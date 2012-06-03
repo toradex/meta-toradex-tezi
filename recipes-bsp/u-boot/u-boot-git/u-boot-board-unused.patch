@@ -1,0 +1,62 @@
+--- git/board/toradex/common/board.c	2012-06-02 21:16:34.000000000 +0200
++++ git/board/toradex/common/board.c	2012-06-02 22:27:51.000000000 +0200
+@@ -146,14 +146,21 @@
+ #error "tegra: We need CONFIG_TEGRA_PMU to support CONFIG_TEGRA_CLOCK_SCALING"
+ #endif
+ 
++#define GENERATE_FUSE_DEV_INFO 0
+ static TrdxBootDevice board_get_current_bootdev(void)
+ {
+-	unsigned reg, reg1, reg2;
++	unsigned reg;
++#if GENERATE_FUSE_DEV_INFO	
++	unsigned reg1 = 0;
++	unsigned reg2;
++#endif
+ 	unsigned strap_select;
+ 	unsigned skip_strap;
+ 	unsigned fuse_select;
++#if GENERATE_FUSE_DEV_INFO
+ 	unsigned fuse_device_info;
+ 	unsigned sdmmc_instance;
++#endif
+ 	TrdxBootDevice boot_device;
+ 
+ 	//get the latched strap pins, bit [26:29]
+@@ -187,15 +194,12 @@
+ 
+ 	clock_disable(PERIPH_ID_FUSE);
+ #else
+-	(void)reg2;
+ #ifdef CONFIG_TEGRA3
+ 	//simulate a T30 fuse setting
+ 	reg = NvBootFuseBootDevice_Sdmmc;
+-	reg1 = 0;
+ #else
+ 	//simulate a T20 fuse setting
+ 	reg = NvBootFuseBootDevice_NandFlash;
+-	reg1 = 0;
+ #endif
+ #endif
+ 	//get the fuse 'SKIP_DEV_SEL_STRAPS', bit 3
+@@ -207,8 +211,10 @@
+ 	{
+ 		printf("Using fuses, %u\n", fuse_select);
+ 		//getting fuse device info and sdmmc instance, bit 7 of fuse_device info
++#if GENERATE_FUSE_DEV_INFO
+ 		fuse_device_info = reg1 & 0x3fff;
+ 		sdmmc_instance = ((reg1 & 0x80)==0x80) ? 2 : 3;
++#endif
+ 		switch(fuse_select)
+ 		{
+ 		case NvBootFuseBootDevice_Sdmmc:
+@@ -225,7 +231,9 @@
+ 	else
+ 	{
+ 		/* printf("Using straps, %u\n", strap_select);*/
++#if GENERATE_FUSE_DEV_INFO
+ 		sdmmc_instance = 3;
++#endif
+ 		switch(strap_select)
+ 		{
+ 		case NvStrapDevSel_Emmc_Primary_x4:

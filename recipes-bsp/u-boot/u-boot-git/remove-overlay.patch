@@ -1,0 +1,11 @@
+--- git/arch/arm/cpu/armv7/u-boot.lds	2012-06-02 21:16:34.000000000 +0200
++++ x
+@@ -68,7 +68,7 @@
+ 
+ 	_end = .;
+ 
+-	.bss __rel_dyn_start (OVERLAY) : {
++	.bss __rel_dyn_start : {
+ 		__bss_start = .;
+ 		*(.bss)
+ 		 . = ALIGN(4);

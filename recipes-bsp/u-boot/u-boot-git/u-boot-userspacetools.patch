@@ -1,0 +1,12 @@
+diff -urNdb u-boot-git.old//tools/env/Makefile u-boot-git//tools/env/Makefile
+--- u-boot-git.old//tools/env/Makefile	2011-11-19 18:17:17.000000000 +0100
++++ u-boot-git//tools/env/Makefile	2011-11-19 18:15:22.000000000 +0100
+@@ -28,6 +28,8 @@
+ 
+ CPPFLAGS := -Wall -DUSE_HOSTCC -I$(SRCTREE)/include
+ 
++CPPFLAGS += -march=armv7-a -mtune=cortex-a9 -mfpu=vfpv3-d16 -mfloat-abi=soft -mthumb-interwork -mno-thumb 
++
+ ifeq ($(MTD_VERSION),old)
+ CPPFLAGS += -DMTD_OLD
+ endif

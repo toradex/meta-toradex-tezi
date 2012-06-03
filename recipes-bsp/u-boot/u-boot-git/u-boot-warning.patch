@@ -1,0 +1,272 @@
+#--- git/include/common.h~	2012-05-31 21:57:20.000000000 +0200
+#+++ git/include/common.h	2012-05-31 21:57:43.000000000 +0200
+@@ -1,3 +1,6 @@
++#pragma GCC diagnostic warning "-Wunused-but-set-variable"
++#pragma GCC diagnostic warning "-Wmaybe-uninitialized"
++#pragma GCC diagnostic warning "-Wstrict-aliasing"
+ /*
+  * (C) Copyright 2000-2009
+  * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/board/toradex/common/tegra2_nand.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/board/toradex/common/tegra2_nand.c
+--- git/board/toradex/common/tegra2_nand.c	2012-06-01 00:56:03.000000000 +0200
++++ git/board/toradex/common/tegra2_nand.c	2012-06-01 01:03:43.000000000 +0200
+@@ -919,7 +919,7 @@
+ 	struct nand_info *info = &nand_ctrl;
+ 	struct fdt_nand *config = &info->config;
+ 	struct mtd_info tmp_mtd;
+-	int tmp_manf, tmp_id, tmp_3rd, tmp_4th;
++	int tmp_manf, tmp_id, /*tmp_3rd,*/ tmp_4th;
+ 	char compat[8];
+ 	int node;
+ 
+@@ -952,7 +952,8 @@
+ 	/* Read manufacturer and device IDs */
+ 	tmp_manf = nand_read_byte(&tmp_mtd);
+ 	tmp_id = nand_read_byte(&tmp_mtd);
+-	tmp_3rd = nand_read_byte(&tmp_mtd);
++	/*tmp_3rd = nand_read_byte(&tmp_mtd);
++	(void) tmp_3rd;*/
+ 	tmp_4th = nand_read_byte(&tmp_mtd);
+ 
+ 	sprintf(compat, "%02X,%02X,%02X", tmp_manf, tmp_id, tmp_4th);
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/common/cmd_mtdparts.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/common/cmd_mtdparts.c
+--- git/common/cmd_mtdparts.c	2012-06-01 00:56:04.000000000 +0200
++++ git/common/cmd_mtdparts.c	2012-06-01 01:06:16.000000000 +0200
+@@ -838,7 +838,7 @@
+ 	struct mtdids *id;
+ 	const char *mtd_id;
+ 	unsigned int mtd_id_len;
+-	const char *p, *pend;
++	const char *p;
+ 	LIST_HEAD(tmp_list);
+ 	struct list_head *entry, *n;
+ 	u16 num_parts;
+@@ -871,8 +871,7 @@
+ 	debug("dev type = %d (%s), dev num = %d, mtd-id = %s\n",
+ 			id->type, MTD_DEV_TYPE(id->type),
+ 			id->num, id->mtd_id);
+-	pend = strchr(p, ';');
+-	debug("parsing partitions %.*s\n", (pend ? pend - p : strlen(p)), p);
++	debug("parsing partitions %.*s\n", (strchr(p, ';') ? strchr(p, ';') - p : strlen(p)), p);
+ 
+ 
+ 	/* parse partitions */
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/common/cmd_nand.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/common/cmd_nand.c
+--- git/common/cmd_nand.c	2012-06-01 00:56:04.000000000 +0200
++++ git/common/cmd_nand.c	2012-06-01 01:08:03.000000000 +0200
+@@ -190,7 +190,7 @@
+ 			loff_t *off, loff_t *size)
+ {
+ 	int ret;
+-	loff_t maxsize;
++	loff_t maxsize=0;
+ 
+ 	if (argc == 0) {
+ 		*off = 0;
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/common/cmd_ubi.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/common/cmd_ubi.c
+--- git/common/cmd_ubi.c	2012-06-01 00:56:04.000000000 +0200
++++ git/common/cmd_ubi.c	2012-06-01 01:09:33.000000000 +0200
+@@ -316,7 +316,6 @@
+ static int ubi_volume_read(char *volume, char *buf, size_t size)
+ {
+ 	int err, lnum, off, len, tbuf_size;
+-	size_t count_save = size;
+ 	void *tbuf;
+ 	unsigned long long tmp;
+ 	struct ubi_volume *vol;
+@@ -347,7 +346,7 @@
+ 	if (vol->corrupted)
+ 		printf("read from corrupted volume %d", vol->vol_id);
+ 	if (offp + size > vol->used_bytes)
+-		count_save = size = vol->used_bytes - offp;
++		size = vol->used_bytes - offp;
+ 
+ 	tbuf_size = vol->usable_leb_size;
+ 	if (size < tbuf_size)
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/common/cmd_ximg.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/common/cmd_ximg.c
+--- git/common/cmd_ximg.c	2012-06-01 00:56:04.000000000 +0200
++++ git/common/cmd_ximg.c	2012-06-01 01:15:20.000000000 +0200
+@@ -55,7 +55,7 @@
+ 	int		verify;
+ 	int		part = 0;
+ 	char		pbuf[10];
+-	image_header_t	*hdr;
++	image_header_t	*hdr = NULL;
+ #if defined(CONFIG_FIT)
+ 	const char	*uname = NULL;
+ 	const void*	fit_hdr;
+@@ -238,16 +238,22 @@
+ 				 * space, use slower decompression algorithm
+ 				 * which requires at most 2300 KB of memory.
+ 				 */
+-				i = BZ2_bzBuffToBuffDecompress(
+-					(char*)ntohl(hdr->ih_load),
+-					&unc_len, (char *)data, len,
+-					CONFIG_SYS_MALLOC_LEN < (4096 * 1024),
+-					0);
+-				if (i != BZ_OK) {
+-					printf ("BUNZIP2 ERROR %d - "
+-						"image not loaded\n", i);
++				if(hdr == NULL) {
++					printf ("hdr not set\n");
+ 					return 1;
+ 				}
++				else {
++					i = BZ2_bzBuffToBuffDecompress(
++						(char*)ntohl(hdr->ih_load),
++						&unc_len, (char *)data, len,
++						CONFIG_SYS_MALLOC_LEN < (4096 * 1024),
++						0);
++					if (i != BZ_OK) {
++						printf ("BUNZIP2 ERROR %d - "
++							"image not loaded\n", i);
++						return 1;
++					}
++				}
+ 			}
+ 			break;
+ #endif /* CONFIG_BZIP2 */
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/drivers/mtd/ubi/vmt.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/drivers/mtd/ubi/vmt.c
+--- git/drivers/mtd/ubi/vmt.c	2012-06-01 00:56:04.000000000 +0200
++++ git/drivers/mtd/ubi/vmt.c	2012-06-01 01:17:21.000000000 +0200
+@@ -678,12 +678,10 @@
+  */
+ void ubi_free_volume(struct ubi_device *ubi, struct ubi_volume *vol)
+ {
+-	int err;
+-
+ 	dbg_msg("free volume %d", vol->vol_id);
+ 
+ 	ubi->volumes[vol->vol_id] = NULL;
+-	err = ubi_destroy_gluebi(vol);
++	(void)ubi_destroy_gluebi(vol);
+ 	cdev_del(&vol->cdev);
+ 	volume_sysfs_close(vol);
+ }
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/drivers/usb/eth/asix.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/drivers/usb/eth/asix.c
+--- git/drivers/usb/eth/asix.c	2012-06-01 00:56:04.000000000 +0200
++++ git/drivers/usb/eth/asix.c	2012-06-01 01:22:07.000000000 +0200
+@@ -326,7 +326,6 @@
+ {
+ 	int embd_phy;
+ 	unsigned char buf[ETH_ALEN];
+-	u16 rx_ctl;
+ 	struct ueth_data	*dev = (struct ueth_data *)eth->priv;
+ 	int timeout = 0;
+ 	char *addr_str, *end;
+@@ -363,13 +362,11 @@
+ 			goto out_err;
+ 	}
+ 
+-	rx_ctl = asix_read_rx_ctl(dev);
+-	debug("RX_CTL is 0x%04x after software reset\n", rx_ctl);
++	(void) asix_read_rx_ctl(dev);
+ 	if (asix_write_rx_ctl(dev, 0x0000) < 0)
+ 		goto out_err;
+ 
+-	rx_ctl = asix_read_rx_ctl(dev);
+-	debug("RX_CTL is 0x%04x setting to 0x0000\n", rx_ctl);
++	(void) asix_read_rx_ctl(dev);
+ 
+ 	if ((dev->pusb_dev->descriptor.idVendor == 0x0b95) && (dev->pusb_dev->descriptor.idProduct == 0x772b)) {
+ 			#define AX_CMD_READ_EEPROM 0x0B
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/fs/jffs2/jffs2_1pass.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/fs/jffs2/jffs2_1pass.c
+--- git/fs/jffs2/jffs2_1pass.c	2012-06-01 00:56:04.000000000 +0200
++++ git/fs/jffs2/jffs2_1pass.c	2012-06-01 01:26:48.000000000 +0200
+@@ -696,7 +696,6 @@
+ 	u32 latestVersion = 0;
+ 	uchar *lDest;
+ 	uchar *src;
+-	long ret;
+ 	int i;
+ 	u32 counter = 0;
+ #ifdef CONFIG_SYS_JFFS2_SORT_FRAGMENTS
+@@ -768,28 +767,23 @@
+ #endif
+ 				switch (jNode->compr) {
+ 				case JFFS2_COMPR_NONE:
+-					ret = (unsigned long) ldr_memcpy(lDest, src, jNode->dsize);
++					(void) ldr_memcpy(lDest, src, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_ZERO:
+-					ret = 0;
+ 					for (i = 0; i < jNode->dsize; i++)
+ 						*(lDest++) = 0;
+ 					break;
+ 				case JFFS2_COMPR_RTIME:
+-					ret = 0;
+ 					rtime_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_DYNRUBIN:
+ 					/* this is slow but it works */
+-					ret = 0;
+ 					dynrubin_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_ZLIB:
+-					ret = zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ #if defined(CONFIG_JFFS2_LZO)
+ 				case JFFS2_COMPR_LZO:
+-					ret = lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ #endif
+ 				default:
+@@ -1575,9 +1569,8 @@
+ 
+ 			if (*(uint32_t *)(&buf[ofs-buf_ofs]) == 0xffffffff) {
+ 				uint32_t inbuf_ofs;
+-				uint32_t empty_start, scan_end;
++				uint32_t scan_end;
+ 
+-				empty_start = ofs;
+ 				ofs += 4;
+ 				scan_end = min_t(uint32_t, EMPTY_SCAN_SIZE(
+ 							part->sector_size)/8,
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/include/u-boot/md5.h u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/include/u-boot/md5.h
+--- git/include/u-boot/md5.h	2012-06-01 00:56:04.000000000 +0200
++++ git/include/u-boot/md5.h	2012-06-01 01:44:25.000000000 +0200
+@@ -11,7 +11,10 @@
+ struct MD5Context {
+ 	__u32 buf[4];
+ 	__u32 bits[2];
+-	unsigned char in[64];
++	union {
++		unsigned char in[64];
++		__u32 in32[16];
++	};
+ };
+ 
+ /*
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/lib/lzo/lzo1x_decompress.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/lib/lzo/lzo1x_decompress.c
+--- git/lib/lzo/lzo1x_decompress.c	2012-06-01 00:56:04.000000000 +0200
++++ git/lib/lzo/lzo1x_decompress.c	2012-06-01 01:31:29.000000000 +0200
+@@ -32,7 +32,6 @@
+ 
+ static inline const unsigned char *parse_header(const unsigned char *src)
+ {
+-	u8 level = 0;
+ 	u16 version;
+ 	int i;
+ 
+@@ -47,7 +46,6 @@
+ 	version = get_unaligned_be16(src);
+ 	src += 7;
+ 	if (version >= 0x0940)
+-		level = *src++;
+ 	if (get_unaligned_be32(src) & HEADER_HAS_FILTER)
+ 		src += 4; /* filter info */
+ 
+diff -Naur u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0.orig/git/lib/md5.c u-boot-r0+gitra86e39a5abbe0a14106bc7ae828fb48a10396a91-r0/git/lib/md5.c
+--- git/lib/md5.c	2012-06-01 00:56:04.000000000 +0200
++++ git/lib/md5.c	2012-06-01 01:42:05.000000000 +0200
+@@ -153,8 +153,8 @@
+ 	byteReverse(ctx->in, 14);
+ 
+ 	/* Append length in bits and transform */
+-	((__u32 *) ctx->in)[14] = ctx->bits[0];
+-	((__u32 *) ctx->in)[15] = ctx->bits[1];
++	ctx->in32[14] = ctx->bits[0];
++	ctx->in32[15] = ctx->bits[1];
+ 
+ 	MD5Transform(ctx->buf, (__u32 *) ctx->in);
+ 	byteReverse((unsigned char *) ctx->buf, 4);

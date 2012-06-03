@@ -1,0 +1,11 @@
+--- git/arch/arm/cpu/armv7/tegra3/ap20.c	2012-01-28 12:16:25.000000000 +0100
++++ git/arch/arm/cpu/armv7/tegra3/ap20.c~	2012-01-28 12:42:44.640356495 +0100
+@@ -72,6 +72,8 @@
+ 	return id == (PG_UP_TAG_0_PID_CPU & 0xff);
+ }
+ 
++//u-boot treats all errors as warnings,  &clkrst->crc_pll[CLOCK_ID_XCPU] uses a subscript out of range
++#pragma GCC diagnostic warning "-Warray-bounds"
+ static int pllx_set_rate(u32 divn, u32 divm, u32 divp, u32 cpcon)
+ {
+ 	struct clk_rst_ctlr *clkrst = (struct clk_rst_ctlr *)NV_PA_CLK_RST_BASE;

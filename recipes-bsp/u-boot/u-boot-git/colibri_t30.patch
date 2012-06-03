@@ -1,0 +1,220 @@
+diff -Naur git/board/nvidia/cardhu/pinmux-config-common.h git.old/board/nvidia/cardhu/pinmux-config-common.h
+--- git/board/nvidia/cardhu/pinmux-config-common.h	2012-01-28 12:16:26.000000000 +0100
++++ git.old/board/nvidia/cardhu/pinmux-config-common.h	2012-01-28 18:56:06.939970059 +0100
+@@ -174,20 +174,21 @@
+ 	DEFAULT_PINMUX(LCD_DC1,         DISPLAYA,        NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(CRT_HSYNC,       CRT,             NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(CRT_VSYNC,       CRT,             NORMAL,    NORMAL,     OUTPUT),
+-	LV_PINMUX(VI_D0,	RSVD1,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D1,	SDMMC2,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D2,	SDMMC2,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D3,	SDMMC2,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D0,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D1,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D2,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D3,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+ 	LV_PINMUX(VI_D4,	VI,	NORMAL,	NORMAL,	OUTPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D5,	SDMMC2,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D7,	SDMMC2,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_D10,	RSVD1,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+-	LV_PINMUX(VI_MCLK,	VI,	UP,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D5,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D7,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D10,	VI,	NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	/* Enable MIC_GND, Pulldown, so this is switched off by default*/
++	LV_PINMUX(VI_MCLK,	RSVD1,	DOWN,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+ 	DEFAULT_PINMUX(UART2_RXD,       IRDA,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(UART2_TXD,       IRDA,            NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(UART2_RTS_N,     UARTB,           NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(UART2_CTS_N,     UARTB,           NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(UART3_TXD,       UARTC,           NORMAL,    NORMAL,     OUTPUT),
++	DEFAULT_PINMUX(UART3_TXD,	UARTC,           NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(UART3_RXD,       UARTC,           NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(UART3_CTS_N,     UARTC,           NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(UART3_RTS_N,     UARTC,           NORMAL,    NORMAL,     OUTPUT),
+@@ -205,13 +206,13 @@
+ 	DEFAULT_PINMUX(CLK3_OUT,        EXTPERIPH3,      NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(CLK3_REQ,        DEV3,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(GMI_WP_N,        GMI,             NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(GMI_CS2_N,       RSVD1,           UP,   NORMAL,     INPUT), /* EN_VDD_BL1 */
++	DEFAULT_PINMUX(GMI_CS2_N,       NAND,           UP,   NORMAL,     INPUT), /* EN_VDD_BL1 */
+ 	DEFAULT_PINMUX(GMI_AD8,         PWM0,            NORMAL,    NORMAL,     OUTPUT), /* LCD1_BL_PWM */
+-	DEFAULT_PINMUX(GMI_AD10,        NAND,            NORMAL,    NORMAL,     OUTPUT), /* LCD1_BL_EN */
+-	DEFAULT_PINMUX(GMI_A16,         SPI4,            NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(GMI_A17,         SPI4,            NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(GMI_A18,         SPI4,            NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(GMI_A19,         SPI4,            NORMAL,    NORMAL,     INPUT),
++	DEFAULT_PINMUX(GMI_AD10,        PWM2,            NORMAL,    NORMAL,     OUTPUT), /* LCD1_BL_EN */
++	DEFAULT_PINMUX(GMI_A16,         UARTD,           NORMAL,    NORMAL,     OUTPUT),
++	DEFAULT_PINMUX(GMI_A17,         UARTD,            NORMAL,    NORMAL,     INPUT),
++	DEFAULT_PINMUX(GMI_A18,         UARTD,            NORMAL,    NORMAL,     INPUT),
++	DEFAULT_PINMUX(GMI_A19,         UARTD,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(CAM_MCLK,        VI_ALT2,         UP,   NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(GPIO_PCC1,       RSVD1,           NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(GPIO_PBB0,       RSVD1,           NORMAL,    NORMAL,     INPUT),
+@@ -256,13 +257,9 @@
+ 	DEFAULT_PINMUX(DAP1_DIN,        I2S0,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(DAP1_DOUT,       I2S0,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(DAP1_SCLK,       I2S0,            NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(CLK1_REQ,        DAP,             NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(CLK1_OUT,        EXTPERIPH1,      NORMAL,    NORMAL,     INPUT),
+-#ifdef CONFIG_SND_HDA_CODEC_REALTEK
+-	DEFAULT_PINMUX(SPDIF_IN,        DAP2,            DOWN, NORMAL,     INPUT),
+-#else
++	DEFAULT_PINMUX(CLK1_REQ,        DAP,             UP,    NORMAL,     INPUT),
++	DEFAULT_PINMUX(CLK1_OUT,        EXTPERIPH1,      NORMAL,    NORMAL,     OUTPUT),
+ 	DEFAULT_PINMUX(SPDIF_IN,        SPDIF,           NORMAL,    NORMAL,     INPUT),
+-#endif
+ 	DEFAULT_PINMUX(SPDIF_OUT,       SPDIF,           NORMAL,    NORMAL,     OUTPUT),
+ #ifdef CONFIG_SND_HDA_CODEC_REALTEK
+ 	DEFAULT_PINMUX(DAP2_FS,         HDA,             DOWN, NORMAL,     INPUT),
+@@ -280,9 +277,13 @@
+ 	DEFAULT_PINMUX(SPI1_SCK,        SPI1,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(SPI1_CS0_N,      SPI1,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(SPI1_MISO,       SPI1,            NORMAL,    NORMAL,     INPUT),
+-	DEFAULT_PINMUX(PEX_L0_PRSNT_N,  PCIE,            NORMAL,    NORMAL,     INPUT),
++	/* ASIX RESET in */
++	DEFAULT_PINMUX(PEX_L0_PRSNT_N,  PCIE,            UP,	NORMAL,     INPUT),
++	/* ASIX wakeup */
+ 	DEFAULT_PINMUX(PEX_L0_RST_N,    PCIE,            NORMAL,    NORMAL,     OUTPUT),
+-	DEFAULT_PINMUX(PEX_L0_CLKREQ_N, PCIE,            NORMAL,    NORMAL,     INPUT),
++	/* ASIX VBUS in */
++	DEFAULT_PINMUX(PEX_L0_CLKREQ_N, PCIE,            UP,    NORMAL,     INPUT),
++	/* ASIX PME in */
+ 	DEFAULT_PINMUX(PEX_WAKE_N,      PCIE,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(PEX_L1_PRSNT_N,  PCIE,            NORMAL,    NORMAL,     INPUT),
+ 	DEFAULT_PINMUX(PEX_L1_RST_N,    PCIE,            NORMAL,    NORMAL,     OUTPUT),
+@@ -294,10 +295,9 @@
+ 	DEFAULT_PINMUX(HDMI_INT,        RSVD0,           NORMAL,    TRISTATE,   INPUT),
+ 
+ 	/* Gpios */
+-	/* SDMMC1 CD gpio */
+-	DEFAULT_PINMUX(GMI_IORDY,       RSVD1,           UP,   NORMAL,     INPUT),
++	DEFAULT_PINMUX(GMI_IORDY,       NAND,           UP,   NORMAL,     INPUT),
+ 	/* SDMMC1 WP gpio */
+-	LV_PINMUX(VI_D11,		RSVD1,		UP,	NORMAL,	INPUT,	DISABLE,	DISABLE),
++	LV_PINMUX(VI_D11,		VI,		NORMAL,	NORMAL,	INPUT,	DISABLE,	DISABLE),
+ 
+ 	/* Touch RESET */
+ 	DEFAULT_PINMUX(GMI_AD14,        NAND,            NORMAL,    NORMAL,     OUTPUT),
+@@ -310,11 +310,11 @@
+ 	DEFAULT_PINMUX(SDMMC3_DAT4,     SDMMC3,          UP,   NORMAL,     INPUT),
+ 
+ 	LV_PINMUX(VI_D6,           VI,              NORMAL,    NORMAL,     OUTPUT, DISABLE, DISABLE),
+-	LV_PINMUX(VI_D8,           SDMMC2,          NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
+-	LV_PINMUX(VI_D9,           SDMMC2,          NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
+-	LV_PINMUX(VI_PCLK,         RSVD1,           UP,   TRISTATE,   INPUT,  DISABLE, DISABLE),
+-	LV_PINMUX(VI_HSYNC,        RSVD1,           NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
+-	LV_PINMUX(VI_VSYNC,        RSVD1,           NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
++	LV_PINMUX(VI_D8,           VI,          NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
++	LV_PINMUX(VI_D9,           VI,          NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
++	LV_PINMUX(VI_PCLK,	VI,           UP,   TRISTATE,   INPUT,  DISABLE, DISABLE),
++	LV_PINMUX(VI_HSYNC,        VI,           NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
++	LV_PINMUX(VI_VSYNC,        VI,           NORMAL,    NORMAL,     INPUT,  DISABLE, DISABLE),
+ };
+ 
+ #if 0 // jz
+@@ -358,21 +358,21 @@
+ 
+ static struct pingroup_config unused_pins_lowpower[] = {
+ 	DEFAULT_PINMUX(GMI_CS0_N,	NAND,		UP,		TRISTATE,	OUTPUT),
+-	DEFAULT_PINMUX(GMI_CS3_N,	NAND,		UP,		TRISTATE,	OUTPUT),
+-	DEFAULT_PINMUX(GMI_CS4_N,	NAND,		UP,		TRISTATE,	OUTPUT),
++	DEFAULT_PINMUX(GMI_CS3_N,	NAND,		NORMAL,		NORMAL,		OUTPUT),
++	DEFAULT_PINMUX(GMI_CS4_N,	NAND,		NORMAL,		NORMAL,		OUTPUT),
+ 	DEFAULT_PINMUX(GMI_CS7_N,	NAND,		UP,		NORMAL,		INPUT),
+-	DEFAULT_PINMUX(GMI_AD0,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD1,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD2,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD3,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD4,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD5,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD6,		NAND,		NORMAL,		TRISTATE,	INPUT),
+-	DEFAULT_PINMUX(GMI_AD7,		NAND,		NORMAL,		TRISTATE,	INPUT),
++	DEFAULT_PINMUX(GMI_AD0,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD1,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD2,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD3,		NAND,		NORMAL,		NORMAL, 	INPUT),
++	DEFAULT_PINMUX(GMI_AD4,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD5,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD6,		NAND,		NORMAL,		NORMAL,		INPUT),
++	DEFAULT_PINMUX(GMI_AD7,		NAND,		NORMAL,		NORMAL,		INPUT),
+ 	DEFAULT_PINMUX(GMI_AD9,		PWM1,		NORMAL,		TRISTATE,	OUTPUT),
+ 	DEFAULT_PINMUX(GMI_AD11,	NAND,		NORMAL,		TRISTATE,	OUTPUT),
+ 	DEFAULT_PINMUX(GMI_AD13,	NAND,		UP,		NORMAL,		INPUT),
+-	DEFAULT_PINMUX(GMI_WR_N,	NAND,		NORMAL,		TRISTATE,	OUTPUT),
++	DEFAULT_PINMUX(GMI_WR_N,	NAND,		NORMAL,		NORMAL,		OUTPUT),
+ };
+ 
+ #endif /* PINMUX_CONFIG_COMMON_H */
+diff -Naur git/board/nvidia/cardhu/tegra3-cardhu.dts git.old/board/nvidia/cardhu/tegra3-cardhu.dts
+--- git/board/nvidia/cardhu/tegra3-cardhu.dts	2012-01-28 12:16:26.000000000 +0100
++++ git.old/board/nvidia/cardhu/tegra3-cardhu.dts	2012-01-28 16:52:31.660622281 +0100
+@@ -14,12 +14,17 @@
+ 	};
+ 
+ 	aliases {
++		/* UART A = UART1 */
+ 		console = "/serial@70006000";
+                 usb0 = "/usb@0x7d008000";
+                 usb1 = "/usb@0x7d000000";
+ 
++		/* SDMMC-4 */
+ 		sdmmc0 = "/sdhci@78000600";
+-		sdmmc1 = "/sdhci@78000000";
++		/* SDMMC-1 */
++		/*	sdmmc1 = "/sdhci@78000000";*/
++		/* SDMMC-2 */
++		sdmmc1 = "/sdhci@78000200";
+ 	};
+ 
+ 	chosen {
+@@ -40,19 +45,19 @@
+ 		clock-frequency = <408000000>;
+ 	};
+ 
+-	sdhci@78000000 {
++	sdhci@78000200 {
+ 		status = "ok";
+ 		width = <4>;	/* width of SDIO port */
+ 		removable = <1>;
+ 		/* Parameter 3 bit 0:1=output, 0=input; bit 1:1=high, 0=low */
+-		cd-gpio = <&gpio 69 0>; /* card detect, gpio PI5 */
+-		wp-gpio = <&gpio 155 0>; /* write protect, gpio PT3 */
+-		power-gpio = <&gpio 31 3>; /* power enable, gpio PD7 */
++		/* cd-gpio = <&gpio 69 0>; *//* card detect, gpio PI5 */
++		/*wp-gpio = <&gpio 155 0>; *//* write protect, gpio PT3 */
++		/*power-gpio = <&gpio 31 3>;*/ /* power enable, gpio PD7 */
+ 	};
+ 
+ 	sdhci@78000600 {
+ 		status = "ok";
+-		width = <4>;	/* width of SDIO port */
++		width = <8>;	/* width of SDIO port */
+ 		removable = <0>;
+ 	};
+ 
+@@ -61,7 +66,7 @@
+ 		width = <1366>;
+ 		height = <768>;
+ 		bits_per_pixel = <16>;
+-		pwfm = <&pwfm0>;
++		/*pwfm = <&pwfm0>;*/
+ 		display = <&display1>;
+ 		frame-buffer = <0x1C022000>;
+ 
+@@ -72,10 +77,10 @@
+ 		vert_timing = <12 5 20 25>;
+ 
+ 		/* Parameter 3 bit 0:1=output, 0=input; bit 1:1=high, 0=low */
+-		gpios = <&gpio 56 3>,	/* PH0, LCD1_BL_PWM */
+-			<&gpio 58 3>,	/* PH2, LCD1_BL_EN */
+-			<&gpio 90 3>,	/* PL2, LVDS1_SHTDN */
+-			<&gpio 92 3>;	/* PL4, EN_VDD_PNL1 */
++		/*gpios = <&gpio 56 3>,*/	/* PH0, LCD1_BL_PWM */
++			/*<&gpio 58 3>,*/	/* PH2, LCD1_BL_EN */
++			/*<&gpio 90 3>,*/	/* PL2, LVDS1_SHTDN */
++			/*<&gpio 92 3>;*/	/* PL4, EN_VDD_PNL1 */
+ 	};
+ 
+ 	usb@0x7d000000 {

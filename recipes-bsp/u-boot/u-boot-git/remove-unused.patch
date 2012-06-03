@@ -1,0 +1,104 @@
+diff -urNdb u-boot/arch/arm/cpu/armv7/tegra-common/board.c u-boot.new/arch/arm/cpu/armv7/tegra-common/board.c
+--- u-boot/arch/arm/cpu/armv7/tegra-common/board.c	2011-12-15 17:28:52.000000000 +0100
++++ u-boot.new/arch/arm/cpu/armv7/tegra-common/board.c	2011-12-20 15:05:10.603876354 +0100
+@@ -41,6 +41,7 @@
+ 	u32 reg;
+ 
+ 	reg = readl(&pmc->pmc_scratch20);
++	(void) reg;
+ 	debug("pmc->pmc_scratch20 (ODMData) = 0x%08X\n", reg);
+ 
+ //Colibri T20 does not use OdmData
+diff -urNdb u-boot/common/cmd_mtdparts.c u-boot.new/common/cmd_mtdparts.c
+--- u-boot/common/cmd_mtdparts.c	2011-12-06 17:10:16.000000000 +0100
++++ u-boot.new/common/cmd_mtdparts.c	2011-12-20 15:12:07.454221888 +0100
+@@ -871,9 +871,12 @@
+ 	debug("dev type = %d (%s), dev num = %d, mtd-id = %s\n",
+ 			id->type, MTD_DEV_TYPE(id->type),
+ 			id->num, id->mtd_id);
++#ifdef  DEBUG
+ 	pend = strchr(p, ';');
+ 	debug("parsing partitions %.*s\n", (pend ? pend - p : strlen(p)), p);
+-
++#else
++	(void)pend;
++#endif	
+ 
+ 	/* parse partitions */
+ 	num_parts = 0;
+diff -urNdb u-boot/common/cmd_ubi.c u-boot.new/common/cmd_ubi.c
+--- u-boot/common/cmd_ubi.c	2011-12-06 17:10:16.000000000 +0100
++++ u-boot.new/common/cmd_ubi.c	2011-12-20 15:14:57.464387590 +0100
+@@ -316,7 +316,6 @@
+ static int ubi_volume_read(char *volume, char *buf, size_t size)
+ {
+ 	int err, lnum, off, len, tbuf_size;
+-	size_t count_save = size;
+ 	void *tbuf;
+ 	unsigned long long tmp;
+ 	struct ubi_volume *vol;
+@@ -347,7 +346,7 @@
+ 	if (vol->corrupted)
+ 		printf("read from corrupted volume %d", vol->vol_id);
+ 	if (offp + size > vol->used_bytes)
+-		count_save = size = vol->used_bytes - offp;
++		size = vol->used_bytes - offp;
+ 
+ 	tbuf_size = vol->usable_leb_size;
+ 	if (size < tbuf_size)
+diff -urNdb u-boot/drivers/mtd/ubi/vmt.c u-boot.new/drivers/mtd/ubi/vmt.c
+--- u-boot/drivers/mtd/ubi/vmt.c	2011-12-06 17:10:16.000000000 +0100
++++ u-boot.new/drivers/mtd/ubi/vmt.c	2011-12-20 15:16:48.334522354 +0100
+@@ -684,6 +684,7 @@
+ 
+ 	ubi->volumes[vol->vol_id] = NULL;
+ 	err = ubi_destroy_gluebi(vol);
++	(void) err;
+ 	cdev_del(&vol->cdev);
+ 	volume_sysfs_close(vol);
+ }
+diff -urNdb u-boot/drivers/usb/eth/asix.c u-boot.new/drivers/usb/eth/asix.c
+--- u-boot/drivers/usb/eth/asix.c	2011-12-15 17:28:52.000000000 +0100
++++ u-boot.new/drivers/usb/eth/asix.c	2011-12-20 15:22:59.254665754 +0100
+@@ -364,6 +364,8 @@
+ 
+ 	rx_ctl = asix_read_rx_ctl(dev);
+ 	debug("RX_CTL is 0x%04x after software reset\n", rx_ctl);
++        (void)rx_ctl;
++
+ 	if (asix_write_rx_ctl(dev, 0x0000) < 0)
+ 		goto out_err;
+ 
+diff -urNdb u-boot/fs/jffs2/jffs2_1pass.c u-boot.new/fs/jffs2/jffs2_1pass.c
+--- u-boot/fs/jffs2/jffs2_1pass.c	2011-12-06 17:10:01.000000000 +0100
++++ u-boot.new/fs/jffs2/jffs2_1pass.c	2011-12-20 15:40:45.114614263 +0100
+@@ -813,6 +813,7 @@
+ #if 0
+ 	putLabeledWord("read_inode: returning = ", totalSize);
+ #endif
++	(void) ret;
+ 	return totalSize;
+ }
+ 
+@@ -1575,9 +1576,8 @@
+ 
+ 			if (*(uint32_t *)(&buf[ofs-buf_ofs]) == 0xffffffff) {
+ 				uint32_t inbuf_ofs;
+-				uint32_t empty_start, scan_end;
++				uint32_t scan_end;
+ 
+-				empty_start = ofs;
+ 				ofs += 4;
+ 				scan_end = min_t(uint32_t, EMPTY_SCAN_SIZE(
+ 							part->sector_size)/8,
+diff -urNdb u-boot/lib/lzo/lzo1x_decompress.c u-boot.new/lib/lzo/lzo1x_decompress.c
+--- u-boot/lib/lzo/lzo1x_decompress.c	2011-12-06 17:10:00.000000000 +0100
++++ u-boot.new/lib/lzo/lzo1x_decompress.c	2011-12-20 15:42:36.064554125 +0100
+@@ -48,6 +48,7 @@
+ 	src += 7;
+ 	if (version >= 0x0940)
+ 		level = *src++;
++	(void) level;
+ 	if (get_unaligned_be32(src) & HEADER_HAS_FILTER)
+ 		src += 4; /* filter info */
+ 

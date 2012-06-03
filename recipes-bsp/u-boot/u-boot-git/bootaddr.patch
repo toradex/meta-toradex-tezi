@@ -1,0 +1,12 @@
+diff -Naur git.old/include/configs/tegra3-common.h git/include/configs/tegra3-common.h
+--- git.old/include/configs/tegra3-common.h	2012-01-29 22:40:43.240684735 +0100
++++ git/include/configs/tegra3-common.h	2012-01-29 22:49:00.330204308 +0100
+@@ -323,7 +323,7 @@
+  */
+ 
+ /* Below should be (NV_PA_SDRAM_BASE + 0x00E08000), but ld errors out */
+-#define CONFIG_SYS_TEXT_BASE	0x80E08000
++#define CONFIG_SYS_TEXT_BASE	0x80108000
+ #define CONFIG_SYS_SDRAM_BASE	PHYS_SDRAM_1
+ 
+ #define CONFIG_SYS_INIT_RAM_ADDR	CONFIG_STACKBASE
