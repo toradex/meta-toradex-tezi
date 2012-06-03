@@ -1,0 +1,67 @@
+--- git/board/toradex/common/board.c	2012-06-02 21:16:34.000000000 +0200
++++ git/board/toradex/common/board.c	2012-06-03 19:04:03.000000000 +0200
+@@ -263,9 +271,7 @@
+ };
+ 
+ #ifdef BOARD_LATE_INIT
+-#ifdef CONFIG_TRDX_CFG_BLOCK_OFFSET
+-static unsigned char *config_block;
+-#endif
++static unsigned char *config_block = NULL;
+ #endif
+ 
+ #ifdef CONFIG_HW_WATCHDOG
+@@ -504,7 +510,8 @@
+ #ifdef BOARD_LATE_INIT
+ int board_late_init(void)
+ {
+-	char env_str[64];
++	char env_str[256 ];
++
+ #ifdef CONFIG_TRDX_CFG_BLOCK_OFFSET
+ 	int do_saveenv = 0;
+ 	char *addr_str, *end;
+@@ -517,6 +524,9 @@
+ 	unsigned char toradex_oui[3]	= { 0x00, 0x14, 0x2d };
+ 	int valid			= 0;
+ 
++	unsigned int offset;
++	int ret;
++
+ 	/* Allocate RAM area for config block */
+ 	config_block = malloc(size);
+ 	if (!config_block) {
+@@ -525,9 +535,6 @@
+ 	}
+ 
+ 	for (i = 0; i < 2; i++) {
+-		unsigned int offset;
+-		int ret;
+-
+ 		if (i == 0)
+ 			offset = CONFIG_TRDX_CFG_BLOCK_OFFSET;
+ 		else
+@@ -699,6 +706,10 @@
+ 	unsigned short major = 0, minor = 0, release = 0;
+ 	size_t size = 4096;
+ 
++	if(config_block == NULL) {
++		return 0;
++	}
++
+ 	/* Parse revision information in config block */
+ 	for (i = 0; i < (size - 8); i++) {
+ 		if (config_block[i] == 0x02 && config_block[i+1] == 0x40 &&
+@@ -731,6 +742,12 @@
+ 	unsigned int serial		= 0;
+ 	unsigned int serial_offset	= 11;
+ 
++	if(config_block == NULL) {
++		serialnr->low = 0;
++		serialnr->high = 0;
++		return;
++	}
++
+ 	/* Get MAC address from config block */
+ 	memcpy(&serial, config_block + serial_offset, 3);
+ 	serial = ntohl(serial);

@@ -1,12 +1,13 @@
-# Extends the core U-Boot GIT recipe 
+# Extends the core u-boot recipe 
 # to take the u-boot sources including the colibri stuff from our git repository
 PR ="r1"
 DEPENDS += "dtc-native"
  
-FILESEXTRAPATHS_prepend := "${THISDIR}/u-boot-git:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 # Also overwries the license checksum to suit the updated text file in our U-Boot snapshot.
-LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
+#LIC_FILES_CHKSUM_colibri-t20 = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
+#LIC_FILES_CHKSUM_colibri-t30 = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 COMPATIBLE_MACHINE_colibri-t20 = "colibri-t20"
 COMPATIBLE_MACHINE_colibri-t30 = "colibri-t30"
@@ -23,13 +24,9 @@ S="${WORKDIR}/git"
 SRC_URI_COLIBRI = "git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-u-boot.git;protocol=git;branch=master \
 	file://u-boot-warning.patch \
 	file://u-boot-board-unused.patch \
+	file://board_stackcorruption_workaround.patch \
 "
 
-#	file://remove-unused.patch \
-#	file://u-boot_ap20warning.patch \
-#	file://colibri_t30.patch \
-#	file://bootaddr.patch \
-#"
 SRCREV_colibri-t20 = "63c37d9e1d3ea97391576384d237728c44b5e33b"
 SRCREV_colibri-t30 = "63c37d9e1d3ea97391576384d237728c44b5e33b"
 
@@ -46,25 +43,22 @@ SRC_URI_colibri-t20 = "${SRC_URI_COLIBRI} "
 SRC_URI_colibri-t30 = "${SRC_URI_COLIBRI} "
 
 #compile with -O2 not -Os as with gcc 4.5 the code does not work 
+# override the solution passed in from u-boot.inc as we want to set additional flags
+EXTRA_OEMAKE_colibri-t20 = "CROSS_COMPILE=${TARGET_PREFIX}"
+EXTRA_OEMAKE_colibri-t30 = "CROSS_COMPILE=${TARGET_PREFIX}"
 do_configure_append() {
 	# sed -i -e 's/-Os/-O2 -fno-ipa-sra -fno-caller-saves -fno-schedule-insns/' ${S}/config.mk
 	sed -i -e 's/-Os/-O2 -fno-ipa-sra -fno-caller-saves -fno-schedule-insns -mno-unaligned-access/' ${S}/config.mk
 }
 
-
 #build additionally a u-boot binary which uses/stores its environment on an T20 external sd or mmc card
+SPL_BINARY_colibri-t20  = "u-boot-hsmmc.bin"
+SPL_IMAGE_colibri-t20   = "u-boot-hsmmc-${MACHINE}-${PV}-${PR}.${UBOOT_SUFFIX}"
+SPL_SYMLINK_colibri-t20 = "u-boot-hsmmc-${MACHINE}.${UBOOT_SUFFIX}"
 do_compile_append_colibri-t20() {
 	mv u-boot.bin u-boot-nand.bin
 	oe_runmake colibri_t20_sdboot_config
 	oe_runmake all
 	mv u-boot.bin u-boot-hsmmc.bin
 	mv u-boot-nand.bin u-boot.bin
-}
-
-UBOOT_IMAGE ?= "u-boot-hsmmc-${MACHINE}-${PV}-${PR}.bin"
-do_deploy_append_colibri-t20 () {
-	install ${S}/u-boot-hsmmc.bin ${DEPLOY_DIR_IMAGE}/u-boot-hsmmc-${MACHINE}-${PV}-${PR}.bin
-	package_stagefile_shell ${DEPLOY_DIR_IMAGE}/u-boot-hsmmc-${MACHINE}-${PV}-${PR}.bin
-	ln -sf u-boot-hsmmc-${MACHINE}-${PV}-${PR}.bin ${DEPLOY_DIR_IMAGE}/u-boot-hsmmc.bin
-	package_stagefile_shell ${DEPLOY_DIR_IMAGE}/u-boot-hsmmc.bin
 }
