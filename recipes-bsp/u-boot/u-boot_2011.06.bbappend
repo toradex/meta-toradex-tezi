@@ -18,29 +18,34 @@ DEFAULT_PREFERENCE_colibri-t30 = "1"
 UBOOT_MACHINE_colibri-t20 = "colibri_t20_config"
 UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
 
-#gitorious git
-FILESPATHPKG =. "git:"
-S="${WORKDIR}/git"
-SRC_URI_COLIBRI = "git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-u-boot.git;protocol=git;branch=master \
-	file://u-boot-warning.patch \
-	file://u-boot-board-unused.patch \
-	file://board_stackcorruption_workaround.patch \
-"
-
-SRCREV_colibri-t20 = "63c37d9e1d3ea97391576384d237728c44b5e33b"
-SRCREV_colibri-t30 = "63c37d9e1d3ea97391576384d237728c44b5e33b"
+#  gitorious git  ###################################################################################################
+#FILESPATHPKG =. "git:"
+#S="${WORKDIR}/git"
+#SRC_URI_COLIBRI = "git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-u-boot.git;protocol=git;branch=master \
+#	file://u-boot-warning.patch \
+#	file://u-boot-board-unused.patch \
+#	file://board_stackcorruption_workaround.patch \
+#"
+#SRCREV_COLIBRI = "63c37d9e1d3ea97391576384d237728c44b5e33b"
+#####################################################################################################################
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
 
-#internal SVN
-#S = "${WORKDIR}/bootloader/u-boot"
-#SVN_REV = 218
-#SRC_URI_COLIBRI = "svn://tegradev:tegra123!@mammut.toradex.int:8090/colibri_tegra_linux/trunk;module=bootloader/u-boot;rev=${SVN_REV};proto=http \
-#	file://remove-unused.patch "
+# internal SVN #####################################################################################################################
+S = "${WORKDIR}/bootloader/u-boot"
+SRCREV_COLIBRI = "298"
+SRC_URI_COLIBRI = "svn://tegradev:tegra123!@mammut.toradex.int:8090/colibri_tegra_linux/trunk;module=bootloader/u-boot;rev=${SRCREV_COLIBRI};proto=http \
+"
+#####################################################################################################################
 	
 SRC_URI_colibri-t20 = "${SRC_URI_COLIBRI} "
 SRC_URI_colibri-t30 = "${SRC_URI_COLIBRI} "
+SRCREV_colibri-t20 = "${SRCREV_COLIBRI}"
+SRCREV_colibri-t30 = "${SRCREV_COLIBRI}"
+PV_colibri-t20 = "${PR}+gitr${SRCREV}"
+PV_colibri-t30 = "${PR}+gitr${SRCREV}"
+
 
 #compile with -O2 not -Os as with gcc 4.5 the code does not work 
 # override the solution passed in from u-boot.inc as we want to set additional flags
