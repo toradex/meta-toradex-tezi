@@ -1,15 +1,18 @@
 inherit kernel
 require recipes-kernel/linux/linux.inc
 
-LINUX_VERSION ?= "2.6.36.2"
+LINUX_VERSION ?= "3.1.10"
 
-SRCREV = "99003b6bd73fd8ce4f2bd63a1c7b63f8c3d0cf68"
+SRCREV = "37440f3ed07a6f588b05b8f98d0b3025c1949371"
 
-PV = "2.6.36.2+gitr${SRCREV}"
+PV = "${LINUX_VERSION}+gitr${SRCREV}"
 PR = "V1.1b1"
 S = "${WORKDIR}/git"
+#SRC_URI = "\
+#  git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-linux-kernel.git;protocol=git;branch=master \
+#  file://bcm4329_warning.patch "
 SRC_URI = "\
-  git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-linux-kernel.git;protocol=git;branch=master \
+  git://git.toradex.com/linux-colibri.git;protocol=git;branch=colibri \
   file://bcm4329_warning.patch "
 
 #SVN_REV = 190
@@ -33,6 +36,10 @@ do_configure_prepend_colibri-t20() {
 
 	#compile with -mno-unaligned-access, with 4.7 compiler the kernel fails 
 	echo "KBUILD_CFLAGS   += -mno-unaligned-access" >> ${S}/Makefile
+}
+
+do_compile_kernelmodules_colibri-t20() {
+	:
 }
 
 #require recipes-kernel/linux/linux-tools.inc
