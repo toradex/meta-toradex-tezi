@@ -4,7 +4,10 @@ require recipes-kernel/linux/linux.inc
 LINUX_VERSION ?= "3.1.10"
 
 #SRCREV = "37440f3ed07a6f588b05b8f98d0b3025c1949371"
-SRCREV = "4f48c4961b86b4df1bcb4b1b535bc1c3d158b5af"
+#L4T R15 first run
+#SRCREV = "4f48c4961b86b4df1bcb4b1b535bc1c3d158b5af" 
+#L4T R15, optimized config, bcm4329 warnings removed
+SRCREV = "b562b12b12ba303d5ceca17b347d8c506e18f7f4"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 PR = "V2.0b1"
@@ -12,10 +15,8 @@ S = "${WORKDIR}/git"
 #SRC_URI = "\
 #  git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-linux-kernel.git;protocol=git;branch=master \
 #  file://bcm4329_warning.patch "
-SRC_URI = "\
-  git://git.toradex.com/linux-colibri.git;protocol=git;branch=colibri \
-  file://bcm4329_warning.patch \
-"
+SRC_URI = "git://git.toradex.com/linux-colibri.git;protocol=git;branch=colibri"
+#  file://bcm4329_warning.patch \
 #  file://remove_modules.patch "
 
 #SVN_REV = 190
@@ -41,9 +42,9 @@ do_configure_prepend_colibri-t20() {
 	echo "KBUILD_CFLAGS   += -mno-unaligned-access" >> ${S}/Makefile
 }
 
-do_compile_kernelmodules_colibri-t20() {
-       :
-}
+#do_compile_kernelmodules_colibri-t20() {
+#       :
+#}
 
 #require recipes-kernel/linux/linux-tools.inc
 

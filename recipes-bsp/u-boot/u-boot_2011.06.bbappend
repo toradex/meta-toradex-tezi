@@ -34,7 +34,7 @@ PV_colibri-t30 = "${PR}+gitr${SRCREV}"
 
 # internal SVN #####################################################################################################################
 S = "${WORKDIR}/bootloader/u-boot"
-SRCREV_COLIBRI = "298"
+SRCREV_COLIBRI = "320"
 SRC_URI_COLIBRI = "svn://tegradev:tegra123!@mammut.toradex.int:8090/colibri_tegra_linux/trunk;module=bootloader/u-boot;rev=${SRCREV_COLIBRI};proto=http \
 "
 #####################################################################################################################
