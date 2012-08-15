@@ -7,7 +7,10 @@ LINUX_VERSION ?= "3.1.10"
 #L4T R15 first run
 #SRCREV = "4f48c4961b86b4df1bcb4b1b535bc1c3d158b5af" 
 #L4T R15, optimized config, bcm4329 warnings removed
-SRCREV = "b562b12b12ba303d5ceca17b347d8c506e18f7f4"
+#SRCREV = "b562b12b12ba303d5ceca17b347d8c506e18f7f4"
+#Nand timings for 1.1, asix driver update, asix driver patch autodetach
+SRCREV = "4dec0ae6f55768ba0acef97ff2c67f7d5d4663fe"
+
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 PR = "V2.0b1"
