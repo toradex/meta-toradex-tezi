@@ -1,13 +1,9 @@
 # Extends the core u-boot recipe 
 # to take the u-boot sources including the colibri stuff from our git repository
-PR ="r1"
+PR ="r2"
 DEPENDS += "dtc-native"
  
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-
-# Also overwries the license checksum to suit the updated text file in our U-Boot snapshot.
-#LIC_FILES_CHKSUM_colibri-t20 = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
-#LIC_FILES_CHKSUM_colibri-t30 = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 COMPATIBLE_MACHINE_colibri-t20 = "colibri-t20"
 COMPATIBLE_MACHINE_colibri-t30 = "colibri-t30"
@@ -29,18 +25,18 @@ UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
 #SRCREV_COLIBRI = "63c37d9e1d3ea97391576384d237728c44b5e33b"
 #####################################################################################################################
 
+#  toradex git  ###################################################################################################
+FILESPATHPKG =. "git:"
+S="${WORKDIR}/git"
+SRC_URI_COLIBRI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
+SRCREV_COLIBRI = "2a1325206da5381292c2b268e248702c523cc927"
+#####################################################################################################################
+
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
 
-# internal SVN #####################################################################################################################
-S = "${WORKDIR}/bootloader/u-boot"
-SRCREV_COLIBRI = "321"
-SRC_URI_COLIBRI = "svn://tegradev:tegra123!@mammut.toradex.int:8090/colibri_tegra_linux/trunk;module=bootloader/u-boot;rev=${SRCREV_COLIBRI};protocol=http \
-"
-#####################################################################################################################
-	
-SRC_URI_colibri-t20 = "${SRC_URI_COLIBRI} "
-SRC_URI_colibri-t30 = "${SRC_URI_COLIBRI} "
+SRC_URI_colibri-t20 = "${SRC_URI_COLIBRI}"
+SRC_URI_colibri-t30 = "${SRC_URI_COLIBRI}"
 SRCREV_colibri-t20 = "${SRCREV_COLIBRI}"
 SRCREV_colibri-t30 = "${SRCREV_COLIBRI}"
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
