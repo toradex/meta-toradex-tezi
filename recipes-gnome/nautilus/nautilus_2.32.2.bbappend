@@ -1,0 +1,2 @@
+DEPENDS += "gobject-introspection-native"
+
