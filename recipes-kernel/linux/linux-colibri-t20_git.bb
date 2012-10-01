@@ -3,10 +3,10 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.1.10"
 
-SRCREV = "4dec0ae6f55768ba0acef97ff2c67f7d5d4663fe"
+SRCREV = "57f321c02d2871648e883739f76d5e768f8b42cd"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
-PR = "V2.0b1"
+PR = "V2.0a2"
 S = "${WORKDIR}/git"
 #SRC_URI = "\
 #  git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-linux-kernel.git;protocol=git;branch=master \
