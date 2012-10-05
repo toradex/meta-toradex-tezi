@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 inherit kernel siteinfo
 
 # Try to build & install perf
-require recipes-kernel/linux/linux-tools.inc
+#require recipes-kernel/linux/linux-tools.inc
 
 RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
 
