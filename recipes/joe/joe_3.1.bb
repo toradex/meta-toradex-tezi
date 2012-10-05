@@ -1,13 +1,13 @@
 SECTION = "console/utils"
 DESCRIPTION = "Console text editor with good functionality, good choice for vi-haters."
 HOMEPAGE = "http://joe-editor.sourceforge.net/"
-LICENSE ="GPL"
+LICENSE ="GPLv1"
 RDEPENDS_${PN} = "ncurses-terminfo"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/joe-editor/joe-${PV}.tar.gz"
 LIC_FILES_CHKSUM = "file://COPYING;md5=da10ed7cf8038981c580e11c1d3e8fb6"
 
-PR = "r3"
+PR = "r4"
 
 inherit autotools
 
