@@ -1,0 +1,318 @@
+From e7d03deef0aae1b7989dac4e908d42e48a1ee592 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 4 Oct 2012 13:25:00 +0200
+Subject: [PATCH 1/3] Changed tabs to spaces in python code
+
+---
+ meta-lxde/recipes-lxde/openbox/openbox_3.5.0.bb |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/meta-lxde/recipes-lxde/openbox/openbox_3.5.0.bb b/meta-lxde/recipes-lxde/openbox/openbox_3.5.0.bb
+index a1eda8a..69b4ef3 100644
+--- a/meta-lxde/recipes-lxde/openbox/openbox_3.5.0.bb
++++ b/meta-lxde/recipes-lxde/openbox/openbox_3.5.0.bb
+@@ -4,7 +4,7 @@ SECTION = "x11/wm"
+ LICENSE = "GPLv2"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
+ 
+-PR = "r3"
++PR = "r4"
+ 
+ RDEPENDS = "glib-2.0 libxml2 pango imlib2 startup-notification libxft libxrandr libxt"
+ DEPENDS = "${RDEPENDS} xextproto xf86vidmodeproto"
+@@ -52,7 +52,7 @@ FILES_${PN}-kde-dbg = "\
+ PACKAGES_DYNAMIC += "${PN}-theme-*"
+ 
+ python populate_packages_prepend() {
+-	theme_dir = bb.data.expand('${datadir}/themes/', d)
+-	theme_name = bb.data.expand('${PN}-theme-%s', d)
+-	do_split_packages(d, theme_dir, '(.*)', theme_name, '${PN} theme for %s', extra_depends='', allow_dirs=True)
++    theme_dir = bb.data.expand('${datadir}/themes/', d)
++    theme_name = bb.data.expand('${PN}-theme-%s', d)
++    do_split_packages(d, theme_dir, '(.*)', theme_name, '${PN} theme for %s', extra_depends='', allow_dirs=True)
+ }
+--
+1.7.0.4
+
+
+From 2a13aed7da1295ab343e15472f41ad2833752c7a Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 4 Oct 2012 13:26:05 +0200
+Subject: [PATCH 2/3] Add missing dependency to openbox
+
+---
+ meta-lxde/recipes-lxde/obconf/obconf_2.0.3+git.bb |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meta-lxde/recipes-lxde/obconf/obconf_2.0.3+git.bb b/meta-lxde/recipes-lxde/obconf/obconf_2.0.3+git.bb
+index 6701fb4..52d2f84 100644
+--- a/meta-lxde/recipes-lxde/obconf/obconf_2.0.3+git.bb
++++ b/meta-lxde/recipes-lxde/obconf/obconf_2.0.3+git.bb
+@@ -3,12 +3,12 @@ HOMEPAGE = "http://openbox.org/wiki/ObConf:About"
+ SECTION = "x11"
+ 
+ SRCREV = "500163e2c74cbbded0361574fd14d0a1168c1119"
+-PR = "r1"
++PR = "r2"
+ 
+ LICENSE = "GPLv2"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
+ 
+-DEPENDS = "gtk+ glib-2.0 libglade startup-notification"
++DEPENDS = "gtk+ glib-2.0 libglade startup-notification openbox"
+ RDEPENDS = "openbox"
+ 
+ SRC_URI = "git://git.openbox.org/dana/obconf;branch=master;protocol=git \
+--
+1.7.0.4
+
+
+From a2c4f3d156be82c0d181ca97ae3bdc00e5538ed8 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 4 Oct 2012 13:28:14 +0200
+Subject: [PATCH 3/3] Add missing autoconf tests required by newer autoconf version
+ Backported a bugfix to lxdm (lxdm used 100% CPU)
+
+---
+ .../lxappearance_missing_am_prog_cc_c_o.patch      |   10 ++++++++
+ .../lxappearance/lxappearance_0.5.1.bb             |    6 +++-
+ .../fix_event_check_bug_caused_cpu_100.patch       |   25 ++++++++++++++++++++
+ .../lxdm-0.4.1/missingAM_GLIB_GNU_GETTEXT.patch    |   25 ++++++++++++++++++++
+ meta-lxde/recipes-lxde/lxdm/lxdm_0.4.1.bb          |    7 ++++-
+ .../lxpanel-0.5.8/lxpanel_missing_am_prog_ar.patch |   10 ++++++++
+ meta-lxde/recipes-lxde/lxpanel/lxpanel_0.5.8.bb    |    6 ++++-
+ .../lxpolkit_missing_am_prog_cc_c_0.patch          |   10 ++++++++
+ .../lxpolkit_remove_gnu_make_extension.patch       |   11 ++++++++
+ meta-lxde/recipes-lxde/lxpolkit/lxpolkit_0.1.0.bb  |    6 ++++-
+ 10 files changed, 110 insertions(+), 6 deletions(-)
+ create mode 100644 meta-lxde/recipes-lxde/lxappearance/lxappearance-0.5.1/lxappearance_missing_am_prog_cc_c_o.patch
+ create mode 100644 meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/fix_event_check_bug_caused_cpu_100.patch
+ create mode 100644 meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/missingAM_GLIB_GNU_GETTEXT.patch
+ create mode 100644 meta-lxde/recipes-lxde/lxpanel/lxpanel-0.5.8/lxpanel_missing_am_prog_ar.patch
+ create mode 100644 meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_missing_am_prog_cc_c_0.patch
+ create mode 100644 meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_remove_gnu_make_extension.patch
+
+diff --git a/meta-lxde/recipes-lxde/lxappearance/lxappearance-0.5.1/lxappearance_missing_am_prog_cc_c_o.patch b/meta-lxde/recipes-lxde/lxappearance/lxappearance-0.5.1/lxappearance_missing_am_prog_cc_c_o.patch
+new file mode 100644
+index 0000000..6e133f6
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxappearance/lxappearance-0.5.1/lxappearance_missing_am_prog_cc_c_o.patch
+@@ -0,0 +1,10 @@
++--- lxappearance-0.5.1/configure.ac~	2011-07-29 16:50:18.000000000 +0200
+++++ lxappearance-0.5.1/configure.ac	2012-08-12 16:52:52.000000000 +0200
++@@ -16,6 +16,7 @@
++
++ # Checks for programs.
++ AC_PROG_CC
+++AM_PROG_CC_C_O
++ # AM_PROG_LIBTOOL
++ 
++ # Checks for libraries.
+diff --git a/meta-lxde/recipes-lxde/lxappearance/lxappearance_0.5.1.bb b/meta-lxde/recipes-lxde/lxappearance/lxappearance_0.5.1.bb
+index 5092cfe..1d03a6c 100644
+--- a/meta-lxde/recipes-lxde/lxappearance/lxappearance_0.5.1.bb
++++ b/meta-lxde/recipes-lxde/lxappearance/lxappearance_0.5.1.bb
+@@ -2,7 +2,7 @@ DESCRIPTION = "LXDE GTK+ theme switcher"
+ HOMEPAGE = "http://lxde.org/"
+ SECTION = "x11"
+ 
+-PR = "r1"
++PR = "r2"
+ 
+ LICENSE = "GPLv2"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
+@@ -10,7 +10,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
+ DEPENDS = "gtk+"
+ 
+ SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${P}.tar.gz \
+-           file://empty-cursor.patch"
++           file://empty-cursor.patch \
++           file://lxappearance_missing_am_prog_cc_c_o.patch \
++"
+ SRC_URI[md5sum] = "34d157a7fe97ef0b93db8fab3f251e07"
+ SRC_URI[sha256sum] = "74e638257092201a572f1fcd4eb93c195c9fa75e27602662de542b002e6deade"
+ 
+diff --git a/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/fix_event_check_bug_caused_cpu_100.patch b/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/fix_event_check_bug_caused_cpu_100.patch
+new file mode 100644
+index 0000000..f0ca23b
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/fix_event_check_bug_caused_cpu_100.patch
+@@ -0,0 +1,25 @@
++From d4e41ecb36a1ea29482b75674d804bb0f05540b2 Mon Sep 17 00:00:00 2001
++From: dgod <dgod.osa@gmail.com>
++Date: Sun, 25 Dec 2011 15:23:19 +0800
++Subject: [PATCH] fix event check bug caused cpu 100%
++
++---
++ src/lxcom.c |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/src/lxcom.c b/src/lxcom.c
++index 02763eb..18ee12e 100644
++--- a/src/lxcom.c
+++++ b/src/lxcom.c
++@@ -89,7 +89,7 @@ static gboolean lxcom_prepare (GSource *source,gint *timeout)
++ 
++ static gboolean lxcom_check(GSource *source)
++ {
++-	return TRUE;
+++	return (((LXComSource*)source)->poll.revents&G_IO_IN)?TRUE:FALSE;
++ }
++ 
++ static gboolean lxcom_dispatch (GSource *source,GSourceFunc callback,gpointer user_data)
++-- 
++1.7.4.1
++
+diff --git a/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/missingAM_GLIB_GNU_GETTEXT.patch b/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/missingAM_GLIB_GNU_GETTEXT.patch
+new file mode 100644
+index 0000000..43a8b1c
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxdm/lxdm-0.4.1/missingAM_GLIB_GNU_GETTEXT.patch
+@@ -0,0 +1,25 @@
++diff -urNdb lxdm-0.4.1.old//config.h.in lxdm-0.4.1//config.h.in
++--- lxdm-0.4.1.old//config.h.in	2011-07-29 15:43:45.000000000 +0200
+++++ lxdm-0.4.1//config.h.in	2011-11-29 22:26:14.000000000 +0100
++@@ -1,5 +1,8 @@
++ /* config.h.in.  Generated from configure.ac by autoheader.  */
++ 
+++/* always defined to indicate that i18n is enabled */
+++/*#undef ENABLE_NLS*/
+++
++ /* Gettext package. */
++ #undef GETTEXT_PACKAGE
++ 
++diff -urNdb lxdm-0.4.1.old//configure.ac lxdm-0.4.1//configure.ac
++--- lxdm-0.4.1.old//configure.ac	2011-07-29 15:42:33.000000000 +0200
+++++ lxdm-0.4.1//configure.ac	2011-11-29 22:23:08.000000000 +0100
++@@ -141,6 +141,9 @@
++ GETTEXT_PACKAGE=lxdm
++ AC_SUBST(GETTEXT_PACKAGE)
++ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
+++AM_GLIB_GNU_GETTEXT
+++
+++#AC_SUBST(GMSGFMT, ($MSGFMT))
++ 
++ AC_CONFIG_FILES([
++ 	Makefile
+diff --git a/meta-lxde/recipes-lxde/lxdm/lxdm_0.4.1.bb b/meta-lxde/recipes-lxde/lxdm/lxdm_0.4.1.bb
+index cb43f23..53e1104 100644
+--- a/meta-lxde/recipes-lxde/lxdm/lxdm_0.4.1.bb
++++ b/meta-lxde/recipes-lxde/lxdm/lxdm_0.4.1.bb
+@@ -2,7 +2,7 @@ DESCRIPTION = "LXDE Display Manager"
+ HOMEPAGE = "http://lxde.org/"
+ SECTION = "x11"
+ 
+-PR = "r2"
++PR = "r3"
+ 
+ LICENSE = "GPLv3"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+@@ -19,7 +19,10 @@ SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${PN}-${PV}.tar.gz \
+            file://${P}-oe-xsession.patch \
+            file://${P}-uclibc-friendly.patch \
+            file://xinitrc \
+-           file://init"
++           file://init \
++           file://missingAM_GLIB_GNU_GETTEXT.patch \
++           file://fix_event_check_bug_caused_cpu_100.patch \
++"
+ SRC_URI[md5sum] = "8da1cfc2be6dc9217c85a7cf51e1e821"
+ SRC_URI[sha256sum] = "9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08"
+ 
+diff --git a/meta-lxde/recipes-lxde/lxpanel/lxpanel-0.5.8/lxpanel_missing_am_prog_ar.patch b/meta-lxde/recipes-lxde/lxpanel/lxpanel-0.5.8/lxpanel_missing_am_prog_ar.patch
+new file mode 100644
+index 0000000..0a360a8
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxpanel/lxpanel-0.5.8/lxpanel_missing_am_prog_ar.patch
+@@ -0,0 +1,10 @@
++--- lxpanel-0.5.8/configure.ac~	2011-07-29 14:37:01.000000000 +0200
+++++ lxpanel-0.5.8/configure.ac	2012-08-12 16:48:31.000000000 +0200
++@@ -16,6 +16,7 @@
++ AC_PROG_LN_S
++ AC_PROG_INTLTOOL(, [no-xml])
++ AM_PROG_CC_C_O
+++AM_PROG_AR
++ 
++ #Initialize libtool
++ LT_PREREQ([2.2])
+diff --git a/meta-lxde/recipes-lxde/lxpanel/lxpanel_0.5.8.bb b/meta-lxde/recipes-lxde/lxpanel/lxpanel_0.5.8.bb
+index 75c89a5..68829fb 100644
+--- a/meta-lxde/recipes-lxde/lxpanel/lxpanel_0.5.8.bb
++++ b/meta-lxde/recipes-lxde/lxpanel/lxpanel_0.5.8.bb
+@@ -2,6 +2,8 @@ DESCRIPTION = "LXDE Panel"
+ HOMEPAGE = "http://lxde.org/"
+ SECTION = "x11"
+ 
++PR = "r2"
++
+ LICENSE = "GPLv2"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=9d19a9495cc76dc96b703fb4aa157183"
+ 
+@@ -9,7 +11,9 @@ RDEPENDS = "gtk+ menu-cache lxmenu-data libxmu libxpm alsa-lib"
+ DEPENDS = "${RDEPENDS}"
+ 
+ SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${PN}-${PV}.tar.gz \
+-           file://lxpanel-0.5.6-broken-apps.patch"
++           file://lxpanel-0.5.6-broken-apps.patch \
++           file://lxpanel_missing_am_prog_ar.patch \
++"
+ SRC_URI[md5sum] = "129fae75d1cd3983fd94542c573a70a1"
+ SRC_URI[sha256sum] = "6a3579d6f384c03a33a03e4d32016428c84eb0f2bc421704f724fe2cc015cddd"
+
+diff --git a/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_missing_am_prog_cc_c_0.patch b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_missing_am_prog_cc_c_0.patch
+new file mode 100644
+index 0000000..5fa39e6
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_missing_am_prog_cc_c_0.patch
+@@ -0,0 +1,10 @@
++--- lxpolkit-0.1.0/configure.ac~	2011-07-24 13:59:15.000000000 +0200
+++++ lxpolkit-0.1.0/configure.ac	2012-08-12 17:06:47.000000000 +0200
++@@ -11,6 +11,7 @@
++ 
++ # Checks for programs.
++ AC_PROG_CC
+++AM_PROG_CC_C_O
++ # AM_PROG_LIBTOOL
++ 
++ # Checks for libraries.
+diff --git a/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_remove_gnu_make_extension.patch b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_remove_gnu_make_extension.patch
+new file mode 100644
+index 0000000..c719828
+--- /dev/null
++++ b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit-0.1.0/lxpolkit_remove_gnu_make_extension.patch
+@@ -0,0 +1,11 @@
++--- lxpolkit-0.1.0/data/ui/Makefile.am~	2011-07-24 13:59:15.000000000 +0200
+++++ lxpolkit-0.1.0/data/ui/Makefile.am	2012-08-12 17:09:53.000000000 +0200
++@@ -12,7 +12,7 @@
++ 	$(NULL)
++ 
++ # Purge GtkBuilder UI files
++-%.ui: %.glade
+++.ui: .glade
++ 	cp $< $@
++ 	$(top_srcdir)/src/xml-purge $@
++ 
+diff --git a/meta-lxde/recipes-lxde/lxpolkit/lxpolkit_0.1.0.bb b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit_0.1.0.bb
+index de0e25b..85f4971 100644
+--- a/meta-lxde/recipes-lxde/lxpolkit/lxpolkit_0.1.0.bb
++++ b/meta-lxde/recipes-lxde/lxpolkit/lxpolkit_0.1.0.bb
+@@ -2,12 +2,16 @@ DESCRIPTION = "Simple PolicyKit authentication agent"
+ HOMEPAGE = "http://lxde.org/"
+ SECTION = "x11"
+ 
++PR = "r2"
++
+ LICENSE = "GPLv3"
+ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+ 
+ DEPENDS = "glib-2.0 gtk+ polkit"
+ 
+-SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${P}.tar.gz"
++SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${P}.tar.gz \
++           file://lxpolkit_missing_am_prog_cc_c_0.patch \
++           file://lxpolkit_remove_gnu_make_extension.patch"
+ SRC_URI[md5sum] = "2597b00035fe1d695219e0f9bfa8c26f"
+ SRC_URI[sha256sum] = "511affca8f55adc67031fb3627b9889064c685e4b983737d8deecdf4f94f008b"
+ 
+--
+1.7.0.4
