@@ -3,7 +3,7 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.1.10"
 
-SRCREV = "e5312cdf7559951ff2fdfa584408bd363fc7bcb3"
+SRCREV = "01451bf9a6ac778b401173b341adb1e32688e73f"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 PR = "V2.0a2"
