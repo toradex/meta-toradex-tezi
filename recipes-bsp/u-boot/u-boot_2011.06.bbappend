@@ -1,6 +1,6 @@
 # Extends the core u-boot recipe 
 # to take the u-boot sources including the colibri stuff from our git repository
-PR ="r2"
+PR ="r3"
 DEPENDS += "dtc-native"
  
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
@@ -29,7 +29,7 @@ UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
 SRC_URI_COLIBRI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_COLIBRI = "a1ab5236759b1cd6fae427517d44d7be90b02c07"
+SRCREV_COLIBRI = "16a9368a88a28252ea1daedc1df03ccc49ea5b22"
 #####################################################################################################################
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
