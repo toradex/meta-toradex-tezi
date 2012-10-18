@@ -29,7 +29,7 @@ UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
 SRC_URI_COLIBRI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_COLIBRI = "2a1325206da5381292c2b268e248702c523cc927"
+SRCREV_COLIBRI = "a1ab5236759b1cd6fae427517d44d7be90b02c07"
 #####################################################################################################################
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
@@ -48,8 +48,8 @@ PV_colibri-t30 = "${PR}+gitr${SRCREV}"
 EXTRA_OEMAKE_colibri-t20 = "CROSS_COMPILE=${TARGET_PREFIX}"
 EXTRA_OEMAKE_colibri-t30 = "CROSS_COMPILE=${TARGET_PREFIX}"
 do_configure_append() {
-	# sed -i -e 's/-Os/-O2 -fno-ipa-sra -fno-caller-saves -fno-schedule-insns/' ${S}/config.mk
-	sed -i -e 's/-Os/-O2 -fno-ipa-sra -fno-caller-saves -fno-schedule-insns -mno-unaligned-access/' ${S}/config.mk
+	# sed -i -e 's/-Os/-O2 -fno-ipa-sra -fno-caller-saves -fno-schedule-insns -mno-unaligned-access/' ${S}/config.mk
+	sed -i -e 's/-Os/-O2/' ${S}/config.mk
 }
 
 #build additionally a u-boot binary which uses/stores its environment on an T20 external sd or mmc card
