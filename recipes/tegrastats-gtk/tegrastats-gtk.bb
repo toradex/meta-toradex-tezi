@@ -1,5 +1,5 @@
 DESCRIPTION = "NVIDIAS tegrastats output in a gtk title bar"
-LICENSE = "NVIDIA Propriatry"
+LICENSE = "CLOSED"
 
 DEPENDS = "gtk+"
 PR = "r1"
