@@ -1,15 +1,14 @@
+#also consult /etc/udev/ruldes.d/usb-rndis.rules
 [Unit]
 Description=Set the USB gadget to RNDIS
 Documentation=http://permalink.gmane.org/gmane.linux.usb.general/56244
 DefaultDependencies=no
-After=dhcpd.service 
-Wants=dhcpd.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/start-rndis.sh
-ExecStop=echo 0 > /sys/class/android_usb/android0/enable
+ExecStart=/usr/bin/start-rndis.sh start
+ExecStop=/usr/bin/start-rndis.sh stop
 
 [Install]
 WantedBy=basic.target
