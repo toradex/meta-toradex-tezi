@@ -6,6 +6,8 @@ RDEPENDS_${PN} = ""
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 
+PR = "r1"
+
 # The kernel provides with CONFIG_USB_G_ANDROID a composite gadget driver among other with RNDIS functionality.
 # This package contains systemd files to configure RNDIS at startup, configures a fix IP localy and provides a dhcp server on the new interface.
 # Local IP is 192.168.11.2, remote IP is 192.168.11.1
