@@ -3,14 +3,11 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.1.10"
 
-SRCREV = "8ff26794f73da3caf815f348a03509f533b32ec2"
+SRCREV = "5bdde4505c493377165e6c2bdd5b51c86a53afa9"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
-PR = "V2.0a3"
+PR = "V2.0a1"
 S = "${WORKDIR}/git"
-#SRC_URI = "\
-#  git://gitorious.org/colibri-t20-embedded-linux-bsp/colibri_t20-linux-kernel.git;protocol=git;branch=master \
-#  file://bcm4329_warning.patch "
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=colibri"
 
 COMPATIBLE_MACHINE = "colibri-t30"
