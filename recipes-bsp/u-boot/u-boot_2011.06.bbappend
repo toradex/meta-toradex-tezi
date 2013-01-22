@@ -17,7 +17,7 @@ UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
 SRC_URI_COLIBRI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_COLIBRI = "cb354a44f1613ade48726097fed24d8cf5c375b8"
+SRCREV_COLIBRI = "a52972d8a5c2cc19597aad60a8e892e4c0f1f350"
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
