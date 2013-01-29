@@ -1,0 +1,11 @@
+--- glmark2-2012.08/src/gl-headers.h.orig	2012-11-14 11:11:43.991688984 +0100
++++ glmark2-2012.08/src/gl-headers.h	2012-11-14 11:13:45.581817248 +0100
+@@ -33,6 +33,8 @@
+ #elif USE_GLESv2
+ #include <GLES2/gl2.h>
+ #include <GLES2/gl2ext.h>
++/* provide GLchar which is not defined in our old gl2.h */
++typedef char GLchar;
+ #ifndef GL_WRITE_ONLY
+ #define GL_WRITE_ONLY GL_WRITE_ONLY_OES
+ #endif
