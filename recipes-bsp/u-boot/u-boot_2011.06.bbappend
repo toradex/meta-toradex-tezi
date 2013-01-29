@@ -1,18 +1,17 @@
 # Extends the core u-boot recipe 
 # to take the u-boot sources including the colibri stuff from our git repository
-PR ="r5"
+PR ="r6"
 DEPENDS += "dtc-native"
  
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 COMPATIBLE_MACHINE_colibri-t20 = "colibri-t20"
 COMPATIBLE_MACHINE_colibri-t30 = "colibri-t30"
+COMPATIBLE_MACHINE_apalis-t30 = "apalis-t30"
 
 DEFAULT_PREFERENCE_colibri-t20 = "1"
 DEFAULT_PREFERENCE_colibri-t30 = "1"
-
-UBOOT_MACHINE_colibri-t20 = "colibri_t20_config"
-UBOOT_MACHINE_colibri-t30 = "colibri_t30_config"
+DEFAULT_PREFERENCE_apalis-t30 = "1"
 
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
@@ -21,17 +20,22 @@ SRCREV_COLIBRI = "a52972d8a5c2cc19597aad60a8e892e4c0f1f350"
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
+PV_apalis-t30 = "${PR}+gitr${SRCREV}"
 
 SRC_URI_colibri-t20 = "${SRC_URI_COLIBRI}"
 SRC_URI_colibri-t30 = "${SRC_URI_COLIBRI}"
+SRC_URI_apalis-t30 = "${SRC_URI_COLIBRI}"
 SRCREV_colibri-t20 = "${SRCREV_COLIBRI}"
 SRCREV_colibri-t30 = "${SRCREV_COLIBRI}"
+SRCREV_apalis-t30 = "${SRCREV_COLIBRI}"
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
+PV_apalis-t30 = "${PR}+gitr${SRCREV}"
 
 # override the solution passed in from u-boot.inc as we want to set additional flags
 EXTRA_OEMAKE_colibri-t20 = "CROSS_COMPILE=${TARGET_PREFIX}"
 EXTRA_OEMAKE_colibri-t30 = "CROSS_COMPILE=${TARGET_PREFIX}"
+EXTRA_OEMAKE_apalis-t30 = "CROSS_COMPILE=${TARGET_PREFIX}"
 
 #build additionally a u-boot binary which uses/stores its environment on an T20 external sd or mmc card
 SPL_BINARY_colibri-t20  = "u-boot-hsmmc.bin"
