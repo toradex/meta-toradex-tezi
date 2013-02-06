@@ -1,0 +1,12 @@
+NULL is no longer defined in what is included resulting in compile time errors.
+Include stddef.h to make it available
+--- git/utils/dvb/dvb_frontend.h~	2013-02-05 18:13:39.000000000 +0100
++++ git/utils/dvb/dvb_frontend.h	2013-02-05 18:14:43.723139932 +0100
+@@ -26,6 +26,7 @@
+ #ifndef _DVBFRONTEND_H_
+ #define _DVBFRONTEND_H_
+ 
++#include <stddef.h>
+ #include <linux/types.h>
+ 
+ typedef enum fe_type {
