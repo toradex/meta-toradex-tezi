@@ -4,4 +4,5 @@ PRINC = "1"
 VPXTARGET_armv7a_colibri-t20 = "armv6-linux-gcc"
 VPXTARGET_armv7a_colibri-t30 = "armv6-linux-gcc"
 VPXTARGET_armv7a_apalis-t30 = "armv6-linux-gcc"
+VPXTARGET_armv7a_qemuarm = "armv6-linux-gcc"
 
