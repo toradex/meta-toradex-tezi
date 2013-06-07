@@ -1,0 +1,13 @@
+--- ./git/src/journal/journald.conf.orig	2013-06-07 21:34:52.256187412 +0200
++++ ./git/src/journal/journald.conf	2013-06-07 21:50:43.089914926 +0200
+@@ -13,8 +13,8 @@
+ #Seal=yes
+ #RateLimitInterval=10s
+ #RateLimitBurst=200
+-#SystemMaxUse=
+-#SystemKeepFree=
++SystemMaxUse=10M
++SystemKeepFree=30M
+ #SystemMaxFileSize=
+ #SystemMinFileSize=
+ #RuntimeMaxUse=
