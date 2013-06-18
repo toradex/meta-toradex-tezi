@@ -1,0 +1,35 @@
+diff -Naur chromium-24.0.1312.52.orig/content/common/gpu/media/gles2_texture_to_egl_image_translator.cc chromium-24.0.1312.52/content/common/gpu/media/gles2_texture_to_egl_image_translator.cc
+--- chromium-24.0.1312.52.orig/content/common/gpu/media/gles2_texture_to_egl_image_translator.cc	2013-01-08 03:40:32.000000000 +0100
++++ chromium-24.0.1312.52/content/common/gpu/media/gles2_texture_to_egl_image_translator.cc	2013-06-12 22:50:03.949061900 +0200
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ #include "content/common/gpu/media/gles2_texture_to_egl_image_translator.h"
++#define TOOLKIT_USES_GTK
+ 
+ #include "base/logging.h"
+ #if defined(TOOLKIT_USES_GTK)
+diff -Naur chromium-24.0.1312.52.orig/content/content_common.gypi chromium-24.0.1312.52/content/content_common.gypi
+--- chromium-24.0.1312.52.orig/content/content_common.gypi	2013-01-08 03:40:34.000000000 +0100
++++ chromium-24.0.1312.52/content/content_common.gypi	2013-06-15 20:51:16.920211604 +0200
+@@ -465,7 +465,7 @@
+         '../gpu/gpu.gyp:command_buffer_service',
+       ],
+     }],
+-    ['target_arch=="arm" and chromeos == 1', {
++    ['target_arch=="arm" and (OS=="linux" or chromeos == 1)', {
+       'dependencies': [
+         '../media/media.gyp:media',
+       ],
+diff -Naur chromium-24.0.1312.52.orig/content/content_gpu.gypi chromium-24.0.1312.52/content/content_gpu.gypi
+--- chromium-24.0.1312.52.orig/content/content_gpu.gypi	2013-01-08 03:40:34.000000000 +0100
++++ chromium-24.0.1312.52/content/content_gpu.gypi	2013-06-12 22:51:04.485062547 +0200
+@@ -100,7 +100,7 @@
+         '../third_party/libXNVCtrl/libXNVCtrl.gyp:libXNVCtrl',
+       ],
+     }],
+-    ['target_arch=="arm" and chromeos == 1', {
++    ['target_arch=="arm" and (OS=="linux" or chromeos == 1)', {
+       'include_dirs': [
+         '<(DEPTH)/third_party/openmax/il',
+       ],

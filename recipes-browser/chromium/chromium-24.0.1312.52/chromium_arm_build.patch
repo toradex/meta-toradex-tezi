@@ -1,0 +1,23 @@
+diff -Naur chromium-24.0.1312.52.orig/crypto/nss_util.cc chromium-24.0.1312.52/crypto/nss_util.cc
+--- chromium-24.0.1312.52.orig/crypto/nss_util.cc	2013-01-08 03:40:36.000000000 +0100
++++ chromium-24.0.1312.52/crypto/nss_util.cc	2013-06-12 22:42:40.154057157 +0200
+@@ -665,6 +665,7 @@
+ 
+   // For Debian derivatives NSS libraries are located here.
+   paths.push_back(FilePath("/usr/lib/nss"));
++  paths.push_back(FilePath("/usr/lib"));
+ 
+   // Ubuntu 11.10 (Oneiric) places the libraries here.
+ #if defined(ARCH_CPU_X86_64)
+diff -Naur chromium-24.0.1312.52.orig/media/filters/decrypting_audio_decoder.cc chromium-24.0.1312.52/media/filters/decrypting_audio_decoder.cc
+--- chromium-24.0.1312.52.orig/media/filters/decrypting_audio_decoder.cc	2013-01-08 03:40:10.000000000 +0100
++++ chromium-24.0.1312.52/media/filters/decrypting_audio_decoder.cc	2013-06-12 22:39:56.798055413 +0200
+@@ -30,7 +30,7 @@
+   // Out of sync of 100ms would be pretty noticeable and we should keep any
+   // drift below that.
+   const int64 kOutOfSyncThresholdInMicroseconds = 100000;
+-  return std::abs(timestamp_1.InMicroseconds() - timestamp_2.InMicroseconds()) >
++  return abs(timestamp_1.InMicroseconds() - timestamp_2.InMicroseconds()) >
+          kOutOfSyncThresholdInMicroseconds;
+ }
+ 
