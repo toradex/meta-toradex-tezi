@@ -1,0 +1,9 @@
+[Unit]
+Description=start resize script to increase rootfs to its partitions full size
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c 'sleep 5 ; /usr/sbin/resizefs.sh'
+
+[Install]
+WantedBy=graphical.target
