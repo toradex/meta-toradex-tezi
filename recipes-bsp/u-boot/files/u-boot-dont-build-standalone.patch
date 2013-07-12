@@ -1,0 +1,13 @@
+--- git/examples/standalone/Makefile~	2013-07-12 15:35:59.000000000 +0200
++++ git/examples/standalone/Makefile	2013-07-12 15:36:23.669235562 +0200
+@@ -88,7 +88,9 @@
+ CFLAGS_NTR := $(call cc-option,-fno-toplevel-reorder)
+ CFLAGS += $(CFLAGS_NTR)
+ 
+-all:	$(obj).depend $(OBJS) $(LIB) $(SREC) $(BIN) $(ELF)
++#all:	$(obj).depend $(OBJS) $(LIB) $(SREC) $(BIN) $(ELF)
++all:
++	:
+ 
+ #########################################################################
+ $(LIB):	$(obj).depend $(LIBOBJS)
