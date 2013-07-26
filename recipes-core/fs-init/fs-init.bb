@@ -16,6 +16,9 @@ do_compile () {
 do_install () {
     install -d ${D}/${sbindir}
     install -m 0755 ${WORKDIR}/*.sh ${D}/${sbindir}
+
+    install -d ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/resizefs.service ${D}${systemd_unitdir}/system
 }
 
 NATIVE_SYSTEMD_SUPPORT = "1"

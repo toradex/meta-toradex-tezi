@@ -25,6 +25,9 @@ do_install() {
     install -m 0755 ${WORKDIR}/start-rndis.sh ${D}/${bindir}/
     install -m 0644 ${WORKDIR}/usb-rndis.rules ${D}/${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/udhcpd-usb-rndis.conf ${D}/${sysconfdir}/
+
+    install -d ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/usb-rndis.service ${D}${systemd_unitdir}/system
 }
 
 NATIVE_SYSTEMD_SUPPORT = "1"
