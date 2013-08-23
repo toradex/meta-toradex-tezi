@@ -16,7 +16,7 @@ DEFAULT_PREFERENCE_apalis-t30 = "1"
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
 SRC_URI_COLIBRI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_COLIBRI = "658a5957747cd3f2d1d90f4983fec28a116851cd"
+SRCREV_COLIBRI = "d7fcf63504425a73f74f3d1d2f5ba68533280ff4"
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
