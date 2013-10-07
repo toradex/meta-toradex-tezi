@@ -32,7 +32,10 @@ fi
 #idea stolen from here:
 #https://codereview.chromium.org/551127
 
-NEXTSIZE=`expr 320 \* 1024 \* 2`
+#get the current size in blocks of 512 byte
+NEXTSIZE=`df /dev/$PART | grep /dev/root | awk '{print $2}'`
+NEXTSIZE=`expr $NEXTSIZE \* 2`
+NEXTSIZE=`expr $NEXTSIZE + 32 \* 1024 \* 2`
 while [ $NEXTSIZE -lt $FSSIZE ]; do
 	FSSIZEMEG=`expr $NEXTSIZE / 2 / 1024`"M"
 	resize2fs /dev/$PART $FSSIZEMEG
