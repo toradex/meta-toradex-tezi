@@ -10,7 +10,7 @@ SRC_URI +=  " \
 "
 
 FILES_${PN} += " \
-    ${libdir}/libOmxCore.so 
+    ${libdir}/libOmxCore.so \
 "
 
 #we have a symlinks ending in .so, skip QA ldflags for this package
