@@ -17,7 +17,7 @@ FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
 SRC_URI_COLIBRI =  "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
 #SRC_URI_COLIBRI += "file://u-boot-dont-build-standalone.patch"
-SRCREV_COLIBRI = "d7fcf63504425a73f74f3d1d2f5ba68533280ff4"
+SRCREV_COLIBRI = "5711fd23f450e848728bb52b1782ea4bfbf1e1de"
 
 PV_colibri-t20 = "${PR}+gitr${SRCREV}"
 PV_colibri-t30 = "${PR}+gitr${SRCREV}"
