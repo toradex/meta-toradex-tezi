@@ -3,7 +3,7 @@ DESCRIPTION = "glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subs
 HOMEPAGE = "https://launchpad.net/glmark2"
 LICENSE ="GPLv3"
 RDEPENDS_${PN} = ""
-DEPENDS_${PN} = "python-native"
+DEPENDS_${PN} = "python-native libpng12 virtual/jpeg"
 
 SRC_URI = "https://launchpad.net/${PN}/trunk/${PV}/+download/${PN}-${PV}.tar.gz \
     file://gl-char.patch"
