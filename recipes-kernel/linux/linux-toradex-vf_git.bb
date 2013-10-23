@@ -3,8 +3,8 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.0.15"
 
-SRCREV_colibri-vf50 = "5746e7e3d1376c80ae7f512d110adbcbad3e7000"
-PR_colibri-vf50 = "V2.1a1"
+SRCREV_colibri-vf50 = "87af4ef6e63b55de3c34cd20e9ebb54b0e0ded05"
+PR_colibri-vf50 = "V2.1b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
