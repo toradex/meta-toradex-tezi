@@ -31,7 +31,7 @@ config_script () {
 do_configure_prepend () {
     #use the defconfig provided in the kernel source tree
     #assume its called ${MACHINE}_defconfig, but with '_' instead of '-'
-    DEFCONFIG=`echo ${MACHINE} | sed -e 's/\-/\_/g' -e 's/$/_defconfig/'`
+    DEFCONFIG="`echo ${MACHINE} | sed -e 's/\-/\_/g' -e 's/$/_defconfig/'`"
 
     oe_runmake $DEFCONFIG
 
