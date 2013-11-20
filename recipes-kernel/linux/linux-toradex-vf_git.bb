@@ -3,8 +3,8 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.0.15"
 
-SRCREV_colibri-vf50 = "87af4ef6e63b55de3c34cd20e9ebb54b0e0ded05"
-PR_colibri-vf50 = "V2.1b1"
+SRCREV_colibri-vf = "fff8692e9818f930c0e40c3e1a631799fb78c13f"
+PR_colibri-vf = "V2.1b2"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
@@ -13,7 +13,7 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=colibri_v
 # SRC_URI += "file://a.patch "
 
 
-COMPATIBLE_MACHINE_colibri-vf50 = "colibri-vf50"
+COMPATIBLE_MACHINE_colibri-vf = "colibri-vf"
 
 # Place changes to the defconfig here
 config_script () {
@@ -21,10 +21,6 @@ config_script () {
 #    #sets CONFIG_TEGRA_CAMERA unconditionally to 'y'
 #    sed -i -e /CONFIG_TEGRA_CAMERA/d ${S}/.config
 #    echo "CONFIG_TEGRA_CAMERA=y" >> ${S}/.config
-    sed -i -e /CONFIG_VFPv3/d ${S}/.config
-    echo "CONFIG_VFPv3=y" >> ${S}/.config
-    sed -i -e /CONFIG_NEON/d ${S}/.config
-    echo "CONFIG_NEON=y" >> ${S}/.config
     echo "dummy" > /dev/null
 }
 
@@ -32,6 +28,9 @@ do_configure_prepend () {
     #use the defconfig provided in the kernel source tree
     #assume its called ${MACHINE}_defconfig, but with '_' instead of '-'
     DEFCONFIG="`echo ${MACHINE} | sed -e 's/\-/\_/g' -e 's/$/_defconfig/'`"
+
+    #until we have the unified kernel
+    DEFCONFIG=colibri_vf50_defconfig
 
     oe_runmake $DEFCONFIG
 
