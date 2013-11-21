@@ -3,7 +3,7 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.0.15"
 
-SRCREV_colibri-vf = "fff8692e9818f930c0e40c3e1a631799fb78c13f"
+SRCREV_colibri-vf = "f7931050d576ffa31a94300e6ce1c7e3e04c2288"
 PR_colibri-vf = "V2.1b2"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
@@ -28,9 +28,6 @@ do_configure_prepend () {
     #use the defconfig provided in the kernel source tree
     #assume its called ${MACHINE}_defconfig, but with '_' instead of '-'
     DEFCONFIG="`echo ${MACHINE} | sed -e 's/\-/\_/g' -e 's/$/_defconfig/'`"
-
-    #until we have the unified kernel
-    DEFCONFIG=colibri_vf50_defconfig
 
     oe_runmake $DEFCONFIG
 
