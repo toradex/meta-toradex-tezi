@@ -11,7 +11,7 @@ PR = "r0"
 
 S = "${WORKDIR}/git"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_colibri-vf = "ac13ca97df9f8c17d1c89d425041690484ee0fdf"
+SRCREV_colibri-vf = "5017686683f7c2eb12bb966924c857622e9cdb94"
 
 #FILESPATHPKG =. "git:"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -24,6 +24,6 @@ SPL_BINARY_colibri-vf  = "u-boot.imx"
 SPL_IMAGE_colibri-vf   = "u-boot-${MACHINE}-${PV}-${PR}.imx"
 SPL_SYMLINK_colibri-vf = "u-boot-${MACHINE}.imx"
 do_compile_append_colibri-vf() {
-    oe_runmake colibri_vf50_sdboot_config
+    oe_runmake colibri_vf_sdboot_config
     oe_runmake 
 }
