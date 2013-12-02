@@ -3,7 +3,7 @@ require recipes-kernel/linux/linux.inc
 
 LINUX_VERSION ?= "3.0.15"
 
-SRCREV_colibri-vf = "f7931050d576ffa31a94300e6ce1c7e3e04c2288"
+SRCREV_colibri-vf = "f9e4905e8ce8459bc4eb56ea8885170e36b849fb"
 PR_colibri-vf = "V2.1b2"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
