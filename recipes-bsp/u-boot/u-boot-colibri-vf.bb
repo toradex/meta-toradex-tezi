@@ -10,8 +10,8 @@ PV = "${PR}+gitr${SRCREV}"
 PR = "r0"
 
 S = "${WORKDIR}/git"
-SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri"
-SRCREV_colibri-vf = "5017686683f7c2eb12bb966924c857622e9cdb94"
+SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=colibri_vf"
+SRCREV_colibri-vf = "f624e019a3f37ee4415a407afae0e026dd203714"
 
 #FILESPATHPKG =. "git:"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
