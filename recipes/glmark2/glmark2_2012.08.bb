@@ -2,15 +2,15 @@ SECTION = "debug"
 DESCRIPTION = "glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of the OpenGL 2.0 API that is compatible with OpenGL ES 2.0."
 HOMEPAGE = "https://launchpad.net/glmark2"
 LICENSE ="GPLv3"
-RDEPENDS_${PN} = ""
-DEPENDS_${PN} = "python-native libpng12 virtual/jpeg"
+RDEPENDS_${PN} = "libpng12"
+DEPENDS_${PN} = "python-native libpng12 virtual/jpeg virtual/egl virtual/libgles2"
 
 SRC_URI = "https://launchpad.net/${PN}/trunk/${PV}/+download/${PN}-${PV}.tar.gz \
     file://gl-char.patch"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-PR = "r4"
+PR = "r5"
 
 do_configure() {
 }
