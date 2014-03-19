@@ -1,9 +1,9 @@
---- systemd-197/src/journal/journald.conf.orig	2013-06-19 09:57:40.166165030 +0200
-+++ systemd-197/src/journal/journald.conf	2013-06-19 09:58:58.946177115 +0200
-@@ -14,8 +14,8 @@
- #SplitMode=login
- #RateLimitInterval=10s
- #RateLimitBurst=200
+--- systemd-206/src/journal/journald.conf~	2013-07-22 00:43:28.000000000 +0200
++++ systemd-206/src/journal/journald.conf	2014-01-24 14:46:31.062603121 +0100
+@@ -15,8 +15,8 @@
+ #SyncIntervalSec=5m
+ #RateLimitInterval=30s
+ #RateLimitBurst=1000
 -#SystemMaxUse=
 -#SystemKeepFree=
 +SystemMaxUse=10M
