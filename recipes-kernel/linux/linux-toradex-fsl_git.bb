@@ -1,11 +1,12 @@
 inherit kernel
 require recipes-kernel/linux/linux-toradex-fsl.inc
 
-LINUX_VERSION ?= "3.0.35"
+LINUX_VERSION_colibri-vf = "3.0.15"
+LINUX_VERSION_apalis-imx6 ?= "3.0.35"
 
 SRCREV_colibri-vf = "72249651843f93d50c302833546fb2880052a80f"
 PR_colibri-vf = "V2.2b1"
-SRCREV_apalis-imx6 = "bb05ab7e088af16ef8669647f1a7ab28621b54e0"
+SRCREV_apalis-imx6 = "26a3b58b789bfe94c87e4a49f0f0a16c63dbfb61"
 PR_apalis-imx6 = "V2.2b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
