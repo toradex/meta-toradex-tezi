@@ -6,7 +6,7 @@ LINUX_VERSION_apalis-imx6 ?= "3.0.35"
 
 SRCREV_colibri-vf = "72249651843f93d50c302833546fb2880052a80f"
 PR_colibri-vf = "V2.2b1"
-SRCREV_apalis-imx6 = "26a3b58b789bfe94c87e4a49f0f0a16c63dbfb61"
+SRCREV_apalis-imx6 = "816f26b3411b447e6637fa36bbd50b4bc720f417"
 PR_apalis-imx6 = "V2.2b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
