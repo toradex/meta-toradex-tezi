@@ -17,8 +17,7 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRAN
 # a Patch
 # SRC_URI += "file://a.patch "
 
-COMPATIBLE_MACHINE_colibri-vf = "colibri-vf"
-COMPATIBLE_MACHINE_apalis-imx6 = "apalis-imx6"
+COMPATIBLE_MACHINE = "(colibri-vf|apalis-imx6)"
 
 # Place changes to the defconfig here
 config_script () {
