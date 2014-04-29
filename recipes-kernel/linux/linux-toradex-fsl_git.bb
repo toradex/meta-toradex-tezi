@@ -4,14 +4,14 @@ require recipes-kernel/linux/linux-toradex-fsl.inc
 LINUX_VERSION_colibri-vf = "3.0.15"
 LINUX_VERSION_apalis-imx6 ?= "3.0.35"
 
-SRCREV_colibri-vf = "72249651843f93d50c302833546fb2880052a80f"
+SRCREV_colibri-vf = "d6e1c85db4d0442a38b43d6c28900a1f1a8d760f"
 PR_colibri-vf = "V2.2b1"
 SRCREV_apalis-imx6 = "fbff978ea77f9d0832cc924e91b2497d7cde572c"
 PR_apalis-imx6 = "V2.2b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
-SRCBRANCH_colibri-vf = "colibri_vf"   
+SRCBRANCH_colibri-vf = "colibri_vf_next"
 SRCBRANCH_apalis-imx6 = "toradex_imx6"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
