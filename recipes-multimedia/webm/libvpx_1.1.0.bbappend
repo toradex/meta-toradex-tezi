@@ -1,7 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-PRINC = "2"
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += "file://configure_remove_implicit_cflags.patch \
