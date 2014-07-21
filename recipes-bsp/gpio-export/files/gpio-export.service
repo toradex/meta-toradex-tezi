@@ -5,8 +5,8 @@ DefaultDependencies=no
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/export-gpio.sh start
-ExecStop=/usr/bin/export-gpio.sh stop
+ExecStart=/usr/bin/gpio-export.sh start
+ExecStop=/usr/bin/gpio-export.sh stop
 
 [Install]
 WantedBy=basic.target

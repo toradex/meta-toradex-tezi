@@ -9,6 +9,11 @@ case "$1" in
 	stop)
 		CTRL=/sys/class/gpio/unexport
 	;;
+
+	*)
+		echo "usage: '$0 start' '$0 stop'"
+		exit 1
+	;;
 esac
 
 #Apalis GPIO - i.MX6 Ball name - GPIO#
