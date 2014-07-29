@@ -10,9 +10,9 @@ PR = "r0"
 
 S = "${WORKDIR}/git"
 
-SRCREV_colibri-vf = "a62f99816066992c7a3793f944d253c3c5484cda"
+SRCREV_colibri-vf = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
 SRCBRANCH_colibri-vf = "2014.04-toradex"
-SRCREV_apalis-imx6 = "a62f99816066992c7a3793f944d253c3c5484cda"
+SRCREV_apalis-imx6 = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
 SRCBRANCH_apalis-imx6 = "2014.04-toradex"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH}"
 
