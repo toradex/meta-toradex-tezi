@@ -1,2 +1,2 @@
 #when a host connects over rndis, give the rnids0 NIC a IP address and up it
-SUBSYSTEM=="android_usb", ATTR{state}=="CONFIGURED", RUN+="/bin/sh -c '/sbin/ifconfig rndis0 192.168.11.2/24 ; /usr/sbin/udhcpd -S /etc/udhcpd-usb-rndis.conf' "
+SUBSYSTEM=="android_usb", ATTR{state}=="CONFIGURED", RUN+="/bin/sh -c '/sbin/ip address add 192.168.11.2/24 dev rndis0; /sbin/ip link set rndis0 up ; /usr/sbin/udhcpd -S /etc/udhcpd-usb-rndis.conf' "
