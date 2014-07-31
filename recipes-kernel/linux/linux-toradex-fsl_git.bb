@@ -5,24 +5,25 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 inherit kernel
+require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native "
 
 LINUX_VERSION_colibri-vf = "3.0.15"
-LINUX_VERSION_apalis-imx6 ?= "3.0.35"
+LINUX_VERSION_apalis-imx6 = "3.10.17"
 
 SRCREV_colibri-vf = "1d876acfd2cd445fe46e5bc4c531da2c6bef0c91"
 PR_colibri-vf = "V2.3b1"
-SRCREV_apalis-imx6 = "fbff978ea77f9d0832cc924e91b2497d7cde572c"
-PR_apalis-imx6 = "V2.2b1"
+SRCREV_apalis-imx6 = "485787d21c9ddefb9f992bf5190e9c4b8d9154b4"
+PR_apalis-imx6 = "V2.3b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
 SRCBRANCH_colibri-vf = "colibri_vf"
-SRCBRANCH_apalis-imx6 = "toradex_imx6"
+SRCBRANCH_apalis-imx6 = "toradex_imx_3.10.17_1.0.0_ga"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
-# SRC_URI += "file://a.patch "
+# SRC_URI_append_mx6 += "file://a.patch "
 
 COMPATIBLE_MACHINE = "(colibri-vf|apalis-imx6)"
 
