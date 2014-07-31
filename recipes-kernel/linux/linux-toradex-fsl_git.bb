@@ -1,5 +1,10 @@
+DESCRIPTION = "Linux Kernel"
+SECTION = "kernel"
+LICENSE = "GPLv2"
+
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
 inherit kernel
-require recipes-kernel/linux/linux-toradex-fsl.inc
 
 LINUX_VERSION_colibri-vf = "3.0.15"
 LINUX_VERSION_apalis-imx6 ?= "3.0.35"
