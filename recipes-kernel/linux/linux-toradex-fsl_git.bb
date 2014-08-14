@@ -10,22 +10,22 @@ require recipes-kernel/linux/linux-dtb.inc
 DEPENDS += "lzop-native "
 
 LINUX_VERSION_colibri-vf = "3.0.15"
-LINUX_VERSION_apalis-imx6 = "3.10.17"
+LINUX_VERSION_mx6 = "3.10.17"
 
 SRCREV_colibri-vf = "1d876acfd2cd445fe46e5bc4c531da2c6bef0c91"
 PR_colibri-vf = "V2.3b1"
-SRCREV_apalis-imx6 = "485787d21c9ddefb9f992bf5190e9c4b8d9154b4"
-PR_apalis-imx6 = "V2.3b1"
+SRCREV_mx6 = "485787d21c9ddefb9f992bf5190e9c4b8d9154b4"
+PR_mx6 = "V2.3b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
 SRCBRANCH_colibri-vf = "colibri_vf"
-SRCBRANCH_apalis-imx6 = "toradex_imx_3.10.17_1.0.0_ga"
+SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
 # SRC_URI_append_mx6 += "file://a.patch "
 
-COMPATIBLE_MACHINE = "(colibri-vf|apalis-imx6)"
+COMPATIBLE_MACHINE = "(colibri-vf|colibri-imx6|apalis-imx6)"
 
 # Place changes to the defconfig here
 config_script () {

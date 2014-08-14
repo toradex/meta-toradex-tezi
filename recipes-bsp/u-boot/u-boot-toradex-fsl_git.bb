@@ -12,16 +12,17 @@ S = "${WORKDIR}/git"
 
 SRCREV_colibri-vf = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
 SRCBRANCH_colibri-vf = "2014.04-toradex"
-SRCREV_apalis-imx6 = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
-SRCBRANCH_apalis-imx6 = "2014.04-toradex"
+SRCREV_mx6 = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
+SRCBRANCH_mx6 = "2014.04-toradex"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH}"
 
 #FILESPATHPKG =. "git:"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(colibri-vf|apalis-imx6)"
+COMPATIBLE_MACHINE = "(colibri-vf|colibri-imx6|apalis-imx6)"
 DEFAULT_PREFERENCE_colibri-vf = "1"
 DEFAULT_PREFERENCE_apalis-imx6 = "1"
+DEFAULT_PREFERENCE_colibri-imx6 = "1"
 
 # colibri_vf: copy additional U-Boot binary for NAND
 UBOOT_BINARY_NAND_colibri-vf = "u-boot-nand.imx"
