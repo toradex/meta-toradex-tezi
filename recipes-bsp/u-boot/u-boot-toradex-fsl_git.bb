@@ -4,14 +4,15 @@ PROVIDES += "u-boot"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
+LIC_FILES_CHKSUM_colibri-vf = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
 
 PV = "${PR}+gitr${SRCREV}"
 PR = "r0"
 
 S = "${WORKDIR}/git"
 
-SRCREV_colibri-vf = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
-SRCBRANCH_colibri-vf = "2014.04-toradex"
+SRCREV_colibri-vf = "2eb36b88d4b5bce64bb3a196fa8b2be5b24bc165"
+SRCBRANCH_colibri-vf = "2014.10-toradex-next"
 SRCREV_mx6 = "36b44c6fc7ddde29aec7f39ebcb5cc959d24b469"
 SRCBRANCH_mx6 = "2014.04-toradex"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH}"
