@@ -4,7 +4,7 @@
 # or set in an autostart file from a postinstall script
 
 DISK="mmcblk0"
-PART="mmcblk0p1"
+PART="mmcblk0p2"
 
 logger "resizing $PART to fill its full partition size"
 # get the disk total size
