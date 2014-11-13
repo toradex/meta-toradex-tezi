@@ -50,4 +50,5 @@ do_install_append_tegra() {
 NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "usb-rndis.service"
+SYSTEMD_AUTO_ENABLE = "disable"
 
