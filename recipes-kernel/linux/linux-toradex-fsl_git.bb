@@ -13,9 +13,9 @@ LINUX_VERSION_colibri-vf = "3.0.15"
 LINUX_VERSION_mx6 = "3.10.17"
 
 SRCREV_colibri-vf = "3188a1756dc1a60e3f311d24c242873a1291f86b"
-PR_colibri-vf = "V2.3b3"
+PR_colibri-vf = "V2.3b4"
 SRCREV_mx6 = "f79675e581a4abda12db31cde3ee71d44016b981"
-PR_mx6 = "V2.3b3"
+PR_mx6 = "V2.3b4"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
