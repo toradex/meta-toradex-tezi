@@ -12,8 +12,8 @@ DEPENDS += "lzop-native "
 LINUX_VERSION_colibri-vf = "3.0.15"
 LINUX_VERSION_mx6 = "3.10.17"
 
-SRCREV_colibri-vf = "3188a1756dc1a60e3f311d24c242873a1291f86b"
-PR_colibri-vf = "V2.3b4"
+SRCREV_colibri-vf = "be731b029cae84453de550058c04841ff99a751b"
+PR_colibri-vf = "V2.3b5"
 SRCREV_mx6 = "23b22e549ed6ede5b44a948824463daafb6745c3"
 PR_mx6 = "V2.3b5"
 
