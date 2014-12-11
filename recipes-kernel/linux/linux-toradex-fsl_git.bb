@@ -14,13 +14,13 @@ LINUX_VERSION_mx6 = "3.10.17"
 
 SRCREV_colibri-vf = "3188a1756dc1a60e3f311d24c242873a1291f86b"
 PR_colibri-vf = "V2.3b4"
-SRCREV_mx6 = "f79675e581a4abda12db31cde3ee71d44016b981"
-PR_mx6 = "V2.3b4"
+SRCREV_mx6 = "23b22e549ed6ede5b44a948824463daafb6745c3"
+PR_mx6 = "V2.3b5"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
 SRCBRANCH_colibri-vf = "colibri_vf"
-SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga"
+SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga-next"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
 # SRC_URI_append_mx6 += "file://a.patch "
