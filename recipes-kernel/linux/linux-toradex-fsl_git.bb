@@ -20,7 +20,7 @@ PR_mx6 = "V2.3b5"
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
 SRCBRANCH_colibri-vf = "colibri_vf"
-SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga-next"
+SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
 # SRC_URI_append_mx6 += "file://a.patch "
