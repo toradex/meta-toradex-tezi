@@ -38,3 +38,16 @@ do_deploy_append_colibri-vf() {
     ln -sf ${UBOOT_IMAGE_NAND} ${UBOOT_SYMLINK_NAND}
     ln -sf ${UBOOT_IMAGE_NAND} ${UBOOT_BINARY_NAND}
 }
+
+# apalis-imx6: build additionally a u-boot binary for the IT variant
+SPL_BINARY_apalis-imx6  = "u-boot-it.imx"
+SPL_IMAGE_apalis-imx6   = "u-boot-it-${MACHINE}-${PV}-${PR}.imx"
+SPL_SYMLINK_apalis-imx6 = "u-boot-it-${MACHINE}.imx"
+do_compile_append_apalis-imx6() {
+    # keep u-boot with standard timings
+    mv u-boot.imx u-boot-std.imx
+    oe_runmake apalis_imx6q2g_config
+    oe_runmake ${UBOOT_MAKE_TARGET}
+    mv u-boot.imx u-boot-it.imx
+    mv u-boot-std.imx u-boot.imx
+}
