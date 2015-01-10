@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/e2fsprogs:"
 SRC_URI += "file://e2fsck.conf"
 
 do_install_append() {

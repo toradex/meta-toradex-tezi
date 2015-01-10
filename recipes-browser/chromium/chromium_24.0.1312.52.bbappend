@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/chromium-${PV}:"
 
 EXTRA_OEGYP_prepend = "-DUSE_EABI_HARDFLOAT=1"
 
