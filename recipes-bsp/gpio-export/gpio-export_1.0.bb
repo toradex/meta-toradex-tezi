@@ -1,4 +1,4 @@
-DESCRIPTION = "Scripts and systemd service file to export unused GPIO to Userspace"
+SUMMARY = "Scripts and systemd service file to export unused GPIO to Userspace"
 LICENSE = "Public Domain"
 PR = "r2"
 

@@ -1,3 +1,4 @@
+SUMMARY = "Expand the rootfs to the full size of its partion"
 DESCRIPTION = "Script to expand the rootfs to the full size of its partion, started as a systemd service which removes itself once finished"
 LICENSE = "Public Domain"
 PR = "r3"

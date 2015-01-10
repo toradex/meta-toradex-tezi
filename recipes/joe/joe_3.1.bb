@@ -1,5 +1,5 @@
 SECTION = "console/utils"
-DESCRIPTION = "Console text editor with good functionality, good choice for vi-haters."
+SUMMARY = "Console text editor with good functionality"
 HOMEPAGE = "http://joe-editor.sourceforge.net/"
 LICENSE ="GPLv1"
 RDEPENDS_${PN} = "ncurses-terminfo"
