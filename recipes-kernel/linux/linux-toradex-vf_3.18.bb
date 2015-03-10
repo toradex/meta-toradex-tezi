@@ -6,8 +6,8 @@ SUMMARY = "Linux kernel for Toradex Colibri VFxx boards"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH} \
            file://defconfig"
 
-LOCALVERSION = "-v2.3b7"
-SRCBRANCH = "toradex_vf_3.18"
-SRCREV = "c78b5ae472e69452d5fe44c261d57c8083c59f74"
+LOCALVERSION = "-v2.3b7+git"
+SRCBRANCH = "toradex_vf_3.18-next"
+SRCREV = "5f68f254e269bdc25c57888e245ae4cddb320be0"
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(colibri-vf)"
