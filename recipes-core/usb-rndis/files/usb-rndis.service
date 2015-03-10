@@ -3,7 +3,7 @@
 Description=Load/Configure the kernel driver providing the RNDIS gadget
 Documentation=http://www.linux-usb.org/gadget/ http://permalink.gmane.org/gmane.linux.usb.general/56244
 DefaultDependencies=no
-After=basic.target
+After=network.target
 
 [Service]
 Type=oneshot

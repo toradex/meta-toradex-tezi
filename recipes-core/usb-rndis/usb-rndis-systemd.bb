@@ -1,5 +1,5 @@
 SECTION = "network"
-DESCRIPTION = "RNDIS usb client configuration and startup"
+SUMMARY = "RNDIS usb client configuration and startup"
 RDEPENDS_${PN} = ""
 # The license is meant for this recipe and the files it installs.
 # RNDIS is part of the kernel, udhcpd is part of busybox
@@ -31,6 +31,7 @@ SRC_URI = " \
 SRC_URI_tegra = " \
     ${SRC_URI_COMMON} \
     file://usb-rndis.rules \
+    file://usb-rndis-udhcpd.service \
 "
 
 do_install() {
@@ -45,10 +46,13 @@ do_install() {
 do_install_append_tegra() {
     install -d ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/usb-rndis.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${WORKDIR}/usb-rndis-udhcpd.service ${D}${systemd_unitdir}/system
 }
+
+FILES_${PN} += "${systemd_unitdir}/system"
 
 NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "usb-rndis.service"
-SYSTEMD_AUTO_ENABLE = "disable"
+SYSTEMD_AUTO_ENABLE_mx6 = "disable"
 
