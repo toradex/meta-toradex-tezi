@@ -2,6 +2,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/systemd:"
 
 SRC_URI += " \
     file://rndis.network \
+    file://0014-Revert-rules-remove-firmware-loading-rules.patch \
+    file://0015-Revert-udev-remove-userspace-firmware-loading-suppor.patch \
 "
 
 PACKAGECONFIG_append = " networkd"
