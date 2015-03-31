@@ -1,5 +1,5 @@
 SUMMARY = "Scripts and systemd service file to export unused GPIO to Userspace"
-LICENSE = "Public Domain"
+LICENSE = "PD"
 PR = "r2"
 
 inherit systemd
