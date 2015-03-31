@@ -37,6 +37,8 @@ do_configure_prepend () {
     #assume its called ${MACHINE}_defconfig, but with '_' instead of '-'
     DEFCONFIG="`echo ${MACHINE} | sed -e 's/\-/\_/g' -e 's/$/_defconfig/'`"
 
+    cd ${S}
+    export KBUILD_OUTPUT=${B}
     oe_runmake $DEFCONFIG
 
     #maybe change some configuration
