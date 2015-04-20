@@ -3,18 +3,17 @@ require recipes-bsp/u-boot/u-boot.inc
 PROVIDES += "u-boot"
 
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=025bf9f768cbcb1a165dbe1a110babfb"
-LIC_FILES_CHKSUM_colibri-vf = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
 
 PV = "${PR}+gitr${SRCREV}"
 PR = "r0"
 
 S = "${WORKDIR}/git"
 
-SRCREV_colibri-vf = "93d011ae1319c297d3cf31d40a88b21699d89d7b"
+SRCREV_colibri-vf = "a75dd7f7df968300e0213ff7f8cbc987df344d4c"
 SRCBRANCH_colibri-vf = "2015.04-toradex-next"
-SRCREV_mx6 = "0260e62f008aa292d87da7c1a9fbe1051a793518"
-SRCBRANCH_mx6 = "2014.04-toradex"
+SRCREV_mx6 = "a75dd7f7df968300e0213ff7f8cbc987df344d4c"
+SRCBRANCH_mx6 = "2015.04-toradex-next"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH}"
 
 #FILESPATHPKG =. "git:"
@@ -46,7 +45,7 @@ SPL_SYMLINK_apalis-imx6 = "u-boot-it-${MACHINE}.imx"
 do_compile_append_apalis-imx6() {
     # keep u-boot with standard timings
     mv u-boot.imx u-boot-std.imx
-    oe_runmake apalis_imx6q2g_config
+    oe_runmake apalis_imx6_defconfig
     oe_runmake ${UBOOT_MAKE_TARGET}
     mv u-boot.imx u-boot-it.imx
     mv u-boot-std.imx u-boot.imx

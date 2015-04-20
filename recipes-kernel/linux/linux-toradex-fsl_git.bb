@@ -11,8 +11,8 @@ DEPENDS += "lzop-native "
 
 LINUX_VERSION_mx6 = "3.10.17"
 
-SRCREV_mx6 = "23b22e549ed6ede5b44a948824463daafb6745c3"
-PR_mx6 = "V2.3b5"
+SRCREV_mx6 = "2927fd34b6cfc68e3db459cceebdaa9f6fea664d"
+PR_mx6 = "V2.4b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
