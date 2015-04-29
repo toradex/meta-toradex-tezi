@@ -1,0 +1,65 @@
+attrs : 
+{
+    bcdUSB = 0x0;
+    bDeviceClass = 0x0;
+    bDeviceSubClass = 0x0;
+    bDeviceProtocol = 0x0;
+    bMaxPacketSize0 = 0x40;
+    idVendor = 0x1d6b;
+    idProduct = 0x0104;
+    bcdDevice = 0x400;
+};
+strings = ( 
+    {
+        lang = 0x409;
+        manufacturer = "Toradex";
+        product = "Unknown";
+        serialnumber = "";
+    } );
+functions : 
+{
+    acm_GS0 : 
+    {
+        instance = "GS0";
+        type = "acm";
+        attrs : 
+        {
+            port_num = 0;
+        };
+    };
+    rndis_0 : 
+    {
+        instance = "0";
+        type = "rndis";
+        attrs : 
+        {
+            dev_addr = "00:14:2d:ff:ff:ff";
+            host_addr = "00:14:2d:ff:ff:fe";
+            qmult = 5;
+        };
+    };
+};
+configs = ( 
+    {
+        id = 1;
+        name = "c";
+        attrs : 
+        {
+            bmAttributes = 0x80;
+            bMaxPower = 0x2;
+        };
+        strings = ( 
+            {
+                lang = 0x409;
+                configuration = "Conf 1";
+            } );
+        functions = ( 
+            {
+                name = "acm.GS0";
+                function = "acm_GS0";
+            }, 
+            {
+                name = "rndis.0";
+                function = "rndis_0";
+            } );
+    } );

@@ -1,0 +1,16 @@
+[Unit]
+Description=Load default USB gadget schema g1.schema
+ConditionPathExists=/etc/usbg/g1.schema
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/gadget-import g1 /etc/usbg/g1.schema
+ExecStartPost=/bin/sh -c '/bin/cat /proc/device-tree/model > \
+                                   /sys/kernel/config/usb_gadget/g1/strings/0x409/product'
+ExecStartPost=/bin/sh -c '/bin/cat /proc/device-tree/serial-number > \
+                                   /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber'
+ExecStartPost=/bin/sh -c '/bin/echo `ls /sys/class/udc/` > \
+                                    /sys/kernel/config/usb_gadget/g1/UDC'
+
+[Install]
+WantedBy=multi-user.target
