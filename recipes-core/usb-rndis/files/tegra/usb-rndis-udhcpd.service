@@ -1,9 +1,0 @@
-[Unit]
-Description=dhcp deamon for rndis NIC, meant to be started from udev rule
-
-[Service]
-ExecStart=/usr/sbin/udhcpd -fS /etc/udhcpd-usb-rndis.conf
-
-[Install]
-WantedBy=multi-user.target
-
