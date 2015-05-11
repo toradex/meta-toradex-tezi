@@ -8,6 +8,6 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRAN
 
 LOCALVERSION = "-v2.4b1+git"
 SRCBRANCH = "toradex_vf_4.0-next"
-SRCREV = "7ae637bf95bdbc01b1930bef898e4085aa7fdaa4"
+SRCREV = "fd2c7bbe3b6a93ee59b29df2b345cedb4fea0b6b"
 DEPENDS += "lzop-native bc-native"
 COMPATIBLE_MACHINE = "(colibri-vf)"
