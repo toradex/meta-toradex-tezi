@@ -45,7 +45,7 @@ SPL_SYMLINK_apalis-imx6 = "u-boot-it-${MACHINE}.imx"
 do_compile_append_apalis-imx6() {
     # keep u-boot with standard timings
     mv u-boot.imx u-boot-std.imx
-    oe_runmake apalis_imx6_defconfig
+    oe_runmake apalis_imx6_it_defconfig
     oe_runmake ${UBOOT_MAKE_TARGET}
     mv u-boot.imx u-boot-it.imx
     mv u-boot-std.imx u-boot.imx
