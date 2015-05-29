@@ -8,7 +8,7 @@ inherit module
 SRC_URI = "git://github.com/toradex/mcc-kmod.git;protocol=git;branch=${SRCBRANCH}"
 
 SRCBRANCH = "master"
-SRCREV = "${AUTOREV}"
+SRCREV = "983012e899c2be4082fb3d45acedeb52bc2191c2"
 
 PV = "1.06"
 
