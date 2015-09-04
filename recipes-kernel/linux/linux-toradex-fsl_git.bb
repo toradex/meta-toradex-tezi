@@ -9,14 +9,14 @@ require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native "
 
-LINUX_VERSION_mx6 = "3.10.17"
+LINUX_VERSION_mx6 = "3.14.28"
 
-SRCREV_mx6 = "602505a35f2bf10963bb1f97adeaeb66e610de24"
-PR_mx6 = "V2.4b1"
+SRCREV_mx6 = "01055e28e5af1d5e309c9eeea19cf012f324dbe8"
+PR_mx6 = "V2.5b1"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
-SRCBRANCH_mx6 = "toradex_imx_3.10.17_1.0.0_ga"
+SRCBRANCH_mx6 = "toradex_imx_3.14.28_1.0.0_ga-next"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 # a Patch
 # SRC_URI_append_mx6 += "file://a.patch "
