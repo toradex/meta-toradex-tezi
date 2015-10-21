@@ -3,6 +3,8 @@ DESCRIPTION = "Script to expand the rootfs to the full size of its partion, star
 LICENSE = "PD"
 PR = "r3"
 
+RRECOMMENDS_${PN} = "e2fsprogs-resize2fs"
+
 SRC_URI =  " \
     file://resizefs.sh \
     file://resizefs.service \
