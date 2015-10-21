@@ -6,4 +6,4 @@ Type=simple
 ExecStart=/bin/sh -c 'sleep 5 ; /usr/sbin/resizefs.sh'
 
 [Install]
-WantedBy=graphical.target
+WantedBy=multi-user.target
