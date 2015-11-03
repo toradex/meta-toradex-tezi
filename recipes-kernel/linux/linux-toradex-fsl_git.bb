@@ -11,15 +11,13 @@ DEPENDS += "lzop-native "
 
 LINUX_VERSION_mx6 = "3.14.28"
 
-SRCREV_mx6 = "6ef4eef1eb726929d913580b9b24d4f57904dc80"
-PR_mx6 = "V2.5b1"
+SRCREV_mx6 = "77e525493f74f9f2e33a41e9e65b54e810ac3dd0"
+PR_mx6 = "V2.5b2"
 
 PV = "${LINUX_VERSION}+gitr${SRCREV}"
 S = "${WORKDIR}/git"
-SRCBRANCH_mx6 = "toradex_imx_3.14.28_1.0.0_ga-next"
+SRCBRANCH_mx6 = "toradex_imx_3.14.28_1.0.0_ga"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
-# a Patch
-# SRC_URI_append_mx6 += "file://a.patch "
 
 COMPATIBLE_MACHINE = "(colibri-imx6|apalis-imx6)"
 
