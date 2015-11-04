@@ -11,6 +11,7 @@ DEPENDS += "lzop-native "
 
 LINUX_VERSION_mx6 = "3.14.28"
 
+LOCALVERSION = "-${PR}"
 SRCREV_mx6 = "77e525493f74f9f2e33a41e9e65b54e810ac3dd0"
 PR_mx6 = "V2.5b2"
 
@@ -43,7 +44,15 @@ do_configure_prepend () {
     oe_runmake $DEFCONFIG
 
     #maybe change some configuration
-    config_script 
+    config_script
+
+    #Add Toradex BSP Version as LOCALVERSION
+    sed -i -e /CONFIG_LOCALVERSION/d ${B}/.config
+    echo "CONFIG_LOCALVERSION=\"${LOCALVERSION}\"" >> ${B}/.config
+
+    #Add GIT revision to the local version
+    head=`git --git-dir=${S}/.git rev-parse --verify --short HEAD 2> /dev/null`
+    printf "%s%s" +g $head > ${S}/.scmversion
 }
 
 # We need to pass it as param since kernel might support more then one
