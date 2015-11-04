@@ -19,6 +19,9 @@ S = "${WORKDIR}/git"
 SRCBRANCH_mx6 = "toradex_imx_3.14.28_1.0.0_ga"
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=git;branch=${SRCBRANCH}"
 
+# Load USB functions configurable through configfs (CONFIG_USB_CONFIGFS)
+KERNEL_MODULE_AUTOLOAD += "${@bb.utils.contains('COMBINED_FEATURES', 'usbgadget', ' libcomposite', '',d)}"
+
 COMPATIBLE_MACHINE = "(colibri-imx6|apalis-imx6)"
 
 # Place changes to the defconfig here
