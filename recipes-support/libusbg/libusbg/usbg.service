@@ -1,7 +1,7 @@
 [Unit]
 Description=Load default USB gadget schema g1.schema
 ConditionPathExists=/etc/usbg/g1.schema
-After=connman.service
+Before=systemd-networkd.service
 
 [Service]
 Type=oneshot
