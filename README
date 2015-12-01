@@ -1,0 +1,94 @@
+OpenEmbedded/Yocto BSP layer for Toradex modules
+================================================
+
+This layer provides support for the ARM based Toradex COMs
+featuring NVIDIA Tegra, Freescale Vybrid and Freescale i.MX6 SOCs.
+For more information on available Toradex COMs please visit:
+
+https://www.toradex.com/computer-on-modules
+
+
+This layer is a BSP and image layer, containing machines for Toradex
+modules, Toradex specific user space applications and customised
+Ångström/LXDE based images.
+For information on how to use the modules with Linux and instructions
+on how to build the angstrom based demo images please visit:
+http://developer.toradex.com/software-resources/arm-family/linux/board-support-package
+
+For support, visit the Toradex Developer Community:
+https://www.toradex.com/community
+
+Note: It is planned to split this layer. A BSP layer for the Tegra
+based COMs, the recipes related to Freescale based COMs moved to
+meta-fsl-arm-extra and a layer for the demo images.
+
+
+This layer depends on:
+
+URI: https://git.linaro.org/openembedded/meta-linaro.git
+meta-linaro/meta-linaro-toolchain
+branch: fido
+revision: HEAD
+
+URI: git://git.openembedded.org/openembedded-core
+openembedded/meta
+branch: fido
+revision: HEAD
+
+URI: git://git.openembedded.org/meta-openembedded
+meta-openembedded/meta-gnome
+meta-openembedded/meta-oe
+branch: fido
+revision: HEAD
+
+URI: git://git.toradex.com/meta-lxde.git
+branch: fido
+revision: HEAD
+
+URI: https://github.com/angstrom-distribution/meta-angstrom.git
+branch: angstrom-v2015.06-yocto1.8
+revision: HEAD
+
+URI: git://git.yoctoproject.org/meta-fsl-arm
+branch: fido
+revision: HEAD
+
+URI: https://github.com/Freescale/meta-fsl-arm-extra
+branch: fido
+revision: HEAD
+
+URI: https://github.com/Freescale/meta-fsl-demos
+branch: fido
+revision: HEAD
+
+URI: https://github.com/OSSystems/meta-browser.git
+branch: master
+revision: HEAD
+
+URI: https://github.com/meta-qt5/meta-qt5
+branch: fido
+revision: HEAD
+
+
+Contributing
+------------
+
+This layer is maintained by Toradex.
+
+When creating a patch of the last commit, use
+
+    git format-patch -s --subject-prefix='meta-toradex][<branch>][PATCH' -1
+
+To send it to the community, use
+
+    git send-email --to yocto-patches@toradex.com <generated patch>
+
+
+License
+-------
+
+All metadata is MIT licensed unless otherwise stated. Source code and
+binaries included in tree for individual recipes is under the LICENSE
+stated in each recipe (.bb file) unless otherwise stated.
+
+This README document is Copyright (C) 2015 Toradex AG.
