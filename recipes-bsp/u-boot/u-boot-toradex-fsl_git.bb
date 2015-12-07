@@ -22,14 +22,14 @@ DEFAULT_PREFERENCE_apalis-imx6 = "1"
 DEFAULT_PREFERENCE_colibri-imx6 = "1"
 
 # apalis-imx6: build additionally a u-boot binary for the IT variant
-SPL_BINARY_apalis-imx6  = "u-boot-it.imx"
-SPL_IMAGE_apalis-imx6   = "u-boot-it-${MACHINE}-${PV}-${PR}.imx"
-SPL_SYMLINK_apalis-imx6 = "u-boot-it-${MACHINE}.imx"
+SPL_BINARY_apalis-imx6  = "u-boot.imx-it"
+SPL_IMAGE_apalis-imx6   = "u-boot-${MACHINE}-${PV}-${PR}.imx-it"
+SPL_SYMLINK_apalis-imx6 = "u-boot-${MACHINE}.imx-it"
 do_compile_append_apalis-imx6() {
     # keep u-boot with standard timings
     mv u-boot.imx u-boot-std.imx
     oe_runmake apalis_imx6_it_defconfig
     oe_runmake ${UBOOT_MAKE_TARGET}
-    mv u-boot.imx u-boot-it.imx
+    mv u-boot.imx ${SPL_BINARY}
     mv u-boot-std.imx u-boot.imx
 }
