@@ -1,9 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-#SRC_URI += "file://configure_remove_implicit_cflags.patch \
-#            "
 
 #T20 does not have neon, but the armv7-linux-gcc assumes that the target has a neon unit
 VPXTARGET_armv7a_tegra2 = "armv6-linux-gcc"
