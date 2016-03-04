@@ -6,4 +6,5 @@ VPXTARGET_armv7a_qemuarm = "armv6-linux-gcc"
 
 CFLAGS_append_tegra3 = " -mfpu=neon -funsafe-math-optimizations -ftree-vectorize "
 CFLAGS_append_mx6 = " -mfpu=neon -funsafe-math-optimizations -ftree-vectorize "
+CFLAGS_append_mx7 = " -mfpu=neon -funsafe-math-optimizations -ftree-vectorize "
 CONFIGUREOPTS += " --enable-runtime-cpu-detect "
