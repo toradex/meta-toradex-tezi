@@ -1,0 +1,49 @@
+OpenEmbedded/Yocto BSP layer for Toradex Easy Installer
+=======================================================
+
+This layer is used to build the Toradex Easy Installer utility.
+It provides a small distro called "tezi" along with image recipes
+for the root file system and recipies for the Qt based UI.
+
+This layer depends on:
+
+URI: git://git.openembedded.org/openembedded-core
+openembedded/meta
+branch: jethro
+revision: HEAD
+
+URI: git://git.openembedded.org/meta-openembedded
+meta-openembedded/meta-oe
+branch: jethro
+revision: HEAD
+
+URI: git://git.yoctoproject.org/meta-fsl-arm
+branch: jethro
+revision: HEAD
+
+URI: https://github.com/Freescale/meta-fsl-arm-extra
+branch: jethro
+revision: HEAD
+
+Contributing
+------------
+
+This layer is maintained by Toradex.
+
+When creating a patch of the last commit, use
+
+    git format-patch -s --subject-prefix='meta-toradex-ezi][<branch>][PATCH' -1
+
+To send it to the community, use
+
+    git send-email --to yocto-patches@toradex.com <generated patch>
+
+
+License
+-------
+
+All metadata is MIT licensed unless otherwise stated. Source code and
+binaries included in tree for individual recipes is under the LICENSE
+stated in each recipe (.bb file) unless otherwise stated.
+
+This README document is Copyright (C) 2016 Toradex AG.
