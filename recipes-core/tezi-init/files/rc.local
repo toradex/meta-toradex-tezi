@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Start services and customize the boot process here.
+echo "Running /etc/rc.local..."
+
+# Start Toradex Installer Qt user interface
+/usr/bin/tezi -qws
+
+# Installer should have rebooted
+
+echo Toradex Easy Installer application crashed
+echo Starting shell
+sh

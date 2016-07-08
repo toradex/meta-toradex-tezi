@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Mount file systems
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -a
+
+hostname -F /etc/hostname
+
+# Create volatile directories
+mkdir /var/volatile/tmp
+mkdir -p /run/media/usb
+mkdir -p /run/media/sdcard
+
+
+# Allow for distro or local customizations
+if [ -f /etc/rc.local ] ; then
+	. /etc/rc.local
+fi
