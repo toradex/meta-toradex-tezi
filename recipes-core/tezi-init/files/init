@@ -17,3 +17,10 @@ mkdir -p /run/media/sdcard
 if [ -f /etc/rc.local ] ; then
 	. /etc/rc.local
 fi
+
+# Become session leader and try to find a real tty (e.g. ttyS0)
+while true; do
+	setsid cttyhack sh
+	echo "Console sh exited with $?, respawning..."
+	sleep 1
+done

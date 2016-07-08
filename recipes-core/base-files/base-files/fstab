@@ -1,7 +1,7 @@
 # Toradex Installer fstab
 
 # <file system>       <mount point>       <type>     <options>             <dump> <pass>
-/dev/root             /                   rootfs     ro,relatime           0  0
+/dev/root             /                   rootfs     defaults              0  0
 
 proc                 /proc                proc       defaults              0  0
 devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
