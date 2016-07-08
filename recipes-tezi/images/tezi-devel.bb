@@ -1,6 +1,8 @@
 require tezi.inc
 
-# Image used for development
+SUMMARY="Toradex Easy Installer development image"
+
+IMAGE_FSTYPES+="tar.bz2 cpio.gz"
 IMAGE_FEATURES+="debug-tweaks ssh-server-openssh"
 
 IMAGE_INSTALL += " \
@@ -8,6 +10,7 @@ IMAGE_INSTALL += " \
     strace \
     gdbserver \
     openssh-sftp-server \
+    gdb \
 "
 
 LICENSE="MIT"
