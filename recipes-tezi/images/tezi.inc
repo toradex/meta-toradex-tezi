@@ -19,7 +19,5 @@ IMAGE_INSTALL += " \
 
 LICENSE="MIT"
 
-BBMASK="qt4-embedded_%.bbappend"
-
 inherit core-image
 
