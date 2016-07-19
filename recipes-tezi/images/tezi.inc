@@ -9,12 +9,12 @@ RDEPENDS_kernel-base = ""
 IMAGE_INSTALL += " \
     ${CORE_IMAGE_BASE_INSTALL} \
     qt-tezi \
-    parted \
     util-linux-sfdisk \
     e2fsprogs-mke2fs \
     dosfstools \
     wget \
     xz \
+    pv \
 "
 
 LICENSE="MIT"

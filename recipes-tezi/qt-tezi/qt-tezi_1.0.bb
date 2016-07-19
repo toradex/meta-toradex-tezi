@@ -6,7 +6,7 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http"
 
-SRCREV = "a529ea16e1bd715ae9297e5b234ca85b1386479e"
+SRCREV = "de1962c21bc1aa95784292ea288f6f4097acb9cd"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=47823c08586e6dbf1bf50405070bf259"
 
 S = "${WORKDIR}/git"
