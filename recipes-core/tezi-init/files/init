@@ -12,10 +12,12 @@ mkdir /var/volatile/tmp
 mkdir -p /run/media/usb
 mkdir -p /run/media/sdcard
 
-
-# Allow for distro or local customizations
-if [ -f /etc/rc.local ] ; then
-	. /etc/rc.local
+# Do not execute rc.local if rescueshell is defined
+if grep -v -q rescueshell /proc/cmdline; then
+	# Allow for distro or local customizations
+	if [ -f /etc/rc.local ] ; then
+		. /etc/rc.local
+	fi
 fi
 
 # Become session leader and try to find a real tty (e.g. ttyS0)

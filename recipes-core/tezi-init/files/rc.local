@@ -3,6 +3,17 @@
 # Start services and customize the boot process here.
 echo "Running /etc/rc.local..."
 
-# Start Toradex Installer Qt user interface in background
-/usr/bin/tezi -qws &
+# Start Toradex Installer Qt user interface
 
+for p in `cat /proc/cmdline` ; do
+	if [ "${p%%=*}" == "lang" ] ; then
+		DEFAULT_LANG="-lang ${p#*=}";
+	fi
+	if [ "${p%%=*}" == "keyboard" ] ; then
+		DEFAULT_KBD="-kbdlayout ${p#*=}";
+	fi
+done
+
+/usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG -qws
+
+echo "Toradex installer exited with code $?"
