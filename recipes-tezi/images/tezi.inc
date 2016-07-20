@@ -15,6 +15,9 @@ IMAGE_INSTALL += " \
     wget \
     xz \
     pv \
+    mmc-utils \
+    util-linux \
+    u-boot-toradex-fsl-fw-utils \
 "
 
 LICENSE="MIT"
