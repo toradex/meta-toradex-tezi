@@ -14,6 +14,12 @@ for p in `cat /proc/cmdline` ; do
 	fi
 done
 
+# This avoids UI freezes with the TTY driver
+export QWS_KEYBOARD="LinuxInput"
+# Mirror output, HDMI as primary device
+# fb0 => HDMI, fb2 => parallel RGB
+export QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1"
+
 /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG -qws
 
 echo "Toradex installer exited with code $?"
