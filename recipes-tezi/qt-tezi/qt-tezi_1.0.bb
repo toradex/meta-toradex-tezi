@@ -19,11 +19,8 @@ DEPENDS += " \
 "
 
 RDEPENDS_${PN} += " \
-    libqt-embedded3support4 \
     libqt-embeddedcore4 \
     libqt-embeddedgui4 \
-    libqt-embeddedhelp4 \
-    qt4-embedded-fonts-ttf-dejavu \
     qt4-embedded-fonts-ttf-vera \
     qt4-embedded-plugin-imageformat-jpeg \
     qt4-embedded-plugin-mousedriver-tslib \
@@ -34,7 +31,6 @@ RDEPENDS_${PN} += " \
 RRECOMMENDS_${PN} += "\
     qt4-embedded-plugin-imageformat-gif \
     qt4-embedded-plugin-imageformat-jpeg \
-    qt4-embedded-plugin-imageformat-tiff \
 "
 
 FILES_${PN} = " \
