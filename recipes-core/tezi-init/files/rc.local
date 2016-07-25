@@ -14,12 +14,16 @@ for p in `cat /proc/cmdline` ; do
 	fi
 done
 
+if grep -q autoinstall /proc/cmdline; then
+	AUTOINSTALL="-autoinstall";
+fi
+
 # This avoids UI freezes with the TTY driver
-export QWS_KEYBOARD="LinuxInput"
+export QWS_KEYBOARD="LinuxInput:/dev/input/event2 LinuxInput:/dev/input/event3"
 # Mirror output, HDMI as primary device
 # fb0 => HDMI, fb2 => parallel RGB
 export QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1"
 
-/usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG -qws
+/usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws
 
 echo "Toradex installer exited with code $?"
