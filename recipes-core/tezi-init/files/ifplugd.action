@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Wrong arguments for ifplugd" > /dev/stderr
+	exit 1
+fi
+
+if [ "$2" = "up" ]; then
+	echo "ifplugd up"
+	ip link set up dev "$1"
+	udhcpc -i "$1"
+fi
+
+if [ "$2" = "down" ]; then 
+	echo "ifplugd down"
+	killall udhcpc
+	ip link set down dev "$1"
+	ip addr flush dev "$1"
+fi
+exit 0
+

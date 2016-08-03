@@ -3,12 +3,16 @@
 # Mount file systems
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
+mkdir /dev/pts
 mount -a
 
 hostname -F /etc/hostname
 
 # Create volatile directories
 mkdir /var/volatile/tmp
+
+# Start ifplugd to monitor ethernet device
+ifplugd
 
 # Do not execute rc.local if rescueshell is defined
 if grep -v -q rescueshell /proc/cmdline; then
