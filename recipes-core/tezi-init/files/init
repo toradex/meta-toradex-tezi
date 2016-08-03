@@ -9,8 +9,6 @@ hostname -F /etc/hostname
 
 # Create volatile directories
 mkdir /var/volatile/tmp
-mkdir -p /run/media/usb
-mkdir -p /run/media/sdcard
 
 # Do not execute rc.local if rescueshell is defined
 if grep -v -q rescueshell /proc/cmdline; then
