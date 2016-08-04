@@ -25,6 +25,10 @@ URI: https://github.com/Freescale/meta-fsl-arm-extra
 branch: jethro
 revision: HEAD
 
+URI: https://github.com/Freescale/meta-toradex
+branch: V2.6-next
+revision: HEAD
+
 Contributing
 ------------
 
