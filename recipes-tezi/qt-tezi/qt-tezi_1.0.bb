@@ -22,7 +22,6 @@ RDEPENDS_${PN} += " \
     libqt-embeddedcore4 \
     libqt-embeddedgui4 \
     qt4-embedded-fonts-ttf-vera \
-    qt4-embedded-plugin-imageformat-jpeg \
     qt4-embedded-plugin-mousedriver-tslib \
     ${TOUCH} \
 "
@@ -30,8 +29,8 @@ RDEPENDS_${PN} += " \
 # Ensure we have some plugins for some useful image formats
 RRECOMMENDS_${PN} += "\
     qt4-embedded-translation-qt \
-    qt4-embedded-plugin-imageformat-gif \
     qt4-embedded-plugin-imageformat-jpeg \
+    qt4-embedded-plugin-gfxdriver-gfxvnc \
 "
 
 FILES_${PN} = " \
