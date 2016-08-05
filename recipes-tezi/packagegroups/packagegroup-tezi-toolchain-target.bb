@@ -4,4 +4,5 @@ inherit packagegroup
 
 RDEPENDS_${PN} += " \
     qjson \
+    libusbgx \
 "

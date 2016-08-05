@@ -24,6 +24,7 @@ RDEPENDS_${PN} += " \
     qt4-embedded-fonts-ttf-vera \
     qt4-embedded-plugin-mousedriver-tslib \
     ${TOUCH} \
+    libusbgx \
 "
 
 # Ensure we have some plugins for some useful image formats

@@ -4,7 +4,7 @@
 /dev/root             /                   rootfs     defaults              0  0
 
 proc                 /proc                proc       defaults              0  0
+configfs             /sys/kernel/config   configfs   defaults              1  1
 devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
 tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,strictatime 0  0
 tmpfs                /var/volatile        tmpfs      defaults              0  0
-
