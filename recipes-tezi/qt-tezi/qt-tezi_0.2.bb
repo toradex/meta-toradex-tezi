@@ -6,7 +6,7 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http"
 
-SRCREV = "dd5ec1c3bc7201826b16b03b23129b8de8fa853d"
+SRCREV = "3e0066bb4b4ad3a0536a2688dee962ad460a125c"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=47823c08586e6dbf1bf50405070bf259"
 
 S = "${WORKDIR}/git"
@@ -48,5 +48,3 @@ do_install() {
 }
 
 FILES_${PN}-dbg += "${bindir}/.debug"
-
-#inherit update-rc.d
