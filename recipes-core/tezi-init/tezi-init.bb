@@ -10,7 +10,6 @@ RDEPENDS_${PN} = "busybox"
 SRC_URI = "file://init \
            file://rc.local \
            file://ifplugd.action \
-           file://ifplugd.conf \
 	  "
 
 do_configure() {
@@ -27,7 +26,6 @@ do_install() {
 	install -m 0755 ${WORKDIR}/rc.local ${D}${sysconfdir}
 	install -d ${D}${sysconfdir}/ifplugd
 	install -m 0755 ${WORKDIR}/ifplugd.action ${D}${sysconfdir}/ifplugd
-	install -m 0755 ${WORKDIR}/ifplugd.conf ${D}${sysconfdir}/ifplugd
 }
 
 FILES_${PN} = "/init \
