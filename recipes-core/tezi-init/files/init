@@ -13,7 +13,7 @@ hostname -F /etc/hostname
 mkdir /var/volatile/tmp
 
 # Start ifplugd to monitor ethernet device
-ifplugd -u 1 -f -i eth0 -f /etc/ifplugd/ifplugd.action
+ifplugd -u 1 -f -i eth0 -r /etc/ifplugd/ifplugd.dhcp.action
 
 # Do not execute rc.local if rescueshell is defined
 if grep -v -q rescueshell /proc/cmdline; then
