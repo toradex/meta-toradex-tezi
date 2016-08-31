@@ -6,8 +6,8 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http"
 
-SRCREV = "3e0066bb4b4ad3a0536a2688dee962ad460a125c"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=47823c08586e6dbf1bf50405070bf259"
+SRCREV = "d4c5c11ca0d4bd6e233e131aef3a4d008d73484e"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=3d58dae9e4f7a8a4ab03de771a6c7d9c"
 
 S = "${WORKDIR}/git"
 inherit qt4e
