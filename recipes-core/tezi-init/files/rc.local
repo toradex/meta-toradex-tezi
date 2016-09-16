@@ -27,6 +27,5 @@ export QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1 LinuxFB:/dev/fb
 # setDefaultMouse("None")
 export QWS_MOUSE_PROTO="Auto"
 
-/usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/zero
-
-echo "Toradex installer exited with code $?"
+# Start in background
+nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/null > /var/volatile/tezi.log &
