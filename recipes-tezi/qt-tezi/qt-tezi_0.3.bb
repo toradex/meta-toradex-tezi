@@ -6,7 +6,7 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http"
 
-SRCREV = "7c7430ef277f1b235705a1f4b815a5482120a66a"
+SRCREV = "01b6d7748791d8f52805586a760ee15cfd7c6310"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=3d58dae9e4f7a8a4ab03de771a6c7d9c"
 
 S = "${WORKDIR}/git"
@@ -16,6 +16,7 @@ TOUCH = ' ${@base_contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calib
 
 DEPENDS += " \
     qjson \
+    libusbgx \
 "
 
 RDEPENDS_${PN} += " \
@@ -24,7 +25,6 @@ RDEPENDS_${PN} += " \
     qt4-embedded-fonts-ttf-vera \
     qt4-embedded-plugin-mousedriver-tslib \
     ${TOUCH} \
-    libusbgx \
 "
 
 # Ensure we have some plugins for some useful image formats
