@@ -15,20 +15,20 @@ Dependencies
 This layer depends on:
 
   URI: git://git.openembedded.org/bitbake
-  branch: 1.28
+  branch: 1.32
   revision: HEAD
 
   URI: git://git.openembedded.org/openembedded-core
   layers: meta
-  branch: jethro
+  branch: morty
   revision: HEAD
 
   URI: git://git.toradex.com/meta-toradex-nxp
-  branch: jethro
+  branch: morty
   revision: HEAD
 and/or
   URI: git://git.toradex.com/meta-toradex-tegra
-  branch: jethro
+  branch: morty
   revision: HEAD
 
 Patches
