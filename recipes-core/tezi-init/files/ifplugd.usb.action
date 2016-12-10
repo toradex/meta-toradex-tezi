@@ -9,9 +9,8 @@ fi
 
 if [ "$2" = "up" ]; then
 	echo "ifplugd up"
-	ip addr add 192.168.11.1 dev "$1" || true
+	ip addr add 192.168.11.1/24 dev "$1" || true
 	ip link set up dev "$1"
-	ip route add 192.168.11.0/24 dev "$1"
 	udhcpd /etc/udhcpd.conf
 fi
 
