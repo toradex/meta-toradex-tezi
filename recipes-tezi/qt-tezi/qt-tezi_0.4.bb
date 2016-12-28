@@ -4,7 +4,8 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http"
+SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http \
+    file://rc.local"
 
 SRCREV = "0ce1e50daefa7f9b5e5904d8b5609d7f1ab4b750"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
@@ -36,6 +37,7 @@ RRECOMMENDS_${PN} += "\
 
 FILES_${PN} = " \
     ${sysconfdir} \
+    ${sysconfdir}/rc.local \
     ${bindir} \
     ${datadir}/tezi/ \
 "
@@ -45,6 +47,9 @@ do_install() {
     install -m 0755 ${S}/tezi ${D}${bindir}/
     install -d ${D}${datadir}/tezi/keymaps/
     install -m 0644 ${S}/keymaps/*qmap ${D}${datadir}/tezi/keymaps/
+
+    install -d ${D}${sysconfdir}
+    install -m 0755 ${WORKDIR}/rc.local ${D}${sysconfdir}
 }
 
 FILES_${PN}-dbg += "${bindir}/.debug"
