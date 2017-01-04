@@ -6,8 +6,9 @@ PR = "r1"
 
 RDEPENDS_${PN} = "busybox"
 
-SRC_URI = "git://eng-git.toradex.int/tdxtester.git;branch=master;protocol=git \
+SRC_URI = "git://eng-git.toradex.int/toradex-tester.git;branch=master;protocol=git \
            file://rc.local \
+           file://flash_tezi.sh \
 	  "
 SRCREV = "${AUTOREV}"
 
@@ -34,6 +35,9 @@ do_install() {
     install -m 0755 ${WORKDIR}/rc.local ${D}${sysconfdir}
 
     install -d ${D}${bindir}/
+    install -m 0755 ${WORKDIR}/flash_tezi.sh ${D}${bindir}/
+
+    install -d ${D}${bindir}/
     install -m 0755 ${S}/tdxtester ${D}${bindir}/
     install -d ${D}${libdir}/tdxtester/
     install -m 0644 ${S}/modules/* ${D}${libdir}/tdxtester/
@@ -41,5 +45,6 @@ do_install() {
 
 FILES_${PN} = "${sysconfdir}/rc.local \
                ${bindir}/tdxtester \
+               ${bindir}/flash_tezi.sh \
                ${libdir}/tdxtester/ \
 "
