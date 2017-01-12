@@ -4,7 +4,7 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://eng-git.toradex.int/cgit/ags/tez-i.git;branch=master;protocol=http \
+SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=http \
     file://rc.local"
 
 SRCREV = "0ce1e50daefa7f9b5e5904d8b5609d7f1ab4b750"
