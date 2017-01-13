@@ -11,7 +11,7 @@ fi
 
 echo ""
 echo "Toradex Easy Installer targets are:"
-echo "    tezi"
+echo "    tezi-run"
 echo "    tezi-devel"
 echo "    tester"
 
