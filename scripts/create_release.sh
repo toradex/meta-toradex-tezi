@@ -16,9 +16,8 @@ cp ${SRCDIR}/tezi.png ${DSTDIR}
 cp -r ${SRCDIR}/recovery/ ${DSTDIR}
 cp ${SRCDIR}/recovery-* ${DSTDIR}
 
-# Externally compiled
-cp ${SRCDIR}/SPL ${DSTDIR}
-cp ${SRCDIR}/u-boot.img ${DSTDIR}
+cp SPL ${DSTDIR}
+cp u-boot.img ${DSTDIR}
 
 cp boot.scr ${DSTDIR}
 cp boot-sdp.scr ${DSTDIR}

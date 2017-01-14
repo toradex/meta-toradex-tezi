@@ -22,6 +22,8 @@ IMAGE_INSTALL += " \
 
 LICENSE="MIT"
 
+DEPENDS="virtual/bootloader"
+
 do_rootfs[depends] += "u-boot-distro-boot:do_deploy"
 
 inherit core-image
