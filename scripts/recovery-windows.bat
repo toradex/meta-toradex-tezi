@@ -1,6 +1,6 @@
 @echo off
 
-recovery\imx_usb.exe -b
+recovery\imx_usb.exe
 
 IF %ERRORLEVEL% EQU 0 (
   echo

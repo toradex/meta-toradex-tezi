@@ -3,9 +3,9 @@
 # Use imx_usb batch download capabilities
 echo "Downloading Toradex Easy Installer..."
 if [ "$1" == "-d" ]; then
-	sudo ./recovery/imx_usb -b
+	sudo ./recovery/imx_usb
 else
-	sudo ./recovery/imx_usb -b > /dev/null
+	sudo ./recovery/imx_usb > /dev/null
 fi
 if [[ $? != 0 ]]; then 
 	echo ""
