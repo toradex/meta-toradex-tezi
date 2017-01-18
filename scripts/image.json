@@ -4,8 +4,8 @@
   "name": "Toradex Easy Installer",
   "description": "Toradex Easy Installer for Apalis iMX6.",
   "icon": "tezi.png",
-  "version": "V0.4",
-  "release_date": "2016-12-12",
+  "version": "V0.5",
+  "release_date": "2017-01-18",
   "wrapup_script": "wrapup.sh",
   "autoinstall": false,
   "supported_product_ids": [
