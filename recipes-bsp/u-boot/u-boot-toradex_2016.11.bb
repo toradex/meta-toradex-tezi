@@ -1,12 +1,12 @@
 include recipes-bsp/u-boot/u-boot-toradex.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-PV = "v2016.11-v2.7b1+git${SRCPV}"
+PV = "v2016.11-v0.5+git${SRCPV}"
 
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-SRCREV = "f1d68687537bceed9211e84e982965bce3be421e"
-SRCBRANCH = "2016.11-toradex-next"
+SRCREV = "785bcf4bc1b1d60b7d7558749fd4bb2eba9bcbc3"
+SRCBRANCH = "2016.11-toradex"
 COMPATIBLE_MACHINE = "(mx6|mx7|vf)"
 
 SRC_URI_append = "\
