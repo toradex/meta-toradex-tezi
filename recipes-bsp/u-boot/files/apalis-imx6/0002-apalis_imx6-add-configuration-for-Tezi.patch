@@ -1,4 +1,4 @@
-From e7531523ea328da04064a61b7839f79cb7e07eb8 Mon Sep 17 00:00:00 2001
+From 94a4648381f5e40a1c09878bf0931be9862df135 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:22:27 -0800
 Subject: [PATCH 2/2] apalis_imx6: add configuration for Tezi

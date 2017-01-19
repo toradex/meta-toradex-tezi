@@ -1,4 +1,4 @@
-From 7d2ddc97287a9034afa0924f0006aa97af30d78e Mon Sep 17 00:00:00 2001
+From bbd6b2ad2a9f998c2303a4132a144434962e884c Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:25:16 -0800
 Subject: [PATCH 1/2] apalis_imx6: use SDP if recovery mode is enabled
@@ -7,13 +7,18 @@ In U-Boot, in case recovery mode is used, set bootcmd to start serial
 download protocol (SDP). This allows to download complete images such
 as Toradex Easy Installer over USB SDP.
 
+Note that how we enter recovery mode in software via bmode has been
+changed: This code supports both modes, the old GPR9 value 0x01 and the
+newer GPR9 value 0x10. See also commit 81c4eccb55cc ("imx: mx6: fix USB
+bmode to use reserved value").
+
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- board/toradex/apalis_imx6/apalis_imx6.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ board/toradex/apalis_imx6/apalis_imx6.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/board/toradex/apalis_imx6/apalis_imx6.c b/board/toradex/apalis_imx6/apalis_imx6.c
-index 93e777d6ce..6a7d26cb4d 100644
+index 93e777d6ce..27818dfe2e 100644
 --- a/board/toradex/apalis_imx6/apalis_imx6.c
 +++ b/board/toradex/apalis_imx6/apalis_imx6.c
 @@ -847,6 +847,9 @@ int board_init(void)
@@ -26,12 +31,16 @@ index 93e777d6ce..6a7d26cb4d 100644
  #if defined(CONFIG_REVISION_TAG) && \
      defined(CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG)
  	char env_str[256];
-@@ -876,6 +879,13 @@ int board_late_init(void)
+@@ -876,6 +879,17 @@ int board_late_init(void)
  #endif /* CONFIG_TDX_APALIS_IMX6_V1_0 */
  #endif /* CONFIG_REVISION_TAG */
  
++	/*
++	 * Check BMODE or software boot override bmode. Note, for bmode two
++	 * different GPR9 values have been used in the past (0x01 and 0x10)
++	 */
 +	if (((readl(&src->sbmr2) >> 24) & 0x03) == 0x01 ||
-+		(gpr10_boot && (gpr9 == 0x1))) {
++		(gpr10_boot && (gpr9 == 0x1 || gpr9 == 0x10))) {
 +		printf("Serial Downloader recovery mode, using sdp command\n");
 +		setenv("bootdelay", "0");
 +		setenv("bootcmd", "sdp 0");
