@@ -5,8 +5,8 @@ SECTION = "libs"
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://COPYING.lib;md5=3511d726d09144c8590aba4623ca2e9f"
 
-SRCREV = "c870d00a5a287ccb3032d33fe01ceef13c1ec003"
-PV = "0.8.1+git${SRCPV}"
+SRCREV = "eee8a1626f18499a95a5216dd1832f45c15a46ba"
+PV = "0.9.0"
 
 PR = "r0"
 S = "${WORKDIR}/git"
@@ -15,11 +15,7 @@ SRC_URI = "git://github.com/flavio/qjson.git"
 
 FILES_${PN} = "${libdir}/qt4"
 
-#RDEPENDS_pn += "qt4-embedded"
-#DEPENDS += "cmake pkgconfig qt4-embedded"
-
 inherit qt4e cmake
-inherit autotools gettext
 
 EXTRA_OECMAKE = "-DQT_LIBRARY_DIR=${OE_QMAKE_LIBDIR_QT} \
                  -DQT_INSTALL_LIBS=${OE_QMAKE_LIBDIR_QT} \
@@ -39,8 +35,4 @@ EXTRA_OECMAKE = "-DQT_LIBRARY_DIR=${OE_QMAKE_LIBDIR_QT} \
 # Adding our lib file to the main package
 FILES_${PN} = "${libdir}/*"
 
-do_configure_prepend() {
-}
 
-do_install_prepend() {
-}
