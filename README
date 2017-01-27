@@ -36,7 +36,7 @@ This layer is maintained by Toradex.
 
 When creating a patch of the last commit, use
 
-    git format-patch -s --subject-prefix='meta-toradex-ezi][<branch>][PATCH' -1
+    git format-patch -s --subject-prefix='meta-toradex-tezi][<branch>][PATCH' -1
 
 To send it to the community, use
 
