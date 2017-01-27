@@ -24,6 +24,7 @@ do_mkimage () {
 }
 
 addtask mkimage after do_compile before do_install
+do_mkimage[dirs] = "${WORKDIR}"
 
 do_deploy () {
     install -d ${DEPLOYDIR}
