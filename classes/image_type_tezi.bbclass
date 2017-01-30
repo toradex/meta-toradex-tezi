@@ -1,6 +1,6 @@
 inherit image_types
 
-IMAGE_DEPENDS_tezi = "tezi-metadata:do_deploy"
+IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy"
 
 python rootfs_tezi_json() {
     import json, subprocess
@@ -99,7 +99,7 @@ python rootfs_tezi_json() {
 }
 do_rootfs[postfuncs] =+ "rootfs_tezi_json"
 
-IMAGE_CMD_tezi () {
+IMAGE_CMD_teziimg () {
 	bbnote "Create bootfs tarball"
 
 	# Create list of device tree files
@@ -123,4 +123,4 @@ IMAGE_CMD_tezi () {
 	${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${U_BOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 }
 
-IMAGE_TYPEDEP_tezi += "tar.xz"
+IMAGE_TYPEDEP_teziimg += "tar.xz"
