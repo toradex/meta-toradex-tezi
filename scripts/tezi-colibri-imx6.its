@@ -1,16 +1,16 @@
 /*
- * U-boot FIT image for Toradex Installer
+ * U-boot FIT image for Toradex Easy Installer
  */
 
 /dts-v1/;
 
 / {
-	description = "Toradex Installer for Apalis iMX6";
+	description = "Toradex Easy Installer for Colibri iMX6";
 	#address-cells = <1>;
 
 	images {
 		kernel@1 {
-			description = "Linux Kernel 3.14.52";
+			description = "Linux Kernel 4.1";
 			data = /incbin/("./zImage");
 			type = "kernel";
 			arch = "arm";
@@ -25,7 +25,7 @@
 
 		ramdisk@1 {
 			description = "SquashFS RAMdisk";
-			data = /incbin/("./tezi-run-apalis-imx6.squashfs");
+			data = /incbin/("./tezi-run-colibri-imx6.squashfs");
 			type = "ramdisk";
 			arch = "arm";
 			os = "linux";
@@ -36,8 +36,8 @@
 		};
 
 		fdt@1 {
-			description = "Apalis iMX6 Device Tree";
-			data = /incbin/("./zImage-imx6q-apalis-eval.dtb");
+			description = "Colibri iMX6 Device Tree";
+			data = /incbin/("./zImage-imx6dl-colibri-eval-v3.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";
@@ -53,7 +53,7 @@
 		default = "config@1";
 
 		config@1 {
-			description = "Toradex Installer for Apalis iMX6";
+			description = "Toradex Easy Installer for Colibri iMX6";
 			kernel = "kernel@1";
 			ramdisk = "ramdisk@1";
 			fdt = "fdt@1";
