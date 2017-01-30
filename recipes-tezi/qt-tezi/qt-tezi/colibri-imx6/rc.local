@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Start services and customize the boot process here.
+echo "Running /etc/rc.local..."
+
+# Start Toradex Installer Qt user interface
+
+for p in `cat /proc/cmdline` ; do
+	if [ "${p%%=*}" == "lang" ] ; then
+		DEFAULT_LANG="-lang ${p#*=}";
+	fi
+	if [ "${p%%=*}" == "keyboard" ] ; then
+		DEFAULT_KBD="-kbdlayout ${p#*=}";
+	fi
+done
+
+if grep -q autoinstall /proc/cmdline; then
+	AUTOINSTALL="-autoinstall";
+fi
+
+# Explicitly using Linux input system avoids UI freezes (default is TTY driver...)
+export QWS_KEYBOARD="LinuxInput:/dev/input/event2"
+# Mirror output, HDMI as primary device
+# fb0 => HDMI, fb2 => parallel RGB
+export QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1 VNC:size=640x480:depth=32"
+# Set Mouse explicitly, otherwise qscreenvnc_qws.cpp overwrites with
+# setDefaultMouse("None")
+export QWS_MOUSE_PROTO="Auto"
+
+# Start in background
+nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/null > /var/volatile/tezi.log &
