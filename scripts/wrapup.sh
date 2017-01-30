@@ -2,7 +2,7 @@
 #
 # (c) Toradex AG 2016
 #
-# Apalis iMX6 in-field hardware update script
+# Apalis/Colibri iMX6 in-field hardware update script
 #
 # One-time configurations (non-reversible!):
 # - Fuse SoC to use eMMC Fast Boot mode
@@ -27,7 +27,8 @@ error_exit () {
 # Do a basic validation that we do this on one of our modules
 case $PRODUCT_ID in
 0027|0028|0029|0035) ;;
-*) error_exit "This script is meant to be run on a Apalis iMX6. Aborting...";
+0014|0015|0016|0017) ;;
+*) error_exit "This script is meant to be run on a Apalis/Colibri iMX6. Aborting...";
 esac
 
 # Fuse SoC's BOOT_CFG to enable eMMC Fast Boot mode, if necsary
@@ -73,6 +74,6 @@ fi
 
 mmc extcsd read ${MMCDEV} | grep -e BOOT_BUS_CONDITIONS -e PARTITION_CONFIG -e RST_N_FUNCTION
 
-echo "Apalis iMX6 in-field hardware update script ended successfully."
+echo "Apalis/Colibri iMX6 in-field hardware update script ended successfully."
 
 exit 0
