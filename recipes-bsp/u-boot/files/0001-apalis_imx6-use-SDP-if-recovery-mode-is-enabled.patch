@@ -1,7 +1,7 @@
 From bbd6b2ad2a9f998c2303a4132a144434962e884c Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:25:16 -0800
-Subject: [PATCH 1/2] apalis_imx6: use SDP if recovery mode is enabled
+Subject: [PATCH 1/4] apalis_imx6: use SDP if recovery mode is enabled
 
 In U-Boot, in case recovery mode is used, set bootcmd to start serial
 download protocol (SDP). This allows to download complete images such

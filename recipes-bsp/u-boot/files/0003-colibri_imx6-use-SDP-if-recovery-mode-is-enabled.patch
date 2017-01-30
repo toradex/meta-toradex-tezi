@@ -1,0 +1,54 @@
+From f39f44cf802e713eda1c4c3c025edbf06c9c84a6 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Fri, 27 Jan 2017 16:05:34 -0800
+Subject: [PATCH 3/4] colibri_imx6: use SDP if recovery mode is enabled
+
+In U-Boot, in case recovery mode is used, set bootcmd to start serial
+download protocol (SDP). This allows to download complete images such
+as Toradex Easy Installer over USB SDP.
+
+Note that how we enter recovery mode in software via bmode has been
+changed: This code supports both modes, the old GPR9 value 0x01 and the
+newer GPR9 value 0x10. See also commit 81c4eccb55cc ("imx: mx6: fix USB
+bmode to use reserved value").
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ board/toradex/colibri_imx6/colibri_imx6.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/board/toradex/colibri_imx6/colibri_imx6.c b/board/toradex/colibri_imx6/colibri_imx6.c
+index 1fa0bf6252..652425e302 100644
+--- a/board/toradex/colibri_imx6/colibri_imx6.c
++++ b/board/toradex/colibri_imx6/colibri_imx6.c
+@@ -668,6 +668,9 @@ int board_init(void)
+ #ifdef CONFIG_BOARD_LATE_INIT
+ int board_late_init(void)
+ {
++	struct src *src = (struct src *)SRC_BASE_ADDR;
++	unsigned int gpr10_boot = readl(&src->gpr10) & (1 << 28);
++	unsigned int gpr9 = readl(&src->gpr9);
+ #if defined(CONFIG_REVISION_TAG) && \
+     defined(CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG)
+ 	char env_str[256];
+@@ -678,6 +681,17 @@ int board_late_init(void)
+ 	setenv("board_rev", env_str);
+ #endif
+ 
++	/*
++	 * Check BMODE or software boot override bmode. Note, for bmode two
++	 * different GPR9 values have been used in the past (0x01 and 0x10)
++	 */
++	if (((readl(&src->sbmr2) >> 24) & 0x03) == 0x01 ||
++		(gpr10_boot && (gpr9 == 0x1 || gpr9 == 0x10))) {
++		printf("Serial Downloader recovery mode, using sdp command\n");
++		setenv("bootdelay", "0");
++		setenv("bootcmd", "sdp 0");
++	}
++
+ 	return 0;
+ }
+ #endif /* CONFIG_BOARD_LATE_INIT */
+-- 
+2.11.0
+
