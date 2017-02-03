@@ -1,0 +1,68 @@
+attrs : 
+{
+    bcdUSB = 0x200;
+    bDeviceClass = 0x2;
+    bDeviceSubClass = 0x0;
+    bDeviceProtocol = 0x0;
+    bMaxPacketSize0 = 0x40;
+    idVendor = 0x1D6B;
+    idProduct = 0x104;
+    bcdDevice = 0x401;
+};
+os_descs : 
+{
+    config = "c_1";
+    use = 1;
+    qw_sign = "MSFT100";
+    b_vendor_code = 0xCD;
+};
+strings = ( 
+    {
+        lang = 0x409;
+        manufacturer = "Toradex";
+        product = "Toradex Colibri iMX6";
+        serialnumber = "00000000";
+    } );
+functions : 
+{
+    rndis_usb0 : 
+    {
+        instance = "usb0";
+        type = "rndis";
+        attrs : 
+        {
+            dev_addr = "00:14:2d:ff:ff:ff";
+            host_addr = "00:14:2d:ff:ff:fe";
+            qmult = 5;
+        };
+        os_descs = ( 
+            {
+                interface = "rndis";
+                compatible_id = "RNDIS";
+                sub_compatible_id = "5162001";
+            } );
+    };
+};
+configs : 
+{
+    c_1 : 
+    {
+        id = 1;
+        name = "c";
+        attrs : 
+        {
+            bmAttributes = 0xC0;
+            bMaxPower = 0x1;
+        };
+        strings = ( 
+            {
+                lang = 0x409;
+                configuration = "RNDIS";
+            } );
+        functions = ( 
+            {
+                name = "rndis.usb0";
+                function = "rndis_usb0";
+            } );
+    };
+};
