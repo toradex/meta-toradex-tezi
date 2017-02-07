@@ -3,6 +3,9 @@ inherit image_types
 IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy"
 
 python rootfs_tezi_json() {
+    if not bb.utils.contains("IMAGE_FSTYPES", "teziimg", True, False, d):
+        return
+
     import json, subprocess
     from datetime import date
     from collections import OrderedDict
