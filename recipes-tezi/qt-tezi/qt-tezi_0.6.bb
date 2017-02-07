@@ -7,7 +7,7 @@ LICENSE = "BSD-3-Clause"
 SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=http \
     file://rc.local"
 
-SRCREV = "37a108606c62a912148526874f8dba787d17097d"
+SRCREV = "68db339d6b9faf9c9fbc0d1080f3168909869727"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
