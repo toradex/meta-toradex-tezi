@@ -47,7 +47,7 @@ FSSIZEMEG=`expr $FSSIZE / 2 / 1024`"M"
 resize2fs /dev/$PART $FSSIZEMEG
 
 #job done, remove it from systemd services
-systemctl disable resizefs.service
+systemctl --no-reload disable resizefs.service
 
 logger "resizing $PART finished, new size is $FSSIZEMEG"
 
