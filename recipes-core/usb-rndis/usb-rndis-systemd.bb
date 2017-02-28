@@ -1,6 +1,5 @@
 SECTION = "network"
 SUMMARY = "RNDIS usb client configuration and startup"
-RDEPENDS_${PN} = ""
 # The license is meant for this recipe and the files it installs.
 # RNDIS is part of the kernel, systemd-networkd is part of systemd
 LICENSE = "MIT"
@@ -47,4 +46,3 @@ NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "usb-rndis.service"
 SYSTEMD_AUTO_ENABLE_mx6 = "disable"
-
