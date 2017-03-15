@@ -1,0 +1,11 @@
+# This avoids UI freezes with the TTY driver
+QWS_KEYBOARD="LinuxInput:/dev/input/event2 LinuxInput:/dev/input/event3"
+
+# Mirror output, HDMI as primary device
+# fb0 => HDMI, fb2 => parallel RGB
+QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1 LinuxFB:/dev/fb3:2 VNC:size=640x480:depth=32"
+
+# Set Mouse explicitly, otherwise qscreenvnc_qws.cpp overwrites with
+# setDefaultMouse("None")
+QWS_MOUSE_PROTO="Auto"
+
