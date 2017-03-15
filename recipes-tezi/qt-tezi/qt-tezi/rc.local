@@ -3,8 +3,10 @@
 # Start services and customize the boot process here.
 echo "Running /etc/rc.local..."
 
-# Start Toradex Installer Qt user interface
+# Start ifplugd to monitor ethernet device
+ifplugd -u 1 -f -i eth0 -r /etc/ifplugd/ifplugd.dhcp.action
 
+# Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do
 	if [ "${p%%=*}" == "lang" ] ; then
 		DEFAULT_LANG="-lang ${p#*=}";

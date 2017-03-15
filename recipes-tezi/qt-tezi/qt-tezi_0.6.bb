@@ -6,7 +6,11 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=http \
     file://defaults \
-    file://rc.local"
+    file://rc.local \
+    file://udhcpd.conf \
+    file://ifplugd.dhcp.action \
+    file://ifplugd.usb.action \
+"
 
 SRCREV = "68db339d6b9faf9c9fbc0d1080f3168909869727"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
@@ -40,6 +44,8 @@ FILES_${PN} = " \
     ${sysconfdir} \
     ${sysconfdir}/rc.local \
     ${sysconfdir}/defaults/tezi \
+    ${sysconfdir}/udhcpd.conf \
+    ${sysconfdir}/ifplugd \
     ${bindir} \
     ${datadir}/tezi/ \
 "
@@ -55,6 +61,13 @@ do_install() {
 
     install -d ${D}${sysconfdir}/defaults/
     install -m 0755 ${WORKDIR}/defaults ${D}${sysconfdir}/defaults/tezi
+
+    install -d ${D}${sysconfdir}
+    install -m 0755 ${WORKDIR}/udhcpd.conf ${D}${sysconfdir}
+    install -d ${D}${sysconfdir}/ifplugd
+    install -m 0755 ${WORKDIR}/ifplugd.dhcp.action ${D}${sysconfdir}/ifplugd
+    install -m 0755 ${WORKDIR}/ifplugd.usb.action ${D}${sysconfdir}/ifplugd
+
 }
 
 FILES_${PN}-dbg += "${bindir}/.debug"
