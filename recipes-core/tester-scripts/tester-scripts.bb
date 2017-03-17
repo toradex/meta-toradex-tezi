@@ -18,6 +18,8 @@ RDEPENDS_${PN} = " \
         python3-importlib \
         python3-pyserial \
         python3-textutils \
+        python3-mmap \
+        python3-json \
     " 
 
 S = "${WORKDIR}/git"
