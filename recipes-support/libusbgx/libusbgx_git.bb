@@ -13,7 +13,8 @@ EXTRA_OECONF = "--includedir=${includedir}/usbgx"
 PV = "0.1.0+git${SRCPV}"
 SRCREV = "566993a7647ed5cb36098f27084fd2d5d1f0f017"
 SRCBRANCH = "os_descriptors"
-SRC_URI = "git://github.com/toradex/libusbgx.git;branch=${SRCBRANCH} \
+SRC_URI = " \
+    git://github.com/toradex/libusbgx.git;branch=${SRCBRANCH} \
     file://usbg.service \
     file://g1.schema \
 "

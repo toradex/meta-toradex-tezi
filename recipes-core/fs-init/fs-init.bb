@@ -5,7 +5,7 @@ PR = "r3"
 
 RRECOMMENDS_${PN} = "e2fsprogs-resize2fs"
 
-SRC_URI =  " \
+SRC_URI = " \
     file://resizefs.sh \
     file://resizefs.service \
     file://COPYING \

@@ -4,7 +4,7 @@ PR = "r2"
 
 inherit systemd
 
-SRC_URI =  " \
+SRC_URI = " \
     file://gpio-export.sh \
     file://gpio-export.service \
     file://COPYING \
