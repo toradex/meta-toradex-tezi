@@ -3,6 +3,8 @@ IMAGE_INSTALL += " \
     dosfstools \
     mmc-utils \
     spitools \
+    pciutils \
+    i2c-tools \
     tester-scripts \
     util-linux \
     util-linux-sfdisk \
