@@ -10,7 +10,7 @@ SRC_URI = "git://eng-git.toradex.int/toradex-tester.git;branch=master;protocol=g
            file://rc.local \
            file://flash_tezi.sh \
 	  "
-SRCREV = "${AUTOREV}"
+SRCREV = "cffafc5f209b1ba564a52894c66d23b7b1de12c8"
 
 RDEPENDS_${PN} = " \
         python3 \
