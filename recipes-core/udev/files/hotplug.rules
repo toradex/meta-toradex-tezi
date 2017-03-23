@@ -1,0 +1,2 @@
+# SD card hotplug configuration of read_ahead cache size
+KERNEL=="mmcblk?", ACTION=="add"    RUN+="/etc/udev/scripts/hotplug.sh"
