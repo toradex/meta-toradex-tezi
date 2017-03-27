@@ -30,11 +30,11 @@ python rootfs_tezi_json() {
 
     data = OrderedDict({ "config_format": 1, "autoinstall": False })
 
-    # Use image recipies SUMMARY/DESCRIPTION/PV...
+    # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
-    data["version"] = d.getVar('PV', True)
-    data["release_date"] = date.isoformat(date.today())
+    data["version"] = d.getVar('TDX_VER_EXT_MIN', True)
+    data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
     if os.path.exists(os.path.join(deploydir, "prepare.sh")):
         data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
@@ -123,7 +123,7 @@ IMAGE_CMD_teziimg () {
 
 	# The first transform strips all folders from the files to tar, the
 	# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
-	${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${U_BOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+	${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${U_BOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 }
 
 IMAGE_TYPEDEP_teziimg += "tar.xz"
