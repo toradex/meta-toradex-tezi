@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "68db339d6b9faf9c9fbc0d1080f3168909869727"
+SRCREV = "d5238a1972a45d43c4735bbefbd55a31fafc94bc"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
@@ -26,6 +26,9 @@ DEPENDS += " \
 "
 
 RDEPENDS_${PN} += " \
+    util-linux-sfdisk \
+    util-linux-blkid \
+    util-linux-blkdiscard \
     libqt-embeddedcore4 \
     libqt-embeddedgui4 \
     qt4-embedded-fonts-ttf-vera \
