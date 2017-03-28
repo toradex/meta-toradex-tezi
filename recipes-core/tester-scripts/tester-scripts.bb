@@ -10,7 +10,7 @@ SRC_URI = "git://eng-git.toradex.int/toradex-tester.git;branch=master;protocol=g
            file://rc.local \
            file://flash_tezi.sh \
 	  "
-SRCREV = "cffafc5f209b1ba564a52894c66d23b7b1de12c8"
+SRCREV = "7e846e4ac667cce0bcd1407ad9bc19305f2f1cfd"
 
 RDEPENDS_${PN} = " \
         python3 \
@@ -20,6 +20,7 @@ RDEPENDS_${PN} = " \
         python3-textutils \
         python3-mmap \
         python3-json \
+        python3-smbus \
     " 
 
 S = "${WORKDIR}/git"
