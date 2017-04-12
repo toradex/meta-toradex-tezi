@@ -89,6 +89,7 @@ python rootfs_tezi_run_json() {
         json.dump(data, outfile, indent=4)
     bb.note("Toradex Easy Installer metadata file image.json written.")
 }
+do_rootfs[depends] =+ "virtual/bootloader:do_deploy"
 do_rootfs[postfuncs] =+ "rootfs_tezi_run_json"
 
 IMAGE_CMD_tezirunimg () {
