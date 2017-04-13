@@ -1,5 +1,8 @@
 inherit image_types
 
+# Setting IMAGE_FSTYPES here allows us to overwrite machine defaults
+# such as "teziimg" set in machine files.
+IMAGE_FSTYPES="tezirunimg"
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native"
 
 python rootfs_tezi_run_json() {
@@ -89,7 +92,7 @@ python rootfs_tezi_run_json() {
         json.dump(data, outfile, indent=4)
     bb.note("Toradex Easy Installer metadata file image.json written.")
 }
-do_rootfs[depends] =+ "virtual/bootloader:do_deploy"
+do_rootfs[depends] =+ "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy"
 do_rootfs[postfuncs] =+ "rootfs_tezi_run_json"
 
 IMAGE_CMD_tezirunimg () {
