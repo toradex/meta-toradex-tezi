@@ -2,7 +2,9 @@
 # in conf/distro/include/angstrom-mesa-tweaks.inc
 
 # add the original mesa PACKAGECONFIG settings
-PACKAGECONFIG_pn-mesa_append = " gbm egl gles dri ${MESA_CRYPTO} ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)} "
+PACKAGECONFIG_pn-mesa_append = " gbm egl gles dri \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
+"
 
 # meta-freescale/recipes-graphics/mesa/mesa_%.bbappend
 PACKAGECONFIG_pn-mesa_remove_imxgpu2d = "egl gles"
