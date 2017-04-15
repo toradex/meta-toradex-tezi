@@ -12,6 +12,8 @@ IMAGE_INSTALL += " \
     openssh-sftp-server \
     gdb \
     devmem2 \
+    ldd \
+    strace \
 "
 
 LICENSE="MIT"

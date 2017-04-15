@@ -10,8 +10,6 @@ IMAGE_INSTALL += " \
     tdxtester \
     util-linux \
     util-linux-sfdisk \
-    ldd \
-    strace \
 "
 
 LICENSE="MIT"
