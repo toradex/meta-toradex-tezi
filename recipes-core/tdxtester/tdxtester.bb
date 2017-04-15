@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 PR = "r1"
 
 SRC_URI = "git://eng-git.toradex.int/toradex-tester.git;branch=master;protocol=git"
-SRCREV = "2021e6445e967724fc4662ef8ed980e427d3cf0b"
+SRCREV = "c53f575a30e22ea87040a5c420bb6fab5cce2637"
 
 RDEPENDS_${PN} = " \
         python3 \
@@ -18,6 +18,8 @@ RDEPENDS_${PN} = " \
         python3-numpy \
         python3-json \
         python3-smbus \
+        python3-can \
+        iproute2 \
     "
 
 inherit setuptools3
