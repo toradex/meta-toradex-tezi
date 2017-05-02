@@ -48,4 +48,4 @@ do_populate_sysroot[noexec] = "1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6)"
+COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6|colibri-imx7)"
