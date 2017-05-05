@@ -20,6 +20,6 @@ do_deploy () {
 
 addtask deploy before do_package after do_install
 
-COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6)"
+COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx6|colibri-imx7)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
