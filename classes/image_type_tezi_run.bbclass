@@ -109,7 +109,7 @@ do_assemble_fitimage () {
 
 	cd ${DEPLOY_DIR_IMAGE}
 	mkdir ${IMAGE_NAME}/
-	cp -L -R SPL u-boot.img tezi.itb wrapup.sh image.json tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
+	cp -L -R ${SPL_BINARY} ${UBOOT_BINARY} tezi.itb wrapup.sh image.json tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
 	zip -r ${IMAGE_NAME}.zip ${IMAGE_NAME}/
 	rm -r ${IMAGE_NAME}/
 }
