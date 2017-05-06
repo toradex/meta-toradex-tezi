@@ -196,12 +196,24 @@ IMAGE_CMD_teziimg () {
 	fi
 
 	cd ${DEPLOY_DIR_IMAGE}
-	${IMAGE_CMD_TAR} --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar -C ${DEPLOY_DIR_IMAGE} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES}
-	xz -f -k -c ${XZ_COMPRESSION_LEVEL} ${XZ_THREADS} --check=${XZ_INTEGRITY_CHECK} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar > ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz
 
-	# The first transform strips all folders from the files to tar, the
-	# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
-	${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+	case "${TORADEX_FLASH_TYPE}" in
+		rawnand)
+		# The first transform strips all folders from the files to tar, the
+		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
+		# The third transform removes zImage from the device tree.
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES} ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		;;
+		*)
+		# Create bootfs...
+		${IMAGE_CMD_TAR} --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar -C ${DEPLOY_DIR_IMAGE} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES}
+		xz -f -k -c ${XZ_COMPRESSION_LEVEL} ${XZ_THREADS} --check=${XZ_INTEGRITY_CHECK} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar > ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz
+
+		# The first transform strips all folders from the files to tar, the
+		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		;;
+	esac
 }
 
 IMAGE_TYPEDEP_teziimg += "tar.xz"
