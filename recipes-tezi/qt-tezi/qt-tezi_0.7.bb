@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "d5238a1972a45d43c4735bbefbd55a31fafc94bc"
+SRCREV = "9499dbea8657ed4781c7ab94a5e48538d59526ed"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
@@ -38,7 +38,6 @@ RDEPENDS_${PN} += " \
 
 # Ensure we have some plugins for some useful image formats
 RRECOMMENDS_${PN} += "\
-    qt4-embedded-translation-qt \
     qt4-embedded-plugin-imageformat-jpeg \
     qt4-embedded-plugin-gfxdriver-gfxvnc \
 "
