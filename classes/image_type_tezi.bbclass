@@ -108,6 +108,7 @@ def rootfs_tezi_rawnand(d):
             {
               "name": "kernel",
               "size_kib": 8192,
+              "type": "static",
               "content": {
                 "rawfile": {
                   "filename": d.getVar('KERNEL_IMAGETYPE', True),
@@ -120,11 +121,13 @@ def rootfs_tezi_rawnand(d):
               "content": {
                 "rawfiles": dtfiles
               },
-              "size_kib": 128
+              "size_kib": 128,
+              "type": "static"
             },
             {
               "name": "m4firmware",
-              "size_kib": 896
+              "size_kib": 896,
+              "type": "static"
             },
             {
               "name": "rootfs",
