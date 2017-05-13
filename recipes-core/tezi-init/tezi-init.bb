@@ -7,8 +7,10 @@ PR = "r1"
 
 RDEPENDS_${PN} = "busybox"
 
-SRC_URI = "file://init \
-	  "
+SRC_URI = " \
+    file://init \
+    file://initrd \
+"
 
 do_configure() {
 	:
@@ -19,7 +21,12 @@ do_compile() {
 }
 
 do_install() {
-	install -m 0755 ${WORKDIR}/init ${D}
+	install -m 0755 ${WORKDIR}/initrd ${D}/init
+	install -d ${D}${base_sbindir}
+	install -m 0755 ${WORKDIR}/init ${D}/${base_sbindir}/init
 }
 
-FILES_${PN} = "/init"
+FILES_${PN} = " \
+    /init \
+    ${base_sbindir}/init \
+"
