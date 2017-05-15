@@ -11,6 +11,8 @@ SRC_URI = "file://wrapup.sh \
            file://recovery/mx6_usb_rom.conf \
            file://recovery/mx6_usb_sdp_spl.conf \
            file://recovery/mx6_usb_sdp_uboot.conf \
+           file://recovery/mx7_usb_rom.conf \
+           file://recovery/mx7_usb_sdp_uboot.conf \
            file://recovery/README"
 
 
@@ -28,6 +30,8 @@ do_deploy () {
 	install -m 644 ${WORKDIR}/recovery/mx6_usb_rom.conf ${DEPLOYDIR}/recovery/
 	install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_spl.conf ${DEPLOYDIR}/recovery/
 	install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_uboot.conf ${DEPLOYDIR}/recovery/
+	install -m 644 ${WORKDIR}/recovery/mx7_usb_rom.conf ${DEPLOYDIR}/recovery/
+	install -m 644 ${WORKDIR}/recovery/mx7_usb_sdp_uboot.conf ${DEPLOYDIR}/recovery/
 	install -m 644 ${WORKDIR}/recovery/README ${DEPLOYDIR}/recovery/
 }
 
