@@ -1,43 +1,118 @@
 inherit image_types
+include conf/tdx_version.conf
 
 # Setting IMAGE_FSTYPES here allows us to overwrite machine defaults
 # such as "teziimg" set in machine files.
 IMAGE_FSTYPES="tezirunimg"
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native"
 
+def fitimg_get_size(d):
+    import subprocess
+    deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
+
+    # Get size of FIT image...
+    args = ['du', '-kLc', os.path.join(deploydir, 'tezi.itb') ]
+    output = subprocess.check_output(args)
+    return int(output.splitlines()[-1].split()[0])
+
+def rootfs_tezi_emmc(d):
+    from collections import OrderedDict
+
+    return [
+        OrderedDict({
+          "name": "mmcblk0",
+          "partitions": [
+            {
+              "partition_size_nominal": 32,
+              "want_maximised": False,
+              "content": {
+                "label": "BOOT",
+                "filesystem_type": "FAT",
+                "mkfs_options": "",
+                "filelist": [ "boot.scr", "tezi.itb" ],
+                "uncompressed_size": fitimg_get_size(d) / 1024
+              }
+            }
+          ]
+        }),
+        OrderedDict({
+          "name": "mmcblk0boot0",
+          "content": {
+            "filesystem_type": "raw",
+            "rawfiles": [
+              {
+                "filename": d.getVar('SPL_BINARY', True),
+                "dd_options": "seek=2"
+              },
+              {
+                "filename": "u-boot." + d.getVar('UBOOT_SUFFIX', True),
+                "dd_options": "seek=138"
+              }
+            ]
+          }
+        })]
+
+def rootfs_tezi_rawnand(d):
+    from collections import OrderedDict
+    imagename = d.getVar('IMAGE_NAME', True)
+
+    # Use device tree mapping to create product id <-> device tree relationship
+    dtmapping = d.getVarFlags('TORADEX_PRODUCT_IDS')
+    dtfiles = []
+    for f, v in dtmapping.items():
+        dtfiles.append({ "filename": v, "product_ids": f })
+
+    return [
+        OrderedDict({
+          "name": "u-boot1",
+          "content": {
+            "rawfile": {
+              "filename": d.getVar('UBOOT_BINARY', True),
+              "size": 1
+            }
+          },
+        }),
+        OrderedDict({
+          "name": "u-boot2",
+          "content": {
+            "rawfile": {
+              "filename": d.getVar('UBOOT_BINARY', True),
+              "size": 1
+            }
+          }
+        }),
+        OrderedDict({
+          "name": "ubi",
+          "ubivolumes": [
+            {
+              "name": "tezi",
+              "type": "static",
+              "content": {
+                "rawfile": {
+                  "filename": "tezi.itb",
+                  "size": fitimg_get_size(d) / 1024
+                }
+              }
+            }
+          ]
+        })]
+
 python rootfs_tezi_run_json() {
     if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
         return
 
-    import json, subprocess
-    from datetime import date
+    import json
     from collections import OrderedDict
 
-    # Calculate size of rootfs...
-    output = subprocess.check_output(['du', '-ks',
-                                      d.getVar('IMAGE_ROOTFS', True)])
-    rootfssize_kb = int(output.split()[0])
-
     deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
-    kernel = d.getVar('KERNEL_IMAGETYPE', True)
 
-    # Calculate size of bootfs...
-    bootfiles = [ os.path.join(deploydir, kernel) ]
-    for dtb in d.getVar('KERNEL_DEVICETREE', True).split():
-        bootfiles.append(os.path.join(deploydir, kernel + "-" + dtb))
+    data = OrderedDict({ "config_format": 1, "autoinstall": False })
 
-    args = ['du', '-kLc']
-    args.extend(bootfiles)
-    output = subprocess.check_output(args)
-    bootfssize_kb = int(output.splitlines()[-1].split()[0])
-
-    data = OrderedDict({ "config_format": 1, "autoinstall": False, "isinstaller": True })
-
-    # Use image recipies SUMMARY/DESCRIPTION/PV...
+    # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
-    data["version"] = d.getVar('PV', True)
-    data["release_date"] = date.isoformat(date.today())
+    data["version"] = d.getVar('TDX_VER_EXT_MIN', True)
+    data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
     if os.path.exists(os.path.join(deploydir, "prepare.sh")):
         data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
@@ -53,40 +128,11 @@ python rootfs_tezi_run_json() {
 
     data["supported_product_ids"] = d.getVar('TORADEX_PRODUCT_IDS', True).split()
 
-    imagename = d.getVar('IMAGE_NAME', True)
-    data["blockdevs"] = [
-    OrderedDict({
-      "name": "mmcblk0",
-      "partitions": [
-        {
-          "partition_size_nominal": 32,
-          "want_maximised": False,
-          "content": {
-            "label": "BOOT",
-            "filesystem_type": "FAT",
-            "mkfs_options": "",
-            "filelist": [ "boot.scr", "tezi.itb" ],
-            "uncompressed_size": 22
-          }
-        }
-      ]
-    }),
-    OrderedDict({
-      "name": "mmcblk0boot0",
-      "content": {
-        "filesystem_type": "raw",
-        "rawfiles": [
-          {
-            "filename": d.getVar('SPL_BINARY', True),
-            "dd_options": "seek=2"
-          },
-          {
-            "filename": "u-boot." + d.getVar('UBOOT_SUFFIX', True),
-            "dd_options": "seek=138"
-          }
-        ]
-      }
-    })]
+    if bb.utils.contains("TORADEX_FLASH_TYPE", "rawnand", True, False, d):
+        data["mtddevs"] = rootfs_tezi_rawnand(d)
+    else:
+        data["blockdevs"] = rootfs_tezi_emmc(d)
+
     deploy_dir = d.getVar('DEPLOY_DIR_IMAGE', True)
     with open(os.path.join(deploy_dir, 'image.json'), 'w') as outfile:
         json.dump(data, outfile, indent=4)
