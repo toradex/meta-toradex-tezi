@@ -20,6 +20,11 @@ IMAGE_INSTALL += " \
     u-boot-toradex-fsl-fw-utils \
 "
 
+IMAGE_INSTALL_append_colibri-imx7 = " \
+    mtd-utils-ubifs \
+    mtd-utils \
+"
+
 LICENSE="MIT"
 
 DEPENDS="virtual/bootloader"
