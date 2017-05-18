@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "9499dbea8657ed4781c7ab94a5e48538d59526ed"
+SRCREV = "04a0bb68f854fcd2af2ac1bf7e07f9247d6b3fb3"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
@@ -26,6 +26,7 @@ DEPENDS += " \
 "
 
 RDEPENDS_${PN} += " \
+    flash-wince \
     util-linux-sfdisk \
     util-linux-blkid \
     util-linux-blkdiscard \
