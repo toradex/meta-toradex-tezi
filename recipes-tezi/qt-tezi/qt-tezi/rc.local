@@ -21,7 +21,10 @@ if grep -q autoinstall /proc/cmdline; then
 fi
 
 # Source module specific defaults
-. /etc/defaults/tezi
+. /etc/default/tezi
+
+# Export variables relevant for Qt
+export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
 
 # Start in background
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/null > /var/volatile/tezi.log &

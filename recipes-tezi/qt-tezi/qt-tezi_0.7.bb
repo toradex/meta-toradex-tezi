@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "04a0bb68f854fcd2af2ac1bf7e07f9247d6b3fb3"
+SRCREV = "c54e59366e38fd811bf4295f4e9075358e2dd900"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
@@ -46,7 +46,7 @@ RRECOMMENDS_${PN} += "\
 FILES_${PN} = " \
     ${sysconfdir} \
     ${sysconfdir}/rc.local \
-    ${sysconfdir}/defaults/tezi \
+    ${sysconfdir}/default/tezi \
     ${sysconfdir}/udhcpd.conf \
     ${sysconfdir}/ifplugd \
     ${bindir} \
@@ -62,8 +62,8 @@ do_install() {
     install -d ${D}${sysconfdir}
     install -m 0755 ${WORKDIR}/rc.local ${D}${sysconfdir}
 
-    install -d ${D}${sysconfdir}/defaults/
-    install -m 0755 ${WORKDIR}/defaults ${D}${sysconfdir}/defaults/tezi
+    install -d ${D}${sysconfdir}/default/
+    install -m 0755 ${WORKDIR}/defaults ${D}${sysconfdir}/default/tezi
 
     install -d ${D}${sysconfdir}
     install -m 0755 ${WORKDIR}/udhcpd.conf ${D}${sysconfdir}
