@@ -5,6 +5,7 @@ include conf/tdx_version.conf
 # such as "teziimg" set in machine files.
 IMAGE_FSTYPES="tezirunimg"
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native"
+UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
 def fitimg_get_size(d):
     import subprocess
@@ -45,7 +46,7 @@ def rootfs_tezi_emmc(d):
                 "dd_options": "seek=2"
               },
               {
-                "filename": "u-boot." + d.getVar('UBOOT_SUFFIX', True),
+                "filename": d.getVar('UBOOT_BINARY', True),
                 "dd_options": "seek=138"
               }
             ]
