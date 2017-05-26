@@ -143,7 +143,7 @@ IMAGE_CMD_tezirunimg () {
 	bbnote "Create Toradex Easy Installer FIT image"
 }
 
-do_assemble_fitimage () {
+build_fitimage () {
 	# We have to execute this step after any image generation so we have
 	# squashfs, kernel etc all in DEPLOY_DIR_IMAGE
 	# We cannot work in IMGDEPLOYDIR since that folder only has the image
@@ -158,6 +158,14 @@ do_assemble_fitimage () {
 	rm -r ${IMAGE_NAME}/
 }
 
+python do_assemble_fitimage() {
+    if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
+        return
+
+    bb.build.exec_func('build_fitimage', d)
+}
+
 addtask do_assemble_fitimage after do_image_complete before do_build
+do_assemble_fitimage[depends] = "tezi-run-metadata:do_deploy"
 
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
