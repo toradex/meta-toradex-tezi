@@ -1,9 +1,6 @@
 inherit image_types
 include conf/tdx_version.conf
 
-# Setting IMAGE_FSTYPES here allows us to overwrite machine defaults
-# such as "teziimg" set in machine files.
-IMAGE_FSTYPES="tezirunimg"
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
@@ -16,7 +13,7 @@ def fitimg_get_size(d):
     output = subprocess.check_output(args)
     return int(output.splitlines()[-1].split()[0])
 
-def rootfs_tezi_emmc(d):
+def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
 
     return [
@@ -53,7 +50,7 @@ def rootfs_tezi_emmc(d):
           }
         })]
 
-def rootfs_tezi_rawnand(d):
+def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
     imagename = d.getVar('IMAGE_NAME', True)
 
@@ -130,9 +127,9 @@ python rootfs_tezi_run_json() {
     data["supported_product_ids"] = d.getVar('TORADEX_PRODUCT_IDS', True).split()
 
     if bb.utils.contains("TORADEX_FLASH_TYPE", "rawnand", True, False, d):
-        data["mtddevs"] = rootfs_tezi_rawnand(d)
+        data["mtddevs"] = rootfs_tezi_run_rawnand(d)
     else:
-        data["blockdevs"] = rootfs_tezi_emmc(d)
+        data["blockdevs"] = rootfs_tezi_run_emmc(d)
 
     deploy_dir = d.getVar('DEPLOY_DIR_IMAGE', True)
     with open(os.path.join(deploy_dir, 'image.json'), 'w') as outfile:
