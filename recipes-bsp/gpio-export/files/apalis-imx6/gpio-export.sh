@@ -19,13 +19,15 @@ esac
 #Apalis GPIO - i.MX6 Ball name - GPIO#
 
 #GPIO1 NAND_DATA04 36
-echo 36 > $CTRL
+#used by OV5640 kernel module
+#echo 36 > $CTRL
 #cat /sys/class/gpio/gpio36/value
 #echo low  > /sys/class/gpio/gpio36/direction
 #echo 1 > /sys/class/gpio/gpio36/value
 
 #GPIO2 NAND_DATA05 37
-echo 37 > $CTRL
+#used by OV5640 kernel module
+#echo 37 > $CTRL
 
 #GPIO3 NAND_DATA06 38
 echo 38 > $CTRL
