@@ -111,8 +111,6 @@ python rootfs_tezi_run_json() {
     data["description"] = d.getVar('DESCRIPTION', True)
     data["version"] = d.getVar('TDX_VER_EXT_MIN', True)
     data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
-    if os.path.exists(os.path.join(deploydir, "prepare.sh")):
-        data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
         data["wrapup_script"] = "wrapup.sh"
     if os.path.exists(os.path.join(deploydir, "marketing.tar")):
