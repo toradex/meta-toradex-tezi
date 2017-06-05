@@ -1,4 +1,4 @@
-From bbd6b2ad2a9f998c2303a4132a144434962e884c Mon Sep 17 00:00:00 2001
+From d8d7500807bb71982be7384d874cc472d543c155 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:25:16 -0800
 Subject: [PATCH 1/4] apalis_imx6: use SDP if recovery mode is enabled
@@ -18,10 +18,10 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
  1 file changed, 14 insertions(+)
 
 diff --git a/board/toradex/apalis_imx6/apalis_imx6.c b/board/toradex/apalis_imx6/apalis_imx6.c
-index 93e777d6ce..27818dfe2e 100644
+index 0e64ae0a42..192c7a995b 100644
 --- a/board/toradex/apalis_imx6/apalis_imx6.c
 +++ b/board/toradex/apalis_imx6/apalis_imx6.c
-@@ -847,6 +847,9 @@ int board_init(void)
+@@ -808,6 +808,9 @@ int board_init(void)
  #ifdef CONFIG_BOARD_LATE_INIT
  int board_late_init(void)
  {
@@ -31,7 +31,7 @@ index 93e777d6ce..27818dfe2e 100644
  #if defined(CONFIG_REVISION_TAG) && \
      defined(CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG)
  	char env_str[256];
-@@ -876,6 +879,17 @@ int board_late_init(void)
+@@ -837,6 +840,17 @@ int board_late_init(void)
  #endif /* CONFIG_TDX_APALIS_IMX6_V1_0 */
  #endif /* CONFIG_REVISION_TAG */
  
@@ -50,5 +50,5 @@ index 93e777d6ce..27818dfe2e 100644
  }
  #endif /* CONFIG_BOARD_LATE_INIT */
 -- 
-2.11.0
+2.13.0
 

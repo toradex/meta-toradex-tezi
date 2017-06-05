@@ -1,4 +1,4 @@
-From 3f1302fbcff3e92201d291371ec8a9604a785f05 Mon Sep 17 00:00:00 2001
+From 02092387ac737642657257907fec36083425f19e Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:22:27 -0800
 Subject: [PATCH 2/4] apalis_imx6: add configuration for Tezi
@@ -9,33 +9,35 @@ Modify configuration for Tezi:
 - Remove Video output
 - Use distroboot by default
 - Boot from external SD-cards by default
-- Disable Toradex Config Block support (read directly from user space)
+- Disable USB PID from config block (otherwise recovery mode download
+  in U-Boot stage fails)
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+
+apalis
 ---
- configs/apalis_imx6_tezi_defconfig | 56 ++++++++++++++++++++++++++++++++++++++
- include/configs/apalis_imx6.h      | 17 ++++--------
- 2 files changed, 62 insertions(+), 11 deletions(-)
+ configs/apalis_imx6_tezi_defconfig | 55 ++++++++++++++++++++++++++++++++++++++
+ include/configs/apalis_imx6.h      | 17 +++++-------
+ 2 files changed, 61 insertions(+), 11 deletions(-)
  create mode 100644 configs/apalis_imx6_tezi_defconfig
 
 diff --git a/configs/apalis_imx6_tezi_defconfig b/configs/apalis_imx6_tezi_defconfig
 new file mode 100644
-index 0000000000..3a34554128
+index 0000000000..560d55c62b
 --- /dev/null
 +++ b/configs/apalis_imx6_tezi_defconfig
-@@ -0,0 +1,56 @@
+@@ -0,0 +1,55 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_MX6=y
 +CONFIG_SPL_GPIO_SUPPORT=y
 +CONFIG_SPL_LIBCOMMON_SUPPORT=y
 +CONFIG_SPL_LIBGENERIC_SUPPORT=y
-+# CONFIG_TDX_CFG_BLOCK is not set
++# CONFIG_TDX_CFG_BLOCK_USB_GADGET_PID is not set
 +CONFIG_TARGET_APALIS_IMX6=y
 +CONFIG_SPL_I2C_SUPPORT=y
 +CONFIG_SPL_MMC_SUPPORT=y
 +CONFIG_SPL_SERIAL_SUPPORT=y
 +CONFIG_FIT=y
-+CONFIG_OF_BOARD_SETUP=y
 +CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=arch/arm/imx-common/spl_sd.cfg,MX6Q"
 +CONFIG_BOOTDELAY=1
 +# CONFIG_DISPLAY_BOARDINFO is not set
@@ -153,5 +155,5 @@ index 8dce5af7d5..17ad668591 100644
  #if defined(CONFIG_ENV_IS_IN_MMC)
  /* Environment in eMMC, before config block at the end of 1st "boot sector" */
 -- 
-2.11.0
+2.13.0
 

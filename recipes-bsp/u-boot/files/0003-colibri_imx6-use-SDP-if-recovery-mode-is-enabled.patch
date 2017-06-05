@@ -1,4 +1,4 @@
-From f39f44cf802e713eda1c4c3c025edbf06c9c84a6 Mon Sep 17 00:00:00 2001
+From 8961371511a091817276812723d0136852c76f61 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Fri, 27 Jan 2017 16:05:34 -0800
 Subject: [PATCH 3/4] colibri_imx6: use SDP if recovery mode is enabled
@@ -18,10 +18,10 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
  1 file changed, 14 insertions(+)
 
 diff --git a/board/toradex/colibri_imx6/colibri_imx6.c b/board/toradex/colibri_imx6/colibri_imx6.c
-index 1fa0bf6252..652425e302 100644
+index 20daa5c447..c7cdf5841c 100644
 --- a/board/toradex/colibri_imx6/colibri_imx6.c
 +++ b/board/toradex/colibri_imx6/colibri_imx6.c
-@@ -668,6 +668,9 @@ int board_init(void)
+@@ -675,6 +675,9 @@ int board_init(void)
  #ifdef CONFIG_BOARD_LATE_INIT
  int board_late_init(void)
  {
@@ -31,7 +31,7 @@ index 1fa0bf6252..652425e302 100644
  #if defined(CONFIG_REVISION_TAG) && \
      defined(CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG)
  	char env_str[256];
-@@ -678,6 +681,17 @@ int board_late_init(void)
+@@ -685,6 +688,17 @@ int board_late_init(void)
  	setenv("board_rev", env_str);
  #endif
  
@@ -50,5 +50,5 @@ index 1fa0bf6252..652425e302 100644
  }
  #endif /* CONFIG_BOARD_LATE_INIT */
 -- 
-2.11.0
+2.13.0
 
