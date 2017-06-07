@@ -6,7 +6,7 @@ Before=systemd-networkd.service
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/gadget-import g1 /etc/usbg/g1.schema
-ExecStartPost=/bin/sh -c '/bin/echo $((0x4000+$(cat /proc/device-tree/toradex,product-id))) > \
+ExecStartPost=/bin/sh -c '/bin/echo $((0x4000+10#$(cat /proc/device-tree/toradex,product-id))) > \
                                     /sys/kernel/config/usb_gadget/g1/idProduct'
 ExecStartPost=/bin/sh -c '/bin/cat /proc/device-tree/serial-number > \
                                    /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber'
