@@ -1,7 +1,7 @@
-From f48a16d42eee30730f03a02626fbe96799b57a6b Mon Sep 17 00:00:00 2001
+From 839125c3058850373d9ec38951bfb09391157ca2 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Wed, 12 Apr 2017 15:29:50 -0700
-Subject: [PATCH 2/2] ARM: dts: imx6qdl-apalis: configure LVDS VGA and dual
+Subject: [PATCH 1/2] ARM: dts: imx6qdl-apalis: configure LVDS VGA and dual
  mdoe
 
 Configure dual mode, which allows displaying one image stream
@@ -14,10 +14,10 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
  1 file changed, 21 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index 4708f892c234..7838f5b62205 100644
+index 388ca3f9da6c..0a6db98d767f 100644
 --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-@@ -1009,7 +1009,7 @@
+@@ -1014,7 +1014,7 @@
  &ldb {
  	status = "okay";
  //	split-mode;
@@ -26,7 +26,7 @@ index 4708f892c234..7838f5b62205 100644
  
  	lvds-channel@0 {
  		reg = <0>;
-@@ -1020,7 +1020,25 @@
+@@ -1025,7 +1025,25 @@
  		status = "okay";
  
  		display-timings {
@@ -53,7 +53,7 @@ index 4708f892c234..7838f5b62205 100644
  			/* LDB-AM-800600LTNQW-A0H */
  			timing_svga: 800x600 {
  				clock-frequency = <55000000>;
-@@ -1086,7 +1104,7 @@
+@@ -1091,7 +1109,7 @@
  		reg = <1>;
  		fsl,data-mapping = "spwg";
  		fsl,data-width = <18>;
@@ -63,5 +63,5 @@ index 4708f892c234..7838f5b62205 100644
  
  		display-timings {
 -- 
-2.12.1
+2.13.0
 

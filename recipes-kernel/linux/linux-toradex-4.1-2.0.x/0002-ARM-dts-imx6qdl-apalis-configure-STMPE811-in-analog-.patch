@@ -1,0 +1,56 @@
+From 8661b09bfd9df403ec0b01416f2104e8a652c3d2 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Wed, 7 Jun 2017 17:14:17 -0700
+Subject: [PATCH 2/2] ARM: dts: imx6qdl-apalis: configure STMPE811 in analog
+ only mode
+
+Disable touch functionality of STMPE811 and use it in pure analog
+mode. This allows to read the raw values of the 4 touch channels.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 27 +--------------------------
+ 1 file changed, 1 insertion(+), 26 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 0a6db98d767f..21a986a86a81 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -463,33 +463,8 @@
+ 		interrupt-parent = <&gpio4>;
+ 		interrupt-controller;
+ 		id = <0>;
+-		blocks = <0x5>;
++		blocks = <0x9>;
+ 		irq-trigger = <0x1>;
+-		stmpe_touchscreen {
+-			compatible = "st,stmpe-ts";
+-			reg = <0>;
+-			/* 3.25 MHz ADC clock speed */
+-			st,adc-freq = <1>;
+-			/* 8 sample average control */
+-			st,ave-ctrl = <3>;
+-			/* 7 length fractional part in z */
+-			st,fraction-z = <7>;
+-			/*
+-			 * 50 mA typical 80 mA max touchscreen drivers
+-			 * current limit value
+-			 */
+-			st,i-drive = <1>;
+-			/* 12-bit ADC */
+-			st,mod-12b = <1>;
+-			/* internal ADC reference */
+-			st,ref-sel = <0>;
+-			/* ADC converstion time: 80 clocks */
+-			st,sample-time = <4>;
+-			/* 1 ms panel driver settling time */
+-			st,settling = <3>;
+-			/* 5 ms touch detect interrupt delay */
+-			st,touch-det-delay = <5>;
+-		};
+ 		stmpe_adc {
+ 			compatible = "st,stmpe-adc";
+ 			/* 3.25 MHz ADC clock speed */
+-- 
+2.13.0
+
