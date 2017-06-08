@@ -19,4 +19,5 @@ SRC_URI_append = "\
     file://0004-colibri_imx6-add-configuration-for-Tezi.patch \
     file://0001-colibri_imx7-use-SDP-if-recovery-mode-is-enabled.patch \
     file://0002-colibri_imx7-add-configuration-for-Tezi.patch \
+    file://0001-mtest-disable-physical-memory-cell-test.patch \
 "

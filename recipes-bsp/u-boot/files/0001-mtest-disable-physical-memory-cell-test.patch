@@ -1,0 +1,37 @@
+From c62569c6fd293c8a0628b4b57292fb0fc1227f89 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 8 Jun 2017 16:45:18 -0700
+Subject: [PATCH] mtest: disable physical memory cell test
+
+For faster test time shorten the alternative memory test to
+only do the stuck address/data line tests instead of full
+memory write pattern tests.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ cmd/mem.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cmd/mem.c b/cmd/mem.c
+index a690957d0f..4f12bc85dd 100644
+--- a/cmd/mem.c
++++ b/cmd/mem.c
+@@ -870,6 +870,7 @@ static ulong mem_test_alt(vu_long *buf, ulong start_addr, ulong end_addr,
+ 		addr[test_offset] = pattern;
+ 	}
+ 
++#if 0
+ 	/*
+ 	 * Description: Test the integrity of a physical
+ 	 *		memory device by performing an
+@@ -930,6 +931,7 @@ static ulong mem_test_alt(vu_long *buf, ulong start_addr, ulong end_addr,
+ 		}
+ 		addr[offset] = 0;
+ 	}
++#endif
+ 
+ 	return errs;
+ }
+-- 
+2.13.0
+
