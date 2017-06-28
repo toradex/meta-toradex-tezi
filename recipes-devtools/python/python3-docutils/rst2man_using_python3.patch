@@ -1,0 +1,8 @@
+--- a/tools/rst2man.py  2009-08-18 11:39:39.000000000 -0700
++++ b/tmp/rst2man.py  2017-04-04 18:25:14.049467561 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+
+ # Author:
+ # Contact: grubert@users.sf.net
