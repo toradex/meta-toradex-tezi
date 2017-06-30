@@ -11,8 +11,9 @@ SRC_URI[sha256sum] = "accd4c94049ce79443ff995c27111f3851e9896bbad502dd5d341f8847
 SNAPD_PKG = "github.com/snapcore/snapd"
 
 DEPENDS += " \
-	go-cross \
 	glib-2.0 \
+	go-cross \
+	python3-docutils-native \
 	udev \
 	xfsprogs \
 "
@@ -30,7 +31,7 @@ EXTRA_OECONF += " \
 	--libexecdir=${libdir}/snapd \
 "
 
-inherit systemd autotools pkgconfig
+inherit systemd autotools pkgconfig python3native
 
 # Our tools build with autotools are inside the cmd subdirectory
 # and we need to tell the autotools class to look in there.
