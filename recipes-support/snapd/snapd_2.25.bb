@@ -89,13 +89,11 @@ do_install_append() {
 	install -d ${D}/var/lib/snapd/snaps
 	install -d ${D}/var/lib/snapd/lib/gl
 	install -d ${D}/var/lib/snapd/desktop
-	install -d ${D}/var/lib/snapd/environment
 	install -d ${D}/var/snap
 	install -d ${D}${sysconfdir}/profile.d
 
 	# NOTE: This file needs to be present to allow snapd's service
 	# units to startup.
-	touch ${D}/${sysconfdir}/environment
 
 	oe_runmake -C ${S}/data/systemd install DESTDIR=${D}
 
