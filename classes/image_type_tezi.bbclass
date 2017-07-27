@@ -47,7 +47,7 @@ def rootfs_tezi_emmc(d):
               "want_maximised": True,
               "content": {
                 "label": "RFS",
-                "filesystem_type": "ext3",
+                "filesystem_type": "ext4",
                 "mkfs_options": "",
                 "filename": imagename + ".rootfs.tar.xz",
                 "uncompressed_size": rootfs_get_size(d) / 1024
