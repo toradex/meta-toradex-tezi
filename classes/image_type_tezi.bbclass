@@ -1,6 +1,6 @@
 inherit image_types
 
-IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy virtual/bootloader"
+do_image_teziimg[depends] += "tezi-metadata:do_deploy virtual/bootloader:do_deploy"
 
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 UBOOT_BINARY_TEZI = "${UBOOT_BINARY}"
