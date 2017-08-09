@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "040b761a97159ffed83e8d148a9463ac87aa2c4b"
+SRCREV = "ae932f619ff2349b96deafa1dd28b0a67fd0dcc7"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=0643dd948aaba20e02e69d3d487dc6cf"
 
 S = "${WORKDIR}/git"
@@ -23,6 +23,7 @@ TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-c
 DEPENDS += " \
     qjson \
     libusbgx \
+    rapidjson \
 "
 
 RDEPENDS_${PN} += " \
