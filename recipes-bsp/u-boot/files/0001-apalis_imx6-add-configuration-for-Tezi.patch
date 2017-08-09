@@ -1,7 +1,7 @@
-From 61fd21909714d5f5997470d3c53d63abd8b49f40 Mon Sep 17 00:00:00 2001
+From 7e470b4265d50cc6d7b7b4f91fdc58edb23ead27 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
-Date: Fri, 27 Jan 2017 16:11:31 -0800
-Subject: [PATCH 4/4] colibri_imx6: add configuration for Tezi
+Date: Mon, 14 Nov 2016 18:22:27 -0800
+Subject: [PATCH 1/3] apalis_imx6: add configuration for Tezi
 
 Modify configuration for Tezi:
 - Enable SDP in SPL and U-Boot
@@ -14,16 +14,16 @@ Modify configuration for Tezi:
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- configs/colibri_imx6_tezi_defconfig | 55 +++++++++++++++++++++++++++++++++++++
- include/configs/colibri_imx6.h      | 13 ++++-----
- 2 files changed, 61 insertions(+), 7 deletions(-)
- create mode 100644 configs/colibri_imx6_tezi_defconfig
+ configs/apalis_imx6_tezi_defconfig | 55 ++++++++++++++++++++++++++++++++++++++
+ include/configs/apalis_imx6.h      | 17 +++++-------
+ 2 files changed, 61 insertions(+), 11 deletions(-)
+ create mode 100644 configs/apalis_imx6_tezi_defconfig
 
-diff --git a/configs/colibri_imx6_tezi_defconfig b/configs/colibri_imx6_tezi_defconfig
+diff --git a/configs/apalis_imx6_tezi_defconfig b/configs/apalis_imx6_tezi_defconfig
 new file mode 100644
-index 0000000000..17eadd4fc2
+index 0000000000..560d55c62b
 --- /dev/null
-+++ b/configs/colibri_imx6_tezi_defconfig
++++ b/configs/apalis_imx6_tezi_defconfig
 @@ -0,0 +1,55 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_MX6=y
@@ -31,12 +31,12 @@ index 0000000000..17eadd4fc2
 +CONFIG_SPL_LIBCOMMON_SUPPORT=y
 +CONFIG_SPL_LIBGENERIC_SUPPORT=y
 +# CONFIG_TDX_CFG_BLOCK_USB_GADGET_PID is not set
-+CONFIG_TARGET_COLIBRI_IMX6=y
++CONFIG_TARGET_APALIS_IMX6=y
 +CONFIG_SPL_I2C_SUPPORT=y
 +CONFIG_SPL_MMC_SUPPORT=y
 +CONFIG_SPL_SERIAL_SUPPORT=y
 +CONFIG_FIT=y
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=arch/arm/imx-common/spl_sd.cfg,MX6DL"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=arch/arm/imx-common/spl_sd.cfg,MX6Q"
 +CONFIG_BOOTDELAY=1
 +# CONFIG_DISPLAY_BOARDINFO is not set
 +CONFIG_SPL=y
@@ -45,7 +45,7 @@ index 0000000000..17eadd4fc2
 +CONFIG_SPL_USB_GADGET_SUPPORT=y
 +CONFIG_SPL_USB_SDP_SUPPORT=y
 +CONFIG_HUSH_PARSER=y
-+CONFIG_SYS_PROMPT="Colibri iMX6 # "
++CONFIG_SYS_PROMPT="Apalis iMX6 # "
 +CONFIG_CMD_BOOTZ=y
 +# CONFIG_CMD_ELF is not set
 +# CONFIG_CMD_IMI is not set
@@ -80,11 +80,22 @@ index 0000000000..17eadd4fc2
 +CONFIG_OF_LIBFDT=y
 +CONFIG_OF_LIBFDT_OVERLAY=y
 +# CONFIG_EFI_LOADER is not set
-diff --git a/include/configs/colibri_imx6.h b/include/configs/colibri_imx6.h
-index af49bcce35..9de8e240fe 100644
---- a/include/configs/colibri_imx6.h
-+++ b/include/configs/colibri_imx6.h
-@@ -117,9 +117,10 @@
+diff --git a/include/configs/apalis_imx6.h b/include/configs/apalis_imx6.h
+index 7acbf9ded4..bfb13a9a8e 100644
+--- a/include/configs/apalis_imx6.h
++++ b/include/configs/apalis_imx6.h
+@@ -80,10 +80,6 @@
+ #define CONFIG_FAT_WRITE
+ #define CONFIG_DOS_PARTITION
+ 
+-#ifdef CONFIG_MX6Q
+-#define CONFIG_CMD_SATA
+-#endif
+-
+ /*
+  * SATA Configs
+  */
+@@ -136,9 +132,10 @@
  #define CONFIG_MXC_GPIO
  
  /* Framebuffer and LCD */
@@ -96,7 +107,7 @@ index af49bcce35..9de8e240fe 100644
  #define CONFIG_VIDEO_BMP_RLE8
  #define CONFIG_SPLASH_SCREEN
  #define CONFIG_SPLASH_SCREEN_ALIGN
-@@ -132,6 +133,7 @@
+@@ -151,6 +148,7 @@
  #define CONFIG_IMX_HDMI
  #define CONFIG_IMX_VIDEO_SKIP
  #define CONFIG_CMD_BMP
@@ -104,24 +115,24 @@ index af49bcce35..9de8e240fe 100644
  
  /* allow to overwrite serial and ethaddr */
  #define CONFIG_ENV_OVERWRITE
-@@ -157,6 +159,7 @@
- #define BOOTENV_RUN_NET_USB_START ""
+@@ -177,6 +175,7 @@
  #define BOOT_TARGET_DEVICES(func) \
          func(MMC, mmc, 1) \
+         func(MMC, mmc, 2) \
 +        func(MMC, mmc, 0) \
          func(USB, usb, 0) \
          func(DHCP, dhcp, na)
  #include <config_distro_bootcmd.h>
-@@ -188,7 +191,6 @@
+@@ -208,7 +207,6 @@
  #define MEM_LAYOUT_ENV_SETTINGS \
- 	"bootm_size=0x10000000\0" \
+ 	"bootm_size=0x20000000\0" \
  	"fdt_addr_r=0x12000000\0" \
 -	"fdt_high=0xffffffff\0" \
  	"initrd_high=0xffffffff\0" \
  	"kernel_addr_r=0x11000000\0" \
  	"pxefile_addr_r=0x17100000\0" \
-@@ -231,10 +233,7 @@
- #define FDT_FILE "imx6dl-colibri-eval-v3.dtb"
+@@ -256,10 +254,7 @@
+ #endif
  #define CONFIG_EXTRA_ENV_SETTINGS \
  	BOOTENV \
 -	"bootcmd=run emmcboot ; echo ; echo emmcboot failed ; " \
@@ -131,8 +142,8 @@ index af49bcce35..9de8e240fe 100644
 +	"bootcmd=run distro_bootcmd\0" \
  	"boot_file=uImage\0" \
  	"console=ttymxc0\0" \
- 	"defargs=enable_wait_mode=off galcore.contiguousSize=50331648\0" \
-@@ -297,7 +296,7 @@
+ 	"defargs=enable_wait_mode=off vmalloc=400M\0" \
+@@ -326,7 +321,7 @@
  
  #define CONFIG_ENV_SIZE			(8 * 1024)
  
@@ -142,5 +153,5 @@ index af49bcce35..9de8e240fe 100644
  #if defined(CONFIG_ENV_IS_IN_MMC)
  /* Environment in eMMC, before config block at the end of 1st "boot sector" */
 -- 
-2.13.0
+2.13.3
 

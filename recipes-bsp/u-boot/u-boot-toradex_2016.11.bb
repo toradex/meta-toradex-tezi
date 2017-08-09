@@ -8,16 +8,13 @@ LOCALVERSION ?= "-${TDX_VER_INT}"
 
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-SRCREV = "0e9e31afba77e478250bedaf0e6a9a2a47aa04f1"
-SRCBRANCH = "2016.11-toradex"
+SRCREV = "753fd209e7d4607a8e9b66fdd9362be0cf36fded"
+SRCBRANCH = "2016.11-toradex-next"
 COMPATIBLE_MACHINE = "(mx6|mx7|vf)"
 
 SRC_URI_append = "\
-    file://0001-apalis_imx6-use-SDP-if-recovery-mode-is-enabled.patch \
-    file://0002-apalis_imx6-add-configuration-for-Tezi.patch \
-    file://0003-colibri_imx6-use-SDP-if-recovery-mode-is-enabled.patch \
-    file://0004-colibri_imx6-add-configuration-for-Tezi.patch \
-    file://0001-colibri_imx7-use-SDP-if-recovery-mode-is-enabled.patch \
-    file://0002-colibri_imx7-add-configuration-for-Tezi.patch \
-    file://0001-mtest-disable-physical-memory-cell-test.patch \
+    file://0001-apalis_imx6-add-configuration-for-Tezi.patch \
+    file://0002-colibri_imx6-add-configuration-for-Tezi.patch \
+    file://0003-mtest-disable-physical-memory-cell-test.patch \
+    file://0001-colibri_imx7-add-configuration-for-Tezi.patch \
 "

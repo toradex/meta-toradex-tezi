@@ -1,7 +1,7 @@
-From c62569c6fd293c8a0628b4b57292fb0fc1227f89 Mon Sep 17 00:00:00 2001
+From ad7c933d88c6a1261d0f4c8a758f17240c0b2198 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Thu, 8 Jun 2017 16:45:18 -0700
-Subject: [PATCH] mtest: disable physical memory cell test
+Subject: [PATCH 3/3] mtest: disable physical memory cell test
 
 For faster test time shorten the alternative memory test to
 only do the stuck address/data line tests instead of full
@@ -33,5 +33,5 @@ index a690957d0f..4f12bc85dd 100644
  	return errs;
  }
 -- 
-2.13.0
+2.13.3
 

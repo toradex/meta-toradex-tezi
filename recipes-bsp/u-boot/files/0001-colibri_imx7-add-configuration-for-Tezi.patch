@@ -1,7 +1,7 @@
-From ac5df1a7957913df9fabcc3e87fcc4467b0eb6ac Mon Sep 17 00:00:00 2001
+From d6405898d67615e811aaf3b87edfc0303fbeee52 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 1 May 2017 17:20:48 -0700
-Subject: [PATCH 2/2] colibri_imx7: add configuration for Tezi
+Subject: [PATCH] colibri_imx7: add configuration for Tezi
 
 Modify configuration for Tezi:
 - Enable SDP in U-Boot
@@ -115,7 +115,7 @@ index 0000000000..3d3954d5bb
 +CONFIG_FDT_FIXUP_PARTITIONS=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index f6dd6b97d1..2d44476219 100644
+index bb40b39b5f..2a589a4689 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
 @@ -68,7 +68,6 @@
@@ -150,7 +150,7 @@ index f6dd6b97d1..2d44476219 100644
  
  #define BOOTENV_RUN_NET_USB_START ""
  #define BOOT_TARGET_DEVICES(func) \
-@@ -172,7 +171,7 @@
+@@ -173,7 +172,7 @@
  
  /* FLASH and environment organization */
  #define CONFIG_SYS_NO_FLASH
@@ -159,7 +159,7 @@ index f6dd6b97d1..2d44476219 100644
  
  #if defined(CONFIG_ENV_IS_IN_MMC)
  #define CONFIG_SYS_MMC_ENV_DEV		0   /* USDHC1 */
-@@ -183,6 +182,8 @@
+@@ -184,6 +183,8 @@
  #define CONFIG_ENV_SECT_SIZE		(128 * 1024)
  #define CONFIG_ENV_OFFSET		(28 * CONFIG_ENV_SECT_SIZE)
  #define CONFIG_ENV_SIZE			CONFIG_ENV_SECT_SIZE
@@ -169,5 +169,5 @@ index f6dd6b97d1..2d44476219 100644
  
  #define CONFIG_NAND_MXS
 -- 
-2.13.0
+2.13.3
 
