@@ -1,5 +1,5 @@
-# This avoids UI freezes with the TTY driver
-QWS_KEYBOARD="LinuxInput:/dev/input/event2 LinuxInput:/dev/input/event3"
+# Use LinuxInput driver to avoid UI freezes seen with the TTY driver
+QWS_KEYBOARD="LinuxInput"
 
 # Mirror output, HDMI as primary device
 # fb0 => HDMI, fb2 => parallel RGB
