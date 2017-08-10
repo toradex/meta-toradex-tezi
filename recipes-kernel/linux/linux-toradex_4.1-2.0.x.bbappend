@@ -6,5 +6,5 @@ SRC_URI += " \
     file://0002-ARM-dts-imx6qdl-apalis-configure-STMPE811-in-analog-.patch \
 "
 
-SRCREV = "50e26af30f04d24f4783dae15206c5dba889fd2b"
+SRCREV = "82f0f4f012a646a735d6b44de77b7c9d0712c714"
 SRCBRANCH = "toradex_4.1-2.0.x-imx"
