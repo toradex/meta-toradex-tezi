@@ -1,7 +1,7 @@
 inherit image_types
 include conf/tdx_version.conf
 
-IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native"
+IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native zip-native"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
 def fitimg_get_size(d):
