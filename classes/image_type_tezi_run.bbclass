@@ -133,7 +133,6 @@ python rootfs_tezi_run_json() {
     bb.note("Toradex Easy Installer metadata file image.json written.")
 }
 do_rootfs[depends] =+ "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy"
-do_rootfs[postfuncs] =+ "rootfs_tezi_run_json"
 
 IMAGE_CMD_tezirunimg () {
 	bbnote "Create Toradex Easy Installer FIT image"
@@ -146,7 +145,9 @@ build_fitimage () {
 	# files in it (not kernel etc...). We could probably make this a
 	# SSTATETASKS similar to how image.class makes do_image_complete...
 	mkimage -f ${DEPLOY_DIR_IMAGE}/tezi.its ${DEPLOY_DIR_IMAGE}/tezi.itb
+}
 
+build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
 	mkdir ${IMAGE_NAME}/
 	cp -L -R ${SPL_BINARY} ${UBOOT_BINARY} tezi.itb wrapup.sh image.json tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
@@ -159,6 +160,8 @@ python do_assemble_fitimage() {
         return
 
     bb.build.exec_func('build_fitimage', d)
+    bb.build.exec_func('rootfs_tezi_run_json', d)
+    bb.build.exec_func('build_deploytar', d)
 }
 
 addtask do_assemble_fitimage after do_image_complete before do_build
