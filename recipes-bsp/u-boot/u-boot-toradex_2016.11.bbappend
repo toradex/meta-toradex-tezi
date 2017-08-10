@@ -1,0 +1,2 @@
+SRCREV = "2f48e45dd54be29401cd7d7e51920fba9581d211"
+SRCBRANCH = "2016.11-toradex-next"
