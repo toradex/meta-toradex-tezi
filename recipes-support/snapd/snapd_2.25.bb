@@ -52,7 +52,7 @@ do_compile() {
 	ln -sf ${S} ${STAGING_LIBDIR}/${TARGET_SYS}/go/src/github.com/snapcore/snapd
 
 	for d in snap snapd snap-exec snapctl; do
-		GOPATH=${STAGING_LIBDIR}/${TARGET_SYS}/go go build github.com/snapcore/snapd/cmd/$d
+		GOPATH=${STAGING_LIBDIR}/${TARGET_SYS}/go go build -x github.com/snapcore/snapd/cmd/$d
 	done
 
 	oe_runmake
