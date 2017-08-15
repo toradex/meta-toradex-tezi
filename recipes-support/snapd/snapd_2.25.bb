@@ -28,6 +28,8 @@ RDEPENDS_${PN} += " \
 
 S = "${WORKDIR}/${PN}-${PV}"
 
+ARM_INSTRUCTION_SET = "arm"
+
 EXTRA_OECONF += " \
 	--disable-apparmor \
 	--disable-seccomp \
