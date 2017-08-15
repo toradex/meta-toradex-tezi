@@ -3,16 +3,19 @@ HOMEPAGE = "https://www.snapcraft.io"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/${PN}-${PV}/COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-SRC_URI = "https://github.com/snapcore/snapd/releases/download/${PV}/snapd_${PV}.vendor.tar.xz"
+SRC_URI = " \
+	https://github.com/snapcore/snapd/releases/download/${PV}/snapd_${PV}.vendor.tar.xz \
+	file://0001-cmd-make-rst2man-optional.patch \
+"
 
 SRC_URI[md5sum] = "453ffdc2ecdbb7058ac193f81ac37135"
 SRC_URI[sha256sum] = "accd4c94049ce79443ff995c27111f3851e9896bbad502dd5d341f8847645b90"
 
-SNAPD_PKG = "github.com/snapcore/snapd"
+GO_IMPORT = "github.com/snapcore/snapd"
 
 DEPENDS += " \
-	glib-2.0 \
 	go-cross \
+	glib-2.0 \
 	python3-docutils-native \
 	udev \
 	xfsprogs \
@@ -31,7 +34,7 @@ EXTRA_OECONF += " \
 	--libexecdir=${libdir}/snapd \
 "
 
-inherit systemd autotools pkgconfig python3native
+inherit systemd autotools pkgconfig python3native go
 
 # Our tools build with autotools are inside the cmd subdirectory
 # and we need to tell the autotools class to look in there.
@@ -43,45 +46,19 @@ do_configure_prepend() {
 	(cd ${S} ; ./mkversion.sh ${PV})
 }
 
-do_compile_prepend() {
-	export GOARCH="${TARGET_ARCH}"
-	# supported amd64, 386, arm arm64
-	if [ "${TARGET_ARCH}" = "x86_64" ]; then
-		export GOARCH="amd64"
-	fi
-	if [ "${TARGET_ARCH}" = "aarch64" ]; then
-		export GOARCH="arm64"
-	fi
-	if [ "${TARGET_ARCH}" = "i586" ]; then
-		export GOARCH="386"
-	fi
+do_compile() {
+	# Ensure we our component at the right place in our GOPATH
+	mkdir -p ${STAGING_LIBDIR}/${TARGET_SYS}/go/src/github.com/snapcore
+	ln -sf ${S} ${STAGING_LIBDIR}/${TARGET_SYS}/go/src/github.com/snapcore/snapd
 
-	# Set GOPATH. See 'PACKAGERS.md'. Don't rely on
-	# docker to download its dependencies but rather
-	# use dependencies packaged independently.
-	cd ${S}
-	rm -rf .gopath
-	mkdir -p .gopath/src/"$(dirname "${SNAPD_PKG}")"
-	ln -sf ../../../.. .gopath/src/"${SNAPD_PKG}"
-	export GOPATH="${S}/.gopath:${S}/vendor:${STAGING_DIR_TARGET}/${prefix}/local/go"
-	export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
-	cd -
+	for d in snap snapd snap-exec snapctl; do
+		GOPATH=${STAGING_LIBDIR}/${TARGET_SYS}/go go build github.com/snapcore/snapd/cmd/$d
+	done
 
-	# Pass the needed cflags/ldflags so that cgo
-	# can find the needed headers files and libraries
-	export CGO_ENABLED="1"
-	export CGO_CFLAGS="${BUILDSDK_CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-	export CGO_LDFLAGS="${BUILDSDK_LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-
-	rm -rf ${B}/build
-	mkdir ${B}/build
-	go build -a -v -o ${B}/build/snapd ${SNAPD_PKG}/cmd/snapd
-	go build -a -v -o ${B}/build/snap ${SNAPD_PKG}/cmd/snap
-	go build -a -v -o ${B}/build/snapctl ${SNAPD_PKG}/cmd/snapctl
-	go build -a -v -o ${B}/build/snap-exec ${SNAPD_PKG}/cmd/snap-exec
+	oe_runmake
 }
 
-do_install_append() {
+do_install() {
 	install -d ${D}${libdir}/snapd
 	install -d ${D}${bindir}
 	install -d ${D}${systemd_unitdir}/system
@@ -92,15 +69,13 @@ do_install_append() {
 	install -d ${D}/var/snap
 	install -d ${D}${sysconfdir}/profile.d
 
-	# NOTE: This file needs to be present to allow snapd's service
-	# units to startup.
-
+	oe_runmake -C ${B} install DESTDIR=${D}
 	oe_runmake -C ${S}/data/systemd install DESTDIR=${D}
 
-	install -m 0755 ${B}/build/snapd ${D}${libdir}/snapd/
-	install -m 0755 ${B}/build/snap-exec ${D}${libdir}/snapd/
-	install -m 0755 ${B}/build/snap ${D}${bindir}
-	install -m 0755 ${B}/build/snapctl ${D}${bindir}
+	install -m 0755 ${B}/snapd ${D}${libdir}/snapd/
+	install -m 0755 ${B}/snap-exec ${D}${libdir}/snapd/
+	install -m 0755 ${B}/snap ${D}${bindir}
+	install -m 0755 ${B}/snapctl ${D}${bindir}
 
 	echo "PATH=\$PATH:/snap/bin" > ${D}${sysconfdir}/profile.d/20-snap.sh
 }
