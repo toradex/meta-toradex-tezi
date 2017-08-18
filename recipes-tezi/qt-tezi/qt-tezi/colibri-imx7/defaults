@@ -1,5 +1,5 @@
-# Use LinuxInput driver to avoid UI freezes seen with the TTY driver
-QWS_KEYBOARD="LinuxInput"
+# Use TTY driver again since it seems to provide better keyboard detection
+QWS_KEYBOARD="TTY"
 
 # Mirror output, HDMI as primary device
 # fb0 => HDMI, fb2 => parallel RGB
