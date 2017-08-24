@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Start services and customize the boot process here.
-echo "Running /etc/rc.local..."
-
-# Disable kernel log messages
-echo 0 > /proc/sys/kernel/printk
