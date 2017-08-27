@@ -154,8 +154,8 @@ python rootfs_tezi_json() {
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
-    data["version"] = d.getVar('TDX_VER_EXT_MIN', True)
-    data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
+    data["version"] = d.getVar('PV', True)
+    data["release_date"] = d.getVar('DATE', True)
     if os.path.exists(os.path.join(deploydir, "prepare.sh")):
         data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
@@ -205,7 +205,7 @@ IMAGE_CMD_teziimg () {
 		# The first transform strips all folders from the files to tar, the
 		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
 		# The third transform removes zImage from the device tree.
-		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES} ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES} ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 		;;
 		*)
 		# Create bootfs...
@@ -214,7 +214,7 @@ IMAGE_CMD_teziimg () {
 
 		# The first transform strips all folders from the files to tar, the
 		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
-		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${TDX_VER_EXT}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 		;;
 	esac
 }
