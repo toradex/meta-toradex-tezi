@@ -189,7 +189,7 @@ IMAGE_CMD_teziimg () {
 	# Create list of device tree files
 	if test -n "${KERNEL_DEVICETREE}"; then
 		for DTS_FILE in ${KERNEL_DEVICETREE}; do
-			DTS_BASE_NAME=`basename ${DTS_FILE} | awk -F "." '{print $1}'`
+			DTS_BASE_NAME=`basename ${DTS_FILE} .dtb`
 			if [ -e "${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${DTS_BASE_NAME}.dtb" ]; then
 				KERNEL_DEVICETREE_FILES="${KERNEL_DEVICETREE_FILES} ${KERNEL_IMAGETYPE}-${DTS_BASE_NAME}.dtb"
 			else
