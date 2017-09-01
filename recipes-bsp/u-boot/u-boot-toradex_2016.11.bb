@@ -8,8 +8,8 @@ LOCALVERSION ?= "-${TDX_VER_INT}"
 
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-SRCREV = "2f48e45dd54be29401cd7d7e51920fba9581d211"
-SRCBRANCH = "2016.11-toradex-next"
+SRCREV = "51b53b428bab1e7dc5f67fb2c44fd15bdf267b09"
+SRCBRANCH = "2016.11-toradex"
 COMPATIBLE_MACHINE = "(mx6|mx7|vf)"
 
 SRC_URI_append = "\
