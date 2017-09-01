@@ -10,6 +10,8 @@ hostname -F /etc/hostname
 
 # Create volatile directories
 mkdir /var/volatile/tmp
+mkdir /var/volatile/log
+mkdir /run/lock
 
 # Do not execute rc.local if rescueshell is defined
 if grep -v -q rescueshell /proc/cmdline; then
