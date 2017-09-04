@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# (c) Toradex AG 2016
+# (c) Toradex AG 2016-2017
 #
 # Apalis/Colibri iMX6 in-field hardware update script
 #
@@ -11,7 +11,7 @@
 # - Configure Boot Bus mode (due to eMMC Fast Boot mode above)
 #
 # Other configurations
-# - Boot from eMMC boot partition (must run as wrapup script)
+# - Boot from eMMC boot partition (must run as wrap-up script)
 #
 
 PRODUCT_ID=$1
@@ -31,7 +31,7 @@ case $PRODUCT_ID in
 *) error_exit "This script is meant to be run on a Apalis/Colibri iMX6. Aborting...";
 esac
 
-# Fuse SoC's BOOT_CFG to enable eMMC Fast Boot mode, if necsary
+# Fuse SoC's BOOT_CFG to enable eMMC Fast Boot mode, if necessary
 # WARNING: Fusing is a one-time operation, do not change values
 # here unless you are absolutely sure what your are doing.
 BOOT_CFG=0x5072
