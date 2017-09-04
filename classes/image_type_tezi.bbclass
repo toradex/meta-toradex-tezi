@@ -63,7 +63,7 @@ def rootfs_tezi_emmc(d):
               "content": {
                 "label": "RFS",
                 "filesystem_type": "ext4",
-                "mkfs_options": "",
+                "mkfs_options": "-E nodiscard",
                 "filename": imagename + ".rootfs.tar.xz",
                 "uncompressed_size": rootfs_get_size(d) / 1024
               }
