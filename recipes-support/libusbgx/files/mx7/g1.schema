@@ -5,8 +5,7 @@ attrs :
     bDeviceSubClass = 0x0;
     bDeviceProtocol = 0x0;
     bMaxPacketSize0 = 0x40;
-    idVendor = 0x1D6B;
-    idProduct = 0x104;
+    idVendor = 0x1b67;
     bcdDevice = 0x401;
 };
 os_descs : 
