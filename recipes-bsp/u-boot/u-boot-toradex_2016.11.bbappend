@@ -1,2 +1,2 @@
-SRCREV = "51b53b428bab1e7dc5f67fb2c44fd15bdf267b09"
-SRCBRANCH = "2016.11-toradex"
+SRCREV = "1c83a29a76782c061e38fca7faab35f14a5507ad"
+SRCBRANCH = "2016.11-toradex-next"
