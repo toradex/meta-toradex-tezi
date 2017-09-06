@@ -135,7 +135,7 @@ index bb40b39b5f..2a589a4689 100644
 +		"rootfstype=squashfs root=/dev/ram autoinstall " \
 +		"${teziargs}; echo Booting Toradex Easy Installer...; " \
 +		"ubi part ubi && " \
-+		"ubi read ${ramdisk_addr_r} tezi && " \
++		"ubi read ${ramdisk_addr_r} rootfs && " \
 +		"bootm ${ramdisk_addr_r}#config@${soc}\0" \
  
 -#define CONFIG_BOOTCOMMAND "run ubiboot; " \
