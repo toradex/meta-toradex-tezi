@@ -2,8 +2,11 @@
 # in conf/distro/include/angstrom-mesa-tweaks.inc
 
 # add the original mesa PACKAGECONFIG settings
-PACKAGECONFIG_pn-mesa_append = " gbm egl gles dri \
-    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
+PACKAGECONFIG_pn-mesa_append = " \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland vulkan', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'opengl egl gles gbm dri', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'x11 opengl', 'x11', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'x11 vulkan', 'dri3', '', d)} \
 "
 
 # meta-freescale/recipes-graphics/mesa/mesa_%.bbappend
