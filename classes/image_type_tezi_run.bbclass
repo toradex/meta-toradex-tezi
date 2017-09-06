@@ -82,7 +82,7 @@ def rootfs_tezi_run_rawnand(d):
           "name": "ubi",
           "ubivolumes": [
             {
-              "name": "tezi",
+              "name": "rootfs",
               "type": "static",
               "content": {
                 "rawfile": {
