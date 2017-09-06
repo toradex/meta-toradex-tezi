@@ -1,6 +1,6 @@
 inherit image_types
 
-IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy"
+IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy virtual/bootloader"
 
 def rootfs_get_size(d):
     import subprocess
