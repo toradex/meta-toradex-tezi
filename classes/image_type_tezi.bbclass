@@ -2,6 +2,8 @@ inherit image_types
 
 IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy virtual/bootloader"
 
+UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
+
 def rootfs_get_size(d):
     import subprocess
 
