@@ -147,9 +147,6 @@ def rootfs_tezi_rawnand(d):
         })]
 
 python rootfs_tezi_json() {
-    if not bb.utils.contains("IMAGE_FSTYPES", "teziimg", True, False, d):
-        return
-
     import json
     from collections import OrderedDict
 
@@ -187,7 +184,14 @@ python rootfs_tezi_json() {
         json.dump(data, outfile, indent=4)
     bb.note("Toradex Easy Installer metadata file image.json written.")
 }
-do_rootfs[postfuncs] =+ "rootfs_tezi_json"
+
+python () {
+    if bb.utils.contains("IMAGE_FSTYPES", "teziimg", True, False, d):
+        # do_image_teziimg does not work because the anonymous python function
+        # in image.bbclass gets called later and overwrites prefuncs. In master
+        # this is fixed, so we might be able to get rid of this work around in rocko
+        d.appendVarFlag('do_image', 'prefuncs', 'rootfs_tezi_json')
+}
 
 IMAGE_CMD_teziimg () {
 	bbnote "Create bootfs tarball"
