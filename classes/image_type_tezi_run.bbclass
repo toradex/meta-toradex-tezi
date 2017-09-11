@@ -15,6 +15,20 @@ def fitimg_get_size(d):
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
 
+    bootpart_rawfiles = []
+    has_spl = d.getVar('SPL_BINARY', True)
+    if has_spl:
+        bootpart_rawfiles.append(
+              {
+                "filename": d.getVar('SPL_BINARY', True),
+                "dd_options": "seek=2"
+              })
+    bootpart_rawfiles.append(
+              {
+                "filename": d.getVar('UBOOT_BINARY', True),
+                "dd_options": "seek=138" if has_spl else "seek=2"
+              })
+
     return [
         OrderedDict({
           "name": "mmcblk0",
@@ -36,16 +50,7 @@ def rootfs_tezi_run_emmc(d):
           "name": "mmcblk0boot0",
           "content": {
             "filesystem_type": "raw",
-            "rawfiles": [
-              {
-                "filename": d.getVar('SPL_BINARY', True),
-                "dd_options": "seek=2"
-              },
-              {
-                "filename": d.getVar('UBOOT_BINARY', True),
-                "dd_options": "seek=138"
-              }
-            ]
+            "rawfiles": bootpart_rawfiles
           }
         })]
 
