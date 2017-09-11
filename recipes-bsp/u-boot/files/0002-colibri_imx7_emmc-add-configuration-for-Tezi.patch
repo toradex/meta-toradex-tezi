@@ -1,7 +1,7 @@
-From e525d13a86634802d4228adf6851734e5ccdb1df Mon Sep 17 00:00:00 2001
+From 46dc07c95e75327de294578bae5e354c7e437412 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 4 Sep 2017 14:23:38 -0700
-Subject: [PATCH 2/2] colibri_imx7_emmc: add configuration for Tezi
+Subject: [PATCH 2/3] colibri_imx7_emmc: add configuration for Tezi
 
 Modify configuration for Tezi:
 - Enable SDP in U-Boot
@@ -20,7 +20,7 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 
 diff --git a/configs/colibri_imx7_emmc_tezi_defconfig b/configs/colibri_imx7_emmc_tezi_defconfig
 new file mode 100644
-index 0000000000..99cfdf7c21
+index 0000000000..f7ff19cc91
 --- /dev/null
 +++ b/configs/colibri_imx7_emmc_tezi_defconfig
 @@ -0,0 +1,57 @@
@@ -34,7 +34,7 @@ index 0000000000..99cfdf7c21
 +CONFIG_IMX_BOOTAUX=y
 +CONFIG_DEFAULT_DEVICE_TREE="imx7-colibri"
 +CONFIG_FIT=y
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/toradex/colibri_imx7/imximage.cfg,MX7D"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/toradex/colibri_imx7/imximage.cfg,MX7D,IMX_NAND"
 +CONFIG_BOOTDELAY=1
 +CONFIG_SYS_CONSOLE_IS_IN_ENV=y
 +# CONFIG_DISPLAY_BOARDINFO is not set

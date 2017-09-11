@@ -18,4 +18,5 @@ SRC_URI_append = "\
     file://0003-mtest-disable-physical-memory-cell-test.patch \
     file://0001-colibri_imx7-add-configuration-for-Tezi.patch \
     file://0002-colibri_imx7_emmc-add-configuration-for-Tezi.patch \
+    file://0003-colibri_imx7-add-configuration-for-Tezi-recovery.patch \
 "

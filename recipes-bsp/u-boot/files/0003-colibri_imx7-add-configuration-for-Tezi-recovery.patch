@@ -1,0 +1,419 @@
+From 9c1bf4571871392df8da98cc6e0abca228dbd87f Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Wed, 23 Aug 2017 10:38:35 -0700
+Subject: [PATCH 3/3] colibri_imx7: add configuration for Tezi recovery
+
+Modify configuration for Tezi unified recovery mode:
+- Enable SDP in U-Boot
+- Enable FDT relocation (in-place is causing issues with FIT images)
+- Remove Video output
+- Currently only for recovery (no flash/eMMC support)
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ board/toradex/colibri_imx7/Kconfig           |   4 +
+ board/toradex/colibri_imx7/colibri_imx7.c    |  28 +++-
+ configs/colibri_imx7_tezi_recovery_defconfig |  59 +++++++
+ include/configs/colibri_imx7_tezi_recovery.h | 234 +++++++++++++++++++++++++++
+ 4 files changed, 323 insertions(+), 2 deletions(-)
+ create mode 100644 configs/colibri_imx7_tezi_recovery_defconfig
+ create mode 100644 include/configs/colibri_imx7_tezi_recovery.h
+
+diff --git a/board/toradex/colibri_imx7/Kconfig b/board/toradex/colibri_imx7/Kconfig
+index e958c35e84..3fb3ae490a 100644
+--- a/board/toradex/colibri_imx7/Kconfig
++++ b/board/toradex/colibri_imx7/Kconfig
+@@ -2,6 +2,7 @@ if TARGET_COLIBRI_IMX7
+ 
+ choice
+ 	prompt "Colibri iMX7S/D variant"
++	optional
+ 
+ config TARGET_COLIBRI_IMX7_NAND
+ 	bool "Support Colibri iMX7 Solo 256MB/Dual 512MB (raw NAND) modules"
+@@ -30,6 +31,9 @@ config TDX_CFG_BLOCK
+ config TDX_CFG_BLOCK_2ND_ETHADDR
+ 	default y
+ 
++config SYS_CONFIG_NAME
++	default "colibri_imx7_tezi_recovery" if (!TARGET_COLIBRI_IMX7_NAND && !TARGET_COLIBRI_IMX7_EMMC)
++
+ if TARGET_COLIBRI_IMX7_NAND
+ 
+ config SYS_CONFIG_NAME
+diff --git a/board/toradex/colibri_imx7/colibri_imx7.c b/board/toradex/colibri_imx7/colibri_imx7.c
+index a8d8dbd2ba..fa303c9ee2 100644
+--- a/board/toradex/colibri_imx7/colibri_imx7.c
++++ b/board/toradex/colibri_imx7/colibri_imx7.c
+@@ -50,7 +50,12 @@ DECLARE_GLOBAL_DATA_PTR;
+ 
+ #define NAND_PAD_READY0_CTRL (PAD_CTL_DSE_3P3V_49OHM | PAD_CTL_PUS_PU5KOHM)
+ 
++#define FLASH_DETECTION_CTRL (PAD_CTL_HYS | PAD_CTL_PUE)
++
+ #define USB_CDET_GPIO	IMX_GPIO_NR(7, 14)
++#define FLASH_DET_GPIO	IMX_GPIO_NR(6, 11)
++
++static bool is_emmc;
+ 
+ int dram_init(void)
+ {
+@@ -81,6 +86,10 @@ static iomux_v3_cfg_t const usb_cdet_pads[] = {
+ 	MX7D_PAD_ENET1_CRS__GPIO7_IO14 | MUX_PAD_CTRL(NO_PAD_CTRL),
+ };
+ 
++static iomux_v3_cfg_t const flash_detection_pads[] = {
++	MX7D_PAD_SD3_RESET_B__GPIO6_IO11 | MUX_PAD_CTRL(FLASH_DETECTION_CTRL),
++};
++
+ #if defined(CONFIG_NAND_MXS) && defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
+ static iomux_v3_cfg_t const gpmi_pads[] = {
+ 	MX7D_PAD_SD3_DATA0__NAND_DATA00 | MUX_PAD_CTRL(NAND_PAD_CTRL),
+@@ -334,6 +343,16 @@ int board_init(void)
+ 	/* address of boot parameters */
+ 	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
+ 
++	/*
++	 * Enable GPIO on NAND_WE_B/eMMC_RST with 100k pull-down. eMMC_RST
++	 * is pulled high with 4.7k for eMMC devices. This allows to reliably
++	 * detect eMMC/NAND flash
++	 */
++	imx_iomux_v3_setup_multiple_pads(flash_detection_pads, ARRAY_SIZE(flash_detection_pads));
++	gpio_request(FLASH_DET_GPIO, "flash-detection-gpio");
++	is_emmc = gpio_get_value(FLASH_DET_GPIO);
++	gpio_free(FLASH_DET_GPIO);
++
+ #ifdef CONFIG_FEC_MXC
+ 	setup_fec();
+ #endif
+@@ -374,6 +393,9 @@ int board_late_init(void)
+ 	add_board_boot_modes(board_boot_modes);
+ #endif
+ 
++	if (is_emmc)
++		setenv("variant", "-emmc");
++
+ #ifdef CONFIG_CMD_USB_SDP
+ 	if (get_boot_device() == USB_SDP_BOOT) {
+ 		printf("Serial Downloader recovery mode, using sdp command\n");
+@@ -470,8 +492,10 @@ int ft_board_setup(void *blob, bd_t *bd)
+ 	};
+ 
+ 	/* Update partition nodes using info from mtdparts env var */
+-	puts("   Updating MTD partitions...\n");
+-	fdt_fixup_mtdparts(blob, nodes, ARRAY_SIZE(nodes));
++	if (!is_emmc) {
++		puts("   Updating MTD partitions...\n");
++		fdt_fixup_mtdparts(blob, nodes, ARRAY_SIZE(nodes));
++	}
+ #endif
+ #if defined(CONFIG_IMX_BOOTAUX)
+ 	ret = arch_auxiliary_core_check_up(0);
+diff --git a/configs/colibri_imx7_tezi_recovery_defconfig b/configs/colibri_imx7_tezi_recovery_defconfig
+new file mode 100644
+index 0000000000..340ca33bce
+--- /dev/null
++++ b/configs/colibri_imx7_tezi_recovery_defconfig
+@@ -0,0 +1,59 @@
++CONFIG_ARM=y
++CONFIG_ARCH_MX7=y
++CONFIG_TARGET_COLIBRI_IMX7=y
++# CONFIG_TDX_CFG_BLOCK is not set
++CONFIG_ARMV7_BOOT_SEC_DEFAULT=y
++CONFIG_IMX_RDC=y
++CONFIG_IMX_BOOTAUX=y
++CONFIG_DEFAULT_DEVICE_TREE="imx7-colibri"
++CONFIG_FIT=y
++CONFIG_OF_BOARD_SETUP=y
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/toradex/colibri_imx7/imximage.cfg,MX7D,IMX_NAND"
++CONFIG_BOOTDELAY=1
++# CONFIG_CONSOLE_MUX is not set
++CONFIG_SYS_CONSOLE_IS_IN_ENV=y
++# CONFIG_DISPLAY_BOARDINFO is not set
++CONFIG_HUSH_PARSER=y
++CONFIG_SYS_PROMPT="Colibri iMX7 # "
++CONFIG_CMD_BOOTZ=y
++# CONFIG_CMD_IMI is not set
++# CONFIG_CMD_IMLS is not set
++# CONFIG_CMD_XIMG is not set
++CONFIG_CMD_ASKENV=y
++CONFIG_CMD_MEMTEST=y
++CONFIG_CMD_MMC=y
++CONFIG_CMD_I2C=y
++CONFIG_CMD_USB=y
++CONFIG_CMD_DFU=y
++CONFIG_CMD_USB_SDP=y
++CONFIG_CMD_USB_MASS_STORAGE=y
++# CONFIG_CMD_FPGA is not set
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_DHCP=y
++CONFIG_CMD_MII=y
++CONFIG_CMD_PING=y
++CONFIG_CMD_CACHE=y
++CONFIG_CMD_EXT4=y
++CONFIG_CMD_FAT=y
++CONFIG_CMD_FS_GENERIC=y
++CONFIG_OF_CONTROL=y
++CONFIG_OF_EMBED=y
++CONFIG_DFU_MMC=y
++CONFIG_DM_GPIO=y
++CONFIG_DM_I2C=y
++CONFIG_PINCTRL=y
++CONFIG_PINCTRL_IMX7=y
++CONFIG_DM_PMIC=y
++CONFIG_PMIC_RN5T567=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_GADGET=y
++CONFIG_CI_UDC=y
++CONFIG_USB_GADGET_DOWNLOAD=y
++CONFIG_G_DNL_MANUFACTURER="Toradex"
++CONFIG_G_DNL_VENDOR_NUM=0x1b67
++CONFIG_G_DNL_PRODUCT_NUM=0x4000
++CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_FDT_FIXUP_PARTITIONS=y
++# CONFIG_EFI_LOADER is not set
+diff --git a/include/configs/colibri_imx7_tezi_recovery.h b/include/configs/colibri_imx7_tezi_recovery.h
+new file mode 100644
+index 0000000000..cabc57c588
+--- /dev/null
++++ b/include/configs/colibri_imx7_tezi_recovery.h
+@@ -0,0 +1,234 @@
++/*
++ * Copyright 2016 Toradex AG
++ *
++ * Configuration settings for the Colibri iMX7 module.
++ *
++ * based on mx7dsabresd.h:
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#ifndef __COLIBRI_IMX7_CONFIG_H
++#define __COLIBRI_IMX7_CONFIG_H
++
++#include "mx7_common.h"
++
++#define CONFIG_SYS_THUMB_BUILD
++#define CONFIG_USE_ARCH_MEMCPY
++#define CONFIG_USE_ARCH_MEMSET
++
++/*#define CONFIG_DBG_MONITOR*/
++#define PHYS_SDRAM_SIZE			SZ_1G
++
++#define CONFIG_ARCH_MISC_INIT
++#define CONFIG_BOARD_EARLY_INIT_F
++#define CONFIG_BOARD_LATE_INIT
++
++#define CONFIG_DISPLAY_BOARDINFO_LATE	/* Calls show_board_info() */
++
++#define CONFIG_ENV_VARS_UBOOT_CONFIG
++#define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
++
++/* Size of malloc() pool */
++#define CONFIG_SYS_MALLOC_LEN		(32 * SZ_1M)
++
++#define CONFIG_CMD_BMODE
++/* Network */
++#define CONFIG_FEC_MXC
++#define CONFIG_MII
++#define CONFIG_FEC_XCV_TYPE             RMII
++#define CONFIG_ETHPRIME                 "FEC"
++#define CONFIG_FEC_MXC_PHYADDR          0
++
++#define CONFIG_PHYLIB
++#define CONFIG_PHY_MICREL
++#define CONFIG_IP_DEFRAG
++#define CONFIG_TFTP_BLOCKSIZE		16352
++#define CONFIG_TFTP_TSIZE
++
++/* ENET1 */
++#define IMX_FEC_BASE			ENET_IPS_BASE_ADDR
++
++/* MMC Config*/
++#define CONFIG_SYS_FSL_ESDHC_ADDR	0
++#define CONFIG_SYS_FSL_USDHC_NUM	1
++
++#define CONFIG_SUPPORT_EMMC_BOOT
++
++#undef CONFIG_BOOTM_PLAN9
++#undef CONFIG_BOOTM_RTEMS
++
++/* I2C configs */
++#define CONFIG_SYS_I2C_MXC
++#define CONFIG_SYS_I2C_SPEED		100000
++
++#define CONFIG_IPADDR			192.168.10.2
++#define CONFIG_NETMASK			255.255.255.0
++#define CONFIG_SERVERIP			192.168.10.1
++
++#define MEM_LAYOUT_ENV_SETTINGS \
++	"bootm_size=0x10000000\0" \
++	"fdt_addr_r=0x82000000\0" \
++	"initrd_high=0xffffffff\0" \
++	"kernel_addr_r=0x81000000\0" \
++	"pxefile_addr_r=0x87100000\0" \
++	"ramdisk_addr_r=0x82100000\0" \
++	"scriptaddr=0x87000000\0"
++
++#define SD_BOOTCMD \
++	"sdargs=root=/dev/mmcblk0p2 rw rootwait\0"	\
++	"sdboot=run setup; setenv bootargs ${defargs} ${sdargs} " \
++	"${setupargs} ${vidargs}; echo Booting from MMC/SD card...; " \
++	"run m4boot && " \
++	"load mmc 0:1 ${kernel_addr_r} ${kernel_file} && " \
++	"load mmc 0:1 ${fdt_addr_r} ${soc}-colibri-${fdt_board}.dtb && " \
++	"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
++
++#define NFS_BOOTCMD \
++	"nfsargs=ip=:::::eth0: root=/dev/nfs\0"	\
++	"nfsboot=run setup; " \
++		"setenv bootargs ${defargs} ${nfsargs} " \
++		"${setupargs} ${vidargs}; echo Booting from NFS...;" \
++		"dhcp ${kernel_addr_r} && "	\
++		"tftp ${fdt_addr_r} ${soc}-colibri-${fdt_board}.dtb && " \
++		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
++
++#define UBI_BOOTCMD	\
++	"ubiargs=ubi.mtd=ubi root=ubi0:rootfs rootfstype=ubifs " \
++		"ubi.fm_autoconvert=1\0" \
++	"ubiboot=run setup; " \
++		"setenv bootargs ${defargs} ${ubiargs} " \
++		"${setupargs} ${vidargs}; echo Booting from NAND...; " \
++		"ubi part ubi && run m4boot && " \
++		"ubi read ${kernel_addr_r} kernel && " \
++		"ubi read ${fdt_addr_r} dtb && " \
++		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
++
++#define CONFIG_BOOTCOMMAND "run ubiboot; " \
++	"setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && run distro_bootcmd;"
++
++#define BOOTENV_RUN_NET_USB_START ""
++#define BOOT_TARGET_DEVICES(func) \
++	func(MMC, mmc, 0) \
++	func(USB, usb, 0) \
++	func(DHCP, dhcp, na)
++#include <config_distro_bootcmd.h>
++#include <config_distro_defaults.h>
++
++#undef CONFIG_ISO_PARTITION
++
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	BOOTENV \
++	MEM_LAYOUT_ENV_SETTINGS \
++	NFS_BOOTCMD \
++	SD_BOOTCMD \
++	UBI_BOOTCMD \
++	"console=ttymxc0\0" \
++	"defargs=\0" \
++	"fdt_board=eval-v3\0" \
++	"fdt_fixup=;\0" \
++	"m4boot=;\0" \
++	"ip_dyn=yes\0" \
++	"kernel_file=zImage\0" \
++	"mtdparts=" MTDPARTS_DEFAULT "\0" \
++	"setethupdate=if env exists ethaddr; then; else setenv ethaddr " \
++		"00:14:2d:00:00:00; fi; tftpboot ${loadaddr} " \
++		"${board}/flash_eth.img && source ${loadaddr}\0" \
++	"setsdupdate=mmc rescan && setenv interface mmc && " \
++		"fatload ${interface} 0:1 ${loadaddr} " \
++		"${board}/flash_blk.img && source ${loadaddr}\0" \
++	"setup=setenv setupargs " \
++		"console=tty1 console=${console}" \
++		",${baudrate}n8 ${memargs} consoleblank=0\0" \
++	"setupdate=run setsdupdate || run setusbupdate || run setethupdate\0" \
++	"setusbupdate=usb start && setenv interface usb && " \
++		"fatload ${interface} 0:1 ${loadaddr} " \
++		"${board}/flash_blk.img && source ${loadaddr}\0" \
++	"splashpos=m,m\0" \
++	"videomode=video=ctfb:x:640,y:480,depth:18,pclk:39722,le:48,ri:16,up:33,lo:10,hs:96,vs:2,sync:0,vmode:0\0" \
++	"updlevel=2\0" \
++	"vidargs=video=mxsfb:640x480M-16@60"
++
++/* Miscellaneous configurable options */
++#define CONFIG_SYS_LONGHELP
++
++#define CONFIG_SYS_ALT_MEMTEST
++#define CONFIG_SYS_MEMTEST_START	0x80000000
++#define CONFIG_SYS_MEMTEST_END		(CONFIG_SYS_MEMTEST_START + 0x3c000000)
++
++#define CONFIG_SYS_LOAD_ADDR		CONFIG_LOADADDR
++#define CONFIG_SYS_HZ			1000
++
++#define CONFIG_STACKSIZE		SZ_128K
++
++/* Physical Memory Map */
++#define CONFIG_NR_DRAM_BANKS		1
++#define PHYS_SDRAM			MMDC0_ARB_BASE_ADDR
++
++#define CONFIG_SYS_SDRAM_BASE		PHYS_SDRAM
++#define CONFIG_SYS_INIT_RAM_ADDR	IRAM_BASE_ADDR
++#define CONFIG_SYS_INIT_RAM_SIZE	IRAM_SIZE
++
++#define CONFIG_SYS_INIT_SP_OFFSET \
++	(CONFIG_SYS_INIT_RAM_SIZE - GENERATED_GBL_DATA_SIZE)
++#define CONFIG_SYS_INIT_SP_ADDR \
++	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_SP_OFFSET)
++
++/* FLASH and environment organization */
++#define CONFIG_SYS_NO_FLASH
++#define CONFIG_ENV_IS_NOWHERE
++#define CONFIG_ENV_SIZE			(8 * 1024)
++
++#if defined(CONFIG_ENV_IS_IN_MMC)
++#define CONFIG_SYS_MMC_ENV_DEV		0
++#define CONFIG_SYS_MMC_ENV_PART		1
++#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
++#define CONFIG_ENV_OFFSET		(8 * SZ_64K)
++#define CONFIG_ENV_SIZE			(8 * 1024)
++#elif defined(CONFIG_ENV_IS_IN_NAND)
++#define CONFIG_ENV_SECT_SIZE		(128 * 1024)
++#define CONFIG_ENV_OFFSET		(28 * CONFIG_ENV_SECT_SIZE)
++#define CONFIG_ENV_SIZE			CONFIG_ENV_SECT_SIZE
++#endif
++
++/* Dynamic MTD partition support */
++#define CONFIG_CMD_MTDPARTS	/* Enable 'mtdparts' command line support */
++#define CONFIG_MTD_DEVICE	/* needed for mtdparts commands */
++#define MTDIDS_DEFAULT		"nand0=gpmi-nand"
++#define MTDPARTS_DEFAULT	"mtdparts=gpmi-nand:"		\
++				"512k(mx7-bcb),"		\
++				"1536k(u-boot1)ro,"		\
++				"1536k(u-boot2)ro,"		\
++				"512k(u-boot-env),"		\
++				"-(ubi)"
++
++/* USB Configs */
++#define CONFIG_EHCI_HCD_INIT_AFTER_RESET
++
++#define CONFIG_MXC_USB_PORTSC		(PORT_PTS_UTMI | PORT_PTS_PTW)
++#define CONFIG_MXC_USB_FLAGS		0
++#define CONFIG_USB_MAX_CONTROLLER_COUNT 2
++
++#define CONFIG_IMX_THERMAL
++
++#define CONFIG_USBD_HS
++
++#define CONFIG_USB_FUNCTION_MASS_STORAGE
++
++/* USB Device Firmware Update support */
++#define CONFIG_SYS_DFU_DATA_BUF_SIZE	SZ_16M
++#define DFU_DEFAULT_POLL_TIMEOUT	300
++
++#ifdef CONFIG_VIDEO
++#define CONFIG_VIDEO_MXS
++#define CONFIG_VIDEO_LOGO
++#define CONFIG_SPLASH_SCREEN
++#define CONFIG_SPLASH_SCREEN_ALIGN
++#define CONFIG_CMD_BMP
++#define CONFIG_BMP_16BPP
++#define CONFIG_VIDEO_BMP_RLE8
++#define CONFIG_VIDEO_BMP_LOGO
++#endif
++
++#endif
+-- 
+2.14.1
+
