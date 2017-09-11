@@ -155,6 +155,12 @@ build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
 	mkdir ${IMAGE_NAME}/
 	cp -L -R ${SPL_BINARY} ${UBOOT_BINARY} tezi.itb wrapup.sh image.json tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
+
+	# zip does update if the file exist, explicitly delete before adding files to the archive
+	if [ -e ${IMAGE_NAME}.zip ]; then
+		rm ${IMAGE_NAME}.zip
+	fi
+
 	zip -r ${IMAGE_NAME}.zip ${IMAGE_NAME}/
 	rm -r ${IMAGE_NAME}/
 }
