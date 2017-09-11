@@ -58,12 +58,6 @@ def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
     imagename = d.getVar('IMAGE_NAME', True)
 
-    # Use device tree mapping to create product id <-> device tree relationship
-    dtmapping = d.getVarFlags('TORADEX_PRODUCT_IDS')
-    dtfiles = []
-    for f, v in dtmapping.items():
-        dtfiles.append({ "filename": v, "product_ids": f })
-
     return [
         OrderedDict({
           "name": "u-boot1",
