@@ -2,6 +2,10 @@ inherit image_types
 
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native zip-native"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
+TEZI_UBOOT_BINARY_EMMC ?= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_RAWNAND ?= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_RECOVERY ?= "${UBOOT_BINARY}"
+TORADEX_FLASH_TYPE ?= "emmc"
 
 def fitimg_get_size(d):
     import subprocess
@@ -14,6 +18,8 @@ def fitimg_get_size(d):
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
+    uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC', True)
+    d.appendVar('TEZI_UBOOT_BINARIES', uboot + ' ')
 
     bootpart_rawfiles = []
     has_spl = d.getVar('SPL_BINARY', True)
@@ -25,7 +31,7 @@ def rootfs_tezi_run_emmc(d):
               })
     bootpart_rawfiles.append(
               {
-                "filename": d.getVar('UBOOT_BINARY', True),
+                "filename": uboot,
                 "dd_options": "seek=138" if has_spl else "seek=2"
               })
 
@@ -57,13 +63,15 @@ def rootfs_tezi_run_emmc(d):
 def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
     imagename = d.getVar('IMAGE_NAME', True)
+    uboot = d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True)
+    d.appendVar('TEZI_UBOOT_BINARIES', uboot + ' ')
 
     return [
         OrderedDict({
           "name": "u-boot1",
           "content": {
             "rawfile": {
-              "filename": d.getVar('UBOOT_BINARY', True),
+              "filename": uboot,
               "size": 1
             }
           },
@@ -72,7 +80,7 @@ def rootfs_tezi_run_rawnand(d):
           "name": "u-boot2",
           "content": {
             "rawfile": {
-              "filename": d.getVar('UBOOT_BINARY', True),
+              "filename": uboot,
               "size": 1
             }
           }
@@ -93,10 +101,7 @@ def rootfs_tezi_run_rawnand(d):
           ]
         })]
 
-python rootfs_tezi_run_json() {
-    if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
-        return
-
+def rootfs_tezi_run_create_json(d, flash_type):
     import json
     from collections import OrderedDict
 
@@ -118,18 +123,47 @@ python rootfs_tezi_run_json() {
     if product_ids is None:
         bb.fatal("Supported Toradex product ids missing, assign TORADEX_PRODUCT_IDS with a list of product ids.")
 
-    data["supported_product_ids"] = d.getVar('TORADEX_PRODUCT_IDS', True).split()
+    dtmapping = d.getVarFlags('TORADEX_PRODUCT_IDS')
+    data["supported_product_ids"] = []
 
-    if bb.utils.contains("TORADEX_FLASH_TYPE", "rawnand", True, False, d):
-        data["mtddevs"] = rootfs_tezi_run_rawnand(d)
+    # If no varflags are set, we assume all product ids supported with single image/U-Boot
+    if dtmapping is not None:
+        for f, v in dtmapping.items():
+            if v.split(',')[1] == flash_type:
+                data["supported_product_ids"].append(f)
     else:
-        data["blockdevs"] = rootfs_tezi_run_emmc(d)
+        data["supported_product_ids"].append(product_ids.split())
 
-    deploy_dir = d.getVar('DEPLOY_DIR_IMAGE', True)
-    with open(os.path.join(deploy_dir, 'image.json'), 'w') as outfile:
-        json.dump(data, outfile, indent=4)
-    bb.note("Toradex Easy Installer metadata file image.json written.")
+    if flash_type == "rawnand":
+        data["mtddevs"] = rootfs_tezi_run_rawnand(d)
+    elif flash_type == "emmc":
+        data["blockdevs"] = rootfs_tezi_run_emmc(d)
+    else:
+        bb.fatal("Unsupported Toradex flash type")
+
+    imagefile = 'image-{0}.json'.format(flash_type)
+    with open(os.path.join(deploydir, imagefile), 'w') as outfile:
+         json.dump(data, outfile, indent=4)
+    d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
+    bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
+
+python rootfs_tezi_run_json() {
+    if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
+        return
+
+    flash_types = d.getVar('TORADEX_FLASH_TYPE', True)
+    if flash_types is None:
+        bb.fatal("Toradex flash type not specified")
+
+    for flash_type in flash_types.split():
+        rootfs_tezi_run_create_json(d, flash_type)
+
+    # We end up having the same binary twice in TEZI_UBOOT_BINARIES in case
+    # the recovery mode binary is the same as the one which gets flashed.
+    # This is ok, zip will only add it once below.
+    d.appendVar('TEZI_UBOOT_BINARIES', d.getVar('TEZI_UBOOT_BINARY_RECOVERY', True) + ' ')
 }
+
 do_rootfs[depends] =+ "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy"
 
 IMAGE_CMD_tezirunimg () {
@@ -148,7 +182,7 @@ build_fitimage () {
 build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
 	mkdir ${IMAGE_NAME}/
-	cp -L -R ${SPL_BINARY} ${UBOOT_BINARY} tezi.itb wrapup.sh image.json tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} tezi.itb wrapup.sh ${TEZI_IMAGE_FILES} tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
 	if [ -e ${IMAGE_NAME}.zip ]; then
