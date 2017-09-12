@@ -58,6 +58,16 @@
 			};
 		};
 
+		fdt@imx7d-emmc {
+			description = "Colibri iMX7 Dual 1GB eMMC Device Tree";
+			data = /incbin/("./zImage-imx7d-colibri-emmc-eval-v3.dtb");
+			type = "flat_dt";
+			arch = "arm";
+			compression = "none";
+			hash@1 {
+				algo = "md5";
+			};
+		};
 	};
 
 	configurations {
@@ -75,6 +85,13 @@
 			kernel = "kernel@1";
 			ramdisk = "ramdisk@1";
 			fdt = "fdt@imx7d";
+		};
+
+		config@imx7d-emmc {
+			description = "Toradex Easy Installer for Colibri iMX7 Dual 1GB eMMC";
+			kernel = "kernel@1";
+			ramdisk = "ramdisk@1";
+			fdt = "fdt@imx7d-emmc";
 		};
 	};
 };
