@@ -1,0 +1,55 @@
+From 6ddd70184fef79fcb11c1cd045e31f70da139846 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Tue, 12 Sep 2017 10:49:11 -0700
+Subject: [PATCH] ARM: dts: imx7-colibri: use static MTD partition layout
+
+Use static MTD partition layout so that we are not dependent
+on U-Boot providing proper MTD partition information.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ arch/arm/boot/dts/imx7-colibri.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index 1c615dfb9a56..ea2b601a8b58 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -125,11 +125,34 @@
+ #endif
+ 
+ &gpmi {
++	#address-cells = <1>;
++	#size-cells = <1>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_gpmi_nand_1>;
+ 	nand-on-flash-bbt;
+ 
+ 	nand-ecc-mode = "hw";
++
++	partition@0 {
++		label = "mx7-bcb";
++		reg = <0x00000000 0x00080000>;
++	};
++	partition@80000 {
++		label = "u-boot1";
++		reg = <0x00080000 0x00180000>;
++	};
++	partition@200000 {
++		label = "u-boot2";
++		reg = <0x00200000 0x00180000>;
++	};
++	partition@380000 {
++		label = "u-boot-env";
++		reg = <0x00380000 0x00080000>;
++	};
++	partition@400000 {
++		label = "ubi";
++		reg = <0x00400000 0x1fc00000>;
++	};
+ };
+ 
+ &i2c1 {
+-- 
+2.14.1
+
