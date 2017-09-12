@@ -101,7 +101,7 @@ def rootfs_tezi_run_rawnand(d):
           ]
         })]
 
-def rootfs_tezi_run_create_json(d, flash_type):
+def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     import json
     from collections import OrderedDict
 
@@ -132,7 +132,7 @@ def rootfs_tezi_run_create_json(d, flash_type):
             if v.split(',')[1] == flash_type:
                 data["supported_product_ids"].append(f)
     else:
-        data["supported_product_ids"].append(product_ids.split())
+        data["supported_product_ids"].extend(product_ids.split())
 
     if flash_type == "rawnand":
         data["mtddevs"] = rootfs_tezi_run_rawnand(d)
@@ -141,7 +141,10 @@ def rootfs_tezi_run_create_json(d, flash_type):
     else:
         bb.fatal("Unsupported Toradex flash type")
 
-    imagefile = 'image-{0}.json'.format(flash_type)
+    imagefile = 'image.json'
+    if type_specific_name:
+        imagefile = 'image-{0}.json'.format(flash_type)
+
     with open(os.path.join(deploydir, imagefile), 'w') as outfile:
          json.dump(data, outfile, indent=4)
     d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
@@ -155,8 +158,9 @@ python rootfs_tezi_run_json() {
     if flash_types is None:
         bb.fatal("Toradex flash type not specified")
 
-    for flash_type in flash_types.split():
-        rootfs_tezi_run_create_json(d, flash_type)
+    flash_types_list = flash_types.split()
+    for flash_type in flash_types_list:
+        rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
 
     # We end up having the same binary twice in TEZI_UBOOT_BINARIES in case
     # the recovery mode binary is the same as the one which gets flashed.
