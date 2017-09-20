@@ -1,0 +1,6 @@
+#
+# kobs configuration file for Colibri iMX6ULL
+#
+chip_0_device_path=/dev/mtd0
+
+search_exponent = 1
