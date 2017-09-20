@@ -129,7 +129,8 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     # If no varflags are set, we assume all product ids supported with single image/U-Boot
     if dtmapping is not None:
         for f, v in dtmapping.items():
-            if v.split(',')[1] == flash_type:
+            dtbflashtypearr = v.split(',')
+            if len(dtbflashtypearr) < 2 or dtbflashtypearr[1] == flash_type:
                 data["supported_product_ids"].append(f)
     else:
         data["supported_product_ids"].extend(product_ids.split())
