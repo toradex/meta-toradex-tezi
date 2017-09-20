@@ -2,5 +2,6 @@
 # kobs configuration file for Colibri iMX6ULL
 #
 chip_0_device_path=/dev/mtd0
+chip_0_size=0x380000
 
 search_exponent = 1
