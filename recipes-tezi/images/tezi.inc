@@ -3,11 +3,13 @@ include conf/tdx_version.conf
 SUMMARY="Toradex Easy Installer"
 DESCRIPTION_apalis-imx6="Toradex Easy Installer for Apalis iMX6."
 DESCRIPTION_colibri-imx6="Toradex Easy Installer for Colibri iMX6."
+DESCRIPTION_colibri-imx6ull="Toradex Easy Installer for Colibri iMX6ULL."
 DESCRIPTION_colibri-imx7="Toradex Easy Installer for Colibri iMX7."
 DESCRIPTION_colibri-imx7-emmc="Toradex Easy Installer for Colibri iMX7 eMMC."
 
 IMAGE_NAME_apalis-imx6="Apalis-iMX6_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_colibri-imx6="Colibri-iMX6_ToradexEasyInstaller_${TDX_VER_EXT}"
+IMAGE_NAME_colibri-imx6ull="Colibri-iMX6ULL_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_colibri-imx7="Colibri-iMX7_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_colibri-imx7-emmc="Colibri-iMX7-eMMC_ToradexEasyInstaller_${TDX_VER_EXT}"
 
@@ -29,6 +31,12 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL_append_colibri-imx7 = " \
     mtd-utils-ubifs \
     mtd-utils \
+"
+
+IMAGE_INSTALL_append_colibri-imx6ull = " \
+    mtd-utils-ubifs \
+    mtd-utils \
+    kobs-ng \
 "
 
 LICENSE="MIT"
