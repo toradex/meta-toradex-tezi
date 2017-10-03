@@ -17,6 +17,8 @@ def rootfs_tezi_emmc(d):
     from collections import OrderedDict
     deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
     kernel = d.getVar('KERNEL_IMAGETYPE', True)
+    offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD', True)
+    offset_spl = d.getVar('OFFSET_SPL_PAYLOAD', True)
     imagename = d.getVar('IMAGE_NAME', True)
 
     # Calculate size of bootfs...
@@ -36,12 +38,12 @@ def rootfs_tezi_emmc(d):
         bootpart_rawfiles.append(
               {
                 "filename": d.getVar('SPL_BINARY', True),
-                "dd_options": "seek=2"
+                "dd_options": "seek=" + offset_bootrom
               })
     bootpart_rawfiles.append(
               {
                 "filename": d.getVar('UBOOT_BINARY', True),
-                "dd_options": "seek=138" if has_spl else "seek=2"
+                "dd_options": "seek=" + (offset_spl if has_spl else offset_bootrom)
               })
 
     return [
