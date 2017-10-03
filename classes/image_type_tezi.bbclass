@@ -2,7 +2,10 @@ inherit image_types
 
 IMAGE_DEPENDS_teziimg = "tezi-metadata:do_deploy virtual/bootloader"
 
-UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
+UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
+UBOOT_BINARY_TEZI = "${UBOOT_BINARY}"
+UBOOT_BINARY_TEZI_apalis-tk1 = "apalis-tk1.img"
+UBOOT_BINARY_TEZI_apalis-tk1-mainline = "apalis-tk1.img"
 
 def rootfs_get_size(d):
     import subprocess
@@ -42,7 +45,7 @@ def rootfs_tezi_emmc(d):
               })
     bootpart_rawfiles.append(
               {
-                "filename": d.getVar('UBOOT_BINARY', True),
+                "filename": d.getVar('UBOOT_BINARY_TEZI', True),
                 "dd_options": "seek=" + (offset_spl if has_spl else offset_bootrom)
               })
 
@@ -98,7 +101,7 @@ def rootfs_tezi_rawnand(d):
           "name": "u-boot1",
           "content": {
             "rawfile": {
-              "filename": d.getVar('UBOOT_BINARY', True),
+              "filename": d.getVar('UBOOT_BINARY_TEZI', True),
               "size": 1
             }
           },
@@ -107,7 +110,7 @@ def rootfs_tezi_rawnand(d):
           "name": "u-boot2",
           "content": {
             "rawfile": {
-              "filename": d.getVar('UBOOT_BINARY', True),
+              "filename": d.getVar('UBOOT_BINARY_TEZI', True),
               "size": 1
             }
           }
@@ -219,7 +222,7 @@ IMAGE_CMD_teziimg () {
 		# The first transform strips all folders from the files to tar, the
 		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
 		# The third transform removes zImage from the device tree.
-		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES} ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' --transform="flags=r;s|${KERNEL_IMAGETYPE}-||" -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY_TEZI} ${KERNEL_IMAGETYPE} ${KERNEL_DEVICETREE_FILES} ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 		;;
 		*)
 		# Create bootfs...
@@ -228,7 +231,7 @@ IMAGE_CMD_teziimg () {
 
 		# The first transform strips all folders from the files to tar, the
 		# second transform "moves" them in a subfolder ${IMAGE_NAME}_${PV}.
-		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
+		${IMAGE_CMD_TAR} --transform='s/.*\///' --transform 's,^,${IMAGE_NAME}_${PV}/,' -chf ${IMGDEPLOYDIR}/${IMAGE_NAME}_${PV}${TDX_VERDATE}.tar image.json toradexlinux.png marketing.tar prepare.sh wrapup.sh ${SPL_BINARY} ${UBOOT_BINARY_TEZI} ${IMGDEPLOYDIR}/${IMAGE_NAME}.bootfs.tar.xz ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.tar.xz
 		;;
 	esac
 }
