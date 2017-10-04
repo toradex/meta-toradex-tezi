@@ -14,3 +14,14 @@
  	@echo
  	@echo Your backported driver modules should be installed now.
  	@echo Reboot.
+--- a/Makefile
++++ b/Makefile
+@@ -84,7 +84,7 @@ mrproper:
+ 				echo ""							;\
+ 			done								\
+ 		) > Kconfig.kernel							;\
+-		kver=$$($(MAKE) --no-print-directory -C $(KLIB_BUILD) kernelversion |	\
++		kver=$$(echo $(KERNEL_VERSION) |	\
+ 			sed 's/^\(\([3-4]\|2\.6\)\.[0-9]\+\).*/\1/;t;d')		;\
+ 		test "$$kver" != "" || echo "Kernel version parse failed!"		;\
+ 		test "$$kver" != ""							;\
