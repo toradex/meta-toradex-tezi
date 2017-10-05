@@ -1,4 +1,4 @@
-From 58240ff9bae0722aaa374c7ce60ac892892e9379 Mon Sep 17 00:00:00 2001
+From cb3334999ce938ef511412ca1c97fa6aadac8cde Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Wed, 20 Sep 2017 13:43:11 -0700
 Subject: [PATCH] colibri-imx6ull: add configuration for Tezi
@@ -85,7 +85,7 @@ index 0000000000..4aa5d845eb
 +CONFIG_FDT_FIXUP_PARTITIONS=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index 87f9683e69..3be2dfee80 100644
+index 1e5bae3e9e..696bf0f4e2 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
 @@ -67,7 +67,6 @@
@@ -96,13 +96,13 @@ index 87f9683e69..3be2dfee80 100644
  	"initrd_high=0xffffffff\0" \
  	"kernel_addr_r=0x81000000\0" \
  	"pxefile_addr_r=0x87100000\0" \
-@@ -96,15 +95,15 @@
+@@ -95,15 +94,15 @@
  	"ubiargs=ubi.mtd=ubi root=ubi0:rootfs rw rootfstype=ubifs " \
  		"ubi.fm_autoconvert=1\0" \
  	"ubiboot=run setup; " \
 -		"setenv bootargs ${defargs} ${ubiargs} " \
 -		"${setupargs} ${vidargs}; echo Booting from NAND...; " \
--		"ubi part ubi && run m4boot && " \
+-		"ubi part ubi &&" \
 -		"ubi read ${kernel_addr_r} kernel && " \
 -		"ubi read ${fdt_addr_r} dtb && " \
 -		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
@@ -120,16 +120,14 @@ index 87f9683e69..3be2dfee80 100644
  
  #define BOOTENV_RUN_NET_USB_START ""
  #define BOOT_TARGET_DEVICES(func) \
-@@ -172,7 +171,7 @@
+@@ -172,12 +171,14 @@
  
  /* FLASH and environment organization */
  #define CONFIG_SYS_NO_FLASH
 -#define CONFIG_ENV_IS_IN_NAND
 +#define CONFIG_ENV_IS_NOWHERE
  
- #if defined(CONFIG_ENV_IS_IN_MMC)
- #define CONFIG_SYS_MMC_ENV_DEV		0   /* USDHC1 */
-@@ -183,6 +182,8 @@
+ #if defined(CONFIG_ENV_IS_IN_NAND)
  #define CONFIG_ENV_SECT_SIZE		(128 * 1024)
  #define CONFIG_ENV_OFFSET		(28 * CONFIG_ENV_SECT_SIZE)
  #define CONFIG_ENV_SIZE			CONFIG_ENV_SECT_SIZE
