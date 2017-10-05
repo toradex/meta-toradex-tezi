@@ -4,5 +4,5 @@ SRC_URI_append_colibri-imx7 = " \
     file://0001-ARM-dts-imx7-colibri-use-static-MTD-partition-layout.patch \
 "
 
-SRCREV = "08e1330fb0b0a6a93ceb5d27cbb49b9989e0f787"
-SRCBRANCH = "toradex_4.1-2.0.x-imx-next"
+SRCREV = "b1555bfbf38818bc6fed8d921b55b7b207249c53"
+SRCBRANCH = "toradex_4.1-2.0.x-imx"
