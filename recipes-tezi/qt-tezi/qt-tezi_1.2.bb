@@ -12,8 +12,8 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "63d00a373954a3b4911caf8c7b7a25e0f8bb277e"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=b753ab285bb7b7e5d8e9dda5d782fb31"
+SRCREV = "85d98391b26cdf9aabf51926d92c21877cc22f45"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
 S = "${WORKDIR}/git"
 inherit qt4e
