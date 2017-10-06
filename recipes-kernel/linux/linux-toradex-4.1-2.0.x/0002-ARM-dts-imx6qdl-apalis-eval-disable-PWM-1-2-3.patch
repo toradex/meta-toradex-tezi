@@ -1,0 +1,48 @@
+From baaf2e3b58d5645f6dfc7ad9b240e5e87eb3db61 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Sat, 7 Oct 2017 00:11:53 +0200
+Subject: [PATCH 2/3] ARM: dts: imx6qdl-apalis-eval: disable PWM 1/2/3
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable it by default.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ arch/arm/boot/dts/imx6qdl-apalis-eval.dtsi | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis-eval.dtsi b/arch/arm/boot/dts/imx6qdl-apalis-eval.dtsi
+index 7b79d4a368da..40c33066dd67 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis-eval.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis-eval.dtsi
+@@ -268,7 +268,7 @@
+ 		mclk = <22000000>;
+ 		mclk_source = <0>;
+ 		pwms = <&pwm3 0 45>;
+-		status = "okay";
++		status = "disabled";
+ 	};
+ };
+ 
+@@ -326,18 +326,6 @@
+ 	status = "okay";
+ };
+ 
+-&pwm1 {
+-	status = "okay";
+-};
+-
+-&pwm2 {
+-	status = "okay";
+-};
+-
+-&pwm3 {
+-	status = "okay";
+-};
+-
+ &pwm4 {
+ 	status = "okay";
+ };
+-- 
+2.14.1
+
