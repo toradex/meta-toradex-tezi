@@ -45,3 +45,10 @@ DEPENDS="virtual/bootloader"
 
 inherit core-image
 
+add_rootfs_tezi_version () {
+    echo ${IMAGE_NAME} > ${IMAGE_ROOTFS}${sysconfdir}/tezi-version
+}
+
+# add the rootfs version
+ROOTFS_POSTPROCESS_COMMAND += " add_rootfs_tezi_version;"
+
