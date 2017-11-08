@@ -14,7 +14,7 @@ SRC_URI[sha256sum] = "accd4c94049ce79443ff995c27111f3851e9896bbad502dd5d341f8847
 GO_IMPORT = "github.com/snapcore/snapd"
 
 DEPENDS += " \
-	go-cross \
+	virtual/${TARGET_PREFIX}go \
 	glib-2.0 \
 	python3-docutils-native \
 	udev \
@@ -36,7 +36,7 @@ EXTRA_OECONF += " \
 	--libexecdir=${libdir}/snapd \
 "
 
-inherit systemd autotools pkgconfig python3native go
+inherit systemd go autotools pkgconfig python3native
 
 # Our tools build with autotools are inside the cmd subdirectory
 # and we need to tell the autotools class to look in there.
@@ -47,6 +47,9 @@ SYSTEMD_SERVICE_${PN} = "snapd.service"
 do_configure_prepend() {
 	(cd ${S} ; ./mkversion.sh ${PV})
 }
+do_configure_append() {
+	go_do_configure
+}
 
 do_compile() {
 	# Ensure we our component at the right place in our GOPATH
@@ -54,7 +57,7 @@ do_compile() {
 	ln -sf ${S} ${STAGING_LIBDIR}/${TARGET_SYS}/go/src/github.com/snapcore/snapd
 
 	for d in snap snapd snap-exec snapctl; do
-		GOPATH=${STAGING_LIBDIR}/${TARGET_SYS}/go go build -x github.com/snapcore/snapd/cmd/$d
+		GOPATH=${STAGING_LIBDIR}/${TARGET_SYS}/go ${GO} build -x github.com/snapcore/snapd/cmd/$d
 	done
 
 	oe_runmake
