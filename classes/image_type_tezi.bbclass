@@ -156,8 +156,10 @@ def rootfs_tezi_rawnand(d):
 python rootfs_tezi_json() {
     import json
     from collections import OrderedDict
+    from datetime import datetime
 
     deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
+    release_date = datetime.strptime(d.getVar('DATE', True), '%Y%m%d').date().isoformat()
 
     data = OrderedDict({ "config_format": 1, "autoinstall": False })
 
@@ -165,7 +167,7 @@ python rootfs_tezi_json() {
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
     data["version"] = d.getVar('PV', True)
-    data["release_date"] = d.getVar('DATE', True)
+    data["release_date"] = release_date
     if os.path.exists(os.path.join(deploydir, "prepare.sh")):
         data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
