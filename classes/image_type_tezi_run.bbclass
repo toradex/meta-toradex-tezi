@@ -115,7 +115,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
-    data["version"] = d.getVar('TDX_VER_EXT_MIN', True)
+    data["version"] = d.getVar('TDX_VER_PACKAGE_MIN', True)
     data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
         data["wrapup_script"] = "wrapup.sh"

@@ -6,7 +6,7 @@ DEPENDS_append_apalis-tk1-mainline = " cbootimage-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 PV = "2016.11"
-PR = "${TDX_VER_INT}+gitr${SRCPV}"
+PR = "${TDX_VER_ITEM}+gitr${SRCPV}"
 
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
