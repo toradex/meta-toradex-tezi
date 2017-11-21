@@ -1,4 +1,4 @@
-From cb3334999ce938ef511412ca1c97fa6aadac8cde Mon Sep 17 00:00:00 2001
+From 97c99723a8cb14e1661d98340204676f2281511f Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Wed, 20 Sep 2017 13:43:11 -0700
 Subject: [PATCH] colibri-imx6ull: add configuration for Tezi
@@ -21,7 +21,7 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 
 diff --git a/configs/colibri-imx6ull_tezi_defconfig b/configs/colibri-imx6ull_tezi_defconfig
 new file mode 100644
-index 0000000000..4aa5d845eb
+index 0000000..4aa5d84
 --- /dev/null
 +++ b/configs/colibri-imx6ull_tezi_defconfig
 @@ -0,0 +1,59 @@
@@ -85,10 +85,10 @@ index 0000000000..4aa5d845eb
 +CONFIG_FDT_FIXUP_PARTITIONS=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index 1e5bae3e9e..696bf0f4e2 100644
+index f5cd853..6e4af7f 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
-@@ -67,7 +67,6 @@
+@@ -69,7 +69,6 @@
  #define MEM_LAYOUT_ENV_SETTINGS \
  	"bootm_size=0x10000000\0" \
  	"fdt_addr_r=0x82000000\0" \
@@ -96,7 +96,7 @@ index 1e5bae3e9e..696bf0f4e2 100644
  	"initrd_high=0xffffffff\0" \
  	"kernel_addr_r=0x81000000\0" \
  	"pxefile_addr_r=0x87100000\0" \
-@@ -95,15 +94,15 @@
+@@ -97,15 +96,15 @@
  	"ubiargs=ubi.mtd=ubi root=ubi0:rootfs rw rootfstype=ubifs " \
  		"ubi.fm_autoconvert=1\0" \
  	"ubiboot=run setup; " \
@@ -114,13 +114,13 @@ index 1e5bae3e9e..696bf0f4e2 100644
 +		"bootm ${ramdisk_addr_r}\0" \
  
 -#define CONFIG_BOOTCOMMAND "run ubiboot; " \
--	"setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && run distro_bootcmd;"
+-	"setenv fdtfile " FDT_FILE " && run distro_bootcmd;"
 +#define CONFIG_BOOTCOMMAND "setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && " \
 +	"run bootcmd_mmc0; run ubiboot; run distro_bootcmd"
  
  #define BOOTENV_RUN_NET_USB_START ""
  #define BOOT_TARGET_DEVICES(func) \
-@@ -172,12 +171,14 @@
+@@ -174,12 +173,14 @@
  
  /* FLASH and environment organization */
  #define CONFIG_SYS_NO_FLASH
@@ -137,5 +137,5 @@ index 1e5bae3e9e..696bf0f4e2 100644
  
  #define CONFIG_NAND_MXS
 -- 
-2.14.1
+2.7.5
 
