@@ -20,6 +20,8 @@ def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
     uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC', True)
     d.appendVar('TEZI_UBOOT_BINARIES', uboot + ' ')
+    offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD', True)
+    offset_spl = d.getVar('OFFSET_SPL_PAYLOAD', True)
 
     bootpart_rawfiles = []
     has_spl = d.getVar('SPL_BINARY', True)
@@ -27,12 +29,12 @@ def rootfs_tezi_run_emmc(d):
         bootpart_rawfiles.append(
               {
                 "filename": d.getVar('SPL_BINARY', True),
-                "dd_options": "seek=2"
+                "dd_options": "seek=" + offset_bootrom
               })
     bootpart_rawfiles.append(
               {
                 "filename": uboot,
-                "dd_options": "seek=138" if has_spl else "seek=2"
+                "dd_options": "seek=" + (offset_spl if has_spl else offset_bootrom)
               })
 
     return [
