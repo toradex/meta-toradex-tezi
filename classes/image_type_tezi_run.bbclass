@@ -188,6 +188,12 @@ build_fitimage () {
 
 build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
+
+	# mkdir fails if existing
+	if [ -e ${IMAGE_NAME} ]; then
+		rm -r ${IMAGE_NAME}/
+	fi
+
 	mkdir ${IMAGE_NAME}/
 	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} tezi.itb wrapup.sh ${TEZI_IMAGE_FILES} tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
 
