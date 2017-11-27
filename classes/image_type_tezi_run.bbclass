@@ -1,11 +1,12 @@
 inherit image_types
 
 IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native zip-native"
-UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
-TEZI_UBOOT_BINARY_EMMC ?= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_RAWNAND ?= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_RECOVERY ?= "${UBOOT_BINARY}"
-TORADEX_FLASH_TYPE ?= "emmc"
+TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
+UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
+TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
+TORADEX_FLASH_TYPE ??= "emmc"
 
 def fitimg_get_size(d):
     import subprocess
@@ -195,7 +196,7 @@ build_deploytar () {
 	fi
 
 	mkdir ${IMAGE_NAME}/
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} tezi.itb wrapup.sh ${TEZI_IMAGE_FILES} tezi.png boot-sdp.scr boot.scr recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} tezi.itb wrapup.sh ${TEZI_IMAGE_FILES} tezi.png ${TEZI_DISTRO_BOOT_SCRIPTS} recovery-linux.sh recovery-windows.bat recovery/ ${IMAGE_NAME}/
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
 	if [ -e ${IMAGE_NAME}.zip ]; then
