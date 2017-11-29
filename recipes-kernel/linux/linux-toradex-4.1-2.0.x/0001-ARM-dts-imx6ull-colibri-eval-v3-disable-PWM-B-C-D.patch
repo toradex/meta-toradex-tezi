@@ -1,0 +1,42 @@
+From 7740a0ae540cfd814aa131acb523fe33e272d37a Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Wed, 29 Nov 2017 19:17:08 +0100
+Subject: [PATCH] ARM: dts: imx6ull-colibri-eval-v3: disable PWM B/C/D
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable it by default.
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+index 38bf45a..2333a64 100644
+--- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
++++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+@@ -281,21 +281,6 @@
+ 	status = "okay";
+ };
+ 
+-/* PWM <B> */
+-&pwm5 {
+-	status = "okay";
+-};
+-
+-/* PWM <C> */
+-&pwm6 {
+-	status = "okay";
+-};
+-
+-/* PWM <D> */
+-&pwm7 {
+-	status = "okay";
+-};
+-
+ &uart1 {
+ 	status = "okay";
+ };
+-- 
+2.7.5
+
