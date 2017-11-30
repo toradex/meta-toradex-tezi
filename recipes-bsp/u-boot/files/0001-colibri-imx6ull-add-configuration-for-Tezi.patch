@@ -1,4 +1,4 @@
-From 97c99723a8cb14e1661d98340204676f2281511f Mon Sep 17 00:00:00 2001
+From 20c9a70a91a1b791c354dd92a225db5531af8a9d Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Wed, 20 Sep 2017 13:43:11 -0700
 Subject: [PATCH] colibri-imx6ull: add configuration for Tezi
@@ -6,7 +6,6 @@ Subject: [PATCH] colibri-imx6ull: add configuration for Tezi
 Modify configuration for Tezi:
 - Enable SDP in U-Boot
 - Enable FDT relocation (in-place is causing issues with FIT images)
-- Remove Video output
 - Use distroboot by default
 - Boot from external SD-cards by default
 - Disable USB PID from config block (otherwise recovery mode download
@@ -14,22 +13,23 @@ Modify configuration for Tezi:
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- configs/colibri-imx6ull_tezi_defconfig | 59 ++++++++++++++++++++++++++++++++++
+ configs/colibri-imx6ull_tezi_defconfig | 60 ++++++++++++++++++++++++++++++++++
  include/configs/colibri-imx6ull.h      | 21 ++++++------
- 2 files changed, 70 insertions(+), 10 deletions(-)
+ 2 files changed, 71 insertions(+), 10 deletions(-)
  create mode 100644 configs/colibri-imx6ull_tezi_defconfig
 
 diff --git a/configs/colibri-imx6ull_tezi_defconfig b/configs/colibri-imx6ull_tezi_defconfig
 new file mode 100644
-index 0000000..4aa5d84
+index 0000000000..8469f4b26e
 --- /dev/null
 +++ b/configs/colibri-imx6ull_tezi_defconfig
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,60 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_MX6=y
 +# CONFIG_TDX_CFG_BLOCK_USB_GADGET_PID is not set
 +CONFIG_TARGET_COLIBRI_IMX6ULL=y
 +CONFIG_DM_SERIAL=y
++CONFIG_VIDEO=y
 +CONFIG_DEFAULT_DEVICE_TREE="imx6ull-colibri"
 +CONFIG_FIT=y
 +CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/toradex/colibri-imx6ull/imximage.cfg,MX6ULL,IMX_NAND"
@@ -85,7 +85,7 @@ index 0000000..4aa5d84
 +CONFIG_FDT_FIXUP_PARTITIONS=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index f5cd853..6e4af7f 100644
+index 8aa9df2ad0..6c637dc517 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
 @@ -69,7 +69,6 @@
@@ -115,7 +115,7 @@ index f5cd853..6e4af7f 100644
  
 -#define CONFIG_BOOTCOMMAND "run ubiboot; " \
 -	"setenv fdtfile " FDT_FILE " && run distro_bootcmd;"
-+#define CONFIG_BOOTCOMMAND "setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && " \
++#define CONFIG_BOOTCOMMAND "setenv fdtfile " FDT_FILE " && " \
 +	"run bootcmd_mmc0; run ubiboot; run distro_bootcmd"
  
  #define BOOTENV_RUN_NET_USB_START ""
@@ -137,5 +137,5 @@ index f5cd853..6e4af7f 100644
  
  #define CONFIG_NAND_MXS
 -- 
-2.7.5
+2.15.1
 
