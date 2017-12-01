@@ -24,6 +24,7 @@ IMAGE_INSTALL += " \
     e2fsprogs-mke2fs \
     dosfstools \
     wget \
+    lzop \
     xz \
     pv \
     mmc-utils \
