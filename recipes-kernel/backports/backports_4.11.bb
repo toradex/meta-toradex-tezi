@@ -5,9 +5,9 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 INC_PR = "r1"
 
-SRCREV = "toradex-${PV}"
+SRCREV = "ad615b7c1f2bfdb766f225805569f0a1495edc69"
 SRC_URI = " \
-    git://git.toradex.com/backports-toradex.git;protocol=git;branch=${SRCREV} \
+    git://git.toradex.com/backports-toradex.git;protocol=git;branch=toradex-${PV} \
     file://makefile.patch \
     file://config \
     "
