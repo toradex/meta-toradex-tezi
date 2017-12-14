@@ -11,10 +11,10 @@ DEPENDS = "libconfig"
 EXTRA_OECONF = "--includedir=${includedir}/usbgx"
 
 PV = "0.1.0+git${SRCPV}"
-SRCREV = "566993a7647ed5cb36098f27084fd2d5d1f0f017"
-SRCBRANCH = "os_descriptors"
+SRCREV = "904b04c4b46ec673197ad1d8291a0aabe6a34f52"
+SRCBRANCH = "master"
 SRC_URI = " \
-    git://github.com/toradex/libusbgx.git;branch=${SRCBRANCH} \
+    git://github.com/libusbgx/libusbgx.git;branch=${SRCBRANCH} \
     file://usbg.service \
     file://g1.schema \
 "
