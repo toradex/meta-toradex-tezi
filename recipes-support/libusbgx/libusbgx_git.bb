@@ -22,8 +22,10 @@ SRC_URI = " \
 S = "${WORKDIR}/git"
 
 do_install_append () {
-    install -d ${D}${systemd_unitdir}/system/
-    install -m 0644 ${WORKDIR}/usbg.service ${D}${systemd_unitdir}/system
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        install -d ${D}${systemd_unitdir}/system/
+        install -m 0644 ${WORKDIR}/usbg.service ${D}${systemd_unitdir}/system
+    fi
 
     install -d ${D}${sysconfdir}/usbg/
     install -m 0644 ${WORKDIR}/g1.schema ${D}${sysconfdir}/usbg/g1.schema
@@ -32,3 +34,13 @@ do_install_append () {
 NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "usbg.service"
+
+PACKAGES =+ "${PN}-examples"
+
+FILES_${PN}-examples = " \
+    ${bindir}/gadget-* \
+    ${bindir}/show-gadgets \
+    ${bindir}/show-udcs \
+    ${systemd_unitdir}/system/usbg.service \
+    ${sysconfdir}/usbg/g1.schema \
+"
