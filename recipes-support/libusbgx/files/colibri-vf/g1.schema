@@ -10,10 +10,10 @@ attrs :
 };
 os_descs : 
 {
-    config = "c_1";
+    config_id = 1;
     use = 1;
     qw_sign = "MSFT100";
-    b_vendor_code = 0xCD;
+    b_vendor_code = 0xcd;
 };
 strings = ( 
     {
@@ -42,9 +42,7 @@ functions :
             } );
     };
 };
-configs : 
-{
-    c_1 : 
+configs = (
     {
         id = 1;
         name = "c";
@@ -63,5 +61,4 @@ configs :
                 name = "rndis.usb0";
                 function = "rndis_usb0";
             } );
-    };
-};
+    } );
