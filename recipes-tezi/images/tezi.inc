@@ -26,6 +26,7 @@ IMAGE_INSTALL += " \
     wget \
     lzop \
     xz \
+    tar \
     pv \
     mmc-utils \
     u-boot-toradex-fsl-fw-utils \
