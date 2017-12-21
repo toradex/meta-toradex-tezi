@@ -7,7 +7,8 @@ INC_PR = "r1"
 
 DEPENDS_append = "coreutils-native"
 
-SRCREV = "ad615b7c1f2bfdb766f225805569f0a1495edc69"
+SRCREV = "c8beff5117bd4614be26bf28e97b885e8af42a67"
+SRCREV_use-head-next = "${AUTOREV}"
 SRC_URI = " \
     git://git.toradex.com/backports-toradex.git;protocol=git;branch=toradex-${PV} \
     file://makefile.patch \
