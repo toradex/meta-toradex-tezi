@@ -29,7 +29,7 @@ fi
 export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
 
 # Configure VESA VGA display resolution and timings
-/usr/sbin/fbset -fb /dev/fb1 -g 640 480 640 960 16 -t 39721 48 16 33 1 96 2
+/usr/sbin/fbset -fb /dev/fb1 -g 640 480 640 960 16 -t 39721 48 16 33 10 96 2
 
 # Start in background
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/null > /var/volatile/tezi.log &
