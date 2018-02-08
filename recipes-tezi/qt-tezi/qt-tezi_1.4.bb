@@ -12,7 +12,7 @@ SRC_URI = "git://eng-git.toradex.int/cgit/qt-tezi.git;branch=master;protocol=htt
     file://ifplugd.usb.action \
 "
 
-SRCREV = "7c8333bd1288353b596a5cd0ed32e07ccf2c60b4"
+SRCREV = "6e0c585036fda7ad5c4e9103f380e56279de4aaf"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
 S = "${WORKDIR}/git"
