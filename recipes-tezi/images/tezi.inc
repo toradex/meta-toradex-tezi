@@ -23,7 +23,8 @@ IMAGE_INSTALL += " \
     qt-tezi \
     e2fsprogs-mke2fs \
     dosfstools \
-    wget \
+    curl \
+    lz4 \
     lzop \
     xz \
     tar \
