@@ -1,0 +1,31 @@
+From eef774f88ba90c3c32643ea0a307b79da92f8191 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 1 Mar 2018 13:50:09 +0100
+Subject: [PATCH] tools/env: allow equal sign as key value separation
+
+Treat the first equal sign as a key/value separation too. This makes
+the script files compatible with mkenvimage input file format. It
+won't support variables with equal signs anymore, but this seems not
+really like a loss.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ tools/env/fw_env.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+index 862a0b1a02..b3d5c9f48c 100644
+--- a/tools/env/fw_env.c
++++ b/tools/env/fw_env.c
+@@ -131,7 +131,7 @@ static int get_config (char *);
+ static char *skip_chars(char *s)
+ {
+ 	for (; *s != '\0'; s++) {
+-		if (isblank(*s))
++		if (isblank(*s) || *s == '=')
+ 			return s;
+ 	}
+ 	return NULL;
+-- 
+2.16.2
+
