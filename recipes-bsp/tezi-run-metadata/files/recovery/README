@@ -1,7 +1,0 @@
-Start this binaries using the provided batch files in the directory above.
-
-This binaries have been built from source available at:
-https://github.com/toradex/imx_loader/tree/imx_usb_batch_mode_refactored
-
-imx_usb.exe: Visual Studio 2015, Release Mode and non-shared libraries
-imx_usb: OpenEmbedded using nativesdk-imx-usb-loader
