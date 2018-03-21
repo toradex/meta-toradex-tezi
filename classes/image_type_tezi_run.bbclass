@@ -121,6 +121,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
         data["wrapup_script"] = "wrapup.sh"
     if os.path.exists(os.path.join(deploydir, "tezi.png")):
         data["icon"] = "tezi.png"
+    data["isinstaller"] = True
 
     product_ids = d.getVar('TORADEX_PRODUCT_IDS', True)
     if product_ids is None:
