@@ -1,7 +1,7 @@
-From 54de32a7c981b320aeb0d032bc6d6d67baa31518 Mon Sep 17 00:00:00 2001
+From 5fef0a0eee963af60d864412496e4e3eb1013f12 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Fri, 27 Jan 2017 16:11:31 -0800
-Subject: [PATCH 2/3] colibri_imx6: add configuration for Tezi
+Subject: [PATCH 2/2] colibri_imx6: add configuration for Tezi
 
 Modify configuration for Tezi:
 - Enable SDP in SPL and U-Boot
@@ -81,10 +81,10 @@ index 0000000000..17eadd4fc2
 +CONFIG_OF_LIBFDT_OVERLAY=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/colibri_imx6.h b/include/configs/colibri_imx6.h
-index 350faa2c1c..cfe1510604 100644
+index f1fd5b422e..5ea9b15312 100644
 --- a/include/configs/colibri_imx6.h
 +++ b/include/configs/colibri_imx6.h
-@@ -117,9 +117,10 @@
+@@ -116,9 +116,10 @@
  #define CONFIG_MXC_GPIO
  
  /* Framebuffer and LCD */
@@ -96,7 +96,7 @@ index 350faa2c1c..cfe1510604 100644
  #define CONFIG_VIDEO_BMP_RLE8
  #define CONFIG_SPLASH_SCREEN
  #define CONFIG_SPLASH_SCREEN_ALIGN
-@@ -132,6 +133,7 @@
+@@ -131,6 +132,7 @@
  #define CONFIG_IMX_HDMI
  #define CONFIG_IMX_VIDEO_SKIP
  #define CONFIG_CMD_BMP
@@ -104,7 +104,7 @@ index 350faa2c1c..cfe1510604 100644
  
  /* allow to overwrite serial and ethaddr */
  #define CONFIG_ENV_OVERWRITE
-@@ -157,6 +159,7 @@
+@@ -156,6 +158,7 @@
  #define BOOTENV_RUN_NET_USB_START ""
  #define BOOT_TARGET_DEVICES(func) \
          func(MMC, mmc, 1) \
@@ -129,9 +129,9 @@ index 350faa2c1c..cfe1510604 100644
 -		"usb start ;" \
 -		"setenv stdout serial,vga ; setenv stdin serial,usbkbd\0" \
 +	"bootcmd=run distro_bootcmd\0" \
- 	"boot_file=uImage\0" \
+ 	"boot_file=zImage\0" \
  	"console=ttymxc0\0" \
- 	"defargs=enable_wait_mode=off galcore.contiguousSize=50331648\0" \
+ 	"defargs=galcore.contiguousSize=50331648 user_debug=30\0" \
 @@ -297,7 +296,7 @@
  
  #define CONFIG_ENV_SIZE			(8 * 1024)
@@ -142,5 +142,5 @@ index 350faa2c1c..cfe1510604 100644
  #if defined(CONFIG_ENV_IS_IN_MMC)
  /* Environment in eMMC, before config block at the end of 1st "boot sector" */
 -- 
-2.13.3
+2.16.2
 

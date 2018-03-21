@@ -1,7 +1,7 @@
-From 7e470b4265d50cc6d7b7b4f91fdc58edb23ead27 Mon Sep 17 00:00:00 2001
+From 2456d09ac73762e1340c43dbe83405d849b1352c Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Mon, 14 Nov 2016 18:22:27 -0800
-Subject: [PATCH 1/3] apalis_imx6: add configuration for Tezi
+Subject: [PATCH 1/2] apalis_imx6: add configuration for Tezi
 
 Modify configuration for Tezi:
 - Enable SDP in SPL and U-Boot
@@ -81,10 +81,10 @@ index 0000000000..560d55c62b
 +CONFIG_OF_LIBFDT_OVERLAY=y
 +# CONFIG_EFI_LOADER is not set
 diff --git a/include/configs/apalis_imx6.h b/include/configs/apalis_imx6.h
-index 7acbf9ded4..bfb13a9a8e 100644
+index 71dfeb56f5..7f423e3451 100644
 --- a/include/configs/apalis_imx6.h
 +++ b/include/configs/apalis_imx6.h
-@@ -80,10 +80,6 @@
+@@ -79,10 +79,6 @@
  #define CONFIG_FAT_WRITE
  #define CONFIG_DOS_PARTITION
  
@@ -95,7 +95,7 @@ index 7acbf9ded4..bfb13a9a8e 100644
  /*
   * SATA Configs
   */
-@@ -136,9 +132,10 @@
+@@ -135,9 +131,10 @@
  #define CONFIG_MXC_GPIO
  
  /* Framebuffer and LCD */
@@ -107,7 +107,7 @@ index 7acbf9ded4..bfb13a9a8e 100644
  #define CONFIG_VIDEO_BMP_RLE8
  #define CONFIG_SPLASH_SCREEN
  #define CONFIG_SPLASH_SCREEN_ALIGN
-@@ -151,6 +148,7 @@
+@@ -150,6 +147,7 @@
  #define CONFIG_IMX_HDMI
  #define CONFIG_IMX_VIDEO_SKIP
  #define CONFIG_CMD_BMP
@@ -115,7 +115,7 @@ index 7acbf9ded4..bfb13a9a8e 100644
  
  /* allow to overwrite serial and ethaddr */
  #define CONFIG_ENV_OVERWRITE
-@@ -177,6 +175,7 @@
+@@ -176,6 +174,7 @@
  #define BOOT_TARGET_DEVICES(func) \
          func(MMC, mmc, 1) \
          func(MMC, mmc, 2) \
@@ -140,9 +140,9 @@ index 7acbf9ded4..bfb13a9a8e 100644
 -		"usb start ;" \
 -		"setenv stdout serial,vga ; setenv stdin serial,usbkbd\0" \
 +	"bootcmd=run distro_bootcmd\0" \
- 	"boot_file=uImage\0" \
+ 	"boot_file=zImage\0" \
  	"console=ttymxc0\0" \
- 	"defargs=enable_wait_mode=off vmalloc=400M\0" \
+ 	"defargs=vmalloc=400M user_debug=30\0" \
 @@ -326,7 +321,7 @@
  
  #define CONFIG_ENV_SIZE			(8 * 1024)
@@ -153,5 +153,5 @@ index 7acbf9ded4..bfb13a9a8e 100644
  #if defined(CONFIG_ENV_IS_IN_MMC)
  /* Environment in eMMC, before config block at the end of 1st "boot sector" */
 -- 
-2.13.3
+2.16.2
 
