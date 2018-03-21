@@ -6,7 +6,7 @@ echo "Running /etc/rc.local..."
 cat /etc/tezi-version
 
 # Start ifplugd to monitor ethernet device
-ifplugd -u 1 -f -i eth0 -r /etc/ifplugd/ifplugd.dhcp.action
+ifplugd -u 1 -d 0 -f -i eth0 -r /etc/ifplugd/ifplugd.dhcp.action
 
 # Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do
