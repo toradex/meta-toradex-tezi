@@ -21,6 +21,9 @@ done
 if grep -q autoinstall /proc/cmdline; then
 	AUTOINSTALL="-autoinstall";
 fi
+if grep -q fullscreen /proc/cmdline; then
+	FULLSCREEN="-fullscreen";
+fi
 
 # Source module specific defaults
 . /etc/default/tezi
@@ -29,4 +32,4 @@ fi
 export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
 
 # Start in background
-nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL -qws < /dev/null > /var/volatile/tezi.log &
+nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN -qws < /dev/null > /var/volatile/tezi.log &
