@@ -1,14 +1,7 @@
-# Use TTY driver again since it seems to provide better keyboard detection
-QWS_KEYBOARD="TTY"
-
 # Configure VESA VGA display resolution and timings
 /usr/sbin/fbset -fb /dev/fb1 -g 640 480 640 960 16 -t 39721 48 16 33 10 96 2
 
 # Mirror output, HDMI as primary device
 # fb0 => HDMI
 QWS_DISPLAY="multi: LinuxFB:/dev/fb1:0 VNC:LinuxFB"
-
-# Set Mouse explicitly, otherwise qscreenvnc_qws.cpp overwrites with
-# setDefaultMouse("None")
-QWS_MOUSE_PROTO="Auto"
 

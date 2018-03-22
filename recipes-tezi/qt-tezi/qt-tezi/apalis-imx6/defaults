@@ -1,11 +1,4 @@
-# Use TTY driver again since it seems to provide better keyboard detection
-QWS_KEYBOARD="TTY"
-
 # Mirror output, HDMI as primary device
 # fb0 => HDMI, fb2 => parallel RGB
 QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 LinuxFB:/dev/fb2:1 LinuxFB:/dev/fb3:2 VNC:LinuxFB"
-
-# Set Mouse explicitly, otherwise qscreenvnc_qws.cpp overwrites with
-# setDefaultMouse("None")
-QWS_MOUSE_PROTO="Auto"
 
