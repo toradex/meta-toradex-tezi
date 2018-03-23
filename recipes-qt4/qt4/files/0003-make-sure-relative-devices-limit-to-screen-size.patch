@@ -1,0 +1,65 @@
+From 314ff8bddaaba939376170c86f08f92fc9165369 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Fri, 23 Mar 2018 09:59:37 +0100
+Subject: [PATCH 3/3] make sure relative devices limit to screen size
+
+Relative devices (mouse) currently can travel "out of screen". This
+is unexpected and not user friendly.
+
+Transformation makes converting back to mouse coordinates non trivial.
+However, for relative devices transformation are anyway not really
+useful. So just don't use transformations for relative devices.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ src/gui/embedded/qmouselinuxinput_qws.cpp | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/gui/embedded/qmouselinuxinput_qws.cpp b/src/gui/embedded/qmouselinuxinput_qws.cpp
+index 01294b43b1..cad51abbd6 100644
+--- a/src/gui/embedded/qmouselinuxinput_qws.cpp
++++ b/src/gui/embedded/qmouselinuxinput_qws.cpp
+@@ -143,6 +143,7 @@ void QWSLinuxInputMousePrivate::readMouseData()
+     struct ::input_event buffer[32];
+     int n = 0;
+     int wheel = 0;
++    bool isabs = false;
+ 
+     forever {
+         int bytesRead = QT_READ(m_fd, reinterpret_cast<char *>(buffer) + n, sizeof(buffer) - n);
+@@ -167,6 +168,7 @@ void QWSLinuxInputMousePrivate::readMouseData()
+ 
+         bool unknown = false;
+         if (data->type == EV_ABS) {
++            isabs = true;
+             if (data->code == ABS_X) {
+                 m_x = data->value;
+             } else if (data->code == ABS_Y) {
+@@ -175,6 +177,7 @@ void QWSLinuxInputMousePrivate::readMouseData()
+                 unknown = true;
+             }
+         } else if (data->type == EV_REL) {
++            isabs = false;
+             if (data->code == REL_X) {
+                 m_x += data->value;
+             } else if (data->code == REL_Y) {
+@@ -199,8 +202,15 @@ void QWSLinuxInputMousePrivate::readMouseData()
+                 m_buttons &= ~button;
+         } else if (data->type == EV_SYN && data->code == SYN_REPORT) {
+             QPoint pos(m_x, m_y);
+-            pos = m_handler->transform(pos);
++            if (isabs)
++                pos = m_handler->transform(pos);
+             m_handler->limitToScreen(pos);
++
++            // make sure relative devices cannot go out of screen
++            if (!isabs) {
++               m_x = pos.x();
++               m_y = pos.y();
++            }
+             m_handler->mouseChanged(pos, m_buttons, wheel);
+         } else if (data->type == EV_MSC && data->code == MSC_SCAN) {
+             // kernel encountered an unmapped key - just ignore it
+-- 
+2.16.2
+
