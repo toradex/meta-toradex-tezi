@@ -1,4 +1,4 @@
-setenv bootargs console=ttymxc0,115200 quiet video=mxcfb0:dev=hdmi,640x480M@60,if=RGB24 video=mxcfb1:dev=lcd,EDT-VGA,if=RGB666 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}
+setenv bootargs console=ttymxc0,115200 quiet video=mxcfb0:dev=hdmi,640x480M@60,if=RGB24 video=mxcfb1:dev=lcd,640x480M@60,if=RGB666 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}
 
 # Reenable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...
