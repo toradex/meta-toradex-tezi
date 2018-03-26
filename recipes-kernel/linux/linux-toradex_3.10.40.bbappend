@@ -5,8 +5,8 @@ SRC_URI_append_apalis-tk1 = " \
     file://tegra_xusb_firmware \
 "
 
-SRCREV = "5ed678c0982f3b611c09a4830e81672fa87372b8"
-SRCBRANCH = "toradex_tk1_l4t_r21.5"
+SRCREV = "877a32308600b065f376f8cf41e1bf9093aff64f"
+SRCBRANCH = "toradex_tk1_l4t_r21.6"
 
 do_configure_prepend () {
     cp ${WORKDIR}/tegra_xusb_firmware ${S}/firmware
