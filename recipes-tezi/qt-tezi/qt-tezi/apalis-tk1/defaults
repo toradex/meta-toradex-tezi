@@ -1,4 +1,5 @@
 # Configure VESA VGA display resolution and timings
+sleep 1
 /usr/sbin/fbset -fb /dev/fb1 -g 640 480 640 960 16 -t 39721 48 16 33 10 96 2
 
 # Mirror output, HDMI as primary device
