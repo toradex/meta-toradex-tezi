@@ -1,0 +1,43 @@
+From 951283713c57b26d60aef9e2eb92ccf6b14a4d52 Mon Sep 17 00:00:00 2001
+Message-Id: <951283713c57b26d60aef9e2eb92ccf6b14a4d52.1522161415.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <c8ec5271177026860cc9106f972000e789638994.1522161415.git.marcel.ziswiler@toradex.com>
+References: <c8ec5271177026860cc9106f972000e789638994.1522161415.git.marcel.ziswiler@toradex.com>
+From: Dmitry Osipenko <digetx-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Date: Tue, 19 Dec 2017 05:58:07 +0300
+Subject: [PATCH 14/14] usb: chipidea: tegra: Use aligned DMA on
+ Tegra30/114/124
+
+USB Ethernet gadget now works on Tegra30, Tegra114 and Tegra124.
+
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ drivers/usb/chipidea/ci_hdrc_tegra.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
+index bfcee2702d50..1af8afd92873 100644
+--- a/drivers/usb/chipidea/ci_hdrc_tegra.c
++++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+@@ -32,15 +32,15 @@ static const struct tegra_udc_soc_info tegra20_udc_soc_info = {
+ };
+ 
+ static const struct tegra_udc_soc_info tegra30_udc_soc_info = {
+-	.flags = 0,
++	.flags = CI_HDRC_REQUIRES_ALIGNED_DMA,
+ };
+ 
+ static const struct tegra_udc_soc_info tegra114_udc_soc_info = {
+-	.flags = 0,
++	.flags = CI_HDRC_REQUIRES_ALIGNED_DMA,
+ };
+ 
+ static const struct tegra_udc_soc_info tegra124_udc_soc_info = {
+-	.flags = 0,
++	.flags = CI_HDRC_REQUIRES_ALIGNED_DMA,
+ };
+ 
+ static const struct of_device_id tegra_udc_of_match[] = {
+-- 
+2.14.3
+

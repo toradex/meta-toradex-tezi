@@ -11,6 +11,9 @@ SRC_URI = " \
 SRC_URI_apalis-tk1 = " \
     file://boot.cmd \
 "
+SRC_URI_apalis-tk1-mainline = " \
+    file://boot.cmd \
+"
 
 S = "${WORKDIR}"
 
@@ -26,6 +29,13 @@ do_mkimage () {
           -n "Recovery boot script" -d boot-sdp.cmd ${MACHINE}/boot-sdp.scr
 }
 do_mkimage_apalis-tk1 () {
+     if [ ! -d ${MACHINE} ]; then
+         mkdir ${MACHINE}
+     fi
+     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
+          -n "Distro boot script" -d boot.cmd ${MACHINE}/boot.scr
+}
+do_mkimage_apalis-tk1-mainline () {
      if [ ! -d ${MACHINE} ]; then
          mkdir ${MACHINE}
      fi
@@ -58,6 +68,15 @@ do_deploy_apalis-tk1 () {
     rm -f boot.scr
     ln -sf boot.scr-${MACHINE}-${PV}-${PR} boot.scr
 }
+do_deploy_apalis-tk1-mainline () {
+    install -d ${DEPLOYDIR}
+    install ${S}/${MACHINE}/boot.scr \
+            ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}
+
+    cd ${DEPLOYDIR}
+    rm -f boot.scr
+    ln -sf boot.scr-${MACHINE}-${PV}-${PR} boot.scr
+}
 
 addtask deploy after do_install before do_build
 
@@ -67,4 +86,5 @@ do_populate_sysroot[noexec] = "1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
+# apalis-tk1 will include apalis-tk1-mainline as well
 COMPATIBLE_MACHINE = "(apalis-imx6|apalis-tk1|colibri-imx6|colibri-imx7)"

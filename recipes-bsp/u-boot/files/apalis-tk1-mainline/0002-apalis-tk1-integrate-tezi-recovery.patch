@@ -1,0 +1,37 @@
+From 343a1c9d15b1575a116515125b54384cfa50bd24 Mon Sep 17 00:00:00 2001
+Message-Id: <343a1c9d15b1575a116515125b54384cfa50bd24.1511879462.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <dea7cf41838e5dcbf93eaa4c95901f7eddb777fa.1511879462.git.marcel.ziswiler@toradex.com>
+References: <dea7cf41838e5dcbf93eaa4c95901f7eddb777fa.1511879462.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Mon, 27 Nov 2017 10:28:35 +0100
+Subject: [PATCH 2/2] apalis-tk1: integrate tezi recovery
+
+In case of Tezi recovery do not stop regular auto booting but rather
+load the tezi.itb which got put at a fixed offset of 1M from the
+regular loadaddr.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ board/toradex/apalis-tk1/apalis-tk1.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/board/toradex/apalis-tk1/apalis-tk1.c b/board/toradex/apalis-tk1/apalis-tk1.c
+index b70f5649e9..86ae886baf 100644
+--- a/board/toradex/apalis-tk1/apalis-tk1.c
++++ b/board/toradex/apalis-tk1/apalis-tk1.c
+@@ -34,7 +34,11 @@ int arch_misc_init(void)
+ 	if (readl(NV_PA_BASE_SRAM + NVBOOTINFOTABLE_BOOTTYPE) ==
+ 	    NVBOOTTYPE_RECOVERY) {
+ 		printf("USB recovery mode, disabled autoboot\n");
+-		setenv("bootdelay", "-1");
++		setenv("bootdelay", "-2");
++		setenv("bootargs", "igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640x480-16@60 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}");
++		setenv("fdt_high", "");
++		setenv("initrd_high", "");
++		setenv("bootcmd", "bootm 0x80208000#config@${fdt_module}");
+ 	}
+ 
+ 	/* PCB Version Indication: V1.2 and later have GPIO_PV0 wired to GND */
+-- 
+2.13.6
+

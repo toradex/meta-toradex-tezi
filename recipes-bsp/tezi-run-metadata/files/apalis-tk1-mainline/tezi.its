@@ -1,0 +1,78 @@
+/*
+ * U-boot FIT image for Toradex Easy Installer
+ */
+
+/dts-v1/;
+
+/ {
+	description = "Toradex Easy Installer for Apalis TK1";
+	#address-cells = <1>;
+
+	images {
+		ramdisk@1 {
+			description = "SquashFS RAMdisk";
+			data = /incbin/("./tezi-run-apalis-tk1-mainline.squashfs");
+			type = "ramdisk";
+			arch = "arm";
+			os = "linux";
+			compression = "none";
+			hash@1 {
+				algo = "md5";
+			};
+		};
+
+		fdt@apalis {
+			description = "Apalis TK1 pre-V1.2 Device Tree";
+			data = /incbin/("./zImage-tegra124-apalis-eval.dtb");
+			type = "flat_dt";
+			arch = "arm";
+			compression = "none";
+			hash@1 {
+				algo = "md5";
+			};
+		};
+
+		fdt@apalis-v1.2 {
+			description = "Apalis TK1 V1.2 Device Tree";
+			data = /incbin/("./zImage-tegra124-apalis-v1.2-eval.dtb");
+			type = "flat_dt";
+			arch = "arm";
+			compression = "none";
+			hash@1 {
+				algo = "md5";
+			};
+		};
+
+		kernel@1 {
+			description = "Linux Kernel 4.14";
+			data = /incbin/("./zImage");
+			type = "kernel_noload";
+			arch = "arm";
+			os = "linux";
+			compression = "none";
+			load = <0x80008000>;
+			entry = <0>;
+			hash@1 {
+				algo = "md5";
+			};
+		};
+	};
+
+	configurations {
+		default = "config@apalis-v1.2";
+
+		config@apalis {
+			description = "Toradex Easy Installer for Apalis TK1 V1.0A, V1.0B or V1.1A";
+			kernel = "kernel@1";
+			ramdisk = "ramdisk@1";
+			fdt = "fdt@apalis";
+		};
+
+		config@apalis-v1.2 {
+			description = "Toradex Easy Installer for Apalis TK1 V1.2A";
+			kernel = "kernel@1";
+			ramdisk = "ramdisk@1";
+			fdt = "fdt@apalis-v1.2";
+		};
+	};
+};
