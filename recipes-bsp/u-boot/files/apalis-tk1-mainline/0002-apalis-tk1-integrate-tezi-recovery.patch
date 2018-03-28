@@ -25,7 +25,7 @@ index b70f5649e9..86ae886baf 100644
  		printf("USB recovery mode, disabled autoboot\n");
 -		setenv("bootdelay", "-1");
 +		setenv("bootdelay", "-2");
-+		setenv("bootargs", "igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640x480-16@60 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}");
++		setenv("bootargs", "igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640x480-16@60 rootfstype=squashfs root=/dev/ram autoinstall hotplugfb ${teziargs}");
 +		setenv("fdt_high", "");
 +		setenv("initrd_high", "");
 +		setenv("bootcmd", "bootm 0x80208000#config@${fdt_module}");
