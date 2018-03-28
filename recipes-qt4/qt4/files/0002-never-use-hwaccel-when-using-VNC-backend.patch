@@ -1,0 +1,31 @@
+From a1d7534c1fca4fa3d83adf3a44ab05bebdb73148 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Wed, 28 Mar 2018 16:18:14 +0200
+Subject: [PATCH 2/2] never use hwaccel when using VNC backend
+
+Using hwaccel with the VNC backend seems to cause issues having
+no LinuxFB backend (or adding LinuxFB backend only later). There
+is no mouse cursur painted on the LinuxFB. Disable hwaccel by
+default.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
+index 7e4ca20377..349846962d 100644
+--- a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
++++ b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
+@@ -73,8 +73,6 @@ QVNCCursor::QVNCCursor(QVNCScreen *s)
+ {
+     if (qt_screencursor)
+         setScreenCursor(qt_screencursor);
+-    else
+-        hwaccel = true;
+ }
+ 
+ QVNCCursor::~QVNCCursor()
+-- 
+2.16.2
+
