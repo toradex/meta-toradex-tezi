@@ -24,6 +24,9 @@ fi
 if grep -q fullscreen /proc/cmdline; then
 	FULLSCREEN="-fullscreen";
 fi
+if grep -q hotplugfb /proc/cmdline; then
+	HOTPLUGFB="-hotplugfb";
+fi
 
 # Source module specific defaults
 . /etc/default/tezi
@@ -33,4 +36,5 @@ export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
 
 # Start in background
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
-	-qws -nokeyboard -nomouse < /dev/null > /var/volatile/tezi.log &
+	$HOTPLUGFB -qws -nokeyboard -nomouse < /dev/null \
+	> /var/volatile/tezi.log &
