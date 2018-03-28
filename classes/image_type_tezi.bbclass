@@ -162,13 +162,14 @@ python rootfs_tezi_json() {
     deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
     release_date = datetime.strptime(d.getVar('DATE', True), '%Y%m%d').date().isoformat()
 
-    data = OrderedDict({ "config_format": 1, "autoinstall": False })
+    data = OrderedDict({ "config_format": 2, "autoinstall": False })
 
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY', True)
     data["description"] = d.getVar('DESCRIPTION', True)
     data["version"] = d.getVar('PV', True)
     data["release_date"] = release_date
+    data["u_boot_env"] = d.getVar('UBOOT_ENV_TEZI', True)
     if os.path.exists(os.path.join(deploydir, "prepare.sh")):
         data["prepare_script"] = "prepare.sh"
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
