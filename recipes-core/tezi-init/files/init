@@ -21,6 +21,17 @@ if grep -v -q rescueshell /proc/cmdline; then
 	fi
 fi
 
+echo
+echo -e "\033[1mWelcome to Toradex Easy Installer\033[0m"
+echo
+echo "This is a Linux based installer for Toradex modules. Currently the \
+installer does not have a serial console interface. You can use the installer \
+through any of the available display interfaces or VNC (e.g. via USB device \
+and RNDIS at IP 192.168.11.1)"
+echo
+echo "Press [RETURN] to activate console"
+read -n 1
+
 # Become session leader and try to find a real tty (e.g. ttyS0)
 while true; do
 	setsid cttyhack sh
