@@ -1,7 +1,7 @@
-From 343a1c9d15b1575a116515125b54384cfa50bd24 Mon Sep 17 00:00:00 2001
-Message-Id: <343a1c9d15b1575a116515125b54384cfa50bd24.1511879462.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <dea7cf41838e5dcbf93eaa4c95901f7eddb777fa.1511879462.git.marcel.ziswiler@toradex.com>
-References: <dea7cf41838e5dcbf93eaa4c95901f7eddb777fa.1511879462.git.marcel.ziswiler@toradex.com>
+From bced9881f3b6ff3df2dece30e43ae875c12372a3 Mon Sep 17 00:00:00 2001
+Message-Id: <bced9881f3b6ff3df2dece30e43ae875c12372a3.1522312917.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <a99a9d5ea634b864261a1785e135295125925773.1522312917.git.marcel.ziswiler@toradex.com>
+References: <a99a9d5ea634b864261a1785e135295125925773.1522312917.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 27 Nov 2017 10:28:35 +0100
 Subject: [PATCH 2/2] apalis-tk1: integrate tezi recovery
@@ -12,26 +12,33 @@ regular loadaddr.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
- board/toradex/apalis-tk1/apalis-tk1.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ board/toradex/apalis-tk1/apalis-tk1.c | 13 ++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/board/toradex/apalis-tk1/apalis-tk1.c b/board/toradex/apalis-tk1/apalis-tk1.c
-index b70f5649e9..86ae886baf 100644
+index 7058cb3efc..945007efe1 100644
 --- a/board/toradex/apalis-tk1/apalis-tk1.c
 +++ b/board/toradex/apalis-tk1/apalis-tk1.c
-@@ -34,7 +34,11 @@ int arch_misc_init(void)
+@@ -35,7 +35,18 @@ int arch_misc_init(void)
  	if (readl(NV_PA_BASE_SRAM + NVBOOTINFOTABLE_BOOTTYPE) ==
  	    NVBOOTTYPE_RECOVERY) {
  		printf("USB recovery mode, disabled autoboot\n");
 -		setenv("bootdelay", "-1");
 +		setenv("bootdelay", "-2");
-+		setenv("bootargs", "lp0_vec=2064@0xf46ff000 core_edp_mv=1150 core_edp_ma=4000 lane_owner_info=6 usb_port_owner_info=2 emc_max_dvfs=0 igb_mac=${ethaddr} console=ttyS0,115200 quiet video=tegrafb0:640x480-16@60 fbcon=map:1 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}");
 +		setenv("fdt_high", "");
 +		setenv("initrd_high", "");
-+		setenv("bootcmd", "bootm 0x80208000#config@${fdt_module}");
++		setenv("setup", "setenv setupargs igb_mac=${ethaddr} " \
++			"consoleblank=0 no_console_suspend=1 " \
++			"console=${console},${baudrate}n8 " \
++			"debug_uartport=lsport,0 ${memargs}");
++		setenv("teziargs", "rootfstype=squashfs root=/dev/ram quiet " \
++			"autoinstall");
++		setenv("bootcmd", "run setup; setenv bootargs ${defargs} " \
++			"${setupargs} ${vidargs} ${teziargs}; " \
++			"bootm 0x80208000#config@${fdt_module}");
  	}
  
  	/* PCB Version Indication: V1.2 and later have GPIO_PV0 wired to GND */
 -- 
-2.13.6
+2.14.3
 
