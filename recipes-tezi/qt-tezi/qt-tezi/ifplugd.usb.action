@@ -17,8 +17,8 @@ fi
 if [ "$2" = "down" ]; then
 	echo "ifplugd down"
 	killall udhcpd
-	ip link set down dev "$1"
-	ip addr flush dev "$1"
+	ip link set down dev "$1" || exit 0
+	ip addr flush dev "$1" || exit 0
 fi
 
 exit 0

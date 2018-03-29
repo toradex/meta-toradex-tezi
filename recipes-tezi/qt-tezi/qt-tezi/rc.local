@@ -8,6 +8,9 @@ cat /etc/tezi-version
 # Start ifplugd to monitor ethernet device
 ifplugd -u 1 -d 0 -f -i eth0 -r /etc/ifplugd/ifplugd.dhcp.action
 
+# Start ifplugd to monitor RNDIS device (in monitor mode!)
+ifplugd -u 0 -d 0 -M -f -i usb0 -r /etc/ifplugd/ifplugd.usb.action
+
 # Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do
 	if [ "${p%%=*}" == "lang" ] ; then
