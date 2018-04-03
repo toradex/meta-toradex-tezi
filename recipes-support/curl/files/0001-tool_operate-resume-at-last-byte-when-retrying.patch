@@ -1,0 +1,35 @@
+From 036ada856681133795ff83e49a5027187aa15a75 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Tue, 3 Apr 2018 13:54:13 +0200
+Subject: [PATCH] tool_operate: resume at last byte when retrying
+
+If continue/resume is enabled, try to also resume when retrying due to
+transient connection problems.
+
+Closes #1084
+---
+ src/tool_operate.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/tool_operate.c b/src/tool_operate.c
+index 0aad54282..210402520 100644
+--- a/src/tool_operate.c
++++ b/src/tool_operate.c
+@@ -1595,6 +1595,14 @@ static CURLcode operate_do(struct GlobalConfig *global,
+                     "%ld retries left.\n",
+                     m[retry], retry_sleep/1000L, retry_numretries);
+ 
++              /* If resume is requested, resume at last byte on retry too */
++              if (config->use_resume) {
++                fprintf(global->errors, "Continuing at %"
++                                CURL_FORMAT_CURL_OFF_T " bytes\n",
++                                outs.bytes);
++                my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs.bytes);
++              }
++
+               tool_go_sleep(retry_sleep);
+               retry_numretries--;
+               if(!config->retry_delay) {
+-- 
+2.16.3
+
