@@ -21,6 +21,7 @@ inherit module
 
 MAKE_TARGETS = "modules"
 MODULES_INSTALL_TARGET = "modules_install"
+PACKAGES_DYNAMIC += "^${BPN}-kernel-module-.*"
 
 KERNEL_MODULE_PACKAGE_PREFIX = "${BPN}-"
 
