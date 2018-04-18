@@ -20,6 +20,12 @@ IMAGE_NAME_colibri-imx7-emmc="Colibri-iMX7-eMMC_ToradexEasyInstaller_${TDX_VER_E
 # Never deploy kernel for RAM based file systems
 RDEPENDS_kernel-base = ""
 
+RAW_NAND_UTILS = " \
+    mtd-utils-ubifs \
+    mtd-utils \
+    kobs-ng \
+"
+
 IMAGE_INSTALL += " \
     ${CORE_IMAGE_BASE_INSTALL} \
     qt-tezi \
@@ -36,14 +42,11 @@ IMAGE_INSTALL += " \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
-    mtd-utils-ubifs \
-    mtd-utils \
-    kobs-ng \
+    ${RAW_NAND_UTILS} \
 "
 
 IMAGE_INSTALL_append_colibri-imx7 = " \
-    mtd-utils-ubifs \
-    mtd-utils \
+    ${RAW_NAND_UTILS} \
 "
 
 MACHINE_EXTRA_RDEPENDS_remove_apalis-tk1 = " \
