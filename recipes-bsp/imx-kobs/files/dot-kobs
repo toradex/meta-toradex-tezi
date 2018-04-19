@@ -1,5 +1,5 @@
 #
-# kobs configuration file for Colibri iMX6ULL
+# kobs configuration file for Colibri iMX6ULL/iMX7
 #
 chip_0_device_path=/dev/mtd0
 chip_0_size=0x380000

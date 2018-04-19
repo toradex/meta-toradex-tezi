@@ -20,6 +20,10 @@ do_install_append_colibri-imx6ull() {
     install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
+do_install_append_colibri-imx7() {
+    install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
+}
+
 COMPATIBLE_MACHINE = "(mxs|mx5|mx6|mx7|vf)"
 
 PN = "kobs-ng"
