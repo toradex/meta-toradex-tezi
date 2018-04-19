@@ -27,8 +27,10 @@ def rootfs_tezi_emmc(d):
 
     # Calculate size of bootfs...
     bootfiles = [ os.path.join(deploydir, kernel) ]
-    for dtb in d.getVar('KERNEL_DEVICETREE', True).split():
-        bootfiles.append(os.path.join(deploydir, kernel + "-" + dtb))
+    has_devicetree = d.getVar('KERNEL_DEVICETREE', True)
+    if has_devicetree:
+        for dtb in d.getVar('KERNEL_DEVICETREE', True).split():
+            bootfiles.append(os.path.join(deploydir, kernel + "-" + dtb))
 
     args = ['du', '-kLc']
     args.extend(bootfiles)
