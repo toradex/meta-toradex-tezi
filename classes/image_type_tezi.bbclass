@@ -2,6 +2,7 @@ inherit image_types
 
 do_image_teziimg[depends] += "tezi-metadata:do_deploy virtual/bootloader:do_deploy"
 
+TEZI_ROOT_FSTYPE ??= "ext4"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 UBOOT_BINARY_TEZI = "${UBOOT_BINARY}"
 UBOOT_BINARY_TEZI_apalis-tk1 = "apalis-tk1.img"
@@ -72,7 +73,7 @@ def rootfs_tezi_emmc(d):
               "want_maximised": True,
               "content": {
                 "label": "RFS",
-                "filesystem_type": "ext4",
+                "filesystem_type": d.getVar('TEZI_ROOT_FSTYPE', True),
                 "mkfs_options": "-E nodiscard",
                 "filename": imagename + ".rootfs.tar.xz",
                 "uncompressed_size": rootfs_get_size(d) / 1024
