@@ -5,6 +5,7 @@ do_image_teziimg[depends] += "tezi-metadata:do_deploy virtual/bootloader:do_depl
 TEZI_ROOT_FSTYPE ??= "ext4"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 UBOOT_BINARY_TEZI = "${UBOOT_BINARY}"
+UBOOT_BINARY_TEZI_apalis-t30 = "apalis_t30.img"
 UBOOT_BINARY_TEZI_apalis-tk1 = "apalis-tk1.img"
 UBOOT_BINARY_TEZI_apalis-tk1-mainline = "apalis-tk1.img"
 UBOOT_ENV_TEZI = "uEnv.txt"
