@@ -201,13 +201,7 @@ python rootfs_tezi_json() {
     bb.note("Toradex Easy Installer metadata file image.json written.")
 }
 
-python () {
-    if bb.utils.contains("IMAGE_FSTYPES", "teziimg", True, False, d):
-        # do_image_teziimg does not work because the anonymous python function
-        # in image.bbclass gets called later and overwrites prefuncs. In master
-        # this is fixed, so we might be able to get rid of this work around in rocko
-        d.appendVarFlag('do_image', 'prefuncs', 'rootfs_tezi_json')
-}
+do_image_teziimg[prefuncs] += "rootfs_tezi_json"
 
 IMAGE_CMD_teziimg () {
 	bbnote "Create bootfs tarball"
