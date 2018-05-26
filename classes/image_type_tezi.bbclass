@@ -164,7 +164,8 @@ python rootfs_tezi_json() {
     from datetime import datetime
 
     deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
-    release_date = datetime.strptime(d.getVar('DATE', True), '%Y%m%d').date().isoformat()
+    # patched in IMAGE_CMD_teziimg() below
+    release_date = "%release_date%"
 
     data = OrderedDict({ "config_format": 2, "autoinstall": False })
 
@@ -210,6 +211,12 @@ python () {
 
 IMAGE_CMD_teziimg () {
 	bbnote "Create bootfs tarball"
+
+	# Fixup release_date in image.json, convert ${DATE} to isoformat
+	# This works around the non fatal ERRORS: "the basehash value changed" when DATE is referenced
+	# in a python prefunction to do_image
+	ISODATE=`echo ${DATE} | sed 's/\(....\)\(..\)\(..\)/\1-\2-\3/'`
+	sed -i "s/%release_date%/$ISODATE/" ${DEPLOY_DIR_IMAGE}/image.json
 
 	# Create list of device tree files
 	if test -n "${KERNEL_DEVICETREE}"; then
