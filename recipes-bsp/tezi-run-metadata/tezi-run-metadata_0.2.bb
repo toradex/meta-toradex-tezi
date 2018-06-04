@@ -18,6 +18,9 @@ SRC_URI = " \
     file://recovery/mx6ull_usb_rom.conf \
     file://recovery/mx6ull_usb_sdp_uboot.conf \
 "
+SRC_URI_append_apalis-t30-mainline = " \
+    file://recovery/Apalis_T30_2GB_800Mhz.bct \
+"
 SRC_URI_append_apalis-tk1 = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
@@ -51,6 +54,19 @@ do_deploy () {
     install -m 644 ${S}/imx_usb.exe ${DEPLOYDIR}/recovery/
 }
 
+do_deploy_apalis-t30-mainline () {
+    install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
+    install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
+    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+
+    install -m 755 ${WORKDIR}/recovery-linux.sh ${DEPLOYDIR}
+    install -m 644 ${WORKDIR}/recovery-windows.bat ${DEPLOYDIR}
+    install -d ${DEPLOYDIR}/recovery
+    install -m 644 ${WORKDIR}/recovery/Apalis_T30_2GB_800Mhz.bct ${DEPLOYDIR}/recovery/
+    install -m 644 ${S}/README.tegrarcm ${DEPLOYDIR}/recovery/README
+    install -m 755 ${S}/tegrarcm ${DEPLOYDIR}/recovery/
+}
+
 do_deploy_apalis-tk1 () {
     install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
     install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
@@ -80,6 +96,6 @@ do_deploy_apalis-tk1-mainline () {
 addtask deploy before do_package after do_install
 
 # apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-tk1|colibri-imx6|colibri-imx7)"
+COMPATIBLE_MACHINE = "(apalis-imx6|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

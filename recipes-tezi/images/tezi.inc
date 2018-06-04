@@ -2,6 +2,7 @@ include conf/tdx_version.conf
 
 SUMMARY="Toradex Easy Installer"
 DESCRIPTION_apalis-imx6="Toradex Easy Installer for Apalis iMX6."
+DESCRIPTION_apalis-t30-mainline="Toradex Easy Installer for Apalis T30."
 DESCRIPTION_apalis-tk1="Toradex Easy Installer for Apalis TK1."
 DESCRIPTION_apalis-tk1-mainline="Toradex Easy Installer for Apalis TK1."
 DESCRIPTION_colibri-imx6="Toradex Easy Installer for Colibri iMX6."
@@ -10,6 +11,7 @@ DESCRIPTION_colibri-imx7="Toradex Easy Installer for Colibri iMX7."
 DESCRIPTION_colibri-imx7-emmc="Toradex Easy Installer for Colibri iMX7 eMMC."
 
 IMAGE_NAME_apalis-imx6="Apalis-iMX6_ToradexEasyInstaller_${TDX_VER_EXT}"
+IMAGE_NAME_apalis-t30-mainline="Apalis-T30_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_apalis-tk1="Apalis-TK1_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_apalis-tk1-mainline="Apalis-TK1_ToradexEasyInstaller_${TDX_VER_EXT}"
 IMAGE_NAME_colibri-imx6="Colibri-iMX6_ToradexEasyInstaller_${TDX_VER_EXT}"

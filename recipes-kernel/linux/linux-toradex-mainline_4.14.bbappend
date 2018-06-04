@@ -3,6 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline_4.14:"
 SRC_URI_append_apalis-t30-mainline = " \
     file://0025-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \
     file://0027-apalis-t30-mainline-usb-device-aka-gadget-specific-d.patch \
+    file://xusb.bin \
 "
 
 SRC_URI_append_apalis-tk1-mainline = " \
@@ -11,6 +12,10 @@ SRC_URI_append_apalis-tk1-mainline = " \
     file://xusb.bin \
 "
 
+do_configure_prepend_apalis-t30-mainline () {
+    mkdir -p ${S}/firmware/nvidia/tegra124
+    cp ${WORKDIR}/xusb.bin ${S}/firmware/nvidia/tegra124/
+}
 do_configure_prepend_apalis-tk1-mainline () {
     mkdir -p ${S}/firmware/nvidia/tegra124
     cp ${WORKDIR}/xusb.bin ${S}/firmware/nvidia/tegra124/

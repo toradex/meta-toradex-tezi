@@ -5,7 +5,7 @@ SECTION = "bootloader"
 PROVIDES = "u-boot-fw-utils"
 DEPENDS = "mtd-utils"
 
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-tk1|colibri-imx6|colibri-imx7|colibri-vf)"
+COMPATIBLE_MACHINE = "(apalis-imx6|apalis-t30|apalis-tk1|colibri-imx6|colibri-imx7|colibri-vf)"
 DEFAULT_PREFERENCE_apalis-imx6 = "1"
 DEFAULT_PREFERENCE_apalis-tk1 = "1"
 DEFAULT_PREFERENCE_colibri-imx6 = "1"
