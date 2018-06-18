@@ -1,1 +1,2 @@
-@echo who cares
+@echo Not yet supported
+pause
