@@ -14,19 +14,6 @@ SRCREV = "087e95a2dcff4a21cf86bba2654f8948684d7d50"
 SRCBRANCH = "2016.11-toradex"
 COMPATIBLE_MACHINE = "(mx6|mx7|tegra3|tegra124|vf)"
 
-SRC_URI_append = "\
-    file://0001-apalis_imx6-add-configuration-for-Tezi.patch \
-    file://0002-colibri_imx6-add-configuration-for-Tezi.patch \
-    file://0003-mtest-disable-physical-memory-cell-test.patch \
-    file://0001-colibri_imx7-add-configuration-for-Tezi.patch \
-    file://0002-colibri_imx7_emmc-add-configuration-for-Tezi.patch \
-    file://0003-colibri_imx7-add-configuration-for-Tezi-recovery.patch \
-    file://0001-colibri-imx6ull-add-configuration-for-Tezi.patch \
-    file://0001-apalis-tk1-add-configuration-for-tezi.patch \
-    file://0002-apalis-tk1-integrate-tezi-recovery.patch \
-    file://0001-apalis_t30-add-configuration-for-tezi.patch \
-    file://0002-apalis_t30-integrate-tezi-recovery.patch \
-"
 SRC_URI_append_apalis-t30-mainline = " \
     file://apalis_t30.img.cfg \
     file://Apalis_T30_2GB_800Mhz.bct \
