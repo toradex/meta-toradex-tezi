@@ -1,14 +1,14 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline-4.14:"
 
 SRC_URI_append_apalis-t30-mainline = " \
-    file://0025-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \
-    file://0027-apalis-t30-mainline-usb-device-aka-gadget-specific-d.patch \
+    file://0034-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \
+    file://0036-apalis-t30-mainline-usb-device-aka-gadget-specific-d.patch \
     file://xusb.bin \
 "
 
 SRC_URI_append_apalis-tk1-mainline = " \
-    file://0025-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \
-    file://0026-apalis-tk1-mainline-usb-device-aka-gadget-specific-d.patch \
+    file://0034-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \
+    file://0035-apalis-tk1-mainline-usb-device-aka-gadget-specific-d.patch \
     file://xusb.bin \
 "
 

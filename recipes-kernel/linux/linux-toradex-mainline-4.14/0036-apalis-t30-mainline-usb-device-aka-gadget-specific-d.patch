@@ -1,10 +1,10 @@
-From 6b37ad8f7e72195352a510a130edae2d036ef013 Mon Sep 17 00:00:00 2001
-Message-Id: <6b37ad8f7e72195352a510a130edae2d036ef013.1529072479.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fb4764e8eb658d35e8fc62ae79c77e1f6e2b0ef3.1529072479.git.marcel.ziswiler@toradex.com>
-References: <fb4764e8eb658d35e8fc62ae79c77e1f6e2b0ef3.1529072479.git.marcel.ziswiler@toradex.com>
+From 46bd979541b1ce127c08629dedf4481e8b910ce9 Mon Sep 17 00:00:00 2001
+Message-Id: <46bd979541b1ce127c08629dedf4481e8b910ce9.1531321190.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <181fb3d93ca0795f2d0ef4ba92c07b81aff43d10.1531321190.git.marcel.ziswiler@toradex.com>
+References: <181fb3d93ca0795f2d0ef4ba92c07b81aff43d10.1531321190.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Fri, 20 Apr 2018 10:04:33 +0200
-Subject: [PATCH 27/27] apalis-t30-mainline: usb device aka gadget specific
+Subject: [PATCH 36/36] apalis-t30-mainline: usb device aka gadget specific
  device tree
 
 USB device aka gadget specific device trees for the Toradex Easy

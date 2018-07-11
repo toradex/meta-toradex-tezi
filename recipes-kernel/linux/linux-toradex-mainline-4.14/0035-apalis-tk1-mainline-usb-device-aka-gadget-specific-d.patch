@@ -1,10 +1,10 @@
-From 79c347e5bd57e489567982478da4b67af3263f1c Mon Sep 17 00:00:00 2001
-Message-Id: <79c347e5bd57e489567982478da4b67af3263f1c.1529072479.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fb4764e8eb658d35e8fc62ae79c77e1f6e2b0ef3.1529072479.git.marcel.ziswiler@toradex.com>
-References: <fb4764e8eb658d35e8fc62ae79c77e1f6e2b0ef3.1529072479.git.marcel.ziswiler@toradex.com>
+From 0b2409cf794fdf4ee8139938f43b29c3c403374b Mon Sep 17 00:00:00 2001
+Message-Id: <0b2409cf794fdf4ee8139938f43b29c3c403374b.1531321190.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <181fb3d93ca0795f2d0ef4ba92c07b81aff43d10.1531321190.git.marcel.ziswiler@toradex.com>
+References: <181fb3d93ca0795f2d0ef4ba92c07b81aff43d10.1531321190.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Tue, 27 Mar 2018 14:34:28 +0200
-Subject: [PATCH 26/27] apalis-tk1-mainline: usb device aka gadget specific
+Subject: [PATCH 35/36] apalis-tk1-mainline: usb device aka gadget specific
  device tree
 
 USB device aka gadget specific device trees for the Toradex Easy
@@ -19,10 +19,10 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  4 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm/boot/dts/tegra124-apalis-eval.dts b/arch/arm/boot/dts/tegra124-apalis-eval.dts
-index ecffcd115fa7..0b2e896a4c51 100644
+index 7e2b9cf84741..da4f646ae01d 100644
 --- a/arch/arm/boot/dts/tegra124-apalis-eval.dts
 +++ b/arch/arm/boot/dts/tegra124-apalis-eval.dts
-@@ -195,8 +195,9 @@
+@@ -207,8 +207,9 @@
  
  	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
  	usb@7d000000 {
@@ -34,10 +34,10 @@ index ecffcd115fa7..0b2e896a4c51 100644
  
  	usb-phy@7d000000 {
 diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
-index c61eb59da1db..47c1f020b08a 100644
+index 4f2e4766379d..0370f50f07c4 100644
 --- a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
 +++ b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
-@@ -194,8 +194,9 @@
+@@ -171,8 +171,9 @@
  
  	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
  	usb@7d000000 {
@@ -49,10 +49,10 @@ index c61eb59da1db..47c1f020b08a 100644
  
  	usb-phy@7d000000 {
 diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
-index 21cdc3117ca2..f8ede212fce3 100644
+index 1336e8caf95d..b0a94d2b8f63 100644
 --- a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
 +++ b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
-@@ -1874,7 +1874,7 @@
+@@ -1836,7 +1836,7 @@
  
  				lanes {
  					usb2-0 {
@@ -62,10 +62,10 @@ index 21cdc3117ca2..f8ede212fce3 100644
  					};
  
 diff --git a/arch/arm/boot/dts/tegra124-apalis.dtsi b/arch/arm/boot/dts/tegra124-apalis.dtsi
-index 8f80a8cf6a05..957bc2d5539d 100644
+index 00920c26f60a..777e341b1ea6 100644
 --- a/arch/arm/boot/dts/tegra124-apalis.dtsi
 +++ b/arch/arm/boot/dts/tegra124-apalis.dtsi
-@@ -1848,7 +1848,7 @@
+@@ -1846,7 +1846,7 @@
  
  				lanes {
  					usb2-0 {
