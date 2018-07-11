@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline_4.14:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline-4.14:"
 
 SRC_URI_append_apalis-t30-mainline = " \
     file://0025-apalis-t30-tk1-mainline-tezi-specific-kernel-configu.patch \

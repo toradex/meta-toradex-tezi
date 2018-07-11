@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex_3.10.40:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-3.10.40:"
 
 SRC_URI_append_apalis-tk1 = " \
     file://0001-apalis-tk1-tezi-specific-kernel-configuration.patch \
