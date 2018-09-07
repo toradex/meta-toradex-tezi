@@ -5,7 +5,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 INC_PR = "r1"
 
-DEPENDS_append = "coreutils-native"
+DEPENDS_append = " coreutils-native"
 
 SRCREV = "198e79f0e8f0b24c1e36ab6032d348f40de20262"
 SRCREV_use-head-next = "${AUTOREV}"
