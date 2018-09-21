@@ -2,12 +2,12 @@ SUMMARY = "Backported kernel drivers"
 HOMEPAGE = "https://backports.wiki.kernel.org"
 SECTION = "kernel/modules"
 LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 INC_PR = "r1"
 
 DEPENDS_append = " coreutils-native"
 
-SRCREV = "198e79f0e8f0b24c1e36ab6032d348f40de20262"
+SRCREV = "5e68b9c311afd867e92f0d71b1121d677698bba1"
 SRCREV_use-head-next = "${AUTOREV}"
 SRC_URI = " \
     git://git.toradex.com/backports-toradex.git;protocol=git;branch=toradex-${PV} \
