@@ -12,14 +12,14 @@ PACKAGES_prepend = "\
                      ${PN}-sd8997 \
                    "
 do_install_append() {
-    cp ${WORKDIR}/sd8997_uapsta.bin ${D}/lib/firmware/mrvl/
+    cp ${WORKDIR}/sd8997_uapsta.bin ${D}${nonarch_base_libdir}/firmware/mrvl/
 }
 
 FILES_${PN}-rtl8188eu = " \
-  /lib/firmware/rtlwifi/rtl8188eufw.bin \
+  ${nonarch_base_libdir}/firmware/rtlwifi/rtl8188eufw.bin \
 "
 FILES_${PN}-sd8997 = " \
-  /lib/firmware/mrvl/sd8997_uapsta.bin \
+  ${nonarch_base_libdir}/firmware/mrvl/sd8997_uapsta.bin \
 "
 RDEPENDS_${PN}-rtl8188eu += "${PN}-rtl-license"
 RDEPENDS_${PN}-sd8997 += "${PN}-marvell-license"
