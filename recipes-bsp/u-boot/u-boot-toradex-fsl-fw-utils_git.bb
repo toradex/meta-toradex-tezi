@@ -14,7 +14,7 @@ DEFAULT_PREFERENCE_colibri-vf = "1"
 
 FILESPATHPKG =. "git:"
 S="${WORKDIR}/git"
-SRCREV = "087e95a2dcff4a21cf86bba2654f8948684d7d50"
+SRCREV = "07edca0bb81857a339f26f3465d5c5602705a94d"
 SRCBRANCH = "2016.11-toradex"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH} \
            file://0001-tools-env-build-without-default-environment.patch \
