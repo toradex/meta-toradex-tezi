@@ -12,7 +12,7 @@ SRC_URI = "git://gitlab.toradex.int/tezi/qt-tezi.git;branch=master;protocol=http
     file://ifplugd.usb.action \
 "
 
-SRCREV = "c31aac4be41276592a89d86e238552af6a6269f5"
+SRCREV = "dd628e7b4b761e22210a1f2947909dbea723b40b"
 SRCREV_use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
