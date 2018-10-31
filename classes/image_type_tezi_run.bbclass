@@ -1,6 +1,6 @@
 inherit image_types
 
-IMAGE_DEPENDS_tezirunimg = "tezi-run-metadata:do_deploy u-boot-mkimage-native p7zip-native zip-native"
+do_image_tezirunimg[depends] += "tezi-run-metadata:do_deploy u-boot-mkimage-native:do_install p7zip-native:do_install"
 TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"

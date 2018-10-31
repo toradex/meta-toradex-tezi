@@ -60,7 +60,10 @@ MACHINE_EXTRA_RDEPENDS_remove_apalis-tk1-mainline = " \
 
 LICENSE="MIT"
 
-DEPENDS="virtual/bootloader"
+DEPENDS=" \
+    virtual/bootloader \
+    zip-native \
+"
 
 inherit core-image
 
