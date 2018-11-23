@@ -1,0 +1,43 @@
+From 8e40653190623f6809d4e9158c0b97c92ac54990 Mon Sep 17 00:00:00 2001
+From: Gerard Salvatella <gerard.salvatella@toradex.com>
+Date: Thu, 15 Nov 2018 10:17:48 +0100
+Subject: [PATCH 1/4] ARM: dts: imx6dl-colibri-eval-v3: disable PWM B/C/D
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable it by default.
+
+Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
+---
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+index 85f88dc28434..7bad2b8dccda 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+@@ -205,22 +205,10 @@
+ 
+ /* the PCAPs use SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm1, pwm4.
+    so if you enable one of the PCAP controllers disable the pwms */
+-&pwm1 {
+-	status = "okay";
+-};
+-
+-&pwm2 {
+-	status = "okay";
+-};
+-
+ &pwm3 {
+ 	status = "okay";
+ };
+ 
+-&pwm4 {
+-	status = "okay";
+-};
+-
+ &uart1 {
+ 	status = "okay";
+ };
+-- 
+2.13.6
+
