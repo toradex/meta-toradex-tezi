@@ -14,32 +14,32 @@ This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
 openembedded/meta
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: git://git.openembedded.org/meta-openembedded
 meta-openembedded/meta-oe
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-qt4
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-freescale
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: https://github.com/Freescale/meta-freescale-3rdparty
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-nxp.git
-branch: morty
+branch: rocko
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-bsp-common.git
-branch: morty
+branch: rocko
 revision: HEAD
 
 Contributing
