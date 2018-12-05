@@ -18,6 +18,7 @@ SRCREV = "07edca0bb81857a339f26f3465d5c5602705a94d"
 SRCBRANCH = "2016.11-toradex"
 SRC_URI = "git://git.toradex.com/u-boot-toradex.git;protocol=git;branch=${SRCBRANCH} \
            file://0001-tools-env-build-without-default-environment.patch \
+	   file://default-gcc.patch \
            file://fw_env_mtd4.config \
            file://fw_env_mmcblk0boot0.config \
 "
@@ -25,9 +26,9 @@ PV = "v2016.11-v0.5+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
-EXTRA_OEMAKE = 'CC="${CC}" STRIP="${STRIP}"'
-
 INSANE_SKIP_${PN} = "already-stripped"
+EXTRA_OEMAKE_class-target = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${CC} ${CFLAGS} ${LDFLAGS}" HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}" V=1'
+EXTRA_OEMAKE_class-cross = 'ARCH=${TARGET_ARCH} CC="${CC} ${CFLAGS} ${LDFLAGS}" V=1'
 
 inherit uboot-config
 
