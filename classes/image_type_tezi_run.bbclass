@@ -6,6 +6,9 @@ UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC', True), '', d), \
+                         bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True), '', d), \
+                         d.getVar('TEZI_UBOOT_BINARY_RECOVERY', True)])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
 
 def fitimg_get_size(d):
@@ -20,7 +23,6 @@ def fitimg_get_size(d):
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
     uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC', True)
-    d.appendVar('TEZI_UBOOT_BINARIES', uboot + ' ')
     offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD', True)
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD', True)
 
@@ -67,7 +69,6 @@ def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
     imagename = d.getVar('IMAGE_NAME', True)
     uboot = d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True)
-    d.appendVar('TEZI_UBOOT_BINARIES', uboot + ' ')
 
     return [
         OrderedDict({
@@ -166,11 +167,6 @@ python rootfs_tezi_run_json() {
     flash_types_list = flash_types.split()
     for flash_type in flash_types_list:
         rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
-
-    # We end up having the same binary twice in TEZI_UBOOT_BINARIES in case
-    # the recovery mode binary is the same as the one which gets flashed.
-    # This is ok, zip will only add it once below.
-    d.appendVar('TEZI_UBOOT_BINARIES', d.getVar('TEZI_UBOOT_BINARY_RECOVERY', True) + ' ')
 }
 
 do_rootfs[depends] =+ "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy"
