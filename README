@@ -38,6 +38,10 @@ URI: git://git.toradex.com/meta-toradex-nxp.git
 branch: rocko
 revision: HEAD
 
+URI: git://git.toradex.com/meta-toradex-tegra.git
+branch: rocko
+revision: HEAD
+
 URI: git://git.toradex.com/meta-toradex-bsp-common.git
 branch: rocko
 revision: HEAD
