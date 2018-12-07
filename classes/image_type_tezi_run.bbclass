@@ -1,6 +1,5 @@
 inherit image_types
 
-do_image_tezirunimg[depends] += "tezi-run-metadata:do_deploy u-boot-mkimage-native:do_install p7zip-native:do_install"
 TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
@@ -169,8 +168,6 @@ python rootfs_tezi_run_json() {
         rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
 }
 
-do_rootfs[depends] =+ "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy"
-
 IMAGE_CMD_tezirunimg () {
 	bbnote "Create Toradex Easy Installer FIT image"
 }
@@ -214,6 +211,9 @@ python do_assemble_fitimage() {
 }
 
 addtask do_assemble_fitimage after do_image_complete before do_build
-do_assemble_fitimage[depends] = "tezi-run-metadata:do_deploy"
+do_assemble_fitimage[depends] = "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
+                                 tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot \
+                                 p7zip-native:do_populate_sysroot zip-native:do_populate_sysroot \
+                                "
 
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
