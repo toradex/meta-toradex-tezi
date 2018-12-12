@@ -5,6 +5,6 @@ setenv bootargs igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640
 setenv fdt_high
 
 # Load FIT image from location as detected by distroboot
-load ${devtype} ${devnum}:${bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
+load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
 
 bootm ${ramdisk_addr_r}#config@${fdt_module}

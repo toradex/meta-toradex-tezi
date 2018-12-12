@@ -5,6 +5,6 @@ setenv bootargs console=ttymxc0,115200 quiet video=mxcfb0:dev=hdmi,640x480@60,if
 setenv fdt_high
 
 # Load FIT image from location as detected by distroboot
-load ${devtype} ${devnum}:${bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
+load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
 
 bootm ${ramdisk_addr_r}

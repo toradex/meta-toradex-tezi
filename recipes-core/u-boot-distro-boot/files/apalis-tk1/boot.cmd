@@ -5,6 +5,6 @@ setenv bootargs lp0_vec=2064@0xf46ff000 core_edp_mv=1150 core_edp_ma=4000 lane_o
 setenv fdt_high
 
 # Load FIT image from location as detected by distroboot
-load ${devtype} ${devnum}:${bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
+load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
 
 bootm ${ramdisk_addr_r}#config@${fdt_module}
