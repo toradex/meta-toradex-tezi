@@ -1,0 +1,405 @@
+From 5b3245bf25b82465ce4bf90966966d938049c00e Mon Sep 17 00:00:00 2001
+From: Ming Liu <liu.ming50@gmail.com>
+Date: Thu, 13 Dec 2018 14:37:51 +0100
+Subject: [PATCH] Add root-dir and compose-dir parameters
+
+So the end users could choose to install the systemd service and the
+docker compose file based on that root directory instead of the default
+'/'.
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Ming Liu <liu.ming50@gmail.com>
+---
+ dcsg.go        | 47 ++++++++++++++++--------------
+ installer.go   | 91 +++++++++++++++++++++++++++++++++++++++++++++-------------
+ main.go        | 10 ++++---
+ uninstaller.go | 64 +++++++++++++++++------------------------
+ 4 files changed, 129 insertions(+), 83 deletions(-)
+
+diff --git a/src/import/dcsg.go b/src/import/dcsg.go
+index 6376ef3..47cd375 100644
+--- a/src/import/dcsg.go
++++ b/src/import/dcsg.go
+@@ -10,18 +10,21 @@ import (
+ 	"github.com/pkg/errors"
+ )
+ 
+-func newDscg(dockerComposeFile, projectName string, dryRun bool, doPull bool) (*dcsg, error) {
+-	cleanedFilePath, err := filepath.Abs(dockerComposeFile)
++func newDscg(rootDirectory, composeDirectory, composeFile, projectName string, dryRun bool, doPull bool) (*dcsg, error) {
++	dockerComposeDirectory := composeDirectory
++	dockerComposeFileName  := filepath.Base(composeFile)
++
++	dockerComposeFilePath, err := filepath.Abs(composeFile)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+ 
+-	if !fileExists(cleanedFilePath) {
+-		return nil, fmt.Errorf("The Docker Compose file %q does not exist", cleanedFilePath)
++	if !fileExists(dockerComposeFilePath) {
++		return nil, fmt.Errorf("The Docker Compose file %q does not exist", dockerComposeFilePath)
+ 	}
+ 
+ 	if projectName == "" {
+-		projectNameFromDirectory, projectNameError := getProjectName(dockerComposeFile)
++		projectNameFromDirectory, projectNameError := getProjectName(composeFile)
+ 		if projectNameError != nil {
+ 			return nil, projectNameError
+ 		}
+@@ -29,37 +32,37 @@ func newDscg(dockerComposeFile, projectName string, dryRun bool, doPull bool) (*
+ 		projectName = projectNameFromDirectory
+ 	}
+ 
+-	projectDirectory, err := getProjectDirectory(dockerComposeFile)
+-	if err != nil {
+-		return nil, err
+-	}
+-
+-	dockerComposeFileName := filepath.Base(dockerComposeFile)
+ 
+ 	systemdDirectory := "/etc/systemd/system"
+ 	commandExecutor := newExecutor(os.Stdin, os.Stdout, os.Stderr, "", dryRun)
+ 
+ 	return &dcsg{
+-		projectDirectory:      projectDirectory,
+-		dockerComposeFileName: dockerComposeFileName,
+-		projectName:           projectName,
+-
+-		installer:   &systemdInstaller{systemdDirectory, commandExecutor, dryRun, doPull},
+-		uninstaller: &systemdUninstaller{systemdDirectory, commandExecutor, dryRun},
++		rootDirectory         : rootDirectory,
++		dockerComposeDirectory: dockerComposeDirectory,
++		dockerComposeFileName : dockerComposeFileName,
++		dockerComposeFilePath : dockerComposeFilePath,
++		systemdDirectory      : systemdDirectory,
++		projectName:            projectName,
++
++		installer:   &systemdInstaller{commandExecutor, dryRun, doPull},
++		uninstaller: &systemdUninstaller{commandExecutor, dryRun},
+ 	}, nil
+ }
+ 
+ type dcsg struct {
+-	projectDirectory      string
+-	dockerComposeFileName string
+-	projectName           string
++	rootDirectory          string
++	dockerComposeDirectory string
++	dockerComposeFileName  string
++	dockerComposeFilePath  string
++	systemdDirectory       string
++	projectName            string
+ 
+ 	installer   installer
+ 	uninstaller uninstaller
+ }
+ 
+ func (service dcsg) Install() error {
+-	err := service.installer.Install(service.projectDirectory, service.dockerComposeFileName, service.projectName)
++	err := service.installer.Install(service.rootDirectory, service.dockerComposeDirectory, service.dockerComposeFileName, service.dockerComposeFilePath, service.systemdDirectory, service.projectName)
+ 	if err != nil {
+ 		return errors.Wrap(err, "Installation failed")
+ 	}
+@@ -68,7 +71,7 @@ func (service dcsg) Install() error {
+ }
+ 
+ func (service dcsg) Uninstall() error {
+-	err := service.uninstaller.Uninstall(service.projectDirectory, service.dockerComposeFileName, service.projectName)
++	err := service.uninstaller.Uninstall(service.rootDirectory, service.dockerComposeDirectory, service.dockerComposeFileName, service.systemdDirectory, service.projectName)
+ 	if err != nil {
+ 		return errors.Wrap(err, "Uninstall failed")
+ 	}
+diff --git a/src/import/installer.go b/src/import/installer.go
+index 879d6b7..26aa367 100644
+--- a/src/import/installer.go
++++ b/src/import/installer.go
+@@ -3,6 +3,7 @@ package main
+ import (
+ 	"fmt"
+ 	"html/template"
++	"io/ioutil"
+ 	"log"
+ 	"os"
+ 	"path/filepath"
+@@ -11,28 +12,48 @@ import (
+ )
+ 
+ type installer interface {
+-	Install(projectDirectory, dockerComposeFileName, projectName string) error
++	Install(rootDirectory, dockerComposeDirectory, dockerComposeFileName, dockerComposeFilePath, systemdDirectory, projectName string) error
+ }
+ 
+ type systemdInstaller struct {
+-	systemdDirectory string
+ 	commandExecutor  Executor
+ 	dryRun           bool
+ 	doPull           bool
+ }
+ 
+-func (installer *systemdInstaller) Install(projectDirectory, dockerComposeFileName, projectName string) error {
++func (installer *systemdInstaller) Install(rootDirectory, dockerComposeDirectory, dockerComposeFileName, dockerComposeFilePath, systemdDirectory, projectName string) error {
+ 
+ 	serviceName := getServiceName(projectName)
+ 	serviceViewModel := serviceDefinition{
+-		ProjectName:       projectName,
+-		ProjectDirectory:  projectDirectory,
+-		DockerComposeFile: dockerComposeFileName,
+-		DoPull:            installer.doPull,
++		ProjectName           : projectName,
++		DockerComposeDirectory: dockerComposeDirectory,
++		DockerComposeFileName : dockerComposeFileName,
++		DoPull                : installer.doPull,
+ 	}
+ 
+-	if err := installer.createSystemdService(serviceViewModel); err != nil {
+-		return errors.Wrap(err, fmt.Sprintf("Failed to create a systemd service for project %q (Directory: %q, Docker Compose File: %q)", projectName, projectDirectory, dockerComposeFileName))
++	if err := installer.createSystemdService(serviceViewModel, rootDirectory, systemdDirectory); err != nil {
++		return errors.Wrap(err, fmt.Sprintf("Failed to create a systemd service for project %q (Directory: %q, Docker Compose File: %q)", projectName, dockerComposeDirectory, dockerComposeFileName))
++	}
++
++        if err := installer.deployDockerComposeFile(rootDirectory, dockerComposeDirectory, dockerComposeFileName, dockerComposeFilePath); err != nil {
++                return errors.Wrap(err, fmt.Sprintf("Failed to deploy docker compose file for project %q (Directory: %q, Docker Compose File: %q)", projectName, filepath.Join(rootDirectory, dockerComposeDirectory), dockerComposeFileName))
++        }
++
++	if rootDirectory != "/" {
++		targetPath := filepath.Join(systemdDirectory, serviceName)
++		linkpath   := filepath.Join(rootDirectory, systemdDirectory, "multi-user.target.wants", serviceName)
++
++		createError := os.MkdirAll(filepath.Join(rootDirectory, systemdDirectory, "multi-user.target.wants"), 0755)
++		if createError != nil {
++			return errors.Wrap(createError, fmt.Sprintf("Failed to create directory %q", filepath.Join(systemdDirectory, "multi-user.target.wants")))
++		}
++
++		linkError   := installer.commandExecutor.Run("ln", "-sf", targetPath, linkpath)
++		if linkError != nil {
++			return errors.Wrap(linkError, fmt.Sprintf("Failed to set link %q", serviceName))
++		} else {
++			return nil
++		}
+ 	}
+ 
+ 	reloadError := installer.commandExecutor.Run("systemctl", "daemon-reload")
+@@ -53,8 +74,8 @@ func (installer *systemdInstaller) Install(projectDirectory, dockerComposeFileNa
+ 	return nil
+ }
+ 
+-func (installer *systemdInstaller) createSystemdService(service serviceDefinition) error {
+-	serviceFilePath := filepath.Join(installer.systemdDirectory, getServiceName(service.ProjectName))
++func (installer *systemdInstaller) createSystemdService(service serviceDefinition, rootDirectory, systemdDirectory string) error {
++	serviceFilePath := filepath.Join(rootDirectory, systemdDirectory, getServiceName(service.ProjectName))
+ 
+ 	var file *os.File
+ 	if installer.dryRun {
+@@ -63,6 +84,11 @@ func (installer *systemdInstaller) createSystemdService(service serviceDefinitio
+ 	} else {
+ 		var err error
+ 
++		err = os.MkdirAll(filepath.Join(rootDirectory, systemdDirectory), 0755)
++		if err != nil {
++			return errors.Wrap(err, fmt.Sprintf("Failed to create systemd directory: %q", filepath.Join(rootDirectory, systemdDirectory)))
++		}
++
+ 		file, err = os.OpenFile(serviceFilePath, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0664)
+ 		if err != nil {
+ 			return errors.Wrap(err, fmt.Sprintf("Failed to open the systemd service file: %q", serviceFilePath))
+@@ -80,6 +106,31 @@ func (installer *systemdInstaller) createSystemdService(service serviceDefinitio
+ 	return nil
+ }
+ 
++func (installer *systemdInstaller) deployDockerComposeFile(rootDirectory, dockerComposeDirectory, dockerComposeFileName, dockerComposeFilePath string) error {
++	composeDirectory := filepath.Join(rootDirectory, dockerComposeDirectory)
++	if installer.dryRun {
++		log.Println("Installing docker compose file to:", composeDirectory)
++	} else {
++		var err error
++		err = os.MkdirAll(composeDirectory, 0755)
++		if err != nil {
++			return errors.Wrap(err, fmt.Sprintf("Failed to create docker compose directory: %q", composeDirectory))
++		}
++
++		data, err := ioutil.ReadFile(dockerComposeFilePath)
++		if err != nil {
++			return errors.Wrap(err, fmt.Sprintf("Failed to read file %q", dockerComposeFilePath))
++		}
++
++		err = ioutil.WriteFile(filepath.Join(composeDirectory, dockerComposeFileName), data, 0644)
++		if err != nil {
++			return errors.Wrap(err, fmt.Sprintf("Failed to write file %q", filepath.Join(composeDirectory, dockerComposeFileName)))
++		}
++	}
++
++	return nil
++}
++
+ func getServiceName(projectName string) string {
+ 	return fmt.Sprintf("%s.service", projectName)
+ }
+@@ -93,21 +144,21 @@ Requires=docker.service
+ Restart=always
+ RestartSec=10
+ TimeoutSec=300
+-WorkingDirectory={{ .ProjectDirectory }}
++WorkingDirectory={{ .DockerComposeDirectory }}
+ {{- if .DoPull }}
+-ExecStartPre=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFile }}" pull
++ExecStartPre=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFileName }}" pull
+ {{- end }}
+-ExecStart=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFile }}" up
+-ExecStop=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFile }}" stop
+-ExecStopPost=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFile }}" down
++ExecStart=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFileName }}" up
++ExecStop=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFileName }}" stop
++ExecStopPost=/usr/bin/env docker-compose -p "{{ .ProjectName }}" -f "{{ .DockerComposeFileName }}" down
+ 
+ [Install]
+ WantedBy=docker.service
+ `
+ 
+ type serviceDefinition struct {
+-	ProjectName       string
+-	ProjectDirectory  string
+-	DockerComposeFile string
+-	DoPull            bool
++	ProjectName             string
++	DockerComposeDirectory  string
++	DockerComposeFileName   string
++	DoPull                  bool
+ }
+diff --git a/src/import/main.go b/src/import/main.go
+index a2d67c6..50268c7 100644
+--- a/src/import/main.go
++++ b/src/import/main.go
+@@ -11,8 +11,10 @@ const applicationName = "dcsg"
+ const applicationVersion = "v0.4.0"
+ 
+ var (
+-	app       = kingpin.New(applicationName, fmt.Sprintf("%s creates systemd services for Docker Compose projects (%s)", applicationName, applicationVersion))
+-	appDryRun = app.Flag("dry-run", "Print details of what would be done but do not install anything").Short('n').Bool()
++	app                 = kingpin.New(applicationName, fmt.Sprintf("%s creates systemd services for Docker Compose projects (%s)", applicationName, applicationVersion))
++	appDryRun           = app.Flag("dry-run", "Print details of what would be done but do not install anything").Short('n').Bool()
++	appRootDirectory    = app.Flag("root-dir", "The root directory of the output systemd service").Default("/").String()
++	appComposeDirectory = app.Flag("compose-dir", "The directory that the docker compose file would be installed into").Default("/opt/containers").String()
+ 
+ 	// install
+ 	installCommand           = app.Command("install", "Register a systemd service for the given docker-compose file")
+@@ -39,7 +41,7 @@ func handleCommandlineArgument(arguments []string) {
+ 	switch kingpin.MustParse(app.Parse(arguments)) {
+ 
+ 	case installCommand.FullCommand():
+-		service, err := newDscg(*installDockerComposeFile, *installProjectName, *appDryRun, !(*installDontPull))
++		service, err := newDscg(*appRootDirectory, *appComposeDirectory, *installDockerComposeFile, *installProjectName, *appDryRun, !(*installDontPull))
+ 		if err != nil {
+ 			fmt.Fprintf(os.Stderr, "%s\n", err)
+ 			os.Exit(1)
+@@ -51,7 +53,7 @@ func handleCommandlineArgument(arguments []string) {
+ 		}
+ 
+ 	case uninstallCommand.FullCommand():
+-		service, err := newDscg(*uninstallDockerComposeFile, *uinstallProjectName, *appDryRun, !(*installDontPull))
++		service, err := newDscg(*appRootDirectory, *appComposeDirectory, *uninstallDockerComposeFile, *uinstallProjectName, *appDryRun, !(*installDontPull))
+ 		if err != nil {
+ 			fmt.Fprintf(os.Stderr, "%s\n", err)
+ 			os.Exit(1)
+diff --git a/src/import/uninstaller.go b/src/import/uninstaller.go
+index 7d208c3..063b851 100644
+--- a/src/import/uninstaller.go
++++ b/src/import/uninstaller.go
+@@ -2,7 +2,6 @@ package main
+ 
+ import (
+ 	"fmt"
+-	"log"
+ 	"os"
+ 	"path/filepath"
+ 
+@@ -10,58 +9,49 @@ import (
+ )
+ 
+ type uninstaller interface {
+-	Uninstall(projectDirectory, dockerComposeFileName, projectName string) error
++	Uninstall(rootDirectory, dockerComposeDirectory, dockerComposeFileName, systemdDirectory, projectName string) error
+ }
+ 
+ type systemdUninstaller struct {
+-	systemdDirectory string
+ 	commandExecutor  Executor
+ 	dryRun           bool
+ }
+ 
+-func (uninstaller *systemdUninstaller) Uninstall(projectDirectory, dockerComposeFileName, projectName string) error {
++func (uninstaller *systemdUninstaller) Uninstall(rootDirectory, dockerComposeDirectory, dockerComposeFileName, systemdDirectory, projectName string) error {
+ 
+ 	serviceName := getServiceName(projectName)
+-	serviceViewModel := serviceDefinition{
+-		ProjectName:       projectName,
+-		ProjectDirectory:  projectDirectory,
+-		DockerComposeFile: dockerComposeFileName,
+-	}
+-
+-	stopError := uninstaller.commandExecutor.Run("systemctl", "stop", serviceName)
+-	if stopError != nil {
+-		return errors.Wrap(stopError, fmt.Sprintf("Failed to stop %q", serviceName))
+-	}
+-
+-	disableError := uninstaller.commandExecutor.Run("systemctl", "disable", serviceName)
+-	if disableError != nil {
+-		return errors.Wrap(disableError, fmt.Sprintf("Failed to disable %q", serviceName))
+-	}
+-
+-	removeError := uninstaller.removeSystemdService(serviceViewModel)
+-	if removeError != nil {
+-		return errors.Wrap(removeError, fmt.Sprintf("Failed to remove the systemd service %q", serviceViewModel.ProjectName))
+-	}
+-
+-	reloadError := uninstaller.commandExecutor.Run("systemctl", "daemon-reload")
+-	if reloadError != nil {
+-		return errors.Wrap(reloadError, "Failed to reload the systemd configuration")
+-	}
+ 
+-	return nil
+-}
++	if rootDirectory == "/" {
++		stopError := uninstaller.commandExecutor.Run("systemctl", "stop", serviceName)
++		if stopError != nil {
++			return errors.Wrap(stopError, fmt.Sprintf("Failed to stop %q", serviceName))
++		}
+ 
+-func (uninstaller *systemdUninstaller) removeSystemdService(service serviceDefinition) error {
+-	serviceFilePath := filepath.Join(uninstaller.systemdDirectory, getServiceName(service.ProjectName))
++		disableError := uninstaller.commandExecutor.Run("systemctl", "disable", serviceName)
++		if disableError != nil {
++			return errors.Wrap(disableError, fmt.Sprintf("Failed to disable %q", serviceName))
++		}
+ 
+-	if uninstaller.dryRun {
+-		log.Println("Would remove file:", serviceFilePath)
++		reloadError := uninstaller.commandExecutor.Run("systemctl", "daemon-reload")
++		if reloadError != nil {
++			return errors.Wrap(reloadError, "Failed to reload the systemd configuration")
++		}
+ 	} else {
+-		removeError := os.Remove(serviceFilePath)
++		removeError := os.Remove(filepath.Join(rootDirectory, systemdDirectory, serviceName))
+ 		if removeError != nil {
+-			return errors.Wrap(removeError, fmt.Sprintf("Failed to remove %q", serviceFilePath))
++			return errors.Wrap(removeError, fmt.Sprintf("Failed to remove the systemd service %q", filepath.Join(rootDirectory, systemdDirectory, serviceName)))
+ 		}
++
++		rmlinkError := os.Remove(filepath.Join(rootDirectory, systemdDirectory, "multi-user.target.wants", serviceName))
++		if rmlinkError != nil {
++			return errors.Wrap(rmlinkError, fmt.Sprintf("Failed to remove %q", filepath.Join(rootDirectory, systemdDirectory, "multi-user.target.wants", serviceName)))
++		}
++
+ 	}
+ 
++	removeError := os.Remove(filepath.Join(rootDirectory, dockerComposeDirectory, dockerComposeFileName))
++	if removeError != nil {
++		return errors.Wrap(removeError, fmt.Sprintf("Failed to remove the systemd service %q", filepath.Join(rootDirectory, dockerComposeDirectory, dockerComposeFileName)))
++	}
+ 	return nil
+ }
+-- 
+2.7.4
+
