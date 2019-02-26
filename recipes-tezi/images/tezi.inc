@@ -19,9 +19,6 @@ IMAGE_NAME_colibri-imx6ull="Colibri-iMX6ULL_ToradexEasyInstaller_${TDX_VER_PACKA
 IMAGE_NAME_colibri-imx7="Colibri-iMX7_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
 IMAGE_NAME_colibri-imx7-emmc="Colibri-iMX7-eMMC_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
 
-# Never deploy kernel for RAM based file systems
-RDEPENDS_kernel-base = ""
-
 RAW_NAND_UTILS = " \
     mtd-utils-ubifs \
     mtd-utils \
@@ -59,11 +56,6 @@ MACHINE_EXTRA_RDEPENDS_remove_apalis-tk1-mainline = " \
 "
 
 LICENSE="MIT"
-
-DEPENDS=" \
-    virtual/bootloader \
-    zip-native \
-"
 
 inherit core-image
 

@@ -12,6 +12,3 @@ IMAGE_INSTALL += " \
     openssh-sftp-server \
     gdb \
 "
-
-LICENSE="MIT"
-

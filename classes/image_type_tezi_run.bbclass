@@ -1,5 +1,3 @@
-inherit image_types
-
 TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
@@ -66,7 +64,6 @@ def rootfs_tezi_run_emmc(d):
 
 def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
-    imagename = d.getVar('IMAGE_NAME', True)
     uboot = d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True)
 
     return [
@@ -212,8 +209,7 @@ python do_assemble_fitimage() {
 
 addtask do_assemble_fitimage after do_image_complete before do_build
 do_assemble_fitimage[depends] = "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
-                                 tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot \
-                                 p7zip-native:do_populate_sysroot zip-native:do_populate_sysroot \
+                                 tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
                                 "
 
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
