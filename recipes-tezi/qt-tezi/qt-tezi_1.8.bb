@@ -33,6 +33,7 @@ RDEPENDS_${PN} += " \
     util-linux-blkid \
     util-linux-blkdiscard \
     ${TOUCH} \
+    ttf-vera \
 "
 
 FILES_${PN} = " \
