@@ -19,10 +19,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 S = "${WORKDIR}/git"
 inherit qmake5
 
-TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests qt4-embedded-plugin-mousedriver-tslib", "",d)}'
+TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests", "",d)}'
 
 DEPENDS += " \
-    qjson \
     libusbgx \
     rapidjson \
     qtbase \
@@ -33,17 +32,7 @@ RDEPENDS_${PN} += " \
     util-linux-sfdisk \
     util-linux-blkid \
     util-linux-blkdiscard \
-    libqt-embeddedcore4 \
-    libqt-embeddedgui4 \
-    qt4-embedded-fonts-ttf-vera \
-    qt4-embedded-plugin-mousedriver-tslib \
     ${TOUCH} \
-"
-
-# Ensure we have some plugins for some useful image formats
-RRECOMMENDS_${PN} += "\
-    qt4-embedded-plugin-imageformat-jpeg \
-    qt4-embedded-plugin-gfxdriver-gfxvnc \
 "
 
 FILES_${PN} = " \
