@@ -34,6 +34,7 @@ RDEPENDS_${PN} += " \
     util-linux-blkdiscard \
     ${TOUCH} \
     ttf-vera \
+    qtwayland \
 "
 
 FILES_${PN} = " \
