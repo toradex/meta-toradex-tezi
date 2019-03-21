@@ -4,7 +4,7 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://gitlab.toradex.int/tezi/qt-tezi.git;branch=master;protocol=http \
+SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=qt5-port;protocol=http \
     file://defaults \
     file://rc.local \
     file://udhcpd.conf \
@@ -12,12 +12,12 @@ SRC_URI = "git://gitlab.toradex.int/tezi/qt-tezi.git;branch=master;protocol=http
     file://ifplugd.usb.action \
 "
 
-SRCREV = "9bc7d7b9773d9e071957dcd4e86dc58b9adefc15"
+SRCREV = "${AUTOREV}"
 SRCREV_use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
 S = "${WORKDIR}/git"
-inherit qt4e
+inherit qmake5
 
 TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests qt4-embedded-plugin-mousedriver-tslib", "",d)}'
 
@@ -25,6 +25,7 @@ DEPENDS += " \
     qjson \
     libusbgx \
     rapidjson \
+    qtbase \
 "
 
 RDEPENDS_${PN} += " \
@@ -57,7 +58,7 @@ FILES_${PN} = " \
 
 do_install() {
     install -d ${D}${bindir}/
-    install -m 0755 ${S}/tezi ${D}${bindir}/
+    install -m 0755 ${S}/../build/tezi ${D}${bindir}/
     install -d ${D}${datadir}/tezi/keymaps/
     install -m 0644 ${S}/keymaps/*qmap ${D}${datadir}/tezi/keymaps/
 
