@@ -1,0 +1,11 @@
+diff --git a/protocol/meson.build b/protocol/meson.build
+index 34026ff9..1c893c01 100644
+--- a/protocol/meson.build
++++ b/protocol/meson.build
+@@ -1,5 +1,5 @@
+ dep_scanner = dependency('wayland-scanner', native: true)
+-prog_scanner = find_program(dep_scanner.get_pkgconfig_variable('wayland_scanner'))
++prog_scanner = find_program('wayland-scanner')
+ 
+ # XXX: For minor version 2 of zwp_linux_explicit_synchronization_v1, we
+ # actually need a development version after 1.17, but there is no way to
