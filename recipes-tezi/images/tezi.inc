@@ -38,6 +38,7 @@ IMAGE_INSTALL += " \
     pv \
     mmc-utils \
     u-boot-toradex-fsl-fw-utils \
+    weston \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
