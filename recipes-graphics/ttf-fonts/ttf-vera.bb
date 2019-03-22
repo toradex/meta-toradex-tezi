@@ -4,7 +4,7 @@ It is a TrueType font with full hinting instructions, which improve its \
 rendering quality on low-resolution devices such as computer monitors."
 
 SECTION = "fonts"
-LICENSE = "Bitstream"
+LICENSE = "BitstreamVera"
 LIC_FILES_CHKSUM = "file://COPYRIGHT.TXT;md5=27d7484b1e18d0ee4ce538644a3f04be"
 PV = "1.0"
 PR = "r1"
