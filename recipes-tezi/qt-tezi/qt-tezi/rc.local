@@ -34,6 +34,10 @@ fi
 # Source module specific defaults
 . /etc/default/tezi
 
+# Environment for weston
+mkdir -p -m 0600 /run/wayland
+export XDG_RUNTIME_DIR=/run/wayland
+
 # Export variables relevant for Qt
 export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
 
