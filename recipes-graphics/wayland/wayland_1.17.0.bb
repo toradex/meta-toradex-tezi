@@ -33,6 +33,11 @@ do_install_append_class-native() {
       -i ${D}/${datadir}/aclocal/wayland-scanner.m4
 }
 
+# Avoid installation conflicts with vivante driver
+do_install_append() {
+    rm -f ${D}${libdir}/pkgconfig/wayland-egl.pc
+}
+
 sysroot_stage_all_append_class-target () {
 	rm ${SYSROOT_DESTDIR}/${datadir}/aclocal/wayland-scanner.m4
 	cp ${STAGING_DATADIR_NATIVE}/aclocal/wayland-scanner.m4 ${SYSROOT_DESTDIR}/${datadir}/aclocal/
