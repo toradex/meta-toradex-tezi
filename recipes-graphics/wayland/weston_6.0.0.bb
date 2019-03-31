@@ -21,6 +21,11 @@ UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
 inherit meson pkgconfig useradd distro_features_check
 
+export CFLAGS_class-target = "${TARGET_CFLAGS}"
+export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
+export CXXFLAGS_class-target = "${TARGET_CXXFLAGS}"
+export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
+
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
