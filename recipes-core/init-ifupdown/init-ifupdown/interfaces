@@ -1,0 +1,24 @@
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+
+# The loopback interface
+auto lo
+iface lo inet loopback
+	address 127.0.0.1
+
+auto eth0
+iface eth0 inet manual
+	up ip link set up dev $IFACE
+	up udhcpc -i $IFACE
+	up ntpd -p pool.ntp.org
+	down killall ntpd
+	down ip link set down dev $IFACE
+	down ip addr flush dev $IFACE
+
+auto usb0
+iface usb0 inet manual
+	up ip addr add 192.168.11.1/24 dev $IFACE || true
+	up ip link set up dev $IFACE
+	up udhcpd /etc/udhcpd.conf
+	down killall udhcpd
+	down ip link set down dev $IFACE
+	down ip addr flush dev $IFACE
