@@ -8,8 +8,6 @@ SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=qt5-port;protocol
     file://defaults \
     file://rc.local \
     file://udhcpd.conf \
-    file://ifplugd.dhcp.action \
-    file://ifplugd.usb.action \
 "
 
 SRCREV = "${AUTOREV}"
@@ -42,7 +40,6 @@ FILES_${PN} = " \
     ${sysconfdir}/rc.local \
     ${sysconfdir}/default/tezi \
     ${sysconfdir}/udhcpd.conf \
-    ${sysconfdir}/ifplugd \
     ${bindir} \
     ${datadir}/tezi/ \
 "
@@ -61,9 +58,6 @@ do_install() {
 
     install -d ${D}${sysconfdir}
     install -m 0755 ${WORKDIR}/udhcpd.conf ${D}${sysconfdir}
-    install -d ${D}${sysconfdir}/ifplugd
-    install -m 0755 ${WORKDIR}/ifplugd.dhcp.action ${D}${sysconfdir}/ifplugd
-    install -m 0755 ${WORKDIR}/ifplugd.usb.action ${D}${sysconfdir}/ifplugd
 
 }
 
