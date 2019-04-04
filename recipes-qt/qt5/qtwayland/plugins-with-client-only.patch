@@ -1,13 +1,13 @@
 diff --git a/src/src.pro b/src/src.pro
-index 4ecbc71b..99c6f930 100644
+index 4ecbc71b..6f4bf4d3 100644
 --- a/src/src.pro
 +++ b/src/src.pro
-@@ -24,10 +24,15 @@ qtConfig(wayland-client) {
+@@ -24,10 +24,20 @@ qtConfig(wayland-client) {
          sub_imports.target = sub-imports
          SUBDIRS += sub_imports
  
 -        sub_plugins.subdir = plugins
-+        sub_plugins.subdir = plugins/decorations plugins/hardwareintegration plugins/shellintegration
++        sub_plugins.subdir = plugins/hardwareintegration plugins/shellintegration
          sub_plugins.depends = sub-qtwaylandscanner sub-client sub-compositor
          sub_plugins.target = sub-plugins
          SUBDIRS += sub_plugins
@@ -17,5 +17,10 @@ index 4ecbc71b..99c6f930 100644
 +    sub_platformplugins.depends = sub-client
 +    sub_platformplugins.target = sub-platformplugins
 +    SUBDIRS += sub_platformplugins
++
++    sub_decorationplugins.subdir = plugins/decorations
++    sub_decorationplugins.depends = sub-client
++    sub_decorationplugins.target = sub-decorationplugins
++    SUBDIRS += sub_decorationplugins
  }
  
