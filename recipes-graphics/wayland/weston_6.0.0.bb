@@ -26,13 +26,13 @@ export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
 export CXXFLAGS_class-target = "${TARGET_CXXFLAGS}"
 export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 
-DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm"
+DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm freerdp"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
 WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 WESTON_MAJOR_VERSION = "6"
 
-EXTRA_OEMESON += "-Dbackend-rdp=false -Dsimple-dmabuf-drm= -Dbackend-default=fbdev"
+EXTRA_OEMESON += "-Dbackend-rdp=true -Dsimple-dmabuf-drm= -Dbackend-default=fbdev"
 EXTRA_OECONF_append_qemux86 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"
