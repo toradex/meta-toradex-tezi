@@ -23,7 +23,7 @@
 
 		fdt@1 {
 			description = "Apalis T30 Device Tree";
-			data = /incbin/("./zImage-tegra30-apalis-eval.dtb");
+			data = /incbin/("./tegra30-apalis-eval.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";

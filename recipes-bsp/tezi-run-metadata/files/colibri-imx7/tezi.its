@@ -37,7 +37,7 @@
 
 		fdt@imx7s {
 			description = "Colibri iMX7 Solo Device Tree";
-			data = /incbin/("./zImage-imx7s-colibri-eval-v3.dtb");
+			data = /incbin/("./imx7s-colibri-eval-v3.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";
@@ -49,7 +49,7 @@
 
 		fdt@imx7d {
 			description = "Colibri iMX7 Dual Device Tree";
-			data = /incbin/("./zImage-imx7d-colibri-eval-v3.dtb");
+			data = /incbin/("./imx7d-colibri-eval-v3.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";
@@ -60,7 +60,7 @@
 
 		fdt@imx7d-emmc {
 			description = "Colibri iMX7 Dual 1GB eMMC Device Tree";
-			data = /incbin/("./zImage-imx7d-colibri-emmc-eval-v3.dtb");
+			data = /incbin/("./imx7d-colibri-emmc-eval-v3.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";

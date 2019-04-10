@@ -37,7 +37,7 @@
 
 		fdt@1 {
 			description = "Apalis iMX6 Device Tree";
-			data = /incbin/("./zImage-imx6q-apalis-eval.dtb");
+			data = /incbin/("./imx6q-apalis-eval.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";

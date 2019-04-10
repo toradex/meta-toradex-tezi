@@ -23,7 +23,7 @@
 
 		fdt@apalis {
 			description = "Apalis TK1 pre-V1.2 Device Tree";
-			data = /incbin/("./zImage-tegra124-apalis-eval.dtb");
+			data = /incbin/("./tegra124-apalis-eval.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";
@@ -34,7 +34,7 @@
 
 		fdt@apalis-v1.2 {
 			description = "Apalis TK1 V1.2 Device Tree";
-			data = /incbin/("./zImage-tegra124-apalis-v1.2-eval.dtb");
+			data = /incbin/("./tegra124-apalis-v1.2-eval.dtb");
 			type = "flat_dt";
 			arch = "arm";
 			compression = "none";
