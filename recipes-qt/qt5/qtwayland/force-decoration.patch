@@ -1,14 +1,14 @@
 diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
-index ac84e12b..a9ae2ea9 100644
+index c46c498..4e35a47 100644
 --- a/src/client/qwaylandwindow.cpp
 +++ b/src/client/qwaylandwindow.cpp
-@@ -707,9 +707,7 @@ bool QWaylandWindow::createDecoration()
-             }
-         }
-     }
+@@ -708,9 +708,6 @@ void QWaylandWindow::setWindowFlags(Qt::WindowFlags flags)
  
+ bool QWaylandWindow::createDecoration()
+ {
 -    if (!mDisplay->supportsWindowDecoration())
 -        return false;
- 
+-
      static bool decorationPluginFailed = false;
      bool decoration = false;
+     switch (window()->type()) {
