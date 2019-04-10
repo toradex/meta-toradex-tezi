@@ -18,12 +18,12 @@ Signed-off-by: Khem Raj <raj.khem@gmail.com>
  create mode 100644 libweston/weston-error.h
 
 diff --git a/configure.ac b/configure.ac
-index 7aebbdb..dc9c802 100644
+index a7a6365..681f7c8 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -109,6 +109,8 @@ AC_CHECK_DECL(CLOCK_MONOTONIC,[],
+@@ -126,6 +126,8 @@ AC_CHECK_DECL(CLOCK_MONOTONIC,[],
+ 	      [AC_MSG_ERROR("CLOCK_MONOTONIC is needed to compile weston")],
  	      [[#include <time.h>]])
- AC_CHECK_HEADERS([execinfo.h])
  
 +AC_CHECK_HEADERS([error.h])
 +
