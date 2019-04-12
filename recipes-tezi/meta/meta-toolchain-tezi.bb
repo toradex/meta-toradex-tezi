@@ -1,6 +1,4 @@
-QTNAME = "qte"
-QT_DIR_NAME = "qtopia"
+TOOLCHAIN_TARGET_TASK_append = " packagegroup-tezi-toolchain-target"
 
-require recipes-qt4/meta/meta-toolchain-qt.inc
+require recipes-qt/meta/meta-toolchain-qt5.bb
 
-TOOLCHAIN_TARGET_TASK += " packagegroup-tezi-toolchain-target"
