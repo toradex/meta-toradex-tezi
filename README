@@ -22,7 +22,7 @@ meta-openembedded/meta-oe
 branch: rocko
 revision: HEAD
 
-URI: git://git.yoctoproject.org/meta-qt4
+URI: https://github.com/meta-qt5/meta-qt5
 branch: rocko
 revision: HEAD
 
@@ -34,15 +34,15 @@ URI: https://github.com/Freescale/meta-freescale-3rdparty
 branch: rocko
 revision: HEAD
 
-URI: git://git.toradex.com/meta-toradex-nxp.git
+URI: git://git.toradex.com/meta-toradex-nxp
 branch: rocko
 revision: HEAD
 
-URI: git://git.toradex.com/meta-toradex-tegra.git
+URI: git://git.toradex.com/meta-toradex-tegra
 branch: rocko
 revision: HEAD
 
-URI: git://git.toradex.com/meta-toradex-bsp-common.git
+URI: git://git.toradex.com/meta-toradex-bsp-common
 branch: rocko
 revision: HEAD
 
