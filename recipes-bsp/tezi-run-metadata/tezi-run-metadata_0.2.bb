@@ -31,66 +31,58 @@ SRC_URI_append_apalis-tk1-mainline = " \
 SRC_URI[md5sum] = "11cf6d9b4b18b7f35f06ed91bfc0b3a8"
 SRC_URI[sha256sum] = "064bff2e4cb4a0c0f8bceeaf6dd2cef1e682869e0b22d49e40bc6a8326ec14c9"
 
+TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
+
 inherit deploy
 
-do_deploy () {
-    install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+deploy_common () {
+    install -d ${TEZI_RUN_DEPLOYDIR}/recovery
+    install -m 644 ${WORKDIR}/wrapup.sh ${TEZI_RUN_DEPLOYDIR}
+    install -m 644 ${WORKDIR}/tezi.png ${TEZI_RUN_DEPLOYDIR}
+    install -m 755 ${WORKDIR}/recovery-linux.sh ${TEZI_RUN_DEPLOYDIR}
+    install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
 
-    install -m 755 ${WORKDIR}/recovery-linux.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/recovery-windows.bat ${DEPLOYDIR}
-    install -d ${DEPLOYDIR}/recovery
-    install -m 644 ${WORKDIR}/recovery/imx_usb.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx6_usb_rom.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_spl.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_uboot.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx7_usb_rom.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx7_usb_sdp_uboot.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx6ull_usb_rom.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/mx6ull_usb_sdp_uboot.conf ${DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.imx_usb ${DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/imx_usb ${DEPLOYDIR}/recovery/
-    install -m 644 ${S}/imx_usb.exe ${DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+}
+
+do_deploy () {
+    deploy_common
+
+    install -m 644 ${WORKDIR}/recovery/imx_usb.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx6_usb_rom.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_spl.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx6_usb_sdp_uboot.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx7_usb_rom.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx7_usb_sdp_uboot.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx6ull_usb_rom.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/mx6ull_usb_sdp_uboot.conf ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/README.imx_usb ${TEZI_RUN_DEPLOYDIR}/recovery/README
+    install -m 755 ${S}/imx_usb ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/imx_usb.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-t30-mainline () {
-    install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+    deploy_common
 
-    install -m 755 ${WORKDIR}/recovery-linux.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/recovery-windows.bat ${DEPLOYDIR}
-    install -d ${DEPLOYDIR}/recovery
-    install -m 644 ${WORKDIR}/recovery/Apalis_T30_2GB_800Mhz.bct ${DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/Apalis_T30_2GB_800Mhz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
+    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-tk1 () {
-    install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+    deploy_common
 
-    install -m 755 ${WORKDIR}/recovery-linux.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/recovery-windows.bat ${DEPLOYDIR}
-    install -d ${DEPLOYDIR}/recovery
-    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
+    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-tk1-mainline () {
-    install -m 644 ${WORKDIR}/wrapup.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.png ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+    deploy_common
 
-    install -m 755 ${WORKDIR}/recovery-linux.sh ${DEPLOYDIR}
-    install -m 644 ${WORKDIR}/recovery-windows.bat ${DEPLOYDIR}
-    install -d ${DEPLOYDIR}/recovery
-    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
+    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 addtask deploy before do_package after do_install
