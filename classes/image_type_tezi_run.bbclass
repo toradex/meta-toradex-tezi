@@ -155,7 +155,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
     bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
 
-python rootfs_tezi_run_json() {
+python rootfs_tezirun_run_json() {
     if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
         return
 
@@ -206,7 +206,7 @@ python do_assemble_fitimage() {
         return
 
     bb.build.exec_func('build_fitimage', d)
-    bb.build.exec_func('rootfs_tezi_run_json', d)
+    bb.build.exec_func('rootfs_tezirun_run_json', d)
     bb.build.exec_func('build_deploytar', d)
 }
 
