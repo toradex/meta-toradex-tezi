@@ -35,9 +35,11 @@ mkdir -p -m 0600 /run/wayland
 export XDG_RUNTIME_DIR=/run/wayland
 
 # Export variables relevant for Qt
-export QWS_KEYBOARD QWS_DISPLAY QWS_MOUSE_PROTO
+export QT_WAYLAND_FORCE_DPI=72
 
 # Start in background
+nohup /usr/bin/weston --tty=2 > /var/volatile/weston.log &
+sleep 0.5
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
-	$HOTPLUGFB -qws -nokeyboard -nomouse < /dev/null \
+	$HOTPLUGFB -platform wayland -nokeyboard -nomouse < /dev/null \
 	> /var/volatile/tezi.log &
