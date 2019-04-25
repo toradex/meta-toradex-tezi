@@ -29,6 +29,7 @@ IMAGE_INSTALL += " \
     ${CORE_IMAGE_BASE_INSTALL} \
     qt-tezi \
     e2fsprogs-mke2fs \
+    e2fsprogs-tune2fs \
     dosfstools \
     curl \
     lz4 \
