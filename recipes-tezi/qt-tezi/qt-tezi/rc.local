@@ -23,9 +23,6 @@ fi
 if grep -q fullscreen /proc/cmdline; then
 	FULLSCREEN="-fullscreen";
 fi
-if grep -q hotplugfb /proc/cmdline; then
-	HOTPLUGFB="-hotplugfb";
-fi
 
 # Source module specific defaults
 . /etc/default/tezi
@@ -41,5 +38,4 @@ export QT_WAYLAND_FORCE_DPI=72
 nohup /usr/bin/weston --tty=2 > /var/volatile/weston.log &
 sleep 0.5
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
-	$HOTPLUGFB -platform wayland -nokeyboard -nomouse < /dev/null \
-	> /var/volatile/tezi.log &
+	-platform wayland < /dev/null > /var/volatile/tezi.log &
