@@ -1,5 +1,9 @@
 #!/bin/sh
 
+RW_MEMORY_DIR=/var/volatile
+WESTON_LOGFILE=weston.log
+TEZI_LOGFILE=tezi.log
+
 # Start services and customize the boot process here.
 echo "Running /etc/rc.local..."
 
@@ -31,11 +35,37 @@ fi
 mkdir -p -m 0600 /run/wayland
 export XDG_RUNTIME_DIR=/run/wayland
 
+# Generate tls certificate for rdp
+RDP_TLS_DIR=${RW_MEMORY_DIR}
+RDP_TLS_FILENAME=tls
+
+{
+if [ ! -f ${RDP_TLS_DIR}/${RDP_TLS_FILENAME}.crt ] || [ ! -f ${RDP_TLS_DIR}/${RDP_TLS_FILENAME}.key ]
+then    
+    echo Certificates for RDP not found in ${RDP_TLS_DIR} 
+    cd ${RDP_TLS_DIR}
+    openssl genrsa -out ${RDP_TLS_FILENAME}.key 2048 && \
+    openssl req -new -key ${RDP_TLS_FILENAME}.key -out ${RDP_TLS_FILENAME}.csr \
+	-subj "/C=CH/ST=Luzern/L=Luzern/O=Toradex/CN=www.toradex.com" && \
+    openssl x509 -req -days 365 -signkey ${RDP_TLS_FILENAME}.key \
+	-in ${RDP_TLS_FILENAME}.csr -out ${RDP_TLS_FILENAME}.crt 
+    if [ $? -eq 0 ]; then
+	echo Certificate for RDP successfully generated
+    else
+	echo Error generating certificate for RDP
+    fi
+    cd
+else
+    echo Certificates for RDP found in ${RDP_TLS_DIR}. Skipping generation.
+fi
+} 2>&1 | tee -a ${RW_MEMORY_DIR}/${WESTON_LOGFILE}
+
+
 # Export variables relevant for Qt
 export QT_WAYLAND_FORCE_DPI=72
 
 # Start in background
-nohup /usr/bin/weston --tty=2 > /var/volatile/weston.log &
+nohup /usr/bin/weston --tty=2 >> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} &
 sleep 0.5
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
-	-platform wayland < /dev/null > /var/volatile/tezi.log &
+	-platform wayland < /dev/null >> ${RW_MEMORY_DIR}/${TEZI_LOGFILE} &
