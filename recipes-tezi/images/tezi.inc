@@ -40,6 +40,7 @@ IMAGE_INSTALL += " \
     mmc-utils \
     u-boot-toradex-fsl-fw-utils \
     weston \
+    openssl-bin \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
