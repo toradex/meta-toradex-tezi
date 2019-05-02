@@ -44,6 +44,10 @@ IMAGE_INSTALL += " \
     haveged \
 "
 
+IMAGE_INSTALL_remove_apalis-imx8 = " \
+    u-boot-toradex-fsl-fw-utils \
+"
+
 IMAGE_INSTALL_append_colibri-imx6ull = " \
     ${RAW_NAND_UTILS} \
 "
