@@ -106,4 +106,4 @@ do_populate_sysroot[noexec] = "1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-t30|apalis-tk1|colibri-imx6|colibri-imx7)"
+COMPATIBLE_MACHINE = "(apalis-imx8|apalis-imx6|apalis-t30|apalis-tk1|colibri-imx6|colibri-imx7)"

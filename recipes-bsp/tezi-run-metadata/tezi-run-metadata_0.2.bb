@@ -88,6 +88,6 @@ do_deploy_apalis-tk1-mainline () {
 addtask deploy before do_package after do_install
 
 # apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7)"
+COMPATIBLE_MACHINE = "(apalis-imx8|apalis-imx6|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
