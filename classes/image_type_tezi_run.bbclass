@@ -1,8 +1,10 @@
 TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_EMMC_apalis-imx8 ??= "flash.bin"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_RECOVERY_apalis-imx8 ??= "recovery.bin"
 TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC', True), '', d), \
                          bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True), '', d), \
                          d.getVar('TEZI_UBOOT_BINARY_RECOVERY', True)])))}"
@@ -10,6 +12,16 @@ TORADEX_FLASH_TYPE ??= "emmc"
 TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
                          tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
                         "
+
+# Variables specific to iMX8. Some already exist in meta-freescale.
+# TODO: refactor the whole class in a more sensible way.
+SC_FIRMWARE_NAME ?= "scfw_tcm.bin"
+SECO_FIRMWARE_NAME ?= "mx8qm-ahab-container.img"
+ATF_MACHINE_NAME ?= "bl31-imx8qm.bin"
+UBOOT_ATF ?= "u-boot-atf.bin"
+IMX_BOOT_TOOLS_DIR ?= "imx-boot-tools"
+HDMI_FIRMWARE_NAME ?= "hdmitxfw.bin"
+FIRMWARE_BINARIES ??= "${HDMI_FIRMWARE_NAME}"
 
 def fitimg_get_size(d):
     import subprocess
@@ -25,8 +37,13 @@ def rootfs_tezi_run_emmc(d):
     uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC', True)
     offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD', True)
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD', True)
+    machine = d.getVar('MACHINE', True)
+    firmware = d.getVar('FIRMWARE_BINARIES', True)
+    if not isinstance(firmware, list): firmware = [firmware]
 
     bootpart_rawfiles = []
+    bootpart_filelist = [ "boot.scr", "tezi.itb" ]
+    if machine == "apalis-imx8": bootpart_filelist += [ fw for fw in firmware ]
     has_spl = d.getVar('SPL_BINARY', True)
     if has_spl:
         bootpart_rawfiles.append(
@@ -45,13 +62,13 @@ def rootfs_tezi_run_emmc(d):
           "name": "mmcblk0",
           "partitions": [
             {
-              "partition_size_nominal": 32,
+              "partition_size_nominal": 128,
               "want_maximised": False,
               "content": {
                 "label": "BOOT",
                 "filesystem_type": "FAT",
                 "mkfs_options": "",
-                "filelist": [ "boot.scr", "tezi.itb" ],
+                "filelist": bootpart_filelist,
                 "uncompressed_size": fitimg_get_size(d) / 1024
               }
             }
@@ -190,7 +207,7 @@ build_deploytar () {
 	fi
 
 	mkdir ${IMAGE_NAME}/
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${IMAGE_NAME}/
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${HDMI_FIRMWARE_NAME} ${IMAGE_NAME}/
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
 	if [ -e ${IMAGE_NAME}.zip ]; then
@@ -201,16 +218,41 @@ build_deploytar () {
 	rm -r ${IMAGE_NAME}/
 }
 
+build_imx8_recovery_image() {
+    bbnote "Generating recovery image container"
+    cd ${DEPLOY_DIR_IMAGE}
+    ${IMX_BOOT_TOOLS_DIR}/mkimage_imx8 -commit > head.hash
+    cat ${UBOOT_BINARY} head.hash > u-boot-hash.bin
+    cp ${IMX_BOOT_TOOLS_DIR}/${ATF_MACHINE_NAME} ${UBOOT_ATF}
+    dd if=u-boot-hash.bin of=${UBOOT_ATF} bs=1K seek=128
+    ${IMX_BOOT_TOOLS_DIR}/mkimage_imx8 -soc QM -rev B0 -append ${IMX_BOOT_TOOLS_DIR}/${SECO_FIRMWARE_NAME} -c -scfw ${IMX_BOOT_TOOLS_DIR}/${SC_FIRMWARE_NAME} -ap ${UBOOT_ATF} a53 0x80000000 -ap boot-sdp.scr a53 0x82e00000 -ap ${HDMI_FIRMWARE_NAME} a53 0x82fe0000 -ap tezi.itb a53 0x83000000 -out ${TEZI_UBOOT_BINARY_RECOVERY}
+}
+
+build_imx8_tezi_image() {
+    bbnote "Generating tezi image"
+    cd ${DEPLOY_DIR_IMAGE}
+    ${IMX_BOOT_TOOLS_DIR}/mkimage_imx8 -commit > head.hash
+    cat ${UBOOT_BINARY} head.hash > u-boot-hash.bin
+    cp ${IMX_BOOT_TOOLS_DIR}/${ATF_MACHINE_NAME} ${UBOOT_ATF}
+    dd if=u-boot-hash.bin of=${UBOOT_ATF} bs=1K seek=128
+    ${IMX_BOOT_TOOLS_DIR}/mkimage_imx8 -soc QM -rev B0 -append ${IMX_BOOT_TOOLS_DIR}/${SECO_FIRMWARE_NAME} -c -scfw ${IMX_BOOT_TOOLS_DIR}/${SC_FIRMWARE_NAME} -ap ${UBOOT_ATF} a53 0x80000000 -out ${TEZI_UBOOT_BINARY_EMMC}
+}
 python do_assemble_fitimage() {
     if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
         return
+    machine = d.getVar('MACHINE', True)
 
     bb.build.exec_func('build_fitimage', d)
     bb.build.exec_func('rootfs_tezirun_run_json', d)
+    if machine == "apalis-imx8":
+        bb.note("Assembling recovery image for " + machine)
+        bb.build.exec_func('build_imx8_recovery_image', d)
+        bb.build.exec_func('build_imx8_tezi_image', d)
     bb.build.exec_func('build_deploytar', d)
 }
 
 addtask do_assemble_fitimage after do_image_complete before do_build
+
 do_assemble_fitimage[depends] = "${@bb.utils.contains('IMAGE_FSTYPES', 'tezirunimg', '${TEZI_RUNIMG_DEPENDS}', '', d)}"
 
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
