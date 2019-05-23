@@ -31,6 +31,7 @@ echo "using USB mouse/keyboard or via network using VNC. Use:"
 echo "  # ip addr show eth0"
 echo "to display the Ethernet IP address or use USB RNDIS at IP 192.168.11.1."
 echo
+echo "Check our documentation at https://developer.toradex.com/software/toradex-easy-installer"
 
 # Become session leader and try to find a real tty (e.g. ttyS0)
 while true; do
