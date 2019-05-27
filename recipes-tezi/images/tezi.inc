@@ -26,6 +26,8 @@ RAW_NAND_UTILS = " \
     mtd-utils \
     kobs-ng \
 "
+TORADEX_FW_UTILS = "u-boot-toradex-fsl-fw-utils"
+TORADEX_FW_UTILS_apalis-imx8 = "u-boot-toradex-fw-utils"
 
 IMAGE_INSTALL += " \
     ${CORE_IMAGE_BASE_INSTALL} \
@@ -40,14 +42,10 @@ IMAGE_INSTALL += " \
     tar \
     pv \
     mmc-utils \
-    u-boot-toradex-fsl-fw-utils \
+    ${TORADEX_FW_UTILS} \
     weston \
     openssl-bin \
     haveged \
-"
-
-IMAGE_INSTALL_remove_apalis-imx8 = " \
-    u-boot-toradex-fsl-fw-utils \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
