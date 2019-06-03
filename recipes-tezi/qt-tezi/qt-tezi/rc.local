@@ -9,7 +9,10 @@ echo "Running /etc/rc.local..."
 
 cat /etc/tezi-version
 
+# Start services
+mkdir -p /var/lock/subsys
 /etc/init.d/udev start
+/etc/init.d/haveged start
 
 # Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do

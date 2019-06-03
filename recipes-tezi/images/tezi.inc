@@ -41,6 +41,7 @@ IMAGE_INSTALL += " \
     u-boot-toradex-fsl-fw-utils \
     weston \
     openssl-bin \
+    haveged \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
