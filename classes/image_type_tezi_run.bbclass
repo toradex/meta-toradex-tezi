@@ -12,6 +12,7 @@ TORADEX_FLASH_TYPE ??= "emmc"
 TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
                          tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
                         "
+TEZI_RUNIMG_DEPENDS_append_apalis-imx8 = " imx-boot:do_deploy"
 
 # Variables specific to iMX8. Some already exist in meta-freescale.
 # TODO: refactor the whole class in a more sensible way.
