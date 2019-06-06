@@ -6,9 +6,9 @@ TEZI_UBOOT_BINARY_EMMC_apalis-imx8 ??= "flash.bin"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY_apalis-imx8 ??= "recovery.bin"
-TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC', True), '', d), \
-                         bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True), '', d), \
-                         d.getVar('TEZI_UBOOT_BINARY_RECOVERY', True)])))}"
+TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC'), '', d), \
+                         bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND'), '', d), \
+                         d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
 TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
                          tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
@@ -27,7 +27,7 @@ FIRMWARE_BINARIES ??= "${HDMI_FIRMWARE_NAME}"
 
 def fitimg_get_size(d):
     import subprocess
-    deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
+    deploydir = d.getVar('DEPLOY_DIR_IMAGE')
 
     # Get size of FIT image...
     args = ['du', '-kLc', os.path.join(deploydir, 'tezi.itb') ]
@@ -36,21 +36,21 @@ def fitimg_get_size(d):
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
-    uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC', True)
-    offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD', True)
-    offset_spl = d.getVar('OFFSET_SPL_PAYLOAD', True)
-    machine = d.getVar('MACHINE', True)
-    firmware = d.getVar('FIRMWARE_BINARIES', True)
+    uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC')
+    offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD')
+    offset_spl = d.getVar('OFFSET_SPL_PAYLOAD')
+    machine = d.getVar('MACHINE')
+    firmware = d.getVar('FIRMWARE_BINARIES')
     if not isinstance(firmware, list): firmware = [firmware]
 
     bootpart_rawfiles = []
     bootpart_filelist = [ "boot.scr", "tezi.itb" ]
     if machine == "apalis-imx8": bootpart_filelist += [ fw for fw in firmware ]
-    has_spl = d.getVar('SPL_BINARY', True)
+    has_spl = d.getVar('SPL_BINARY')
     if has_spl:
         bootpart_rawfiles.append(
               {
-                "filename": d.getVar('SPL_BINARY', True),
+                "filename": has_spl,
                 "dd_options": "seek=" + offset_bootrom
               })
     bootpart_rawfiles.append(
@@ -86,7 +86,7 @@ def rootfs_tezi_run_emmc(d):
 
 def rootfs_tezi_run_rawnand(d):
     from collections import OrderedDict
-    uboot = d.getVar('TEZI_UBOOT_BINARY_RAWNAND', True)
+    uboot = d.getVar('TEZI_UBOOT_BINARY_RAWNAND')
 
     return [
         OrderedDict({
@@ -127,22 +127,22 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     import json
     from collections import OrderedDict
 
-    deploydir = d.getVar('DEPLOY_DIR_IMAGE', True)
+    deploydir = d.getVar('DEPLOY_DIR_IMAGE')
 
     data = OrderedDict({ "config_format": 1, "autoinstall": False })
 
     # Use image recipes SUMMARY/DESCRIPTION/PV...
-    data["name"] = d.getVar('SUMMARY', True)
-    data["description"] = d.getVar('DESCRIPTION', True)
-    data["version"] = d.getVar('TDX_VER_PACKAGE_MIN', True)
-    data["release_date"] = d.getVar('TDX_VERDATE', True)[1:9]
+    data["name"] = d.getVar('SUMMARY')
+    data["description"] = d.getVar('DESCRIPTION')
+    data["version"] = d.getVar('TDX_VER_PACKAGE_MIN')
+    data["release_date"] = d.getVar('TDX_VERDATE')[1:9]
     if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
         data["wrapup_script"] = "wrapup.sh"
     if os.path.exists(os.path.join(deploydir, "tezi.png")):
         data["icon"] = "tezi.png"
     data["isinstaller"] = True
 
-    product_ids = d.getVar('TORADEX_PRODUCT_IDS', True)
+    product_ids = d.getVar('TORADEX_PRODUCT_IDS')
     if product_ids is None:
         bb.fatal("Supported Toradex product ids missing, assign TORADEX_PRODUCT_IDS with a list of product ids.")
 
@@ -178,7 +178,7 @@ python rootfs_tezirun_run_json() {
     if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
         return
 
-    flash_types = d.getVar('TORADEX_FLASH_TYPE', True)
+    flash_types = d.getVar('TORADEX_FLASH_TYPE')
     if flash_types is None:
         bb.fatal("Toradex flash type not specified")
 
@@ -246,7 +246,7 @@ build_imx8_tezi_image() {
 python do_assemble_fitimage() {
     if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
         return
-    machine = d.getVar('MACHINE', True)
+    machine = d.getVar('MACHINE')
 
     bb.build.exec_func('build_fitimage', d)
     bb.build.exec_func('rootfs_tezirun_run_json', d)
