@@ -208,7 +208,11 @@ build_deploytar () {
 	fi
 
 	mkdir ${IMAGE_NAME}/
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${HDMI_FIRMWARE_NAME} ${IMAGE_NAME}/
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${IMAGE_NAME}/
+
+	if [ -e ${HDMI_FIRMWARE_NAME} ]; then
+	    cp ${HDMI_FIRMWARE_NAME} ${IMAGE_NAME}/
+	fi
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
 	if [ -e ${IMAGE_NAME}.zip ]; then
