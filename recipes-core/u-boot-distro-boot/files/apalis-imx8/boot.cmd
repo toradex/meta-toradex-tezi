@@ -1,4 +1,4 @@
-setenv bootargs "console=ttyLP1,115200 earlycon=lpuart32,0x5a070000,115200,115200 video=HDMI-A-1:640x480 video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}" 
+setenv bootargs "quiet console=ttyLP1,115200 earlycon=lpuart32,0x5a070000,115200,115200 video=HDMI-A-1:640x480 video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}" 
 
 # Set address outside the range where FIT Image is extracted
 setenv ramdisk_addr_r 0x94400000 
