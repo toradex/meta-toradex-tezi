@@ -1,4 +1,5 @@
 TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
+TEZI_DISTRO_BOOT_SCRIPTS_remove_apalis-imx8 = "boot-sdp.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_EMMC_apalis-imx8 ??= "flash.bin"
@@ -15,7 +16,7 @@ TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_depl
 TEZI_RUNIMG_DEPENDS_append_apalis-imx8 = " imx-boot:do_deploy"
 
 # Variables specific to iMX8. Some already exist in meta-freescale.
-# TODO: refactor the whole class in a more sensible way.
+# TODO: refactor the whole class in a more sensible way?
 SC_FIRMWARE_NAME ?= "scfw_tcm.bin"
 SECO_FIRMWARE_NAME ?= "mx8qm-ahab-container.img"
 ATF_MACHINE_NAME ?= "bl31-imx8qm.bin"
