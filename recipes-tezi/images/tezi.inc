@@ -1,8 +1,8 @@
-include conf/tdx_version.conf
+SUMMARY="Toradex Easy Installer"
+LICENSE="MIT"
 
 PV = "${TDX_VER_PACKAGE_MIN}"
 
-SUMMARY="Toradex Easy Installer"
 DESCRIPTION_apalis-imx6="Toradex Easy Installer for Apalis iMX6."
 DESCRIPTION_apalis-imx8="Toradex Easy Installer for Apalis iMX8."
 DESCRIPTION_apalis-t30-mainline="Toradex Easy Installer for Apalis T30."
@@ -22,6 +22,8 @@ IMAGE_NAME_colibri-imx6="Colibri-iMX6_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
 IMAGE_NAME_colibri-imx6ull="Colibri-iMX6ULL_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
 IMAGE_NAME_colibri-imx7="Colibri-iMX7_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
 IMAGE_NAME_colibri-imx7-emmc="Colibri-iMX7-eMMC_ToradexEasyInstaller_${TDX_VER_PACKAGE}"
+
+
 
 RAW_NAND_UTILS = " \
     mtd-utils-ubifs \
@@ -65,8 +67,6 @@ MACHINE_EXTRA_RDEPENDS_remove_apalis-tk1-mainline = " \
     tdx-k20-fw \
 "
 
-LICENSE="MIT"
-
 inherit core-image
 
 add_rootfs_tezi_version () {
@@ -75,4 +75,3 @@ add_rootfs_tezi_version () {
 
 # add the rootfs version
 ROOTFS_POSTPROCESS_COMMAND += " add_rootfs_tezi_version;"
-
