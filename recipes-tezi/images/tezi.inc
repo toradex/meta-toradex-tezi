@@ -1,5 +1,7 @@
 include conf/tdx_version.conf
 
+PV = "${TDX_VER_PACKAGE_MIN}"
+
 SUMMARY="Toradex Easy Installer"
 DESCRIPTION_apalis-imx6="Toradex Easy Installer for Apalis iMX6."
 DESCRIPTION_apalis-imx8="Toradex Easy Installer for Apalis iMX8."
