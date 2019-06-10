@@ -190,24 +190,24 @@ build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
 
 	# mkdir fails if existing
-	if [ -e ${IMAGE_NAME} ]; then
-		rm -r ${IMAGE_NAME}/
+	if [ -e ${TDX_VER_ID} ]; then
+		rm -r ${TDX_VER_ID}
 	fi
 
-	mkdir ${IMAGE_NAME}/
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${IMAGE_NAME}/
+	mkdir ${TDX_VER_ID}
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${TDX_VER_ID}
 
 	if [ -n ${MACHINE_BOOT_FILES} ]; then
-	    cp ${MACHINE_BOOT_FILES} ${IMAGE_NAME}/
+	    cp ${MACHINE_BOOT_FILES} ${TDX_VER_ID}
 	fi
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
-	if [ -e ${IMAGE_NAME}.zip ]; then
-		rm ${IMAGE_NAME}.zip
+	if [ -e ${TDX_VER_ID}.zip ]; then
+		rm ${TDX_VER_ID}.zip
 	fi
 
-	zip -r ${IMAGE_NAME}.zip ${IMAGE_NAME}/
-	rm -r ${IMAGE_NAME}/
+	zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
+	rm -r ${TDX_VER_ID}
 }
 
 python do_assemble_fitimage() {
