@@ -161,9 +161,6 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
 
 python rootfs_tezirun_run_json() {
-    if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
-        return
-
     flash_types = d.getVar('TORADEX_FLASH_TYPE')
     if flash_types is None:
         bb.fatal("Toradex flash type not specified")
@@ -211,9 +208,6 @@ build_deploytar () {
 }
 
 python do_assemble_fitimage() {
-    if not bb.utils.contains("IMAGE_FSTYPES", "tezirunimg", True, False, d):
-        return
-
     bb.build.exec_func('build_fitimage', d)
     bb.build.exec_func('rootfs_tezirun_run_json', d)
     bb.build.exec_func('build_deploytar', d)
