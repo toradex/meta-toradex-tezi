@@ -16,13 +16,8 @@ TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_depl
 TEZI_RUNIMG_DEPENDS_append_apalis-imx8 = " imx-boot:do_deploy"
 
 def fitimg_get_size(d):
-    import subprocess
-    deploydir = d.getVar('DEPLOY_DIR_IMAGE')
-
-    # Get size of FIT image...
-    args = ['du', '-kLc', os.path.join(deploydir, 'tezi.itb') ]
-    output = subprocess.check_output(args)
-    return int(output.splitlines()[-1].split()[0])
+    import os
+    return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
@@ -57,7 +52,7 @@ def rootfs_tezi_run_emmc(d):
                 "filesystem_type": "FAT",
                 "mkfs_options": "",
                 "filelist": bootpart_filelist,
-                "uncompressed_size": fitimg_get_size(d) / 1024
+                "uncompressed_size": fitimg_get_size(d)
               }
             }
           ]
@@ -102,7 +97,7 @@ def rootfs_tezi_run_rawnand(d):
               "content": {
                 "rawfile": {
                   "filename": "tezi.itb",
-                  "size": fitimg_get_size(d) / 1024
+                  "size": fitimg_get_size(d)
                 }
               }
             }
