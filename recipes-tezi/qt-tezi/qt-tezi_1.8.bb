@@ -15,6 +15,9 @@ SRCREV_use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
 S = "${WORKDIR}/git"
+
+EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
+
 inherit qmake5
 
 TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests", "",d)}'
@@ -60,5 +63,3 @@ do_install() {
     install -m 0755 ${WORKDIR}/udhcpd.conf ${D}${sysconfdir}
 
 }
-
-FILES_${PN}-dbg += "${bindir}/.debug"
