@@ -1,4 +1,4 @@
-TEZI_DISTRO_BOOT_SCRIPTS ??= "boot-sdp.scr boot.scr"
+TEZI_DISTRO_BOOT_SCRIPTS ??= "${@'boot-sdp.scr' if d.getVar('UBOOT_SDP_SUPPORT') == '1' else ''} boot.scr"
 TEZI_DISTRO_BOOT_SCRIPTS_remove_apalis-imx8 = "boot-sdp.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
