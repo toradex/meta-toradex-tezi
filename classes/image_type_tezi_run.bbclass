@@ -12,8 +12,8 @@ TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('T
 TORADEX_FLASH_TYPE ??= "emmc"
 TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
                          tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
+                         ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                         "
-TEZI_RUNIMG_DEPENDS_append_apalis-imx8 = " imx-boot:do_deploy"
 
 def fitimg_get_size(d):
     import os
