@@ -26,7 +26,7 @@ def rootfs_tezi_run_emmc(d):
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD')
 
     bootpart_rawfiles = []
-    bootpart_filelist = [ "boot.scr", "tezi.itb" ] + d.getVar('MACHINE_BOOT_FILES').split()
+    bootpart_filelist = [ "boot.scr", "tezi.itb" ] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
     has_spl = d.getVar('SPL_BINARY')
     if has_spl:
         bootpart_rawfiles.append(
@@ -178,6 +178,26 @@ build_fitimage () {
 	mkimage -f ${DEPLOY_DIR_IMAGE}/tezi.its ${DEPLOY_DIR_IMAGE}/tezi.itb
 }
 
+build_recovery_image () {
+	if [ "${SOC_FAMILY}" = "mx8" ]; then
+		${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${TOOLS_NAME} -commit > head.hash
+		cat ${DEPLOY_DIR_IMAGE}/u-boot.bin head.hash > u-boot-hash.bin
+		cp ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${ATF_MACHINE_NAME} u-boot-atf.bin
+		dd if=u-boot-hash.bin of=u-boot-atf.bin bs=1K seek=128
+
+		${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${TOOLS_NAME} -soc QM -rev B0 \
+			-append ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SECO_FIRMWARE_NAME} \
+			-c -scfw ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SC_FIRMWARE_NAME} \
+			-ap u-boot-atf.bin a53 0x80000000 \
+			-ap ${DEPLOY_DIR_IMAGE}/boot-sdp.scr a53 0x82e00000 \
+			-ap ${DEPLOY_DIR_IMAGE}/hdmitxfw.bin a53 0x82fe0000 \
+			-ap ${DEPLOY_DIR_IMAGE}/tezi.itb a53 0x83000000 \
+			-out ${DEPLOY_DIR_IMAGE}/recovery.bin
+	fi
+}
+build_recovery_image[dirs] = "${WORKDIR}/recovery"
+build_recovery_image[cleandirs] = "${WORKDIR}/recovery"
+
 build_deploytar () {
 	cd ${DEPLOY_DIR_IMAGE}
 
@@ -189,7 +209,7 @@ build_deploytar () {
 	mkdir ${TDX_VER_ID}
 	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${TDX_VER_ID}
 
-	if [ -n ${MACHINE_BOOT_FILES} ]; then
+	if [ -n "${MACHINE_BOOT_FILES}" ]; then
 	    cp ${MACHINE_BOOT_FILES} ${TDX_VER_ID}
 	fi
 
@@ -204,6 +224,7 @@ build_deploytar () {
 
 python do_assemble_fitimage() {
     bb.build.exec_func('build_fitimage', d)
+    bb.build.exec_func('build_recovery_image', d)
     bb.build.exec_func('rootfs_tezirun_run_json', d)
     bb.build.exec_func('build_deploytar', d)
 }
