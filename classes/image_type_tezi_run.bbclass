@@ -117,9 +117,9 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     data["description"] = d.getVar('DESCRIPTION')
     data["version"] = d.getVar('TDX_VER_PACKAGE_MIN')
     data["release_date"] = d.getVar('TDX_VERDATE')[1:9]
-    if os.path.exists(os.path.join(deploydir, "wrapup.sh")):
+    if os.path.exists(os.path.join(deploydir, "tezi-run-metadata", "wrapup.sh")):
         data["wrapup_script"] = "wrapup.sh"
-    if os.path.exists(os.path.join(deploydir, "tezi.png")):
+    if os.path.exists(os.path.join(deploydir, "tezi-run-metadata", "tezi.png")):
         data["icon"] = "tezi.png"
     data["isinstaller"] = True
 
