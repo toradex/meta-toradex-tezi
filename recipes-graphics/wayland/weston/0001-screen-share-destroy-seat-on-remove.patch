@@ -1,0 +1,51 @@
+From d4627611b7849f1b024b2db4fe3718495fe8a984 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Fri, 21 Jun 2019 00:31:59 +0200
+Subject: [PATCH] screen-share: destroy seat on remove
+
+Destroy seats when they get removed. This makes sure that seats
+properly disappear when screen-share RDP clients disconnect.
+There will be no excessive amount of mouse pointer anymore after
+several client connection/disconnections.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ compositor/screen-share.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/compositor/screen-share.c b/compositor/screen-share.c
+index 33de2b1f..c2bb49bb 100644
+--- a/compositor/screen-share.c
++++ b/compositor/screen-share.c
+@@ -85,6 +85,7 @@ struct ss_seat {
+ 	struct weston_seat base;
+ 	struct shared_output *output;
+ 	struct wl_list link;
++	uint32_t id;
+ 
+ 	struct {
+ 		struct wl_seat *seat;
+@@ -364,6 +365,7 @@ ss_seat_create(struct shared_output *so, uint32_t id)
+ 
+ 	weston_seat_init(&seat->base, so->output->compositor, "default");
+ 	seat->output = so;
++	seat->id = id;
+ 	seat->parent.seat = wl_registry_bind(so->parent.registry, id,
+ 					     &wl_seat_interface, 1);
+ 	wl_list_insert(so->seat_list.prev, &seat->link);
+@@ -734,6 +736,12 @@ static void
+ registry_handle_global_remove(void *data, struct wl_registry *registry,
+ 			      uint32_t name)
+ {
++	struct shared_output *so = data;
++	struct ss_seat *seat, *next;
++
++	wl_list_for_each_safe(seat, next, &so->seat_list, link)
++		if (seat->id == name)
++			ss_seat_destroy(seat);
+ }
+ 
+ static const struct wl_registry_listener registry_listener = {
+-- 
+2.22.0
+

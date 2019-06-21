@@ -1,0 +1,29 @@
+From b53af7765e1cbba56bac0abfe9728335ff530141 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Mon, 17 Jun 2019 12:33:35 +0200
+Subject: [PATCH] backend-rdp: fix memory leak
+
+Free command data after all rects have been updated. This fixes a
+rather huge memory leak when using the RDP backend.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ libweston/compositor-rdp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
+index 50f45281..632fe552 100644
+--- a/libweston/compositor-rdp.c
++++ b/libweston/compositor-rdp.c
+@@ -361,6 +361,8 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
+ 		}
+ 	}
+ 
++	free(SURFACE_BITMAP_DATA(cmd));
++
+ 	marker.frameAction = SURFACECMD_FRAMEACTION_END;
+ 	update->SurfaceFrameMarker(peer->context, &marker);
+ }
+-- 
+2.22.0
+
