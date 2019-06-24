@@ -18,6 +18,7 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-pixman-avoid-unnecessary-y-flip-for-screen-capture.patch \
            file://0001-screen-share-destroy-seat-on-remove.patch \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
+           file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
 "
 SRC_URI[md5sum] = "7c634e262f8a464a076c97fd50ad36b3"
 SRC_URI[sha256sum] = "546323a90607b3bd7f48809ea9d76e64cd09718102f2deca6d95aa59a882e612"

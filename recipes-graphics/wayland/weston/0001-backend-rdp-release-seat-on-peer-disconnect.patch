@@ -1,0 +1,34 @@
+From 6cc274cf8de3371619d66ca08c18324e4ae874cf Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Thu, 20 Jun 2019 17:41:16 +0200
+Subject: [PATCH] backend-rdp: release seat on peer disconnect
+
+Properly release the seat on RDP disconnect. Using current master
+branch which is commit d93c0f705949 ("backend-rdp: fix memory leak")
+I was not able to reproduce this issue. Using Weston with rdp-backend
+directly as well as using the screen-share plug-in allowed to reconnect
+just fine.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ libweston/compositor-rdp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
+index 871a0a3e..7f4b99e9 100644
+--- a/libweston/compositor-rdp.c
++++ b/libweston/compositor-rdp.c
+@@ -771,8 +771,8 @@ rdp_peer_context_free(freerdp_peer* client, RdpPeerContext* context)
+ 	if (context->item.flags & RDP_PEER_ACTIVATED) {
+ 		weston_seat_release_keyboard(context->item.seat);
+ 		weston_seat_release_pointer(context->item.seat);
+-		/* XXX we should weston_seat_release(context->item.seat); here
+-		 * but it would crash on reconnect */
++		weston_seat_release(context->item.seat);
++		free(context->item.seat);
+ 	}
+ 
+ 	Stream_Free(context->encode_stream, TRUE);
+-- 
+2.22.0
+
