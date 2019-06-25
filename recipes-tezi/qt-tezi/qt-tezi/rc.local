@@ -49,7 +49,7 @@ then
     cd ${RDP_TLS_DIR}
     openssl genrsa -out ${RDP_TLS_FILENAME}.key 2048 && \
     openssl req -new -key ${RDP_TLS_FILENAME}.key -out ${RDP_TLS_FILENAME}.csr \
-	-subj "/C=CH/ST=Luzern/L=Luzern/O=Toradex/CN=www.toradex.com" && \
+	-subj "/C=CH/ST=Luzern/L=Luzern/O=Toradex/CN=${HOSTNAME}" && \
     openssl x509 -req -days 365 -signkey ${RDP_TLS_FILENAME}.key \
 	-in ${RDP_TLS_FILENAME}.csr -out ${RDP_TLS_FILENAME}.crt 
     if [ $? -eq 0 ]; then
