@@ -1,0 +1,10 @@
+
+### Shell environment set up for Toradex Easy Installer builds. ###
+
+You can now run 'bitbake <target>'
+
+Toradex Easy Installer targets are:
+    tezi-run
+    tezi-devel
+    tester
+

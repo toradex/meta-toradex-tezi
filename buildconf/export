@@ -1,27 +1,26 @@
 #!/bin/sh
-ECHO=`which echo`
-BUILDDIR="../../build"
-FIRST_TIME=0
-cd layers/openembedded-core/
-if [ ! -f ${BUILDDIR}/conf/local.conf ]; then
-	FIRST_TIME=1
+
+if [ -n "$BASH_SOURCE" ]; then
+   THIS_SCRIPT_DIR="$(dirname $BASH_SOURCE)"
+elif [ -n "$ZSH_NAME" ]; then
+   THIS_SCRIPT_DIR="$(dirname $0)"
+else
+   THIS_SCRIPT_DIR="$(pwd)"
 fi
 
-. ./oe-init-build-env ${BUILDDIR}
+TOP_DIR=$(realpath $THIS_SCRIPT_DIR)
+TEMPLATECONF=$TOP_DIR/layers/meta-toradex-tezi/buildconf
 
-echo ""
-echo "Toradex Easy Installer targets are:"
-echo "    tezi-run"
-echo "    tezi-devel"
-echo "    tester"
+if [ ! -r "$TOP_DIR/build/conf/local.conf" ]; then
+    FIRST_TIME="yes"
+fi
 
-if [ $FIRST_TIME -eq 1 ]; then
-	mkdir -p conf
-	cp ../layers/meta-toradex-tezi/buildconf/*.conf conf/
+. $TOP_DIR/layers/openembedded-core/oe-init-build-env
 
-	echo ""
-	$ECHO -e "\033[1mA sample conf/local.conf file has been created"
-	$ECHO -e "Check and edit the file to adapt to your local needs\033[0m"
-	echo "The following likely need your attention:"
-	echo "BB_NUMBER_THREADS, PARALLEL_MAKE, DL_DIR"
+if [ ! -z "$FIRST_TIME" ]; then
+    cat <<EOM
+Check and edit conf/local.conf to adapt to your local needs.
+The following likely need your attention:
+BB_NUMBER_THREADS, PARALLEL_MAKE, DL_DIR
+EOM
 fi
