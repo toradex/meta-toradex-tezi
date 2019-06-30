@@ -15,6 +15,8 @@ TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_depl
                          ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                         "
 
+inherit imx-boot-common
+
 def fitimg_get_size(d):
     import os
     return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
