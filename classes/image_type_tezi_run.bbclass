@@ -10,10 +10,6 @@ TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('T
                          bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND'), '', d), \
                          d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
-TEZI_RUNIMG_DEPENDS ??= "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
-                         tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
-                         ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
-                        "
 
 inherit imx-boot-common
 
@@ -231,8 +227,14 @@ python do_assemble_fitimage() {
     bb.build.exec_func('build_deploytar', d)
 }
 
-addtask do_assemble_fitimage after do_image_complete before do_build
+python () {
+    if "tezirunimg" in d.getVar('IMAGE_FSTYPES'):
+        bb.build.addtask('do_assemble_fitimage', 'do_build', 'do_image_complete', d)
+}
 
-do_assemble_fitimage[depends] = "${@bb.utils.contains('IMAGE_FSTYPES', 'tezirunimg', '${TEZI_RUNIMG_DEPENDS}', '', d)}"
+do_assemble_fitimage[depends] = "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
+                                 tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
+                                 ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
+                                "
 
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
