@@ -1,11 +1,11 @@
 TEZI_DISTRO_BOOT_SCRIPTS ??= "${@'boot-sdp.scr' if d.getVar('UBOOT_SDP_SUPPORT') == '1' else ''} boot.scr"
-TEZI_DISTRO_BOOT_SCRIPTS_remove_apalis-imx8 = "boot-sdp.scr"
+TEZI_DISTRO_BOOT_SCRIPTS_remove_mx8 = "boot-sdp.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_EMMC_apalis-imx8 ??= "flash.bin"
+TEZI_UBOOT_BINARY_EMMC_mx8 ??= "flash.bin"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_RECOVERY_apalis-imx8 ??= "recovery.bin"
+TEZI_UBOOT_BINARY_RECOVERY_mx8 ??= "recovery.bin"
 TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC'), '', d), \
                          bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND'), '', d), \
                          d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
@@ -189,6 +189,20 @@ build_recovery_image () {
 			-ap u-boot-atf.bin a53 0x80000000 \
 			-data ${DEPLOY_DIR_IMAGE}/boot-sdp.scr 0x82e00000 \
 			-data ${DEPLOY_DIR_IMAGE}/hdmitxfw.bin 0x82fe0000 \
+			-data ${DEPLOY_DIR_IMAGE}/tezi.itb 0x83000000 \
+			-out ${DEPLOY_DIR_IMAGE}/recovery.bin
+	fi
+	if [ "${SOC_FAMILY}" = "mx8x" ]; then
+		${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${TOOLS_NAME} -commit > head.hash
+		cat ${DEPLOY_DIR_IMAGE}/u-boot.bin head.hash > u-boot-hash.bin
+		cp ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${ATF_MACHINE_NAME} u-boot-atf.bin
+		dd if=u-boot-hash.bin of=u-boot-atf.bin bs=1K seek=128
+
+		${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${TOOLS_NAME} -soc QX -rev B0 \
+			-append ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SECO_FIRMWARE_NAME} \
+			-c -scfw ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SC_FIRMWARE_NAME} \
+			-ap u-boot-atf.bin a53 0x80000000 \
+			-data ${DEPLOY_DIR_IMAGE}/boot-sdp.scr 0x82e00000 \
 			-data ${DEPLOY_DIR_IMAGE}/tezi.itb 0x83000000 \
 			-out ${DEPLOY_DIR_IMAGE}/recovery.bin
 	fi

@@ -7,7 +7,10 @@ IMX_EXTRA_FIRMWARE_mx8x = "firmware-imx-8x imx-sc-firmware"
 BOOT_NAME = "imx-boot"
 
 SC_FIRMWARE_NAME ?= "scfw_tcm.bin"
-SECO_FIRMWARE_NAME ?= "mx8qm-ahab-container.img"
+
+SECO_FIRMWARE_NAME ?= "INVALID"
+SECO_FIRMWARE_NAME_mx8 = "mx8qm-ahab-container.img"
+SECO_FIRMWARE_NAME_mx8x = "mx8qx-ahab-container.img"
 
 ATF_MACHINE_NAME ?= "bl31-imx8qm.bin"
 ATF_MACHINE_NAME_mx8qm = "bl31-imx8qm.bin"

@@ -39,11 +39,13 @@ PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
 # machines which for the Toradex Colibri and Apalis computer on module families
 #
 #MACHINE ?= "apalis-imx6"
+#MACHINE ?= "apalis-imx8"
 #MACHINE ?= "apalis-t30-mainline"
 #MACHINE ?= "apalis-tk1-mainline"
 #
 #MACHINE ?= "colibri-imx6"
 #MACHINE ?= "colibri-imx7"
+#MACHINE ?= "colibri-imx8x"
 
 #
 # There are also a selection of emulated machines available which can boot and run
