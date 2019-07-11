@@ -28,4 +28,4 @@ do_deploy[depends] = "u-boot-mkimage-native:do_populate_sysroot"
 addtask deploy after do_unpack before do_build
 
 # apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx8|apalis-imx6|apalis-t30|apalis-tk1|colibri-imx6|colibri-imx7)"
+COMPATIBLE_MACHINE = "(apalis-imx6|apalis-imx8|apalis-t30|apalis-tk1|colibri-imx6|colibri-imx7|colibri-imx8x)"
