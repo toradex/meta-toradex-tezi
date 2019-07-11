@@ -62,7 +62,7 @@ do_deploy () {
     install -m 644 ${S}/imx_usb.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-do_deploy_apalis-imx8 () {
+do_deploy_mx8 () {
     deploy_common
 
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
@@ -95,6 +95,6 @@ do_deploy_apalis-tk1-mainline () {
 addtask deploy before do_package after do_install
 
 # apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx8|apalis-imx6|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7)"
+COMPATIBLE_MACHINE = "(apalis-imx6|apalis-imx8|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7|colibri-imx8x)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
