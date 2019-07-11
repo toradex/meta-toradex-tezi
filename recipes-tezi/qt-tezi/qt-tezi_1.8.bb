@@ -4,14 +4,16 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=master;protocol=http \
+SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};protocol=http \
     file://defaults \
     file://rc.local \
     file://udhcpd.conf \
 "
 
-SRCREV = "${AUTOREV}"
+SRCREV = "40cdd35f87c6792e2dcbf02efa2bf01462e93232"
+SRCBRANCH = "master"
 SRCREV_use-head-next = "${AUTOREV}"
+SRCBRANCH_use-head-next = "next"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
 S = "${WORKDIR}/git"
