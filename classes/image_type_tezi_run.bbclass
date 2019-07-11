@@ -187,9 +187,9 @@ build_recovery_image () {
 			-append ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SECO_FIRMWARE_NAME} \
 			-c -scfw ${DEPLOY_DIR_IMAGE}/${BOOT_TOOLS}/${SC_FIRMWARE_NAME} \
 			-ap u-boot-atf.bin a53 0x80000000 \
-			-ap ${DEPLOY_DIR_IMAGE}/boot-sdp.scr a53 0x82e00000 \
-			-ap ${DEPLOY_DIR_IMAGE}/hdmitxfw.bin a53 0x82fe0000 \
-			-ap ${DEPLOY_DIR_IMAGE}/tezi.itb a53 0x83000000 \
+			-data ${DEPLOY_DIR_IMAGE}/boot-sdp.scr 0x82e00000 \
+			-data ${DEPLOY_DIR_IMAGE}/hdmitxfw.bin 0x82fe0000 \
+			-data ${DEPLOY_DIR_IMAGE}/tezi.itb 0x83000000 \
 			-out ${DEPLOY_DIR_IMAGE}/recovery.bin
 	fi
 }
