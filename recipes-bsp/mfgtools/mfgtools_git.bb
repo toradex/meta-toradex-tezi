@@ -7,7 +7,6 @@ LIC_FILES_CHKSUM = "file://README.md;md5=653656dfc74a26684d74346214abe93a"
 
 SRC_URI = "gitsm://github.com/NXPmicro/mfgtools;branch=master \
            file://0001-CMakeLists.txt-fix-libzip-name.patch \
-           file://0001-CMakeLists.txt-support-building-static-uuu.patch \
           "
 
 # uuu_1.2.91
@@ -21,11 +20,7 @@ DEPENDS = "libusb1 zlib bzip2"
 
 inherit pkgconfig cmake
 
-PACKAGECONFIG ??= "static"
+PACKAGECONFIG ??= ""
 PACKAGECONFIG[doc] = "-DBUILD_DOC=ON,-DBUILD_DOC=OFF,doxygen-native"
-PACKAGECONFIG[static] = "-DBUILD_STATIC=ON,-DBUILD_STATIC=OFF"
-
-# Do not set RPATH if static build is intended for native build.
-OECMAKE_RPATH_class-native_forcevariable = "${@bb.utils.contains('PACKAGECONFIG', 'static', '', '${libdir}', d)}"
 
 BBCLASSEXTEND = "native"
