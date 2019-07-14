@@ -1,7 +1,7 @@
 setenv bootargs "quiet console=ttyLP1,115200 video=HDMI-A-1:640x480 rootfstype=squashfs root=/dev/ram autoinstall ${teziargs}"
 
 # Set address outside the range where FIT Image is extracted
-setenv ramdisk_addr_r 0x94400000 
+setenv ramdisk_addr_r 0x86400000
 
 # Reenable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...
