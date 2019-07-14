@@ -31,9 +31,6 @@ if grep -q fullscreen /proc/cmdline; then
 	FULLSCREEN="-fullscreen";
 fi
 
-# Source module specific defaults
-. /etc/default/tezi
-
 # Environment for weston
 mkdir -p -m 0700 /run/wayland
 export XDG_RUNTIME_DIR=/run/wayland

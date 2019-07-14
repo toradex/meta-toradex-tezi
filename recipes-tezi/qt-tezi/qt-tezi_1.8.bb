@@ -5,7 +5,6 @@ HOMEPAGE = "http://www.toradex.com"
 LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};protocol=http \
-    file://defaults \
     file://rc.local \
     file://udhcpd.conf \
 "
@@ -57,9 +56,6 @@ do_install() {
 
     install -d ${D}${sysconfdir}
     install -m 0755 ${WORKDIR}/rc.local ${D}${sysconfdir}
-
-    install -d ${D}${sysconfdir}/default/
-    install -m 0755 ${WORKDIR}/defaults ${D}${sysconfdir}/default/tezi
 
     install -d ${D}${sysconfdir}
     install -m 0755 ${WORKDIR}/udhcpd.conf ${D}${sysconfdir}

@@ -1,3 +1,0 @@
-# Mirror output, HDMI as primary device
-# fb0 => HDMI, fb2 => parallel RGB
-QWS_DISPLAY="multi: LinuxFB:/dev/fb0:0 VNC:LinuxFB"

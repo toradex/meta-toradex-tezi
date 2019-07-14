@@ -1,4 +1,0 @@
-# Mirror output, HDMI as primary device
-# fb0 => HDMI
-QWS_DISPLAY="multi: VNC:size=640x480:depth=16"
-
