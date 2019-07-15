@@ -18,6 +18,7 @@ SRC_URI = " \
     file://recovery/mx6ull_usb_rom.conf \
     file://recovery/mx6ull_usb_sdp_uboot.conf \
     file://recovery/uuu \
+    file://recovery/uuu.exe \
 "
 SRC_URI_append_apalis-t30-mainline = " \
     file://recovery/Apalis_T30_2GB_800Mhz.bct \
@@ -66,6 +67,7 @@ do_deploy_mx8 () {
     deploy_common
 
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-t30-mainline () {
