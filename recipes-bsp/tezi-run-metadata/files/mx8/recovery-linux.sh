@@ -3,9 +3,9 @@
 # Use uuu
 echo "Downloading Toradex Easy Installer..."
 if [ "$1" = "-q" ]; then
-        sudo ./recovery/uuu recovery.bin > /dev/null
+        sudo ./recovery/uuu recovery > /dev/null
 else
-        sudo ./recovery/uuu recovery.bin
+        sudo ./recovery/uuu recovery
 fi
 if [ $? != 0 ]; then
         echo ""

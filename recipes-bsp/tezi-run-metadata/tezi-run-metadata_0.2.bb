@@ -29,6 +29,9 @@ SRC_URI_append_apalis-tk1 = " \
 SRC_URI_append_apalis-tk1-mainline = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
+SRC_URI_append_mx8 = " \
+    file://recovery/uuu.auto \
+"
 
 SRC_URI[md5sum] = "11cf6d9b4b18b7f35f06ed91bfc0b3a8"
 SRC_URI[sha256sum] = "064bff2e4cb4a0c0f8bceeaf6dd2cef1e682869e0b22d49e40bc6a8326ec14c9"
@@ -68,6 +71,7 @@ do_deploy_mx8 () {
 
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-t30-mainline () {
