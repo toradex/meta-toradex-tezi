@@ -15,3 +15,7 @@ SRC_URI_append_colibri-imx7 = " \
 
 SRCREV = "3bb6e3284a1bb88f142528537e6573f9d9f39aaa"
 SRCBRANCH = "toradex_4.9-1.0.x-imx"
+
+do_configure_prepend () {
+    sed -i -e /CONFIG_LOGO/d ${B}/.config
+}
