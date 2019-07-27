@@ -21,8 +21,8 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
            file://wallpaper.png \
 "
-SRC_URI[md5sum] = "7c634e262f8a464a076c97fd50ad36b3"
-SRC_URI[sha256sum] = "546323a90607b3bd7f48809ea9d76e64cd09718102f2deca6d95aa59a882e612"
+SRC_URI[md5sum] = "e7b10710ef1eac82258f97bfd41fe534"
+SRC_URI[sha256sum] = "bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -84,6 +84,8 @@ PACKAGECONFIG[clients] = "-Dsimple-clients=all,-Dsimple-clients="
 PACKAGECONFIG[demo] = "-Ddemo-clients=true,-Ddemo-clients=false"
 # Virtual remote output with GStreamer on DRM backend
 PACKAGECONFIG[remoting] = "-Dremoting=true,-Dremoting=false,gstreamer-1.0"
+# Weston with PAM support
+PACKAGECONFIG[pam] = "-Dpam=true,-Dpam=false,libpam"
 
 do_install_append() {
 	# Weston doesn't need the .la files to load modules, so wipe them
@@ -100,6 +102,10 @@ do_install_append() {
 
 	if [ "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', 'yes', 'no', d)}" = "yes" ]; then
 		install -Dm 644 ${WORKDIR}/xwayland.weston-start ${D}${datadir}/weston-start/xwayland
+	fi
+
+	if [ "${@bb.utils.contains('PACKAGECONFIG', 'launch', 'yes', 'no', d)}" = "yes" ]; then
+		chmod u+s ${D}${bindir}/weston-launch
 	fi
 
 	install ${WORKDIR}/wallpaper.png ${D}${datadir}/weston
