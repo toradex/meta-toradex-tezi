@@ -1,5 +1,10 @@
-SUMMARY = "Xlib: locale data files for libx11"
-DESCRIPTION = "This package provides the locale data files for libx11."
+SUMMARY = "Xlib: Compose data files for libx11"
+DESCRIPTION = "This package provides the compose data files for libx11."
+
+python () {
+    if bb.utils.contains('DISTRO_FEATURES', 'x11', True, False, d):
+        raise bb.parse.SkipRecipe("libx11-compose-data is incompatible with x11 distro feature, use libx11 instead.")
+}
 
 require recipes-graphics/xorg-lib/xorg-lib-common.inc
 
@@ -28,5 +33,3 @@ do_install() {
 }
 
 REQUIRED_DISTRO_FEATURES = ""
-
-BBCLASSEXTEND = "native nativesdk"
