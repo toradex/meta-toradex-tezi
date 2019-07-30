@@ -48,6 +48,7 @@ deploy_common () {
     install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
 
     install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
+    sed -i 's/@@TEZI_INITRD_IMAGE@@/${TEZI_INITRD_IMAGE}/' ${DEPLOYDIR}/tezi.its
 }
 
 do_deploy () {

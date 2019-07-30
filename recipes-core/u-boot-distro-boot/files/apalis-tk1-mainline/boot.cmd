@@ -1,4 +1,4 @@
-setenv bootargs igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640x480-16@60 rootfstype=squashfs root=/dev/ram autoinstall hotplugfb ${teziargs}
+setenv bootargs igb_mac=${ethaddr} console=ttyS0,115200 quiet video=HDMI-A-1:640x480-16@60 rootfstype=@@TEZI_INITRD_IMAGE@@ root=/dev/ram autoinstall hotplugfb ${teziargs}
 
 # Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...

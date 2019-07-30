@@ -164,7 +164,7 @@ python rootfs_tezirun_run_json() {
 
 build_fitimage () {
     datafile=$(mktemp ${DEPLOY_DIR_IMAGE}/tezi-XXXXXX.its)
-    sed "s#\./\(${IMAGE_BASENAME}-${MACHINE}.squashfs\)#${IMGDEPLOYDIR}/\1#" ${DEPLOY_DIR_IMAGE}/tezi.its > $datafile
+    sed "s#\./\(${IMAGE_BASENAME}-${MACHINE}.${TEZI_INITRD_IMAGE}\)#${IMGDEPLOYDIR}/\1#" ${DEPLOY_DIR_IMAGE}/tezi.its > $datafile
     mkimage -f $datafile ${IMGDEPLOYDIR}/tezi.itb
     rm -f $datafile
 }
@@ -182,4 +182,4 @@ do_image_tezirunimg[prefuncs] += "build_fitimage rootfs_tezirun_run_json"
 do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy tezi-run-metadata:do_deploy \
                                  ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                                 "
-IMAGE_TYPEDEP_tezirunimg += "squashfs"
+IMAGE_TYPEDEP_tezirunimg += "${TEZI_INITRD_IMAGE}"

@@ -11,7 +11,7 @@
 	images {
 		ramdisk@1 {
 			description = "SquashFS RAMdisk";
-			data = /incbin/("./tezi-run-apalis-tk1.squashfs");
+			data = /incbin/("./tezi-run-apalis-tk1.@@TEZI_INITRD_IMAGE@@");
 			type = "ramdisk";
 			arch = "arm";
 			os = "linux";

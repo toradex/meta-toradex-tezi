@@ -25,7 +25,7 @@
 
 		ramdisk@1 {
 			description = "SquashFS RAMdisk";
-			data = /incbin/("./tezi-run-colibri-imx6.squashfs");
+			data = /incbin/("./tezi-run-colibri-imx6.@@TEZI_INITRD_IMAGE@@");
 			type = "ramdisk";
 			arch = "arm";
 			os = "linux";
