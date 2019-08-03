@@ -1,4 +1,3 @@
-TEZI_DISTRO_BOOT_SCRIPTS ??= "${@'boot-sdp.scr' if d.getVar('UBOOT_SDP_SUPPORT') == '1' else ''} boot.scr"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_EMMC_mx8 ??= "flash.bin"
@@ -22,7 +21,7 @@ def rootfs_tezi_run_emmc(d):
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD')
 
     bootpart_rawfiles = []
-    bootpart_filelist = [ "boot.scr", "tezi.itb" ] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
+    bootpart_filelist = ["tezi.itb"] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
     has_spl = d.getVar('SPL_BINARY')
     if has_spl:
         bootpart_rawfiles.append(
@@ -183,11 +182,7 @@ build_deploytar () {
 	fi
 
 	mkdir ${TDX_VER_ID}
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${TEZI_DISTRO_BOOT_SCRIPTS} tezi.itb tezi-run-metadata/* ${TDX_VER_ID}
-
-	if [ -n "${MACHINE_BOOT_FILES}" ]; then
-	    cp ${MACHINE_BOOT_FILES} ${TDX_VER_ID}
-	fi
+	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${MACHINE_BOOT_FILES} tezi.itb tezi-run-metadata/* ${TDX_VER_ID}
 
 	# zip does update if the file exist, explicitly delete before adding files to the archive
 	if [ -e ${TDX_VER_ID}.zip ]; then
