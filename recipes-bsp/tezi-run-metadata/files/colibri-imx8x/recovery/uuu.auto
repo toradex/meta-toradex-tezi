@@ -1,7 +1,10 @@
 uuu_version 1.2.135
 
 SDPS: boot -f ../flash.bin
+CFG: FB: -vid 0x0525 -pid 0x4000
 CFG: FB: -vid 0x0525 -pid 0x4026
+CFG: FB: -vid 0x0525 -pid 0x4032
+CFG: FB: -vid 0x0525 -pid 0x4033
 CFG: FB: -vid 0x0525 -pid 0x4034
 FB: ucmd setenv fastboot_buffer 0x82e00000
 FB: download -f ../boot-sdp.scr
