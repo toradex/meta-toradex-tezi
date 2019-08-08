@@ -9,16 +9,19 @@ I was not able to reproduce this issue. Using Weston with rdp-backend
 directly as well as using the screen-share plug-in allowed to reconnect
 just fine.
 
+Upstream-Status: Pending
+
 Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- libweston/compositor-rdp.c | 4 ++--
+ libweston/backend-rdp/rdp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
-index 871a0a3e..7f4b99e9 100644
---- a/libweston/compositor-rdp.c
-+++ b/libweston/compositor-rdp.c
-@@ -771,8 +771,8 @@ rdp_peer_context_free(freerdp_peer* client, RdpPeerContext* context)
+diff --git a/libweston/backend-rdp/rdp.c b/libweston/backend-rdp/rdp.c
+index 109c20b..6d5892f 100644
+--- a/libweston/backend-rdp/rdp.c
++++ b/libweston/backend-rdp/rdp.c
+@@ -776,8 +776,8 @@ rdp_peer_context_free(freerdp_peer* client, RdpPeerContext* context)
  	if (context->item.flags & RDP_PEER_ACTIVATED) {
  		weston_seat_release_keyboard(context->item.seat);
  		weston_seat_release_pointer(context->item.seat);
@@ -30,5 +33,5 @@ index 871a0a3e..7f4b99e9 100644
  
  	Stream_Free(context->encode_stream, TRUE);
 -- 
-2.22.0
+2.7.4
 

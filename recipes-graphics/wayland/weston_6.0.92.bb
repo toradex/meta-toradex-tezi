@@ -8,21 +8,16 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d79ee9e66bb0f95d3386a7acae780b70 \
 SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://weston.png \
            file://weston.desktop \
-           file://0001-make-error-portable.patch \
+           file://wallpaper.png \
            file://xwayland.weston-start \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
            file://find-wayland-scanner.patch \
            file://auto-enable-screenshare.patch \
-           file://0001-backend-rdp-allow-to-force-compression-off.patch \
-           file://0001-backend-rdp-fix-memory-leak.patch \
-           file://0001-pixman-avoid-unnecessary-y-flip-for-screen-capture.patch \
-           file://0001-screen-share-destroy-seat-on-remove.patch \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
-           file://wallpaper.png \
 "
-SRC_URI[md5sum] = "e7b10710ef1eac82258f97bfd41fe534"
-SRC_URI[sha256sum] = "bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4"
+SRC_URI[md5sum] = "551fcfd6acc1cf39bccc3b8bdc37591a"
+SRC_URI[sha256sum] = "f3fe27e72f3261486853b8606e4d02eb5a30002dc80961c2c5d0b59ea8071e24"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -36,10 +31,9 @@ export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm freerdp"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
-WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
-WESTON_MAJOR_VERSION = "6"
+WESTON_MAJOR_VERSION = "7"
 
-EXTRA_OEMESON += "-Dbackend-rdp=true -Dsimple-dmabuf-drm= -Dbackend-default=fbdev"
+EXTRA_OEMESON += "-Dbackend-rdp=true -Dsimple-dmabuf-drm= -Dbackend-default=fbdev -Dpipewire=false"
 EXTRA_OECONF_append_qemux86 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"
