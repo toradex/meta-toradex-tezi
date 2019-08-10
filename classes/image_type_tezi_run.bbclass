@@ -8,9 +8,13 @@ TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('T
                          d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
 
+RM_WORK_EXCLUDE += "${PN}"
+
+DEPENDS += "u-boot-mkimage-native zip-native"
+
 def fitimg_get_size(d):
     import os
-    return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
+    return os.path.getsize(os.path.join(d.getVar('IMGDEPLOYDIR'), 'tezi.itb')) / (1024 * 1024)
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
@@ -143,7 +147,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     if type_specific_name:
         imagefile = 'image-{0}.json'.format(flash_type)
 
-    with open(os.path.join(deploydir, imagefile), 'w') as outfile:
+    with open(os.path.join(d.getVar('IMGDEPLOYDIR'), imagefile), 'w') as outfile:
          json.dump(data, outfile, indent=4)
     d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
     bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
@@ -158,53 +162,24 @@ python rootfs_tezirun_run_json() {
         rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
 }
 
-IMAGE_CMD_tezirunimg () {
-	bbnote "Create Toradex Easy Installer FIT image"
-}
-
 build_fitimage () {
-	# We have to execute this step after any image generation so we have
-	# squashfs, kernel etc all in DEPLOY_DIR_IMAGE
-	# We cannot work in IMGDEPLOYDIR since that folder only has the image
-	# files in it (not kernel etc...). We could probably make this a
-	# SSTATETASKS similar to how image.class makes do_image_complete...
-	mkimage -f ${DEPLOY_DIR_IMAGE}/tezi.its ${DEPLOY_DIR_IMAGE}/tezi.itb
+    datafile=$(mktemp ${DEPLOY_DIR_IMAGE}/tezi-XXXXXX.its)
+    sed "s#\./\(${IMAGE_BASENAME}-${MACHINE}.squashfs\)#${IMGDEPLOYDIR}/\1#" ${DEPLOY_DIR_IMAGE}/tezi.its > $datafile
+    mkimage -f $datafile ${IMGDEPLOYDIR}/tezi.itb
+    rm -f $datafile
 }
 
-build_deploytar () {
-	cd ${DEPLOY_DIR_IMAGE}
-
-	# mkdir fails if existing
-	if [ -e ${TDX_VER_ID} ]; then
-		rm -r ${TDX_VER_ID}
-	fi
-
-	mkdir ${TDX_VER_ID}
-	cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${TEZI_IMAGE_FILES} ${MACHINE_BOOT_FILES} tezi.itb tezi-run-metadata/* ${TDX_VER_ID}
-
-	# zip does update if the file exist, explicitly delete before adding files to the archive
-	if [ -e ${TDX_VER_ID}.zip ]; then
-		rm ${TDX_VER_ID}.zip
-	fi
-
-	zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
-	rm -r ${TDX_VER_ID}
+IMAGE_CMD_tezirunimg () {
+    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${MACHINE_BOOT_FILES} tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
+    (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} tezi.itb ${WORKDIR}/${TDX_VER_ID})
+    zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
+    mv ${TDX_VER_ID}.zip ${IMGDEPLOYDIR}
 }
 
-python do_assemble_fitimage() {
-    bb.build.exec_func('build_fitimage', d)
-    bb.build.exec_func('rootfs_tezirun_run_json', d)
-    bb.build.exec_func('build_deploytar', d)
-}
-
-python () {
-    if "tezirunimg" in d.getVar('IMAGE_FSTYPES'):
-        bb.build.addtask('do_assemble_fitimage', 'do_build', 'do_image_complete', d)
-}
-
-do_assemble_fitimage[depends] = "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy \
-                                 tezi-run-metadata:do_deploy u-boot-mkimage-native:do_populate_sysroot zip-native:do_populate_sysroot \
+do_image_tezirunimg[dirs] += "${WORKDIR}/${TDX_VER_ID} ${WORKDIR}"
+do_image_tezirunimg[cleandirs] += "${WORKDIR}/${TDX_VER_ID}"
+do_image_tezirunimg[prefuncs] += "build_fitimage rootfs_tezirun_run_json"
+do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy tezi-run-metadata:do_deploy \
                                  ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                                 "
-
 IMAGE_TYPEDEP_tezirunimg += "squashfs"
