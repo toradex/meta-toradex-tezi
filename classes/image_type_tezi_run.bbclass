@@ -8,8 +8,6 @@ TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('T
                          d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
 
-inherit imx-boot-common
-
 def fitimg_get_size(d):
     import os
     return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
