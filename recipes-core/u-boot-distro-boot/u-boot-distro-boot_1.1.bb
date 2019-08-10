@@ -10,7 +10,7 @@ SRC_URI = " \
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-inherit deploy
+inherit deploy nopackages
 
 do_deploy () {
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
