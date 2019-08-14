@@ -1,5 +1,5 @@
 From 8ec449c5f68092936dc7f36e034661b8a0fc046e Mon Sep 17 00:00:00 2001
-From: Ming Liu <liu.ming50@gmail.com>
+From: Ming Liu <ming.liu@toradex.com>
 Date: Fri, 12 Jul 2019 22:25:36 +0800
 Subject: [PATCH] CMakeLists.txt: do not override CMAKE_CXX_FLAGS
 
@@ -11,17 +11,17 @@ drop them.
 
 Upstream-Status: Inappropriate [oe specific]
 
-Signed-off-by: Ming Liu <liu.ming50@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  libuuu/CMakeLists.txt | 1 -
  uuu/CMakeLists.txt    | 2 +-
  2 files changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/libuuu/CMakeLists.txt b/libuuu/CMakeLists.txt
-index ef548fb..08bea12 100644
+index 67c817c..98916c5 100644
 --- a/libuuu/CMakeLists.txt
 +++ b/libuuu/CMakeLists.txt
-@@ -11,7 +11,6 @@ find_package(Threads)
+@@ -12,7 +12,6 @@ find_package(Threads)
  include_directories(${LIBUSB_INCLUDE_DIRS} include)
  
  set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wstrict-aliasing -Wextra")
@@ -30,17 +30,17 @@ index ef548fb..08bea12 100644
  set(SOURCES
  	error.cpp
 diff --git a/uuu/CMakeLists.txt b/uuu/CMakeLists.txt
-index c299715..a2d8c87 100644
+index 0a4d94d..deee36a 100644
 --- a/uuu/CMakeLists.txt
 +++ b/uuu/CMakeLists.txt
-@@ -10,7 +10,7 @@ pkg_check_modules(LIBZ REQUIRED zlib)
+@@ -9,7 +9,7 @@ pkg_check_modules(LIBZIP REQUIRED zlib)
  find_package(Threads)
  
  
 -set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -O2")
 +set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
  
- if (NOT APPLE)
+ if (STATIC)
  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 -- 
 2.7.4
