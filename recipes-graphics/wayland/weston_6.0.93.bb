@@ -16,8 +16,8 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
 "
-SRC_URI[md5sum] = "551fcfd6acc1cf39bccc3b8bdc37591a"
-SRC_URI[sha256sum] = "f3fe27e72f3261486853b8606e4d02eb5a30002dc80961c2c5d0b59ea8071e24"
+SRC_URI[md5sum] = "45569b1ff4bd679dea77889eda3d8b53"
+SRC_URI[sha256sum] = "4ab0157ba54eb9d3154c18aa4d00659fbf22b65ebdd45e894c836f50099e6af0"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
