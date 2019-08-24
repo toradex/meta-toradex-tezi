@@ -38,7 +38,11 @@ SRC_URI[sha256sum] = "064bff2e4cb4a0c0f8bceeaf6dd2cef1e682869e0b22d49e40bc6a8326
 
 TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 
-inherit deploy nopackages
+inherit deploy linux-kernel-base nopackages
+
+DEPENDS = "virtual/kernel"
+
+KERNEL_VERSION = "${@get_kernelversion_file("${STAGING_KERNEL_BUILDDIR}")}"
 
 deploy_common () {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
@@ -48,7 +52,8 @@ deploy_common () {
     install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
 
     install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
-    sed -i 's/@@TEZI_INITRD_IMAGE@@/${TEZI_INITRD_IMAGE}/' ${DEPLOYDIR}/tezi.its
+    sed -i -s 's/@@TEZI_INITRD_IMAGE@@/${TEZI_INITRD_IMAGE}/' ${DEPLOYDIR}/tezi.its
+    sed -i -s 's/@@KERNEL_VERSION@@/${KERNEL_VERSION}/' ${DEPLOYDIR}/tezi.its
 }
 
 do_deploy () {
