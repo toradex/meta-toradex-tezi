@@ -38,7 +38,7 @@ SRC_URI[sha256sum] = "064bff2e4cb4a0c0f8bceeaf6dd2cef1e682869e0b22d49e40bc6a8326
 
 TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 
-inherit deploy
+inherit deploy nopackages
 
 deploy_common () {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
@@ -99,7 +99,7 @@ do_deploy_apalis-tk1-mainline () {
     install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-addtask deploy before do_package after do_install
+addtask deploy before do_build after do_install
 
 # apalis-tk1 will include apalis-tk1-mainline as well
 COMPATIBLE_MACHINE = "(apalis-imx6|apalis-imx8|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7|colibri-imx8x)"
