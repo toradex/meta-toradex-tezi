@@ -16,8 +16,8 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
 "
-SRC_URI[md5sum] = "45569b1ff4bd679dea77889eda3d8b53"
-SRC_URI[sha256sum] = "4ab0157ba54eb9d3154c18aa4d00659fbf22b65ebdd45e894c836f50099e6af0"
+SRC_URI[md5sum] = "cbfda483bc2501d0831af3f33c707850"
+SRC_URI[sha256sum] = "a00a6d207b6a45f95f4401c604772a307c3767e5e2beecf3d879110c43909a64"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -31,7 +31,7 @@ export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm freerdp"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
-WESTON_MAJOR_VERSION = "7"
+WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 
 EXTRA_OEMESON += "-Dbackend-rdp=true -Dsimple-dmabuf-drm= -Dbackend-default=fbdev -Dpipewire=false"
 EXTRA_OECONF_append_qemux86 = "\
