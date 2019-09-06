@@ -1,4 +1,4 @@
-From 7d2fea61a95e9498b5a19c8cffcb2ab5631d5685 Mon Sep 17 00:00:00 2001
+From 682b7d79a7b81ec8e38760381104b24ad549e8c0 Mon Sep 17 00:00:00 2001
 From: Tom Hochstein <tom.hochstein@nxp.com>
 Date: Wed, 22 Feb 2017 15:53:30 +0200
 Subject: [PATCH] weston-launch: Provide a default version that doesn't require
@@ -18,9 +18,9 @@ Signed-off-by: Denys Dmytriyenko <denys@ti.com>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  libweston/meson.build     | 16 ++++++++++++----
- libweston/weston-launch.c | 20 ++++++++++++++++++++
+ libweston/weston-launch.c | 21 +++++++++++++++++++++
  meson_options.txt         |  7 +++++++
- 3 files changed, 39 insertions(+), 4 deletions(-)
+ 3 files changed, 40 insertions(+), 4 deletions(-)
 
 diff --git a/libweston/meson.build b/libweston/meson.build
 index d8d3fc0..326683f 100644
@@ -56,7 +56,7 @@ index d8d3fc0..326683f 100644
  		install: true
  	)
 diff --git a/libweston/weston-launch.c b/libweston/weston-launch.c
-index 4962bd6..03b6518 100644
+index 4962bd6..fc531c5 100644
 --- a/libweston/weston-launch.c
 +++ b/libweston/weston-launch.c
 @@ -51,7 +51,9 @@
@@ -149,7 +149,7 @@ index 4962bd6..03b6518 100644
  		{ "tty",     required_argument, NULL, 't' },
  		{ "verbose", no_argument,       NULL, 'v' },
  		{ "help",    no_argument,       NULL, 'h' },
-@@ -766,11 +780,15 @@ main(int argc, char *argv[])
+@@ -766,11 +780,16 @@ main(int argc, char *argv[])
  	while ((c = getopt_long(argc, argv, "u:t:vh", opts, &i)) != -1) {
  		switch (c) {
  		case 'u':
@@ -160,12 +160,13 @@ index 4962bd6..03b6518 100644
  				exit(EXIT_FAILURE);
  			}
 +#else
-+			error(1, 0, "-u is unsupported in this weston-launch build");
++			fprintf(stderr, "weston: -u is unsupported in this weston-launch build\n");
++			exit(EXIT_FAILURE);
 +#endif
  			break;
  		case 't':
  			tty = optarg;
-@@ -822,8 +840,10 @@ main(int argc, char *argv[])
+@@ -822,8 +841,10 @@ main(int argc, char *argv[])
  	if (setup_tty(&wl, tty) < 0)
  		exit(EXIT_FAILURE);
  
