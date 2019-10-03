@@ -38,7 +38,7 @@
 
 		fdt@1 {
 			description = "Apalis iMX8 Device Tree";
-			data = /incbin/("./fsl-imx8qm-apalis.dtb");
+			data = /incbin/("./fsl-imx8qm-apalis-eval.dtb");
 			type = "flat_dt";
 			arch = "arm64";
 			compression = "none";
