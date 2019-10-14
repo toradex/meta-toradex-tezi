@@ -9,7 +9,7 @@ SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};prot
     file://udhcpd.conf \
 "
 
-SRCREV = "5adca386870a2847c15c26b8f75a469dd290032d"
+SRCREV = "fc5c34192587a9b24ea244ab7b9f84f3ced48428"
 SRCBRANCH = "master"
 SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
@@ -37,6 +37,7 @@ RDEPENDS_${PN} += " \
     ${TOUCH} \
     ttf-vera \
     qtwayland \
+    unzip \
 "
 
 FILES_${PN} = " \
