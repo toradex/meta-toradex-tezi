@@ -14,7 +14,7 @@ else
         if test ${board} = "apalis-imx8x"
         then
             env set bootcmd_hdp ';'
-            env set vidargs 'video=HDMI-A-1:800x600 video=DPI-1:d'
+            env set vidargs 'video=HDMI-A-1:800x600 video=DPI-1:d video=LVDS-1:d'
         else
             echo "This script is only meant for Apalis iMX8 / Apalis iMX8X / Colibri iMX8X"
             exit
