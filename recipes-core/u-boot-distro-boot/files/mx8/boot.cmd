@@ -22,7 +22,7 @@ else
     fi
 fi
 
-env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@TEZI_INITRD_IMAGE@@ root=/dev/ram autoinstall pci=nomsi ${teziargs}'
+env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@TEZI_INITRD_IMAGE@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
 # TODO: modify once our refactoring to use kernel fitImage is done
 #env set bootcmd_run 'bootm ${ramdisk_addr_r}#config@${fdt_file}'
 env set bootcmd_run 'bootm ${ramdisk_addr_r}'
