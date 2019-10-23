@@ -11,4 +11,5 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     gdbserver \
     openssh-sftp-server \
     gdb \
+    qtzeroconf \
 "

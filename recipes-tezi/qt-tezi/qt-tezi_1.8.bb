@@ -27,6 +27,7 @@ DEPENDS += " \
     libusbgx \
     rapidjson \
     qtbase \
+    qtzeroconf \
 "
 
 RDEPENDS_${PN} += " \
