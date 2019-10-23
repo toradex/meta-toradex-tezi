@@ -24,6 +24,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     openssl-bin \
     haveged \
     tezi-version \
+    avahi-daemon \
 "
 
 inherit core-image

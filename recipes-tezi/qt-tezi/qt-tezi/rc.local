@@ -39,6 +39,11 @@ export XDG_RUNTIME_DIR=/run/wayland
 RDP_TLS_DIR=${RW_MEMORY_DIR}
 RDP_TLS_FILENAME=tls
 
+# D-Bus and Avahi
+mkdir -p /var/run/dbus/
+dbus-daemon --system
+avahi-daemon --daemonize
+
 # Set the system clock from hardware clock
 # If the timestamp is more recent than the current time,
 # use the timestamp instead.

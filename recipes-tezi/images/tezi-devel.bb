@@ -12,4 +12,5 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     openssh-sftp-server \
     gdb \
     qtzeroconf \
+    avahi-daemon \
 "
