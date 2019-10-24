@@ -16,6 +16,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     lz4 \
     lzop \
     xz \
+    zstd \
     tar \
     pv \
     mmc-utils \
