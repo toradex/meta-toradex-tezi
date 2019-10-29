@@ -15,7 +15,7 @@ SRC_URI_append_colibri-imx7 = " \
     file://0003-ARM-dts-imx7-colibri-eval-v3-disable-PWM-B-C-D.patch \
 "
 
-SRCREV = "3bb6e3284a1bb88f142528537e6573f9d9f39aaa"
+SRCREV = "def4502031f6127d41ef4a6fd80bf437623bec80"
 SRCBRANCH = "toradex_4.9-1.0.x-imx"
 
 do_configure_append () {
