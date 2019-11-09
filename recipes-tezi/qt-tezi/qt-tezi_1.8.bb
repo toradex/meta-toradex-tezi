@@ -31,14 +31,31 @@ DEPENDS += " \
 "
 
 RDEPENDS_${PN} += " \
+    avahi-daemon \
+    curl \
+    dosfstools \
+    e2fsprogs-mke2fs \
+    e2fsprogs-tune2fs \
     flash-wince \
-    util-linux-sfdisk \
-    util-linux-blkid \
-    util-linux-blkdiscard \
+    haveged \
+    lz4 \
+    lzop \
+    mmc-utils \
+    openssl-bin \
+    pv \
+    qtwayland \
+    tar \
+    tezi-version \
     ${TOUCH} \
     ttf-vera \
-    qtwayland \
+    u-boot-fw-utils \
     unzip \
+    util-linux-blkdiscard \
+    util-linux-blkid \
+    util-linux-sfdisk \
+    weston \
+    xz \
+    zstd \
 "
 
 FILES_${PN} = " \
