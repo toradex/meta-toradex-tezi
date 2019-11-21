@@ -1,4 +1,4 @@
-uuu_version 1.3.34
+uuu_version 1.3.102
 
 SDPS: boot -f ../flash.bin
 CFG: FB: -vid 0x0525 -pid 0x4000
