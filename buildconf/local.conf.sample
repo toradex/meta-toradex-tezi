@@ -47,6 +47,8 @@ PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
 #MACHINE ?= "colibri-imx6"
 #MACHINE ?= "colibri-imx7"
 #MACHINE ?= "colibri-imx8x"
+#
+#MACHINE ?= "verdin-imx8mm"
 
 #
 # There are also a selection of emulated machines available which can boot and run

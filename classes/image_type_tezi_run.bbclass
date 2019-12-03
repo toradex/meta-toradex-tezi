@@ -1,11 +1,8 @@
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_EMMC_mx8 ??= "flash.bin"
+TEZI_UBOOT_BINARY_EMMC_mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARIES ??= "${@' '.join(x for x in sorted(set([bb.utils.contains('TORADEX_FLASH_TYPE', 'emmc', d.getVar('TEZI_UBOOT_BINARY_EMMC'), '', d), \
-                         bb.utils.contains('TORADEX_FLASH_TYPE', 'rawnand', d.getVar('TEZI_UBOOT_BINARY_RAWNAND'), '', d), \
-                         d.getVar('TEZI_UBOOT_BINARY_RECOVERY')])))}"
 TORADEX_FLASH_TYPE ??= "emmc"
 
 RM_WORK_EXCLUDE += "${PN}"
@@ -24,17 +21,16 @@ def rootfs_tezi_run_emmc(d):
 
     bootpart_rawfiles = []
     bootpart_filelist = ["tezi.itb"] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
-    has_spl = d.getVar('SPL_BINARY')
-    if has_spl:
+    if offset_spl:
         bootpart_rawfiles.append(
               {
-                "filename": has_spl,
+                "filename": d.getVar('SPL_BINARY'),
                 "dd_options": "seek=" + offset_bootrom
               })
     bootpart_rawfiles.append(
               {
                 "filename": uboot,
-                "dd_options": "seek=" + (offset_spl if has_spl else offset_bootrom)
+                "dd_options": "seek=" + (offset_spl if offset_spl else offset_bootrom)
               })
 
     return [
@@ -138,8 +134,13 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
 
     if flash_type == "rawnand":
         data["mtddevs"] = rootfs_tezi_run_rawnand(d)
+        uboot_file = d.getVar('TEZI_UBOOT_BINARY_RAWNAND')
     elif flash_type == "emmc":
         data["blockdevs"] = rootfs_tezi_run_emmc(d)
+        uboot_file = d.getVar('TEZI_UBOOT_BINARY_EMMC')
+        # TODO: Multi image/raw NAND with SPL currently not supported
+        if d.getVar('OFFSET_SPL_PAYLOAD'):
+            uboot_file += " " + d.getVar('SPL_BINARY')
     else:
         bb.fatal("Unsupported Toradex flash type")
 
@@ -150,6 +151,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     with open(os.path.join(d.getVar('IMGDEPLOYDIR'), imagefile), 'w') as outfile:
          json.dump(data, outfile, indent=4)
     d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
+    d.appendVar("TEZI_IMAGE_UBOOT_FILES", uboot_file + " ")
     bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
 
 python rootfs_tezirun_run_json() {
@@ -170,7 +172,7 @@ build_fitimage () {
 }
 
 IMAGE_CMD_tezirunimg () {
-    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${SPL_BINARY} ${TEZI_UBOOT_BINARIES} ${MACHINE_BOOT_FILES} tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
+    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
     (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} tezi.itb ${WORKDIR}/${TDX_VER_ID})
     zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
     mv ${TDX_VER_ID}.zip ${IMGDEPLOYDIR}

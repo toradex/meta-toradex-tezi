@@ -3,21 +3,32 @@
 if test ${board} = "apalis-imx8"
 then
     env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
+    env set ramdisk_addr_r 0x83000000
     env set vidargs 'video=HDMI-A-1:640x480'
 else
     # TODO: modify once we move to mainline U-Boot
     if test ${board} = "colibri-imx8qxp"
     then
         env set bootcmd_hdp ';'
+	env set ramdisk_addr_r 0x83000000
         env set vidargs 'video=VGA-1:640x480'
     else
         if test ${board} = "apalis-imx8x"
         then
             env set bootcmd_hdp ';'
+	    env set ramdisk_addr_r 0x83000000
             env set vidargs 'video=HDMI-A-1:800x600 video=DPI-1:d video=LVDS-1:d'
         else
-            echo "This script is only meant for Apalis iMX8 / Apalis iMX8X / Colibri iMX8X"
-            exit
+            if test ${board} = "verdin-imx8mm"
+            then
+                env set bootcmd_hdp ';'
+		env set ramdisk_addr_r 0x43000000
+                env set vidargs 'video=HDMI-A-1:1024x768'
+            else
+                echo "This script is only meant for Apalis iMX8 / Apalis iMX8X / Colibri iMX8X"
+                echo "and Verdin iMX8MM"
+                exit
+            fi
         fi
     fi
 fi
@@ -44,7 +55,6 @@ then
     fi
 
     env set bootcmd_tezi ';'
-    env set ramdisk_addr_r 0x83000000
 else
     env set bootcmd_tezi 'load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${tezi_image}'
 fi
