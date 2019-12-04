@@ -150,8 +150,8 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
 
     with open(os.path.join(d.getVar('IMGDEPLOYDIR'), imagefile), 'w') as outfile:
          json.dump(data, outfile, indent=4)
-    d.appendVar('TEZI_IMAGE_FILES', imagefile + ' ')
-    d.appendVar("TEZI_IMAGE_UBOOT_FILES", uboot_file + " ")
+    d.appendVar('TEZI_IMAGE_FILES', ' ' + imagefile)
+    d.appendVar("TEZI_IMAGE_UBOOT_FILES", ' ' + uboot_file)
     bb.note("Toradex Easy Installer metadata file {0} written.".format(imagefile))
 
 python rootfs_tezirun_run_json() {
