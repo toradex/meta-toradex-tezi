@@ -32,6 +32,7 @@ DEPENDS += " \
 
 RDEPENDS_${PN} += " \
     avahi-daemon \
+    avahi-utils \
     curl \
     dosfstools \
     e2fsprogs-mke2fs \
