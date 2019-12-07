@@ -15,9 +15,13 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://auto-enable-screenshare.patch \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
+           file://0001-rdp-add-libwinpr2-dependency.patch \
+           file://0001-compositor-drop-libexec_weston-versioning.patch \
+           file://0001-renderer-change-all-frame_signal-emission-to-pass-pr.patch \
+           file://0001-backend-drm-Define-potentially-missing-aspect-ratio-.patch \
 "
-SRC_URI[md5sum] = "cbfda483bc2501d0831af3f33c707850"
-SRC_URI[sha256sum] = "a00a6d207b6a45f95f4401c604772a307c3767e5e2beecf3d879110c43909a64"
+SRC_URI[md5sum] = "18da5ffdb0db99786e929d3a46621016"
+SRC_URI[sha256sum] = "a802d0f3214613e92d509d64ba069887a6339d0cf2f735290b9e97701807a21d"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -31,23 +35,23 @@ export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm freerdp"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
-WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
+WESTON_MAJOR_VERSION = "8"
 
-EXTRA_OEMESON += "-Dbackend-rdp=true -Dsimple-dmabuf-drm= -Dbackend-default=fbdev -Dpipewire=false"
+EXTRA_OEMESON += "-Dbackend-rdp=true -Dbackend-default=drm -Drenderer-gl=false -Dpipewire=false"
 EXTRA_OECONF_append_qemux86 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"
 EXTRA_OECONF_append_qemux86-64 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"
-PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'fbdev', '', d)} \
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'kms', '', d)} \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'x11 wayland', 'xwayland', '', d)} \
                    ${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
 #
 # Compositor choices
 #
 # Weston on KMS
-PACKAGECONFIG[kms] = "-Dbackend-drm=true,-Dbackend-drm=false,drm udev mtdev virtual/mesa"
+PACKAGECONFIG[kms] = "-Dbackend-drm=true,-Dbackend-drm=false,drm udev mtdev"
 # Weston on Wayland (nested Weston)
 PACKAGECONFIG[wayland] = "-Dbackend-wayland=true,-Dbackend-wayland=false,virtual/mesa"
 # Weston on X11

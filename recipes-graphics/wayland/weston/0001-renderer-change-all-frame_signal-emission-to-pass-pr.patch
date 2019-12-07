@@ -1,0 +1,54 @@
+From 0bb94476532ebbe95e255a9a736ee0c48866db53 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Mon, 9 Dec 2019 13:26:57 +0100
+Subject: [PATCH] renderer: change all frame_signal emission to pass
+ previous_damage
+
+Upstream-Status: Backport
+
+Commit adaf8c7410da ("renderer: change frame_signal emission to pass
+previous_damage as data argument") missed updating all frame_signal
+emissions. Later commit 2619bfe420 ("move frame_signal emission to
+weston_output_repaint()") fixed this deficency along with moving the
+location of the emission. Due to an issue of the location change, this
+commit had to be reverted again.
+
+This makes sure that the pixman as well as the GL renderer now also
+emits the damage region instead of the Weston output.
+
+Fixes: adaf8c7410da ("renderer: change frame_signal emission to pass previous_damage as data argument")
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ libweston/pixman-renderer.c         | 2 +-
+ libweston/renderer-gl/gl-renderer.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libweston/pixman-renderer.c b/libweston/pixman-renderer.c
+index 2d70aa4..cae8974 100644
+--- a/libweston/pixman-renderer.c
++++ b/libweston/pixman-renderer.c
+@@ -579,7 +579,7 @@ pixman_renderer_repaint_output(struct weston_output *output,
+ 	}
+ 	pixman_region32_fini(&hw_damage);
+ 
+-	wl_signal_emit(&output->frame_signal, output);
++	wl_signal_emit(&output->frame_signal, output_damage);
+ 
+ 	/* Actual flip should be done by caller */
+ }
+diff --git a/libweston/renderer-gl/gl-renderer.c b/libweston/renderer-gl/gl-renderer.c
+index 25e212b..6c43550 100644
+--- a/libweston/renderer-gl/gl-renderer.c
++++ b/libweston/renderer-gl/gl-renderer.c
+@@ -1473,7 +1473,7 @@ gl_renderer_repaint_output(struct weston_output *output,
+ 
+ 	draw_output_borders(output, border_status);
+ 
+-	wl_signal_emit(&output->frame_signal, output);
++	wl_signal_emit(&output->frame_signal, output_damage);
+ 
+ 	go->end_render_sync = create_render_sync(gr);
+ 
+-- 
+2.7.4
+

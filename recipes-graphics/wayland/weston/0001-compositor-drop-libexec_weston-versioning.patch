@@ -1,0 +1,31 @@
+From c1b5d0577b487f39a1ff3abcdb4536877eb89895 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Wed, 27 Nov 2019 17:19:19 +0100
+Subject: [PATCH] compositor: drop libexec_weston versioning
+
+Upstream-Status: Inappropriate [ OE specific ]
+
+This fixes a following QA issue in OE:
+| QA Issue: /usr/bin/weston contained in package weston requires libexec_weston.so.0, but no providers found in RDEPENDS_weston? [file-rdeps]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ compositor/meson.build | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/compositor/meson.build b/compositor/meson.build
+index e1334d6..ecec611 100644
+--- a/compositor/meson.build
++++ b/compositor/meson.build
+@@ -33,8 +33,6 @@ libexec_weston = shared_library(
+ 	dependencies: deps_weston,
+ 	install_dir: dir_module_weston,
+ 	install: true,
+-	version: '0.0.0',
+-	soversion: 0
+ )
+ dep_libexec_weston = declare_dependency(
+ 	link_with: libexec_weston,
+-- 
+2.7.4
+
