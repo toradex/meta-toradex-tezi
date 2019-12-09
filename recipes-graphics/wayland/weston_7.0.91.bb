@@ -12,13 +12,13 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://xwayland.weston-start \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
            file://find-wayland-scanner.patch \
-           file://auto-enable-screenshare.patch \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
            file://0001-rdp-add-libwinpr2-dependency.patch \
            file://0001-compositor-drop-libexec_weston-versioning.patch \
            file://0001-renderer-change-all-frame_signal-emission-to-pass-pr.patch \
            file://0001-backend-drm-Define-potentially-missing-aspect-ratio-.patch \
+           file://0001-backend-vnc-initial-commit.patch \
 "
 SRC_URI[md5sum] = "18da5ffdb0db99786e929d3a46621016"
 SRC_URI[sha256sum] = "a802d0f3214613e92d509d64ba069887a6339d0cf2f735290b9e97701807a21d"
@@ -37,7 +37,7 @@ DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
 WESTON_MAJOR_VERSION = "8"
 
-EXTRA_OEMESON += "-Dbackend-rdp=true -Dbackend-default=drm -Drenderer-gl=false -Dpipewire=false"
+EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false -Dpipewire=false"
 EXTRA_OECONF_append_qemux86 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"

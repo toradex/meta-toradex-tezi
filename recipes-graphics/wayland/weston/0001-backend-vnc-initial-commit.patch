@@ -1,0 +1,1640 @@
+From 3292a49bd8dbca68f0637b3b58119a000aa97b9d Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Sun, 22 Sep 2019 19:40:04 +0200
+Subject: [PATCH] backend-vnc: initial commit
+
+Upstream-Status: Pending
+
+This adds basic VNC protocol support. This implementation does not
+support authentication and only supports raw encoding. The backend
+implements the VNC server protocol itself as it is fairly simple
+when only basic features are supported.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ compositor/main.c                    |  90 +++
+ include/libweston/backend-vnc.h      |  75 +++
+ include/libweston/libweston.h        |   1 +
+ include/libweston/meson.build        |   1 +
+ libweston/backend-vnc/meson.build    |  20 +
+ libweston/backend-vnc/vnc-protocol.c | 365 ++++++++++++
+ libweston/backend-vnc/vnc-protocol.h |  97 ++++
+ libweston/backend-vnc/vnc.c          | 809 +++++++++++++++++++++++++++
+ libweston/compositor.c               |   1 +
+ libweston/meson.build                |   1 +
+ meson_options.txt                    |   6 +
+ xwayland/launcher.c                  |   2 +
+ 12 files changed, 1468 insertions(+)
+ create mode 100644 include/libweston/backend-vnc.h
+ create mode 100644 libweston/backend-vnc/meson.build
+ create mode 100644 libweston/backend-vnc/vnc-protocol.c
+ create mode 100644 libweston/backend-vnc/vnc-protocol.h
+ create mode 100644 libweston/backend-vnc/vnc.c
+
+diff --git a/compositor/main.c b/compositor/main.c
+index 8eb8a470..1483f02e 100644
+--- a/compositor/main.c
++++ b/compositor/main.c
+@@ -58,6 +58,7 @@
+ #include <libweston/backend-drm.h>
+ #include <libweston/backend-headless.h>
+ #include <libweston/backend-rdp.h>
++#include <libweston/backend-vnc.h>
+ #include <libweston/backend-fbdev.h>
+ #include <libweston/backend-x11.h>
+ #include <libweston/backend-wayland.h>
+@@ -637,6 +638,9 @@ usage(int error_code)
+ #if defined(BUILD_RDP_COMPOSITOR)
+ 			"\t\t\t\trdp-backend.so\n"
+ #endif
++#if defined(BUILD_VNC_COMPOSITOR)
++			"\t\t\t\tvnc-backend.so\n"
++#endif
+ #if defined(BUILD_WAYLAND_COMPOSITOR)
+ 			"\t\t\t\twayland-backend.so\n"
+ #endif
+@@ -710,6 +714,15 @@ usage(int error_code)
+ 		"\n");
+ #endif
+ 
++#if defined(BUILD_VNC_COMPOSITOR)
++	fprintf(out,
++		"Options for vnc-backend.so:\n\n"
++		"  --width=WIDTH\t\tWidth of desktop\n"
++		"  --height=HEIGHT\tHeight of desktop\n"
++		"  --port=PORT\t\tThe port to listen on\n"
++		"\n");
++#endif
++
+ #if defined(BUILD_WAYLAND_COMPOSITOR)
+ 	fprintf(out,
+ 		"Options for wayland-backend.so:\n\n"
+@@ -2701,6 +2714,81 @@ load_rdp_backend(struct weston_compositor *c,
+ 	return ret;
+ }
+ 
++static int
++vnc_backend_output_configure(struct weston_output *output)
++{
++	struct wet_compositor *compositor = to_wet_compositor(output->compositor);
++	struct wet_output_config *parsed_options = compositor->parsed_options;
++	const struct weston_vnc_output_api *api = weston_vnc_output_get_api(output->compositor);
++	int width = 640;
++	int height = 480;
++
++	assert(parsed_options);
++
++	if (!api) {
++		weston_log("Cannot use weston_vnc_output_api.\n");
++		return -1;
++	}
++
++	if (parsed_options->width)
++		width = parsed_options->width;
++
++	if (parsed_options->height)
++		height = parsed_options->height;
++
++	weston_output_set_scale(output, 1);
++	weston_output_set_transform(output, WL_OUTPUT_TRANSFORM_NORMAL);
++
++	if (api->output_set_size(output, width, height) < 0) {
++		weston_log("Cannot configure output \"%s\" using weston_vnc_output_api.\n",
++			   output->name);
++		return -1;
++	}
++	weston_log("vnc_backend_output_configure.. Done\n");
++
++	return 0;
++}
++
++
++static void
++weston_vnc_backend_config_init(struct weston_vnc_backend_config *config)
++{
++	config->base.struct_version = WESTON_VNC_BACKEND_CONFIG_VERSION;
++	config->base.struct_size = sizeof(struct weston_vnc_backend_config);
++
++	config->port = 5900;
++}
++
++static int
++load_vnc_backend(struct weston_compositor *c,
++		int *argc, char *argv[], struct weston_config *wc)
++{
++	struct weston_vnc_backend_config config  = {{ 0, }};
++	int ret = 0;
++
++	struct wet_output_config *parsed_options = wet_init_parsed_options(c);
++	if (!parsed_options)
++		return -1;
++
++	weston_vnc_backend_config_init(&config);
++
++	const struct weston_option vnc_options[] = {
++		{ WESTON_OPTION_INTEGER, "width", 0, &parsed_options->width },
++		{ WESTON_OPTION_INTEGER, "height", 0, &parsed_options->height },
++		{ WESTON_OPTION_INTEGER, "port", 0, &config.port },
++	};
++
++	parse_options(vnc_options, ARRAY_LENGTH(vnc_options), argc, argv);
++
++	wet_set_simple_head_configurator(c, vnc_backend_output_configure);
++
++	ret = weston_compositor_load_backend(c, WESTON_BACKEND_VNC,
++					     &config.base);
++
++	return ret;
++}
++
++
+ static int
+ fbdev_backend_output_configure(struct weston_output *output)
+ {
+@@ -2989,6 +3077,8 @@ load_backend(struct weston_compositor *compositor, const char *backend,
+ 		return load_headless_backend(compositor, argc, argv, config);
+ 	else if (strstr(backend, "rdp-backend.so"))
+ 		return load_rdp_backend(compositor, argc, argv, config);
++	else if (strstr(backend, "vnc-backend.so"))
++		return load_vnc_backend(compositor, argc, argv, config);
+ 	else if (strstr(backend, "fbdev-backend.so"))
+ 		return load_fbdev_backend(compositor, argc, argv, config);
+ 	else if (strstr(backend, "drm-backend.so"))
+diff --git a/include/libweston/backend-vnc.h b/include/libweston/backend-vnc.h
+new file mode 100644
+index 00000000..a33b43f1
+--- /dev/null
++++ b/include/libweston/backend-vnc.h
+@@ -0,0 +1,75 @@
++/*
++ * Copyright © 2019 Stefan Agner <stefan@agner.ch>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the
++ * next paragraph) shall be included in all copies or substantial
++ * portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#ifndef WESTON_COMPOSITOR_VNC_H
++#define WESTON_COMPOSITOR_VNC_H
++
++#ifdef  __cplusplus
++extern "C" {
++#endif
++
++#include <libweston/libweston.h>
++#include <libweston/plugin-registry.h>
++
++#define WESTON_VNC_OUTPUT_API_NAME "weston_vnc_output_api_v1"
++
++struct weston_vnc_output_api {
++	/** Initialize a VNC output with specified width and height.
++	 *
++	 * Returns 0 on success, -1 on failure.
++	 */
++	int (*output_set_size)(struct weston_output *output,
++			       int width, int height);
++};
++
++static inline const struct weston_vnc_output_api *
++weston_vnc_output_get_api(struct weston_compositor *compositor)
++{
++	const void *api;
++	api = weston_plugin_api_get(compositor, WESTON_VNC_OUTPUT_API_NAME,
++				    sizeof(struct weston_vnc_output_api));
++
++	return (const struct weston_vnc_output_api *)api;
++}
++
++#define WESTON_VNC_BACKEND_CONFIG_VERSION 2
++
++struct weston_vnc_backend_config {
++	struct weston_backend_config base;
++	char *bind_address;
++	int port;
++	char *vnc_key;
++	char *server_cert;
++	char *server_key;
++	int env_socket;
++	int no_clients_resize;
++	int force_no_compression;
++};
++
++#ifdef  __cplusplus
++}
++#endif
++
++#endif /* WESTON_COMPOSITOR_VNC_H */
+diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
+index dc54b170..8241abff 100644
+--- a/include/libweston/libweston.h
++++ b/include/libweston/libweston.h
+@@ -1781,6 +1781,7 @@ enum weston_compositor_backend {
+ 	WESTON_BACKEND_FBDEV,
+ 	WESTON_BACKEND_HEADLESS,
+ 	WESTON_BACKEND_RDP,
++	WESTON_BACKEND_VNC,
+ 	WESTON_BACKEND_WAYLAND,
+ 	WESTON_BACKEND_X11,
+ };
+diff --git a/include/libweston/meson.build b/include/libweston/meson.build
+index 2c2f7729..3ce659d8 100644
+--- a/include/libweston/meson.build
++++ b/include/libweston/meson.build
+@@ -13,6 +13,7 @@ backend_drm_h =      files('backend-drm.h')
+ backend_fbdev_h =    files('backend-fbdev.h')
+ backend_headless_h = files('backend-headless.h')
+ backend_rdp_h =      files('backend-rdp.h')
++backend_vnc_h =      files('backend-vnc.h')
+ backend_wayland_h =  files('backend-wayland.h')
+ backend_x11_h =      files('backend-x11.h')
+ 
+diff --git a/libweston/backend-vnc/meson.build b/libweston/backend-vnc/meson.build
+new file mode 100644
+index 00000000..4aa428e5
+--- /dev/null
++++ b/libweston/backend-vnc/meson.build
+@@ -0,0 +1,20 @@
++if not get_option('backend-vnc')
++	subdir_done()
++endif
++
++config_h.set('BUILD_VNC_COMPOSITOR', '1')
++
++deps_vnc = [
++	dep_libweston_private,
++]
++plugin_vnc = shared_library(
++	'vnc-backend',
++	[ 'vnc.c', 'vnc-protocol.c' ],
++	include_directories: include_directories('../..', '../../shared'),
++	dependencies: deps_vnc,
++	name_prefix: '',
++	install: true,
++	install_dir: dir_module_libweston
++)
++env_modmap += 'vnc-backend.so=@0@;'.format(plugin_vnc.full_path())
++install_headers(backend_vnc_h, subdir: dir_include_libweston_install)
+diff --git a/libweston/backend-vnc/vnc-protocol.c b/libweston/backend-vnc/vnc-protocol.c
+new file mode 100644
+index 00000000..5e5c158b
+--- /dev/null
++++ b/libweston/backend-vnc/vnc-protocol.c
+@@ -0,0 +1,365 @@
++/*
++ * Copyright © 2019 Stefan Agner <stefan@agner.ch>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the
++ * next paragraph) shall be included in all copies or substantial
++ * portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include "config.h"
++
++#include <assert.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
++#include <linux/input.h>
++#include <netinet/in.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <unistd.h>
++
++#include "vnc-protocol.h"
++#include <libweston/libweston.h>
++
++#define DEFAULT_AXIS_STEP_DISTANCE 10
++#define MAX_FREERDP_FDS 5
++#define VNC_MODE_FREQ 60 * 1000
++#define VNC_PROTOCOL_VERSION_LEN 12
++#define VNC_PROTOCOL_VERSION_SERVER "RFB 003.008\n"
++
++enum vnc_message_type {
++	VNC_SET_PIXEL_FORMAT = 0,
++	VNC_SET_ENCODINGS = 2,
++	VNC_FRAMEBUFFER_UPDATE_REQUEST = 3,
++	VNC_KEY_EVENT = 4,
++	VNC_POINTER_EVENT = 5,
++	VNC_CLIENT_CUT_TEXT = 6,
++};
++
++#define VNC_SECURITY_TYPE_INVALID 0
++#define VNC_SECURITY_TYPE_NONE 1
++#define VNC_SECURITY_TYPE_VNC 2
++
++struct vnc_security_types {
++	uint8_t number;
++	uint8_t type;
++} __attribute__((packed));
++
++const struct vnc_security_types vnc_security_types_supported = {
++	.number = 1,
++	.type = VNC_SECURITY_TYPE_NONE,
++};
++
++struct vnc_set_encoding {
++	uint8_t padding;
++	uint16_t number;
++} __attribute__((packed));
++
++struct vnc_pixel_format {
++	uint8_t bpp;
++	uint8_t depth;
++	uint8_t big_endian;
++	uint8_t true_color;
++	uint16_t red_max;
++	uint16_t green_max;
++	uint16_t blue_max;
++	uint8_t red_shift;
++	uint8_t green_shift;
++	uint8_t blue_shift;
++	uint8_t padding[3];
++} __attribute__((packed));
++
++struct vnc_server_init {
++	uint16_t width;
++	uint16_t height;
++	struct vnc_pixel_format pixel_format;
++	uint32_t name_len;
++} __attribute__((packed));
++
++struct vnc_framebuffer_update_request {
++	uint8_t incremental;
++	uint16_t posx;
++	uint16_t posy;
++	uint16_t width;
++	uint16_t height;
++} __attribute__((packed));
++
++struct vnc_framebuffer_update {
++	uint8_t message_type;
++	uint8_t padding;
++	uint16_t num_rect;
++	uint16_t posx;
++	uint16_t posy;
++	uint16_t width;
++	uint16_t height;
++	int32_t encoding_type;
++} __attribute__((packed));
++
++struct vnc_pointer_event {
++	uint8_t button_mask;
++	uint16_t posx;
++	uint16_t posy;
++} __attribute__((packed));
++
++struct vnc_key_event {
++	uint8_t down_flag;
++	uint8_t padding[2];
++	uint32_t key;
++} __attribute__((packed));
++
++int
++vnc_server_fd(struct vnc_server *server)
++{
++	return server->fd;
++}
++
++static int
++vnc_send_pixel_format(int fd, int width, int height)
++{
++	const char *name = "Weston VNC Server";
++	int name_len = strlen(name);
++
++	const struct vnc_server_init server_init = {
++		.width = htons(width),
++		.height = htons(height),
++		.pixel_format = {
++			.bpp = 32,
++			.depth = 24,
++			.big_endian = 0,
++			.true_color = 1,
++			.red_max = htons(255),
++			.green_max = htons(255),
++			.blue_max = htons(255),
++			.red_shift = 16,
++			.green_shift = 8,
++			.blue_shift = 0,
++		},
++		.name_len = htonl(name_len),
++	};
++
++	write(fd, &server_init, sizeof(server_init));
++	write(fd, name, name_len);
++
++	return 0;
++}
++
++int
++vnc_send_raw_framebuffer_update(struct vnc_client *client, int x, int y,
++				int width, int height, uint32_t *data)
++{
++	struct vnc_framebuffer_update upd = {
++		.message_type = 0,
++		.padding = 0,
++		.num_rect = htons(1),
++		.posx = htons(x),
++		.posy = htons(y),
++		.width = htons(width),
++		.height = htons(height),
++		.encoding_type = htonl(0),
++	};
++
++	write(client->fd, &upd, sizeof(upd));
++	write(client->fd, data, height * width * 4);
++
++	return 0;
++}
++
++int
++vnc_client_close(struct vnc_client *client)
++{
++	close(client->fd);
++	client->disconnect_event(client);
++	free(client);
++
++	return 0;
++}
++
++static int
++vnc_handle_client_message(int fd, struct vnc_client *client)
++{
++	int len;
++	char buffer[256];
++	uint8_t message_type;
++	int32_t encoding_type;
++	struct vnc_set_encoding set_encoding;
++	struct vnc_framebuffer_update_request fb_update_req;
++	struct vnc_pointer_event pointer_event;
++	struct vnc_key_event key_event;
++
++	/* Read Client-to-Server Message type */
++	len = read(fd, &message_type, 1);
++	if (len != 1)
++		return vnc_client_close(client);
++
++	switch(message_type) {
++	case VNC_SET_PIXEL_FORMAT:
++		weston_log("SetPixelFormat\n");
++		len = read(fd, &buffer, 19);
++		break;
++	case VNC_SET_ENCODINGS:
++		len = read(fd, &set_encoding, sizeof(set_encoding));
++
++		for (int i = 0; i < ntohs(set_encoding.number); i++)
++			len = read(fd, &encoding_type, sizeof(encoding_type));
++		break;
++
++	case VNC_FRAMEBUFFER_UPDATE_REQUEST:
++		len = read(fd, &fb_update_req, sizeof(fb_update_req));
++		if (!fb_update_req.incremental)
++			client->update_request(client,
++					ntohs(fb_update_req.posx),
++					ntohs(fb_update_req.posy),
++					ntohs(fb_update_req.width),
++					ntohs(fb_update_req.height));
++		break;
++	case VNC_KEY_EVENT:
++		len = read(fd, &key_event, sizeof(key_event));
++		return client->key_event(client, !!key_event.down_flag,
++					 ntohl(key_event.key));
++		break;
++	case VNC_POINTER_EVENT:
++		len = read(fd, &pointer_event, sizeof(pointer_event));
++		return client->pointer_event(client,
++					     ntohs(pointer_event.posx),
++					     ntohs(pointer_event.posy),
++					     pointer_event.button_mask);
++		break;
++	case VNC_CLIENT_CUT_TEXT:
++		break;
++	}
++
++	return 0;
++}
++
++int
++vnc_client_handle_activity(struct vnc_client *client)
++{
++	char buffer[256] = { };
++	int len;
++	uint32_t status = 0;
++	int fd = client->fd;
++
++	switch (client->state) {
++	case VNC_PROTOCOL_VERSION:
++		len = read(fd, buffer, VNC_PROTOCOL_VERSION_LEN);
++		if (len != 12)
++			return vnc_client_close(client);
++
++		weston_log("VNC Client Version: %s\n", buffer);
++		client->state = VNC_SECURITY_HANDSHAKE;
++		write(fd, &vnc_security_types_supported, sizeof(vnc_security_types_supported));
++		break;
++	case VNC_SECURITY_HANDSHAKE:
++		len = read(fd, buffer, 1);
++		if (len != 1)
++			return vnc_client_close(client);
++
++		weston_log("Security: %d\n", buffer[0]);
++		client->state = VNC_INIT_PHASE;
++		write(fd, &status, sizeof(status));
++		break;
++	case VNC_INIT_PHASE:
++		len = read(fd, buffer, 1);
++		if (len != 1)
++			return vnc_client_close(client);
++
++		weston_log("Client Init, shared: %d\n", buffer[0]);
++		client->state = VNC_RUN;
++		vnc_send_pixel_format(fd, client->width, client->height);
++
++		break;
++	case VNC_RUN:
++		return vnc_handle_client_message(fd, client);
++	}
++
++	return 0;
++}
++
++int
++vnc_server_handle_activity(struct vnc_server *server)
++{
++	int clientfd;
++	struct sockaddr_in client_addr;
++	int client_len = sizeof(client_addr);
++	struct vnc_client *client;
++
++	clientfd = accept(server->fd, (struct sockaddr *) &client_addr, &client_len);
++
++	client = zalloc(sizeof(*client));
++	if (!client)
++		return -1;
++
++	client->state = VNC_PROTOCOL_VERSION;
++	client->fd = clientfd;
++	client->server = server;
++
++	write(clientfd, VNC_PROTOCOL_VERSION_SERVER, VNC_PROTOCOL_VERSION_LEN);
++
++	server->new_client(client);
++
++	return 0;
++}
++
++struct vnc_server *
++vnc_server_init(int port)
++{
++	struct vnc_server *server;
++	int fd;
++	struct sockaddr_in server_addr = { 0 };
++
++	server = zalloc(sizeof(*server));
++	if (!server)
++		return NULL;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (fd < 0) {
++		weston_log("Opening VNC socket failed\n");
++		goto err;
++	}
++
++	server_addr.sin_family = AF_INET;
++	server_addr.sin_addr.s_addr = INADDR_ANY;
++	server_addr.sin_port = htons(port);
++
++	if (bind(fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0)
++	if (fd < 0) {
++		weston_log("Binding VNC socket failed\n");
++		goto err;
++	}
++
++	listen(fd, 16);
++
++	server->fd = fd;
++
++	return server;
++
++err:
++	free(server);
++	return NULL;
++}
++
++void
++vnc_server_close(struct vnc_server *server)
++{
++	close(server->fd);
++	free(server);
++}
++
+diff --git a/libweston/backend-vnc/vnc-protocol.h b/libweston/backend-vnc/vnc-protocol.h
+new file mode 100644
+index 00000000..590edd46
+--- /dev/null
++++ b/libweston/backend-vnc/vnc-protocol.h
+@@ -0,0 +1,97 @@
++/*
++ * Copyright © 2019 Stefan Agner <stefan@agner.ch>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the
++ * next paragraph) shall be included in all copies or substantial
++ * portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++
++#ifndef LIBWESTON_BACKEND_VNC_H
++#define LIBWESTON_BACKEND_VNC_H
++
++#include <stdint.h>
++#include <stdbool.h>
++
++struct vnc_client;
++
++struct vnc_server {
++	int fd;
++	int (*new_client)(struct vnc_client *);
++	void *data;
++};
++
++enum vnc_state {
++	VNC_PROTOCOL_VERSION,
++	VNC_SECURITY_HANDSHAKE,
++	VNC_INIT_PHASE,
++	VNC_RUN,
++};
++
++#define VNC_BUTTON_LEFT		(1 << 0)
++#define VNC_BUTTON_MIDDLE	(1 << 1)
++#define VNC_BUTTON_RIGHT	(1 << 2)
++#define VNC_BUTTON_MOUSE_WHEEL_UP	(1 << 3)
++#define VNC_BUTTON_MOUSE_WHEEL_DOWN	(1 << 4)
++
++struct vnc_client {
++	struct vnc_server *server;
++	int fd;
++
++	int (*key_event)(struct vnc_client *client, bool down_flag,
++		      uint32_t keysym);
++	int (*pointer_event)(struct vnc_client *client, int x, int y,
++			  uint8_t button_mask);
++	int (*update_request)(struct vnc_client *client, int x, int y,
++			   int width, int height);
++	void (*disconnect_event)(struct vnc_client *client);
++
++	int width;
++	int height;
++
++	enum vnc_state state;
++
++	void *data;
++};
++
++struct vnc_server *
++vnc_server_init(int port);
++
++void
++vnc_server_close(struct vnc_server *server);
++
++int
++vnc_client_close(struct vnc_client *client);
++
++int
++vnc_server_fd(struct vnc_server *server);
++
++int
++vnc_server_handle_activity(struct vnc_server *server);
++
++int
++vnc_client_handle_activity(struct vnc_client *client);
++
++int
++vnc_send_raw_framebuffer_update(struct vnc_client *client, int x, int y,
++				int width, int height, uint32_t *data);
++
++
++#endif /* LIBWESTON_BACKEND_VNC_H */
+diff --git a/libweston/backend-vnc/vnc.c b/libweston/backend-vnc/vnc.c
+new file mode 100644
+index 00000000..a4e90037
+--- /dev/null
++++ b/libweston/backend-vnc/vnc.c
+@@ -0,0 +1,809 @@
++/*
++ * Copyright © 2019 Stefan Agner <stefan@agner.ch>
++ * based on backend-rdp:
++ * Copyright © 2013 Hardening <rdp.effort@gmail.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice (including the
++ * next paragraph) shall be included in all copies or substantial
++ * portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include "config.h"
++
++#include <assert.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
++#include <linux/input.h>
++#include <netinet/in.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <unistd.h>
++#include <xkbcommon/xkbcommon-keysyms.h>
++
++#include "shared/helpers.h"
++#include "shared/timespec-util.h"
++#include <libweston/libweston.h>
++#include <libweston/backend-vnc.h>
++#include "pixman-renderer.h"
++#include "vnc-protocol.h"
++
++#define DEFAULT_AXIS_STEP_DISTANCE 10
++#define VNC_MODE_FREQ 60 * 1000
++
++struct vnc_output;
++
++struct vnc_backend {
++	struct weston_backend base;
++	struct weston_compositor *compositor;
++	struct vnc_output *output;
++
++	struct vnc_server *server;
++	struct wl_event_source *accept_event;
++};
++
++struct vnc_output {
++	struct weston_output base;
++	struct wl_event_source *finish_frame_timer;
++	pixman_image_t *shadow_surface;
++
++	struct wl_list peers;
++};
++
++struct vnc_peer {
++	struct vnc_backend *backend;
++	struct wl_event_source *socket_event;
++	struct weston_seat *seat;
++	struct vnc_client *client;
++
++	uint8_t last_button_mask;
++	struct wl_list link;
++};
++
++struct vnc_head {
++	struct weston_head base;
++};
++
++static inline struct vnc_backend *to_vnc_backend(struct weston_compositor *base)
++{
++	return container_of(base->backend, struct vnc_backend, base);
++}
++
++static inline struct vnc_output *to_vnc_output(struct weston_output *base)
++{
++	return container_of(base, struct vnc_output, base);
++}
++
++static inline struct vnc_head *to_vnc_head(struct weston_head *base)
++{
++	return container_of(base, struct vnc_head, base);
++}
++
++struct vnc_keysym_to_keycode {
++	const uint32_t keysym;
++	const uint32_t code;
++};
++
++static const
++struct vnc_keysym_to_keycode key_translation[] = {
++	{XKB_KEY_KP_Enter, 0x60},
++	{XKB_KEY_Return, 0x1c},
++	{XKB_KEY_space, 0x39},
++	{XKB_KEY_BackSpace, 0xe},
++	{XKB_KEY_Tab, 0xf},
++	{XKB_KEY_Escape, 0x1},
++	{XKB_KEY_Shift_L, 0x2a},
++	{XKB_KEY_Shift_R, 0x36},
++	{XKB_KEY_Control_L, 0x1d},
++	{XKB_KEY_Control_R, 0x9d},
++	{XKB_KEY_Alt_L, 0x38},
++	{XKB_KEY_Alt_R, 0x64},
++	{XKB_KEY_Meta_L, 0x38},
++	{XKB_KEY_Meta_R, 0x64},
++	{XKB_KEY_Super_L, 0x7d},
++	{XKB_KEY_Print, 0x63},
++	{XKB_KEY_Pause, 0x77},
++	{XKB_KEY_Caps_Lock, 0x3a},
++	{XKB_KEY_Scroll_Lock, 0x46},
++	{XKB_KEY_A, 0x1e},
++	{XKB_KEY_a, 0x1e},
++	{XKB_KEY_B, 0x30},
++	{XKB_KEY_b, 0x30},
++	{XKB_KEY_C, 0x2e},
++	{XKB_KEY_c, 0x2e},
++	{XKB_KEY_D, 0x20},
++	{XKB_KEY_d, 0x20},
++	{XKB_KEY_E, 0x12},
++	{XKB_KEY_e, 0x12},
++	{XKB_KEY_F, 0x21},
++	{XKB_KEY_f, 0x21},
++	{XKB_KEY_G, 0x22},
++	{XKB_KEY_g, 0x22},
++	{XKB_KEY_H, 0x23},
++	{XKB_KEY_h, 0x23},
++	{XKB_KEY_I, 0x17},
++	{XKB_KEY_i, 0x17},
++	{XKB_KEY_J, 0x24},
++	{XKB_KEY_j, 0x24},
++	{XKB_KEY_K, 0x25},
++	{XKB_KEY_k, 0x25},
++	{XKB_KEY_L, 0x26},
++	{XKB_KEY_l, 0x26},
++	{XKB_KEY_M, 0x32},
++	{XKB_KEY_m, 0x32},
++	{XKB_KEY_N, 0x31},
++	{XKB_KEY_n, 0x31},
++	{XKB_KEY_O, 0x18},
++	{XKB_KEY_o, 0x18},
++	{XKB_KEY_P, 0x19},
++	{XKB_KEY_p, 0x19},
++	{XKB_KEY_Q, 0x10},
++	{XKB_KEY_q, 0x10},
++	{XKB_KEY_R, 0x13},
++	{XKB_KEY_r, 0x13},
++	{XKB_KEY_S, 0x1f},
++	{XKB_KEY_s, 0x1f},
++	{XKB_KEY_T, 0x14},
++	{XKB_KEY_t, 0x14},
++	{XKB_KEY_U, 0x16},
++	{XKB_KEY_u, 0x16},
++	{XKB_KEY_V, 0x2f},
++	{XKB_KEY_v, 0x2f},
++	{XKB_KEY_W, 0x11},
++	{XKB_KEY_w, 0x11},
++	{XKB_KEY_X, 0x2d},
++	{XKB_KEY_x, 0x2d},
++	{XKB_KEY_Y, 0x15},
++	{XKB_KEY_y, 0x15},
++	{XKB_KEY_Z, 0x2c},
++	{XKB_KEY_z, 0x2c},
++	{XKB_KEY_grave, 0x29},
++	{XKB_KEY_asciitilde, 0x29},
++	{XKB_KEY_1, 0x02},
++	{XKB_KEY_exclam, 0x02},
++	{XKB_KEY_2, 0x03},
++	{XKB_KEY_at, 0x03},
++	{XKB_KEY_3, 0x04},
++	{XKB_KEY_numbersign, 0x04},
++	{XKB_KEY_4, 0x05},
++	{XKB_KEY_dollar, 0x05},
++	{XKB_KEY_5, 0x06},
++	{XKB_KEY_percent, 0x06},
++	{XKB_KEY_6, 0x07},
++	{XKB_KEY_asciicircum, 0x07},
++	{XKB_KEY_7, 0x08},
++	{XKB_KEY_ampersand, 0x08},
++	{XKB_KEY_8, 0x09},
++	{XKB_KEY_asterisk, 0x09},
++	{XKB_KEY_9, 0x0a},
++	{XKB_KEY_parenleft, 0x0a},
++	{XKB_KEY_0, 0x0b},
++	{XKB_KEY_parenright, 0x0b},
++	{XKB_KEY_minus, 0x0c},
++	{XKB_KEY_underscore, 0x0c},
++	{XKB_KEY_equal, 0x0d},
++	{XKB_KEY_plus, 0x0d},
++	{XKB_KEY_bracketleft, 0x1a},
++	{XKB_KEY_braceleft, 0x1a},
++	{XKB_KEY_bracketright, 0x1b},
++	{XKB_KEY_braceright, 0x1b},
++	{XKB_KEY_semicolon, 0x27},
++	{XKB_KEY_colon, 0x27},
++	{XKB_KEY_apostrophe, 0x28},
++	{XKB_KEY_quotedbl, 0x28},
++	{XKB_KEY_backslash, 0x2b},
++	{XKB_KEY_bar, 0x2b},
++	{XKB_KEY_comma, 0x33},
++	{XKB_KEY_less, 0x33},
++	{XKB_KEY_period, 0x34},
++	{XKB_KEY_greater, 0x34},
++	{XKB_KEY_slash, 0x35},
++	{XKB_KEY_question, 0x35},
++	{XKB_KEY_F1, 0x3b},
++	{XKB_KEY_F2, 0x3c},
++	{XKB_KEY_F3, 0x3d},
++	{XKB_KEY_F4, 0x3e},
++	{XKB_KEY_F5, 0x3f},
++	{XKB_KEY_F6, 0x40},
++	{XKB_KEY_F7, 0x41},
++	{XKB_KEY_F8, 0x42},
++	{XKB_KEY_F9, 0x43},
++	{XKB_KEY_F10, 0x44},
++	{XKB_KEY_F11, 0x57},
++	{XKB_KEY_F12, 0x58},
++	{XKB_KEY_Home, 0x66},
++	{XKB_KEY_Up, 0x67},
++	{XKB_KEY_Prior, 0x68},
++	{XKB_KEY_Left, 0x69},
++	{XKB_KEY_Right, 0x6a},
++	{XKB_KEY_End, 0x6b},
++	{XKB_KEY_Down, 0x6c},
++	{XKB_KEY_Next, 0x6d},
++	{ },
++};
++
++static int
++vnc_handle_key_event(struct vnc_client *client, bool down_flag, uint32_t keysym)
++{
++	struct vnc_peer *peer = client->data;
++	uint32_t key = 0;
++	enum wl_keyboard_key_state state;
++	struct timespec time;
++	int i;
++
++	if (down_flag)
++		state = WL_KEYBOARD_KEY_STATE_PRESSED;
++	else
++		state = WL_KEYBOARD_KEY_STATE_RELEASED;
++
++	for (i = 0; key_translation[i].keysym; i++) {
++		if (key_translation[i].keysym == keysym) {
++			key = key_translation[i].code;
++			break;
++		}
++	}
++
++	if (!key)
++		weston_log("Key not found: keysym %08x, translated %08x\n",
++			    keysym, key);
++
++	notify_key(peer->seat, &time, key, state, STATE_UPDATE_AUTOMATIC);
++
++	return 0;
++}
++
++static int
++vnc_handle_pointer_event(struct vnc_client *client, int x, int y,
++			 uint8_t button_mask)
++{
++	struct vnc_peer *peer = client->data;
++	struct vnc_output *output = peer->backend->output;
++	struct timespec time;
++	uint8_t changed_button_mask;
++
++	weston_compositor_get_time(&time);
++
++	if (x < output->base.width && y < output->base.height)
++		notify_motion_absolute(peer->seat, &time, x, y);
++
++	changed_button_mask = peer->last_button_mask ^ button_mask;
++
++	if (changed_button_mask & VNC_BUTTON_LEFT)
++		notify_button(peer->seat, &time, BTN_LEFT,
++			(button_mask & VNC_BUTTON_LEFT) ?
++			 WL_POINTER_BUTTON_STATE_PRESSED : WL_POINTER_BUTTON_STATE_RELEASED);
++
++	if (changed_button_mask & VNC_BUTTON_MIDDLE)
++		notify_button(peer->seat, &time, BTN_MIDDLE,
++			(button_mask & VNC_BUTTON_MIDDLE) ?
++			 WL_POINTER_BUTTON_STATE_PRESSED : WL_POINTER_BUTTON_STATE_RELEASED);
++
++	if (changed_button_mask & VNC_BUTTON_RIGHT)
++		notify_button(peer->seat, &time, BTN_RIGHT,
++			(button_mask & VNC_BUTTON_RIGHT) ?
++			 WL_POINTER_BUTTON_STATE_PRESSED : WL_POINTER_BUTTON_STATE_RELEASED);
++
++	if ((button_mask & VNC_BUTTON_MOUSE_WHEEL_UP) ||
++	    (button_mask & VNC_BUTTON_MOUSE_WHEEL_DOWN))
++	{
++		struct weston_pointer_axis_event weston_event;
++
++		weston_event.axis = WL_POINTER_AXIS_VERTICAL_SCROLL;
++
++		/* DEFAULT_AXIS_STEP_DISTANCE is stolen from compositor-x11.c */
++		if (button_mask & VNC_BUTTON_MOUSE_WHEEL_UP)
++			weston_event.value = -DEFAULT_AXIS_STEP_DISTANCE;
++		if (button_mask & VNC_BUTTON_MOUSE_WHEEL_DOWN)
++			weston_event.value = DEFAULT_AXIS_STEP_DISTANCE;
++		weston_event.has_discrete = false;
++
++		notify_axis(peer->seat, &time, &weston_event);
++	}
++
++	peer->last_button_mask = button_mask;
++
++	notify_pointer_frame(peer->seat);
++
++	return 0;
++}
++
++static void
++vnc_disconnect_event(struct vnc_client *client)
++{
++	struct vnc_peer *peer = client->data;
++
++	wl_list_remove(&peer->link);
++	wl_event_source_remove(peer->socket_event);
++	weston_seat_release_keyboard(peer->seat);
++	weston_seat_release_pointer(peer->seat);
++	weston_seat_release(peer->seat);
++	free(peer);
++	weston_log("VNC Client disconnected\n");
++}
++
++static int
++vnc_peer_activity(int fd, uint32_t mask, void *data)
++{
++	struct vnc_peer *peer = data;
++
++	if (!(mask & WL_EVENT_READABLE))
++		return 0;
++
++	return vnc_client_handle_activity(peer->client);
++}
++
++static int
++vnc_listen_activity(int fd, uint32_t mask, void *data)
++{
++	struct vnc_backend *backend = data;
++
++	return vnc_server_handle_activity(backend->server);
++}
++
++static int
++vnc_handle_update_request(struct vnc_client *client,
++			  int x, int y, int width, int height)
++{
++	struct vnc_peer *peer = client->data;
++	struct vnc_output *output = peer->backend->output;
++	uint32_t *ptr;
++	pixman_image_t *damage_buffer;
++
++	damage_buffer = pixman_image_create_bits(PIXMAN_x8r8g8b8, width,
++						 height, 0, width * 4);
++	pixman_image_composite32(PIXMAN_OP_SRC, output->shadow_surface,
++			0, damage_buffer, x, y, 0, 0, 0, 0, width, height);
++	ptr = pixman_image_get_data(damage_buffer);
++
++	return vnc_send_raw_framebuffer_update(client, x, y, width, height, ptr);
++}
++
++static int vnc_new_client(struct vnc_client *client)
++{
++	struct vnc_backend *backend = client->server->data;
++	struct vnc_output *output = backend->output;
++	struct vnc_peer *peer;
++	struct wl_event_loop *loop;
++	const char *seat_name = "VNC Client";
++
++	peer = zalloc(sizeof(*peer));
++	peer->client = client;
++	peer->backend = client->server->data;
++	peer->seat = zalloc(sizeof(*peer->seat));
++
++	client->key_event = vnc_handle_key_event;
++	client->pointer_event = vnc_handle_pointer_event;
++	client->update_request = vnc_handle_update_request;
++	client->disconnect_event = vnc_disconnect_event;
++
++	client->width = output->base.current_mode->width;
++	client->height = output->base.current_mode->height;
++	client->data = peer;
++
++	if (!peer->seat) {
++		weston_log("unable to create a weston_seat\n");
++		return -1;
++	}
++	weston_seat_init(peer->seat, backend->compositor, seat_name);
++	weston_seat_init_pointer(peer->seat);
++	weston_seat_init_keyboard(peer->seat, NULL);
++
++	wl_list_insert(&output->peers, &peer->link);
++
++	loop = wl_display_get_event_loop(backend->compositor->wl_display);
++	peer->socket_event = wl_event_loop_add_fd(loop, client->fd,
++						  WL_EVENT_READABLE,
++						  vnc_peer_activity, peer);
++
++	return 0;
++}
++
++
++static int
++finish_frame_handler(void *data)
++{
++	struct vnc_output *output = data;
++	struct timespec ts;
++
++	weston_compositor_read_presentation_clock(output->base.compositor, &ts);
++	weston_output_finish_frame(&output->base, &ts, 0);
++
++	return 1;
++}
++
++static int
++vnc_output_enable(struct weston_output *base)
++{
++	struct vnc_output *output = to_vnc_output(base);
++	struct vnc_backend *backend = to_vnc_backend(base->compositor);
++	struct wl_event_loop *loop;
++
++	output->shadow_surface = pixman_image_create_bits(PIXMAN_x8r8g8b8,
++							  output->base.current_mode->width,
++							  output->base.current_mode->height,
++							  NULL,
++							  output->base.current_mode->width * 4);
++	if (output->shadow_surface == NULL) {
++		weston_log("Failed to create surface for frame buffer.\n");
++		return -1;
++	}
++
++	if (pixman_renderer_output_create(&output->base, 0) < 0) {
++		pixman_image_unref(output->shadow_surface);
++		return -1;
++	}
++
++	loop = wl_display_get_event_loop(backend->compositor->wl_display);
++	output->finish_frame_timer = wl_event_loop_add_timer(loop, finish_frame_handler, output);
++
++	backend->output = output;
++
++	return 0;
++}
++
++static int
++vnc_output_disable(struct weston_output *base)
++{
++	struct vnc_output *output = to_vnc_output(base);
++	struct vnc_backend *backend = to_vnc_backend(base->compositor);
++
++	if (!output->base.enabled)
++		return 0;
++
++	pixman_image_unref(output->shadow_surface);
++	pixman_renderer_output_destroy(&output->base);
++
++	wl_event_source_remove(output->finish_frame_timer);
++	backend->output = NULL;
++
++	return 0;
++}
++
++static void
++vnc_output_destroy(struct weston_output *base)
++{
++	struct vnc_output *output = to_vnc_output(base);
++
++	weston_output_release(&output->base);
++
++	free(output);
++}
++
++static struct weston_output *
++vnc_create_output(struct weston_compositor *compositor, const char *name)
++{
++	struct vnc_output *output;
++
++	output = zalloc(sizeof *output);
++	if (output == NULL)
++		return NULL;
++
++	weston_output_init(&output->base, compositor, name);
++
++	output->base.destroy = vnc_output_destroy;
++	output->base.disable = vnc_output_disable;
++	output->base.enable = vnc_output_enable;
++	output->base.attach_head = NULL;
++
++	weston_compositor_add_pending_output(&output->base, compositor);
++
++	return &output->base;
++}
++
++static void
++vnc_destroy(struct weston_compositor *ec)
++{
++	struct weston_head *base, *next;
++	struct vnc_head *head;
++	struct vnc_backend *backend = to_vnc_backend(ec);
++	struct vnc_output *output = backend->output;
++	struct vnc_peer *peer, *next_peer;
++
++	wl_list_for_each_safe(peer, next_peer, &output->peers, link) {
++		vnc_client_close(peer->client);
++	}
++
++	weston_compositor_shutdown(ec);
++
++	wl_list_for_each_safe(base, next, &ec->head_list, compositor_link) {
++		head = to_vnc_head(base);
++
++		weston_head_release(&head->base);
++		free(head);
++	}
++
++	wl_event_source_remove(backend->accept_event);
++
++	vnc_server_close(backend->server);
++
++	free(backend);
++}
++
++static int
++vnc_head_create(struct weston_compositor *compositor, const char *name)
++{
++	struct vnc_head *head;
++
++	head = zalloc(sizeof *head);
++	if (!head)
++		return -1;
++
++	weston_head_init(&head->base, name);
++	weston_head_set_connection_status(&head->base, true);
++	weston_compositor_add_head(compositor, &head->base);
++
++	return 0;
++}
++
++
++static int
++vnc_output_start_repaint_loop(struct weston_output *output)
++{
++	struct timespec ts;
++
++	weston_compositor_read_presentation_clock(output->compositor, &ts);
++	weston_output_finish_frame(output, &ts, WP_PRESENTATION_FEEDBACK_INVALID);
++
++	return 0;
++}
++
++static int
++vnc_output_repaint(struct weston_output *base, pixman_region32_t *damage,
++		   void *repaint_data)
++{
++	struct vnc_output *output = to_vnc_output(base);
++	struct weston_compositor *ec = output->base.compositor;
++	pixman_image_t *damage_buffer;
++	struct vnc_peer *peer;
++	int width, height;
++	uint32_t *ptr;
++
++	pixman_renderer_output_set_buffer(base, output->shadow_surface);
++	ec->renderer->repaint_output(&output->base, damage);
++
++	if (pixman_region32_not_empty(damage)) {
++		width = (damage->extents.x2 - damage->extents.x1);
++		height = (damage->extents.y2 - damage->extents.y1);
++
++		damage_buffer = pixman_image_create_bits(PIXMAN_x8r8g8b8, width,
++							 height, 0, width * 4);
++		pixman_image_composite32(PIXMAN_OP_SRC, output->shadow_surface,
++				0, damage_buffer, damage->extents.x1, damage->extents.y1, 0, 0, 0, 0, width, height);
++		ptr = pixman_image_get_data(damage_buffer);
++
++		wl_list_for_each(peer, &output->peers, link) {
++			vnc_send_raw_framebuffer_update(peer->client,
++					damage->extents.x1,
++					damage->extents.y1,
++					width,
++					height,
++					ptr);
++		}
++
++		pixman_image_unref(damage_buffer);
++	}
++
++	pixman_region32_subtract(&ec->primary_plane.damage,
++				 &ec->primary_plane.damage, damage);
++
++	wl_event_source_timer_update(output->finish_frame_timer, 16);
++	return 0;
++}
++
++static struct weston_mode *
++vnc_insert_new_mode(struct weston_output *output, int width, int height, int rate)
++{
++	struct weston_mode *mode;
++
++	mode = zalloc(sizeof *mode);
++	if (!mode)
++		return NULL;
++	mode->width = width;
++	mode->height = height;
++	mode->refresh = rate;
++	wl_list_insert(&output->mode_list, &mode->link);
++
++	return mode;
++}
++
++static struct weston_mode *
++vnc_ensure_matching_mode(struct weston_output *output, struct weston_mode *target)
++{
++	struct weston_mode *local;
++
++	wl_list_for_each(local, &output->mode_list, link) {
++		if ((local->width == target->width) && (local->height == target->height))
++			return local;
++	}
++
++	return vnc_insert_new_mode(output, target->width, target->height, VNC_MODE_FREQ);
++}
++
++static int
++vnc_switch_mode(struct weston_output *base, struct weston_mode *target_mode)
++{
++	struct vnc_output *output = to_vnc_output(base);
++	pixman_image_t *new_shadow_buffer;
++	struct weston_mode *local_mode;
++
++	local_mode = vnc_ensure_matching_mode(base, target_mode);
++	if (!local_mode) {
++		weston_log("mode %dx%d not available\n",
++			   target_mode->width, target_mode->height);
++		return -ENOENT;
++	}
++
++	if (local_mode == base->current_mode)
++		return 0;
++
++	base->current_mode->flags &= ~WL_OUTPUT_MODE_CURRENT;
++
++	base->current_mode = base->native_mode = local_mode;
++	base->current_mode->flags |= WL_OUTPUT_MODE_CURRENT;
++
++	pixman_renderer_output_destroy(base);
++	pixman_renderer_output_create(base, 0);
++
++	new_shadow_buffer = pixman_image_create_bits(PIXMAN_x8r8g8b8, target_mode->width,
++			target_mode->height, 0, target_mode->width * 4);
++	pixman_image_composite32(PIXMAN_OP_SRC, output->shadow_surface, 0, new_shadow_buffer,
++			0, 0, 0, 0, 0, 0, target_mode->width, target_mode->height);
++	pixman_image_unref(output->shadow_surface);
++	output->shadow_surface = new_shadow_buffer;
++
++	return 0;
++}
++
++static int
++vnc_output_set_size(struct weston_output *base,
++		    int width, int height)
++{
++	struct vnc_output *output = to_vnc_output(base);
++	struct weston_head *head;
++	struct weston_mode *current_mode;
++	struct weston_mode init_mode;
++
++	/* We can only be called once. */
++	assert(!output->base.current_mode);
++
++	wl_list_for_each(head, &output->base.head_list, output_link) {
++		weston_head_set_monitor_strings(head, "weston", "vnc", NULL);
++
++		weston_head_set_physical_size(head, width, height);
++	}
++
++	wl_list_init(&output->peers);
++
++	init_mode.flags = WL_OUTPUT_MODE_CURRENT | WL_OUTPUT_MODE_PREFERRED;
++	init_mode.width = width;
++	init_mode.height = height;
++	init_mode.refresh = VNC_MODE_FREQ;
++
++	current_mode = vnc_ensure_matching_mode(&output->base, &init_mode);
++	if (!current_mode)
++		return -1;
++
++	output->base.current_mode = output->base.native_mode = current_mode;
++
++	output->base.start_repaint_loop = vnc_output_start_repaint_loop;
++	output->base.repaint = vnc_output_repaint;
++	output->base.assign_planes = NULL;
++	output->base.set_backlight = NULL;
++	output->base.set_dpms = NULL;
++	output->base.switch_mode = vnc_switch_mode;
++
++	return 0;
++}
++
++static const struct weston_vnc_output_api api = {
++	vnc_output_set_size,
++};
++
++static struct vnc_backend *
++vnc_backend_create(struct weston_compositor *compositor,
++		   struct weston_vnc_backend_config *config)
++{
++	struct vnc_backend *backend;
++	struct wl_event_loop *loop;
++	int ret;
++
++	backend = zalloc(sizeof *backend);
++	if (backend == NULL)
++		return NULL;
++
++	backend->compositor = compositor;
++	backend->base.destroy = vnc_destroy;
++	backend->base.create_output = vnc_create_output;
++
++	compositor->backend = &backend->base;
++
++	if (weston_compositor_set_presentation_clock_software(compositor) < 0)
++		goto err_compositor;
++
++	if (pixman_renderer_init(compositor) < 0)
++		goto err_compositor;
++
++	if (vnc_head_create(compositor, "vnc") < 0)
++		goto err_compositor;
++
++	compositor->capabilities |= WESTON_CAP_ARBITRARY_MODES;
++
++	backend->server = vnc_server_init(config->port);
++	if (!backend->server)
++		goto err_output;
++
++	backend->server->new_client = vnc_new_client;
++	backend->server->data = backend;
++
++	loop = wl_display_get_event_loop(backend->compositor->wl_display);
++
++	backend->accept_event = wl_event_loop_add_fd(loop,
++					backend->server->fd,
++					WL_EVENT_READABLE,
++					vnc_listen_activity, backend);
++
++	ret = weston_plugin_api_register(compositor, WESTON_VNC_OUTPUT_API_NAME,
++					 &api, sizeof(api));
++	if (ret < 0) {
++		weston_log("Failed to register output API.\n");
++		goto err_output;
++	}
++
++	return backend;
++
++err_output:
++	weston_output_release(&backend->output->base);
++err_compositor:
++	weston_compositor_shutdown(compositor);
++	free(backend);
++	return NULL;
++}
++
++static void
++config_init_to_defaults(struct weston_vnc_backend_config *config)
++{
++	config->port = 5900;
++}
++
++WL_EXPORT int
++weston_backend_init(struct weston_compositor *compositor,
++		    struct weston_backend_config *config_base)
++{
++	struct vnc_backend *backend;
++	struct weston_vnc_backend_config config = {{ 0, }};
++
++	weston_log("Initializing VNC backend\n");
++
++	if (config_base == NULL ||
++	    config_base->struct_version != WESTON_VNC_BACKEND_CONFIG_VERSION ||
++	    config_base->struct_size > sizeof(struct weston_vnc_backend_config)) {
++		weston_log("VNC backend config structure is invalid\n");
++		return -1;
++	}
++
++	config_init_to_defaults(&config);
++	memcpy(&config, config_base, config_base->struct_size);
++
++	backend = vnc_backend_create(compositor, &config);
++	if (backend == NULL)
++		return -1;
++	return 0;
++}
+diff --git a/libweston/compositor.c b/libweston/compositor.c
+index dbc64927..3710405c 100644
+--- a/libweston/compositor.c
++++ b/libweston/compositor.c
+@@ -7755,6 +7755,7 @@ static const char * const backend_map[] = {
+ 	[WESTON_BACKEND_FBDEV] =	"fbdev-backend.so",
+ 	[WESTON_BACKEND_HEADLESS] =	"headless-backend.so",
+ 	[WESTON_BACKEND_RDP] =		"rdp-backend.so",
++	[WESTON_BACKEND_VNC] =		"vnc-backend.so",
+ 	[WESTON_BACKEND_WAYLAND] =	"wayland-backend.so",
+ 	[WESTON_BACKEND_X11] =		"x11-backend.so",
+ };
+diff --git a/libweston/meson.build b/libweston/meson.build
+index 08d23ecd..a6b57038 100644
+--- a/libweston/meson.build
++++ b/libweston/meson.build
+@@ -238,5 +238,6 @@ subdir('backend-drm')
+ subdir('backend-fbdev')
+ subdir('backend-headless')
+ subdir('backend-rdp')
++subdir('backend-vnc')
+ subdir('backend-wayland')
+ subdir('backend-x11')
+diff --git a/meson_options.txt b/meson_options.txt
+index c862ecc4..6669cea4 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -26,6 +26,12 @@ option(
+ 	value: true,
+ 	description: 'Weston backend: RDP remote screensharing'
+ )
++option(
++	'backend-vnc',
++	type: 'boolean',
++	value: true,
++	description: 'Weston backend: VNC remote screensharing'
++)
+ option(
+ 	'screenshare',
+ 	type: 'boolean',
+diff --git a/xwayland/launcher.c b/xwayland/launcher.c
+index 2f2cebbe..756d5931 100644
+--- a/xwayland/launcher.c
++++ b/xwayland/launcher.c
+@@ -29,8 +29,10 @@
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <sys/types.h> 
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <netinet/in.h>
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <unistd.h>
+-- 
+2.22.0
+

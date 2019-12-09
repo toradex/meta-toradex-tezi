@@ -10,9 +10,10 @@ echo "Running /etc/rc.local..."
 cat /etc/tezi-version
 
 # Start services
-mkdir -p /var/lock/subsys
+mkdir -p /var/run/dbus/
 /etc/init.d/udev start
-/etc/init.d/haveged start
+dbus-daemon --system
+avahi-daemon --daemonize
 
 # Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do
@@ -30,19 +31,6 @@ fi
 if grep -q fullscreen /proc/cmdline; then
 	FULLSCREEN="-fullscreen";
 fi
-
-# Environment for weston
-mkdir -p -m 0700 /run/wayland
-export XDG_RUNTIME_DIR=/run/wayland
-
-# Generate tls certificate for rdp
-RDP_TLS_DIR=${RW_MEMORY_DIR}
-RDP_TLS_FILENAME=tls
-
-# D-Bus and Avahi
-mkdir -p /var/run/dbus/
-dbus-daemon --system
-avahi-daemon --daemonize
 
 # Set the system clock from hardware clock
 # If the timestamp is more recent than the current time,
@@ -63,27 +51,9 @@ then
         fi
 fi
 
-{
-if [ ! -f ${RDP_TLS_DIR}/${RDP_TLS_FILENAME}.crt ] || [ ! -f ${RDP_TLS_DIR}/${RDP_TLS_FILENAME}.key ]
-then    
-    echo Certificates for RDP not found in ${RDP_TLS_DIR} 
-    cd ${RDP_TLS_DIR}
-    openssl genrsa -out ${RDP_TLS_FILENAME}.key 2048 && \
-    openssl req -new -key ${RDP_TLS_FILENAME}.key -out ${RDP_TLS_FILENAME}.csr \
-	-subj "/C=CH/ST=Luzern/L=Luzern/O=Toradex/CN=${HOSTNAME}" && \
-    openssl x509 -req -days 3650 -signkey ${RDP_TLS_FILENAME}.key \
-	-in ${RDP_TLS_FILENAME}.csr -out ${RDP_TLS_FILENAME}.crt 
-    if [ $? -eq 0 ]; then
-	echo Certificate for RDP successfully generated
-    else
-	echo Error generating certificate for RDP
-    fi
-    cd
-else
-    echo Certificates for RDP found in ${RDP_TLS_DIR}. Skipping generation.
-fi
-} 2>&1 | tee -a ${RW_MEMORY_DIR}/${WESTON_LOGFILE}
-
+# Environment for weston
+mkdir -p -m 0700 /run/wayland
+export XDG_RUNTIME_DIR=/run/wayland
 
 # Export variables relevant for Qt
 export QT_WAYLAND_FORCE_DPI=72
