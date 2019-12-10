@@ -19,6 +19,7 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-renderer-change-all-frame_signal-emission-to-pass-pr.patch \
            file://0001-backend-drm-Define-potentially-missing-aspect-ratio-.patch \
            file://0001-backend-vnc-initial-commit.patch \
+           file://0001-screen-share-auto-enable-screen-share-on-startup.patch \
 "
 SRC_URI[md5sum] = "18da5ffdb0db99786e929d3a46621016"
 SRC_URI[sha256sum] = "a802d0f3214613e92d509d64ba069887a6339d0cf2f735290b9e97701807a21d"
