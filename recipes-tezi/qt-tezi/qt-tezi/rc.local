@@ -59,7 +59,7 @@ export XDG_RUNTIME_DIR=/run/wayland
 export QT_WAYLAND_FORCE_DPI=72
 
 # Start in background
-nohup /usr/bin/weston --tty=2 >> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} &
+nohup /usr/bin/weston --tty=2 --current-mode >> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} &
 sleep 0.5
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
 	-platform wayland < /dev/null >> ${RW_MEMORY_DIR}/${TEZI_LOGFILE} &
