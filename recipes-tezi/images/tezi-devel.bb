@@ -13,4 +13,5 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     gdb \
     qtzeroconf \
     avahi-daemon \
+    drm-info \
 "
