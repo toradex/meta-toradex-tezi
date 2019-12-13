@@ -4,7 +4,7 @@ if test ${board} = "apalis-imx8"
 then
     env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
     env set ramdisk_addr_r 0x83000000
-    env set vidargs 'video=LVDS-1:d video=HDMI-A-1:640x480'
+    env set vidargs 'video=LVDS-1:d video=HDMI-A-1:640x480D'
 else
     # TODO: modify once we move to mainline U-Boot
     if test ${board} = "colibri-imx8qxp"
