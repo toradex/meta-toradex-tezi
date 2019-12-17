@@ -1,0 +1,45 @@
+From 00c45a09903538838fca1acc752ed04366ba825d Mon Sep 17 00:00:00 2001
+Message-Id: <00c45a09903538838fca1acc752ed04366ba825d.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed, 11 Jul 2018 10:58:19 +0200
+Subject: [PATCH 04/14] arm: dts: imx6qdl-apalis: force fixed ids for usdhc
+ controllers
+
+The following, together with kernel patches, forces a fixed assignment
+between device id and sdmmc controller.
+
+I.e. the eMMC on uSDHC3 will be /dev/mmcblk0.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index f6dd48a4f89e..98b79a17ad9f 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -53,6 +53,18 @@
+ 		reg = <0x10000000 0>;
+ 	};
+ 
++	aliases {
++		/*
++		* The following, together with kernel patches, forces a fixed
++		* assignment between device id and SDMMC controllers.
++		*
++		* I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
++		*/
++		mmc0 = &usdhc3; /* eMMC */
++		mmc1 = &usdhc1; /* MMC1 slot */
++		mmc2 = &usdhc2; /* SD1 slot */
++	};
++
+ 	backlight: backlight {
+ 		compatible = "pwm-backlight";
+ 		pinctrl-names = "default";
+-- 
+2.24.1
+

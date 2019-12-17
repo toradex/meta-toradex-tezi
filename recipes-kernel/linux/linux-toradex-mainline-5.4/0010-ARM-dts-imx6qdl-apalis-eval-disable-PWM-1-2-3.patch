@@ -1,0 +1,42 @@
+From 5190b129da5461dfbc097cb49f22d5296ce9f0dc Mon Sep 17 00:00:00 2001
+Message-Id: <5190b129da5461dfbc097cb49f22d5296ce9f0dc.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Gerard Salvatella <gerard.salvatella@toradex.com>
+Date: Fri, 23 Nov 2018 15:53:51 +0100
+Subject: [PATCH 10/14] ARM: dts: imx6qdl-apalis-eval: disable PWM 1/2/3
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable it by default.
+
+Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
+---
+ arch/arm/boot/dts/imx6q-apalis-eval.dts | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+index 1972ec475ce9..fd2330e9e534 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+@@ -303,18 +303,6 @@
+ 	status = "okay";
+ };
+ 
+-&pwm1 {
+-	status = "okay";
+-};
+-
+-&pwm2 {
+-	status = "okay";
+-};
+-
+-&pwm3 {
+-	status = "okay";
+-};
+-
+ &pwm4 {
+ 	status = "okay";
+ };
+-- 
+2.24.1
+

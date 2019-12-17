@@ -1,0 +1,45 @@
+From 2d05cfb3a24849caafe1295be4de29368004ff67 Mon Sep 17 00:00:00 2001
+Message-Id: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed, 11 Dec 2019 22:32:59 +0100
+Subject: [PATCH 01/14] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
+ RGB ports by default"
+
+This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.
+---
+ arch/arm/boot/dts/imx6q-apalis-eval.dts | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+index 02a63e666a0a..488192a34b1d 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+@@ -86,7 +86,7 @@
+ 		#size-cells = <0>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
+-		status = "disabled";
++		status = "okay";
+ 
+ 		port@0 {
+ 			reg = <0>;
+@@ -144,7 +144,6 @@
+ 		height-mm = <137>;
+ 
+ 		data-mapping = "vesa-24";
+-		status = "disabled";
+ 
+ 		panel-timing {
+ 			clock-frequency = <68930000>;
+@@ -277,7 +276,7 @@
+ };
+ 
+ &ldb {
+-	status = "disabled";
++	status = "okay";
+ 
+ 	lvds-channel@0 {
+ 		status = "okay";
+-- 
+2.24.1
+

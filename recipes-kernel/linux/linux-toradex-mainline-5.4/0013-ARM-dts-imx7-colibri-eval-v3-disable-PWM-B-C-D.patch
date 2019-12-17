@@ -1,0 +1,42 @@
+From 2a97a4bcd7dc677f9cee39e54501b053ee0160af Mon Sep 17 00:00:00 2001
+Message-Id: <2a97a4bcd7dc677f9cee39e54501b053ee0160af.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Gerard Salvatella <gerard.salvatella@toradex.com>
+Date: Fri, 23 Nov 2018 15:47:51 +0100
+Subject: [PATCH 13/14] ARM: dts: imx7-colibri-eval-v3: disable PWM B/C/D
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable them by default.
+
+Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
+---
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+index cb64aa310f40..e67a3e50e962 100644
+--- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+@@ -178,18 +178,6 @@
+ 	status = "okay";
+ };
+ 
+-&pwm2 {
+-	status = "okay";
+-};
+-
+-&pwm3 {
+-	status = "okay";
+-};
+-
+-&pwm4 {
+-	status = "okay";
+-};
+-
+ &uart1 {
+ 	status = "okay";
+ };
+-- 
+2.24.1
+

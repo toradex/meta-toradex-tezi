@@ -1,0 +1,29 @@
+From 43a1f000a1eec4a19b9d11f1ff2b6746f1301975 Mon Sep 17 00:00:00 2001
+Message-Id: <43a1f000a1eec4a19b9d11f1ff2b6746f1301975.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed, 11 Dec 2019 22:33:52 +0100
+Subject: [PATCH 02/14] Partially revert "ARM: dts: imx6qdl-apalis: link the
+ backlight to the panels"
+
+This partially reverts commit e1bfc3ddb9e2be45055e8e4835e22c48a1030103.
+---
+ arch/arm/boot/dts/imx6q-apalis-eval.dts | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+index 488192a34b1d..8f98cb464a18 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+@@ -114,7 +114,6 @@
+ 		height-mm = <86>;
+ 
+ 		data-mapping = "rgb24";
+-		status = "disabled";
+ 
+ 		panel-timing {
+ 			clock-frequency = <25175000>;
+-- 
+2.24.1
+

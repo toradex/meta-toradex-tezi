@@ -1,0 +1,46 @@
+From 2847102b5fa6a59ba074194201e0db8c970fc345 Mon Sep 17 00:00:00 2001
+Message-Id: <2847102b5fa6a59ba074194201e0db8c970fc345.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Gerard Salvatella <gerard.salvatella@toradex.com>
+Date: Thu, 15 Nov 2018 10:17:48 +0100
+Subject: [PATCH 11/14] ARM: dts: imx6dl-colibri-eval-v3: disable PWM B/C/D
+
+PWM is not really required by Toradex Easy Installer and might
+interfere on some carrier boards. Disable it by default.
+
+Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
+---
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+index 0e27f180913b..49108e5c0f5a 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+@@ -199,22 +199,10 @@
+ 	remote-endpoint = <&lcd_display_in>;
+ };
+ 
+-&pwm1 {
+-	status = "okay";
+-};
+-
+-&pwm2 {
+-	status = "okay";
+-};
+-
+ &pwm3 {
+ 	status = "okay";
+ };
+ 
+-&pwm4 {
+-	status = "okay";
+-};
+-
+ &reg_usb_host_vbus {
+ 	status = "okay";
+ };
+-- 
+2.24.1
+

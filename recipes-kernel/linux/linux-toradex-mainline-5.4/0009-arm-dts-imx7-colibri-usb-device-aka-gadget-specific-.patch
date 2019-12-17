@@ -1,0 +1,33 @@
+From 9696df4675369f9a61e911ff4c2ea40d963aa1b6 Mon Sep 17 00:00:00 2001
+Message-Id: <9696df4675369f9a61e911ff4c2ea40d963aa1b6.1576833238.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed, 18 Dec 2019 21:44:53 +0100
+Subject: [PATCH 09/14] arm: dts: imx7-colibri: usb device aka gadget specific
+ device tree
+
+USB device aka gadget specific device trees for the Toradex Easy
+Installer.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/imx7-colibri.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index eed78f12e79e..fa16826b2ea1 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -316,7 +316,7 @@
+ };
+ 
+ &usbotg1 {
+-	dr_mode = "host";
++	dr_mode = "peripheral";
+ };
+ 
+ &usdhc1 {
+-- 
+2.24.1
+
