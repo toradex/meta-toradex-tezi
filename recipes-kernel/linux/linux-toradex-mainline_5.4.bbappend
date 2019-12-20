@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline-5.4:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-5.4:"
 
 SRC_URI_append = " \
     file://0001-Revert-ARM-dts-imx6qdl-apalis-disable-LVDS-parallel-.patch \
