@@ -46,7 +46,6 @@ RDEPENDS_${PN} += " \
     tar \
     tezi-version \
     ${TOUCH} \
-    ttf-vera \
     u-boot-fw-utils \
     unzip \
     util-linux-blkdiscard \
