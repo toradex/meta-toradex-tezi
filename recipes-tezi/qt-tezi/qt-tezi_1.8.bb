@@ -21,8 +21,6 @@ EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE
 
 inherit qmake5
 
-TOUCH = ' ${@bb.utils.contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests", "",d)}'
-
 DEPENDS += " \
     libusbgx \
     rapidjson \
@@ -45,7 +43,6 @@ RDEPENDS_${PN} += " \
     qtwayland \
     tar \
     tezi-version \
-    ${TOUCH} \
     u-boot-fw-utils \
     unzip \
     util-linux-blkdiscard \
