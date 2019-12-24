@@ -41,7 +41,6 @@ RDEPENDS_${PN} += " \
     lz4 \
     lzop \
     mmc-utils \
-    openssl-bin \
     pv \
     qtwayland \
     tar \
