@@ -13,8 +13,6 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
            file://find-wayland-scanner.patch \
            file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
-           file://0001-backend-rdp-release-seat-on-peer-disconnect.patch \
-           file://0001-rdp-add-libwinpr2-dependency.patch \
            file://0001-compositor-drop-libexec_weston-versioning.patch \
            file://0001-renderer-change-all-frame_signal-emission-to-pass-pr.patch \
            file://0001-backend-drm-Define-potentially-missing-aspect-ratio-.patch \
@@ -33,12 +31,14 @@ export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
 export CXXFLAGS_class-target = "${TARGET_CXXFLAGS}"
 export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 
-DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm freerdp"
+DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
 WESTON_MAJOR_VERSION = "8"
 
-EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false -Dpipewire=false"
+EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false \
+		-Dpipewire=false -Dbackend-rdp=false \
+		"
 EXTRA_OECONF_append_qemux86 = "\
 		WESTON_NATIVE_BACKEND=fbdev-backend.so \
 		"
