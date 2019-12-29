@@ -4,6 +4,6 @@ inherit packagegroup
 
 RDEPENDS_${PN} += " \
     libusbgx \
-    rapidjson-dev \
+    rapidjson \
     qtzeroconf-dev \
 "
