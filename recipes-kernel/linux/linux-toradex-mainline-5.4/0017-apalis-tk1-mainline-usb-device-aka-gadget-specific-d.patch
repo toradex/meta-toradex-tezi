@@ -1,0 +1,79 @@
+From d8dc457ce62a1e8a0bd6a607466f7a2a2e0b980f Mon Sep 17 00:00:00 2001
+Message-Id: <d8dc457ce62a1e8a0bd6a607466f7a2a2e0b980f.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Tue, 27 Mar 2018 14:34:28 +0200
+Subject: [PATCH 17/18] apalis-tk1-mainline: usb device aka gadget specific
+ device tree
+
+USB device aka gadget specific device trees for the Toradex Easy
+Installer.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/tegra124-apalis-eval.dts      | 3 ++-
+ arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts | 3 ++-
+ arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi     | 2 +-
+ arch/arm/boot/dts/tegra124-apalis.dtsi          | 2 +-
+ 4 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/tegra124-apalis-eval.dts b/arch/arm/boot/dts/tegra124-apalis-eval.dts
+index 3f4ab911cb49..c0864181d400 100644
+--- a/arch/arm/boot/dts/tegra124-apalis-eval.dts
++++ b/arch/arm/boot/dts/tegra124-apalis-eval.dts
+@@ -158,8 +158,9 @@
+ 
+ 	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
+ 	usb@7d000000 {
++		compatible = "nvidia,tegra124-udc";
+ 		status = "okay";
+-		dr_mode = "otg";
++		dr_mode = "peripheral";
+ 	};
+ 
+ 	usb-phy@7d000000 {
+diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
+index e81b10b788a6..b930acff3c54 100644
+--- a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
++++ b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
+@@ -160,8 +160,9 @@
+ 
+ 	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
+ 	usb@7d000000 {
++		compatible = "nvidia,tegra124-udc";
+ 		status = "okay";
+-		dr_mode = "otg";
++		dr_mode = "peripheral";
+ 	};
+ 
+ 	usb-phy@7d000000 {
+diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
+index 9f773fb0f477..4ea16a88c8c0 100644
+--- a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
++++ b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
+@@ -1846,7 +1846,7 @@
+ 				lanes {
+ 					usb2-0 {
+ 						status = "okay";
+-						nvidia,function = "xusb";
++						nvidia,function = "snps";
+ 					};
+ 
+ 					usb2-1 {
+diff --git a/arch/arm/boot/dts/tegra124-apalis.dtsi b/arch/arm/boot/dts/tegra124-apalis.dtsi
+index adb66ad691a6..d0364ec800ea 100644
+--- a/arch/arm/boot/dts/tegra124-apalis.dtsi
++++ b/arch/arm/boot/dts/tegra124-apalis.dtsi
+@@ -1811,7 +1811,7 @@
+ 				lanes {
+ 					usb2-0 {
+ 						status = "okay";
+-						nvidia,function = "xusb";
++						nvidia,function = "snps";
+ 					};
+ 
+ 					usb2-1 {
+-- 
+2.24.1
+

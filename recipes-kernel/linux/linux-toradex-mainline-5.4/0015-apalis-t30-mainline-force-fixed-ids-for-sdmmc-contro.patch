@@ -1,0 +1,99 @@
+From 93938f47485b63e65923eceba28f30a24d8aed40 Mon Sep 17 00:00:00 2001
+Message-Id: <93938f47485b63e65923eceba28f30a24d8aed40.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Thu, 19 Apr 2018 14:01:58 +0200
+Subject: [PATCH 15/18] apalis-t30-mainline: force fixed ids for sdmmc
+ controllers
+
+The following, together with the previous 3 kernel patches, forces a
+fixed assignment between device id and sdmmc controller.
+
+I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/tegra30-apalis-eval.dts      | 13 +++++++++++--
+ arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts | 13 +++++++++++--
+ 2 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/tegra30-apalis-eval.dts b/arch/arm/boot/dts/tegra30-apalis-eval.dts
+index ca23cacd1412..625d9f4d5205 100644
+--- a/arch/arm/boot/dts/tegra30-apalis-eval.dts
++++ b/arch/arm/boot/dts/tegra30-apalis-eval.dts
+@@ -10,6 +10,15 @@
+ 		     "nvidia,tegra30";
+ 
+ 	aliases {
++		/*
++		 * The following, together with kernel patches, forces a fixed
++		 * assignment between device id and SDMMC controllers.
++		 *
++		 * I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
++		 */
++		mmc0 = "/sdhci@78000600"; /* eMMC */
++		mmc1 = &mmc1; /* MMC1 8-bit slot */
++		mmc2 = &sd1; /* SD1  4-bit slot */
+ 		rtc0 = "/i2c@7000c000/rtc@68";
+ 		rtc1 = "/i2c@7000d000/pmic@2d";
+ 		rtc2 = "/rtc@7000e000";
+@@ -120,7 +129,7 @@
+ 	};
+ 
+ 	/* Apalis SD1 */
+-	sdhci@78000000 {
++	sd1: sdhci@78000000 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* SD1_CD# */
+@@ -129,7 +138,7 @@
+ 	};
+ 
+ 	/* Apalis MMC1 */
+-	sdhci@78000400 {
++	mmc1: sdhci@78000400 {
+ 		status = "okay";
+ 		bus-width = <8>;
+ 		/* MMC1_CD# */
+diff --git a/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts b/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
+index e97bec341c21..255a6388392a 100644
+--- a/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
++++ b/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
+@@ -11,6 +11,15 @@
+ 		     "nvidia,tegra30";
+ 
+ 	aliases {
++		/*
++		 * The following, together with kernel patches, forces a fixed
++		 * assignment between device id and SDMMC controllers.
++		 *
++		 * I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
++		 */
++		mmc0 = "/sdhci@78000600"; /* eMMC */
++		mmc1 = &mmc1; /* MMC1 8-bit slot */
++		mmc2 = &sd1; /* SD1  4-bit slot */
+ 		rtc0 = "/i2c@7000c000/rtc@68";
+ 		rtc1 = "/i2c@7000d000/pmic@2d";
+ 		rtc2 = "/rtc@7000e000";
+@@ -121,7 +130,7 @@
+ 	};
+ 
+ 	/* Apalis SD1 */
+-	sdhci@78000000 {
++	sd1: sdhci@78000000 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* SD1_CD# */
+@@ -130,7 +139,7 @@
+ 	};
+ 
+ 	/* Apalis MMC1 */
+-	sdhci@78000400 {
++	mmc1: sdhci@78000400 {
+ 		status = "okay";
+ 		bus-width = <8>;
+ 		/* MMC1_CD# */
+-- 
+2.24.1
+

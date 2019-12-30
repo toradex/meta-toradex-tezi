@@ -1,0 +1,29 @@
+From 2f78c3600c552fc87509d37fd9a7a713f48ade8f Mon Sep 17 00:00:00 2001
+Message-Id: <2f78c3600c552fc87509d37fd9a7a713f48ade8f.1577722702.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Fri, 20 Apr 2018 10:07:58 +0200
+Subject: [PATCH] apalis-t30-mainline: apply pcie fix hacks
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ drivers/pci/controller/pci-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
+index 37365a5a4390..1f5a0d096570 100644
+--- a/drivers/pci/controller/pci-tegra.c
++++ b/drivers/pci/controller/pci-tegra.c
+@@ -44,8 +44,8 @@
+ 
+ #include "../pci.h"
+ 
+-//#define CONFIG_MACH_APALIS_T30
+-#define CONFIG_MACH_APALIS_TK1
++#define CONFIG_MACH_APALIS_T30
++//#define CONFIG_MACH_APALIS_TK1
+ #if defined(CONFIG_MACH_APALIS_T30) || defined(CONFIG_MACH_APALIS_TK1)
+ #include <linux/gpio.h>
+ 
+-- 
+2.24.1
+

@@ -1,10 +1,10 @@
-From 8b6545f05033609c39f447f8d26244b1b7ec3fd6 Mon Sep 17 00:00:00 2001
-Message-Id: <8b6545f05033609c39f447f8d26244b1b7ec3fd6.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 14f740c0447bde26cd5b3fcc32160f4da529da46 Mon Sep 17 00:00:00 2001
+Message-Id: <14f740c0447bde26cd5b3fcc32160f4da529da46.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:07:38 +0100
-Subject: [PATCH 06/14] arm: dts: imx7d-colibri-emmc: force fixed ids for usdhc
+Subject: [PATCH 06/18] arm: dts: imx7d-colibri-emmc: force fixed ids for usdhc
  controllers
 
 The following, together with kernel patches, forces a fixed assignment

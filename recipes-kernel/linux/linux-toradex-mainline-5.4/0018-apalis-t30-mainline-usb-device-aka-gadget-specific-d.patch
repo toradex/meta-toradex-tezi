@@ -1,0 +1,51 @@
+From 26bae8be3ed3d36cad972f9f48d0899b2284ed43 Mon Sep 17 00:00:00 2001
+Message-Id: <26bae8be3ed3d36cad972f9f48d0899b2284ed43.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Fri, 20 Apr 2018 10:04:33 +0200
+Subject: [PATCH 18/18] apalis-t30-mainline: usb device aka gadget specific
+ device tree
+
+USB device aka gadget specific device trees for the Toradex Easy
+Installer.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/tegra30-apalis-eval.dts      | 3 ++-
+ arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/tegra30-apalis-eval.dts b/arch/arm/boot/dts/tegra30-apalis-eval.dts
+index 625d9f4d5205..1fcbaf0149ae 100644
+--- a/arch/arm/boot/dts/tegra30-apalis-eval.dts
++++ b/arch/arm/boot/dts/tegra30-apalis-eval.dts
+@@ -148,8 +148,9 @@
+ 
+ 	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
+ 	usb@7d000000 {
++		compatible = "nvidia,tegra30-udc";
+ 		status = "okay";
+-		dr_mode = "otg";
++		dr_mode = "peripheral";
+ 	};
+ 
+ 	usb-phy@7d000000 {
+diff --git a/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts b/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
+index 255a6388392a..b96b351d3157 100644
+--- a/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
++++ b/arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts
+@@ -149,8 +149,9 @@
+ 
+ 	/* EHCI instance 0: USB1_DP/N -> USBO1_DP/N */
+ 	usb@7d000000 {
++		compatible = "nvidia,tegra30-udc";
+ 		status = "okay";
+-		dr_mode = "otg";
++		dr_mode = "peripheral";
+ 	};
+ 
+ 	usb-phy@7d000000 {
+-- 
+2.24.1
+

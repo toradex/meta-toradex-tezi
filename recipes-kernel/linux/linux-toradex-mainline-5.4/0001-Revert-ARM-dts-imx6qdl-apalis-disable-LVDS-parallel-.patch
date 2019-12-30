@@ -1,8 +1,8 @@
-From 2d05cfb3a24849caafe1295be4de29368004ff67 Mon Sep 17 00:00:00 2001
-Message-Id: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From fbe98d0f83aff5b59a677d46e7448536e119f3fa Mon Sep 17 00:00:00 2001
+Message-Id: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:32:59 +0100
-Subject: [PATCH 01/14] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
+Subject: [PATCH 01/18] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
  RGB ports by default"
 
 This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.

@@ -1,10 +1,10 @@
-From edfb7f2142147ef89626176f70621eae2c699dde Mon Sep 17 00:00:00 2001
-Message-Id: <edfb7f2142147ef89626176f70621eae2c699dde.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 9691025be19161a88af88dc4b61a22388fc6dfb9 Mon Sep 17 00:00:00 2001
+Message-Id: <9691025be19161a88af88dc4b61a22388fc6dfb9.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Stefan Agner <stefan@agner.ch>
 Date: Fri, 29 Apr 2016 10:32:17 -0700
-Subject: [PATCH 03/14] mmc: read mmc alias from device tree
+Subject: [PATCH 03/18] mmc: read mmc alias from device tree
 
 To get the SD/MMC host device ID, read the alias from the device
 tree.

@@ -1,10 +1,10 @@
-From 2b43719b1a4339d2288cd280031e33990fc3698f Mon Sep 17 00:00:00 2001
-Message-Id: <2b43719b1a4339d2288cd280031e33990fc3698f.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 1a50c381743f9ec3e24f635238c1e7d607f9ebc7 Mon Sep 17 00:00:00 2001
+Message-Id: <1a50c381743f9ec3e24f635238c1e7d607f9ebc7.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 10:48:19 +0100
-Subject: [PATCH 07/14] arm: dts: imx6dl/q/ull/7-apalis/colibri-eval/eval-v3:
+Subject: [PATCH 07/18] arm: dts: imx6dl/q/ull/7-apalis/colibri-eval/eval-v3:
  vesa vga display timings
 
 Use proper VESA VGA display timings by default.

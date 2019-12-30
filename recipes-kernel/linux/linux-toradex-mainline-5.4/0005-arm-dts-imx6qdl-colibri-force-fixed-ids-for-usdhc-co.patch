@@ -1,10 +1,10 @@
-From c1ca5d015320327e29a52d47f8d0214bf6cbd06e Mon Sep 17 00:00:00 2001
-Message-Id: <c1ca5d015320327e29a52d47f8d0214bf6cbd06e.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 75e22063ac3f84cd46812879295fa9b78a88a1c9 Mon Sep 17 00:00:00 2001
+Message-Id: <75e22063ac3f84cd46812879295fa9b78a88a1c9.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:06:54 +0100
-Subject: [PATCH 05/14] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
+Subject: [PATCH 05/18] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
  controllers
 
 The following, together with kernel patches, forces a fixed assignment

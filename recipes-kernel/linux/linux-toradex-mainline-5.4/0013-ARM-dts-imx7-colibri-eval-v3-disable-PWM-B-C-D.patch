@@ -1,10 +1,10 @@
-From 2a97a4bcd7dc677f9cee39e54501b053ee0160af Mon Sep 17 00:00:00 2001
-Message-Id: <2a97a4bcd7dc677f9cee39e54501b053ee0160af.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 24b07672c83976b99d2bc36c356032b6de3e45de Mon Sep 17 00:00:00 2001
+Message-Id: <24b07672c83976b99d2bc36c356032b6de3e45de.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 15:47:51 +0100
-Subject: [PATCH 13/14] ARM: dts: imx7-colibri-eval-v3: disable PWM B/C/D
+Subject: [PATCH 13/18] ARM: dts: imx7-colibri-eval-v3: disable PWM B/C/D
 
 PWM is not really required by Toradex Easy Installer and might
 interfere on some carrier boards. Disable them by default.

@@ -1,10 +1,10 @@
-From 5190b129da5461dfbc097cb49f22d5296ce9f0dc Mon Sep 17 00:00:00 2001
-Message-Id: <5190b129da5461dfbc097cb49f22d5296ce9f0dc.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From 37db71362da88405ec01c7f62c598cc688be008a Mon Sep 17 00:00:00 2001
+Message-Id: <37db71362da88405ec01c7f62c598cc688be008a.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 15:53:51 +0100
-Subject: [PATCH 10/14] ARM: dts: imx6qdl-apalis-eval: disable PWM 1/2/3
+Subject: [PATCH 10/18] ARM: dts: imx6qdl-apalis-eval: disable PWM 1/2/3
 
 PWM is not really required by Toradex Easy Installer and might
 interfere on some carrier boards. Disable it by default.

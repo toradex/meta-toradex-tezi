@@ -1,0 +1,98 @@
+From 6f21ab16b48fb8f0b622577c827c46618802c1a9 Mon Sep 17 00:00:00 2001
+Message-Id: <6f21ab16b48fb8f0b622577c827c46618802c1a9.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed, 11 Jul 2018 10:58:19 +0200
+Subject: [PATCH 16/18] apalis-tk1: force fixed ids for sdmmc controllers
+
+The following, together with kernel patches, forces a fixed assignment
+between device id and sdmmc controller.
+
+I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/tegra124-apalis-eval.dts      | 13 +++++++++++--
+ arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts | 13 +++++++++++--
+ 2 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/tegra124-apalis-eval.dts b/arch/arm/boot/dts/tegra124-apalis-eval.dts
+index ceb3f6388c7d..3f4ab911cb49 100644
+--- a/arch/arm/boot/dts/tegra124-apalis-eval.dts
++++ b/arch/arm/boot/dts/tegra124-apalis-eval.dts
+@@ -14,6 +14,15 @@
+ 		     "nvidia,tegra124";
+ 
+ 	aliases {
++		/*
++		 * The following, together with kernel patches, forces a fixed
++		 * assignment between device id and SDMMC controllers.
++		 *
++		 * I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
++		 */
++		mmc0 = "/sdhci@700b0600"; /* eMMC */
++		mmc1 = &mmc1; /* MMC1 slot */
++		mmc2 = &sd1; /* SD1 slot */
+ 		rtc0 = "/i2c@7000c000/rtc@68";
+ 		rtc1 = "/i2c@7000d000/pmic@40";
+ 		rtc2 = "/rtc@7000e000";
+@@ -130,7 +139,7 @@
+ 	};
+ 
+ 	/* Apalis MMC1 */
+-	sdhci@700b0000 {
++	mmc1: sdhci@700b0000 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* MMC1_CD# */
+@@ -139,7 +148,7 @@
+ 	};
+ 
+ 	/* Apalis SD1 */
+-	sdhci@700b0400 {
++	sd1: sdhci@700b0400 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* SD1_CD# */
+diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
+index 6337b7c9f136..e81b10b788a6 100644
+--- a/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
++++ b/arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts
+@@ -15,6 +15,15 @@
+ 		     "nvidia,tegra124";
+ 
+ 	aliases {
++		/*
++		 * The following, together with kernel patches, forces a fixed
++		 * assignment between device id and SDMMC controllers.
++		 *
++		 * I.e. the eMMC on SDMMC4 will be /dev/mmcblk0.
++		 */
++		mmc0 = "/sdhci@700b0600"; /* eMMC */
++		mmc1 = &mmc1; /* MMC1 slot */
++		mmc2 = &sd1; /* SD1 slot */
+ 		rtc0 = "/i2c@7000c000/rtc@68";
+ 		rtc1 = "/i2c@7000d000/pmic@40";
+ 		rtc2 = "/rtc@7000e000";
+@@ -132,7 +141,7 @@
+ 	};
+ 
+ 	/* Apalis MMC1 */
+-	sdhci@700b0000 {
++	mmc1: sdhci@700b0000 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* MMC1_CD# */
+@@ -141,7 +150,7 @@
+ 	};
+ 
+ 	/* Apalis SD1 */
+-	sdhci@700b0400 {
++	sd1: sdhci@700b0400 {
+ 		status = "okay";
+ 		bus-width = <4>;
+ 		/* SD1_CD# */
+-- 
+2.24.1
+

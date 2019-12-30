@@ -1,10 +1,10 @@
-From 5c2f956bb652509a3b5529f7802b8a6237242f0c Mon Sep 17 00:00:00 2001
-Message-Id: <5c2f956bb652509a3b5529f7802b8a6237242f0c.1576833238.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
-References: <2d05cfb3a24849caafe1295be4de29368004ff67.1576833238.git.marcel.ziswiler@toradex.com>
+From ab45c9f6aacb59420c71753d702abd7e64e636ab Mon Sep 17 00:00:00 2001
+Message-Id: <ab45c9f6aacb59420c71753d702abd7e64e636ab.1577722306.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 18 Dec 2019 21:43:31 +0100
-Subject: [PATCH 08/14] arm: dts: imx6ull-colibri: usb device aka gadget
+Subject: [PATCH 08/18] arm: dts: imx6ull-colibri: usb device aka gadget
  specific device tree
 
 USB device aka gadget specific device trees for the Toradex Easy
