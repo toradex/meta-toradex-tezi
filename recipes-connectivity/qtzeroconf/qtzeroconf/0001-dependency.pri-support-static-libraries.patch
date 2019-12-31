@@ -1,0 +1,42 @@
+From a619dd3f8209eb5deae2861f7824eb5b4ed5cdd3 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Sun, 29 Dec 2019 22:43:53 +0100
+Subject: [PATCH] dependency.pri: support static libraries
+
+Also drop rpath options, they are not compitable with cross-compilation
+which is in use in OE.
+
+Upstream-Status: Inappropriate [oe-core specific]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ dependency.pri | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/dependency.pri b/dependency.pri
+index 34186e1..92f971a 100644
+--- a/dependency.pri
++++ b/dependency.pri
+@@ -6,10 +6,13 @@ else:  SONAME=so
+ # this project.  Specify the libraries you need to depend on in the variable
+ # DEPENDENCY_LIBRARIES and this will add
+ for(dep, DEPENDENCY_LIBRARIES) {
+-    #message($$TARGET depends on $$dep ($${DESTDIR}/lib$${dep}.$${SONAME}))
+-    LIBS               += -L$${DESTDIR} -l$${dep}
+-    PRE_TARGETDEPS     += $${DESTDIR}/lib$${dep}.$${SONAME}
+-    QMAKE_LFLAGS += -Wl,-rpath=\'\$\$ORIGIN\'
+-    QMAKE_LFLAGS += -Wl,-rpath-link=\'$${DESTDIR}\'
+-    QMAKE_LFLAGS_RPATH =
++    !contains(CONFIG, static) {
++        message($$TARGET depends on $$dep ($${DESTDIR}/lib$${dep}.$${SONAME}))
++        LIBS               += -L$${DESTDIR} -l$${dep}
++        PRE_TARGETDEPS     += $${DESTDIR}/lib$${dep}.$${SONAME}
++    } else {
++        message($$TARGET depends on $$dep ($${DESTDIR}/lib$${dep}))
++        LIBS               += $${DESTDIR}/lib$${dep}.a
++        PRE_TARGETDEPS     += $${DESTDIR}/lib$${dep}.a
++    }
+ }
+-- 
+2.7.4
+

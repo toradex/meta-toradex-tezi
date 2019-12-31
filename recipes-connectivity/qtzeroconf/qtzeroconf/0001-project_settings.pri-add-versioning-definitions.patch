@@ -1,0 +1,40 @@
+From 331f70d7e87869d222e22de2282385afc566e7ea Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 30 Dec 2019 09:42:46 +0100
+Subject: [PATCH] project_settings.pri: add versioning definitions
+
+Upstream-Status: Pending
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ project_settings.pri | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/project_settings.pri b/project_settings.pri
+index f86ed2d..f668673 100644
+--- a/project_settings.pri
++++ b/project_settings.pri
+@@ -3,8 +3,6 @@ PROJ_DIR     = $$PWD
+ QT          -= gui
+ QT          += core
+ CONFIG      += c++11 debug
+-VERSION      = 0.0.1
+-
+ DESTDIR      = $$PROJ_DIR/bin
+ 
+ MOC_DIR      = .moc
+@@ -12,6 +10,11 @@ UI_DIR       = .ui
+ RCC_DIR      = .rcc
+ OBJECTS_DIR  = .obj
+ 
++VERSION_MAJOR = 0
++VERSION_MINOR = 0
++VERSION_PATCH = 1
++VERSION       = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
++
+ INCLUDEPATH += $$PROJ_DIR/include
+ 
+ QMAKE_CXXFLAGS += -Wall -Wcast-align -Wextra -Wfloat-equal -Wformat=2 -Wformat-nonliteral -Wmissing-braces -Wmissing-declarations -Wmissing-field-initializers -Wmissing-format-attribute -Wmissing-noreturn -Woverlength-strings -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wsequence-point -Wsign-compare -Wswitch -Wuninitialized -Wunknown-pragmas -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -Wwrite-strings -O3
+-- 
+2.7.4
+
