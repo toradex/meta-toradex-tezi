@@ -24,7 +24,7 @@ inherit qmake5
 DEPENDS += " \
     libusbgx \
     rapidjson \
-    qtbase \
+    qtwayland \
     qtzeroconf \
 "
 
@@ -40,7 +40,7 @@ RDEPENDS_${PN} += " \
     lzop \
     mmc-utils \
     pv \
-    qtwayland \
+    qtwayland-plugins \
     tar \
     tezi-version \
     u-boot-fw-utils \
