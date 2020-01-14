@@ -11,7 +11,7 @@ DEPENDS += "u-boot-mkimage-native zip-native"
 
 def fitimg_get_size(d):
     import os
-    return os.path.getsize(os.path.join(d.getVar('IMGDEPLOYDIR'), 'tezi.itb')) / (1024 * 1024)
+    return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
@@ -164,24 +164,16 @@ python rootfs_tezirun_run_json() {
         rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
 }
 
-build_fitimage () {
-    datafile=$(mktemp ${DEPLOY_DIR_IMAGE}/tezi-XXXXXX.its)
-    sed "s#\./\(${IMAGE_BASENAME}-${MACHINE}.${TEZI_INITRD_IMAGE}\)#${IMGDEPLOYDIR}/\1#" ${DEPLOY_DIR_IMAGE}/tezi.its > $datafile
-    mkimage -f $datafile ${IMGDEPLOYDIR}/tezi.itb
-    rm -f $datafile
-}
-
 IMAGE_CMD_tezirunimg () {
-    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
-    (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} tezi.itb ${WORKDIR}/${TDX_VER_ID})
+    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi.itb tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
+    (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} ${WORKDIR}/${TDX_VER_ID})
     zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
     mv ${TDX_VER_ID}.zip ${IMGDEPLOYDIR}
 }
 
 do_image_tezirunimg[dirs] += "${WORKDIR}/${TDX_VER_ID} ${WORKDIR}"
 do_image_tezirunimg[cleandirs] += "${WORKDIR}/${TDX_VER_ID}"
-do_image_tezirunimg[prefuncs] += "build_fitimage rootfs_tezirun_run_json"
+do_image_tezirunimg[prefuncs] += "rootfs_tezirun_run_json"
 do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy tezi-run-metadata:do_deploy \
                                  ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                                 "
-IMAGE_TYPEDEP_tezirunimg += "${TEZI_INITRD_IMAGE}"

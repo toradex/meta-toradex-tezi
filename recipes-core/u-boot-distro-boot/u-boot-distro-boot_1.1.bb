@@ -13,7 +13,7 @@ INHIBIT_DEFAULT_DEPS = "1"
 inherit deploy nopackages
 
 do_deploy () {
-    sed -i 's/@@TEZI_INITRD_IMAGE@@/${TEZI_INITRD_IMAGE}/' ${WORKDIR}/boot*.cmd
+    sed -i 's/@@INITRAMFS_FSTYPES@@/${INITRAMFS_FSTYPES}/' ${WORKDIR}/boot*.cmd
 
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
         -n "Distro boot script" -d ${WORKDIR}/boot.cmd ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}

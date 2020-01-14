@@ -6,7 +6,6 @@ SRC_URI = " \
     http://sources.toradex.com/tezi/${PN}_${PV}.tar.xz \
     file://wrapup.sh \
     file://tezi.png \
-    file://tezi.its \
     file://recovery-linux.sh \
     file://recovery-windows.bat \
     file://recovery/imx_usb.conf \
@@ -50,10 +49,6 @@ deploy_common () {
     install -m 644 ${WORKDIR}/tezi.png ${TEZI_RUN_DEPLOYDIR}
     install -m 755 ${WORKDIR}/recovery-linux.sh ${TEZI_RUN_DEPLOYDIR}
     install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
-
-    install -m 644 ${WORKDIR}/tezi.its ${DEPLOYDIR}
-    sed -i -s 's/@@TEZI_INITRD_IMAGE@@/${TEZI_INITRD_IMAGE}/' ${DEPLOYDIR}/tezi.its
-    sed -i -s 's/@@KERNEL_VERSION@@/${KERNEL_VERSION}/' ${DEPLOYDIR}/tezi.its
 }
 
 do_deploy () {

@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-5.4:"
 
+require linux-toradex-tezi-common.inc
+
 SRC_URI_append = " \
     file://0001-Revert-ARM-dts-imx6qdl-apalis-disable-LVDS-parallel-.patch \
     file://0002-Partially-revert-ARM-dts-imx6qdl-apalis-link-the-bac.patch \

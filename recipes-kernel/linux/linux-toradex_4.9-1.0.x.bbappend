@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-4.9-1.0.x/${MACHINE}:${THISDIR}/${PN}-4.9-1.0.x:"
 
-require linux-configure-variable.inc
+require linux-toradex-tezi-common.inc
 
 SRC_URI_append_apalis-imx6 = " \
     file://0002-ARM-dts-imx6qdl-apalis-eval-disable-PWM-1-2-3.patch \
