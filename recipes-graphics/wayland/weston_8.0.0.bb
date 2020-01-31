@@ -12,13 +12,12 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://xwayland.weston-start \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
            file://find-wayland-scanner.patch \
-           file://0001-desktop-shell-make-sure-child-window-stays-active.patch \
            file://0001-compositor-drop-libexec_weston-versioning.patch \
            file://0001-backend-vnc-initial-commit.patch \
            file://0001-screen-share-auto-enable-screen-share-on-startup.patch \
 "
-SRC_URI[md5sum] = "7f20007b88bca4f4bac9aa8a1afe146f"
-SRC_URI[sha256sum] = "043ba3d65e0f715f3895cbfaa90f9346414930a9211ea7042742bd3342a279dd"
+SRC_URI[md5sum] = "53e4810d852df0601d01fd986a5b22b3"
+SRC_URI[sha256sum] = "7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c027848"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -32,7 +31,7 @@ export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
-WESTON_MAJOR_VERSION = "8"
+WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 
 EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false \
 		-Dpipewire=false -Dbackend-rdp=false \

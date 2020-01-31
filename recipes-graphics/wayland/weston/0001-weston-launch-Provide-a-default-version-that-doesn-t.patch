@@ -1,6 +1,6 @@
-From add9ea55a1fbb6b196df090e272dd1d97c3652bb Mon Sep 17 00:00:00 2001
-From: Ming Liu <ming.liu@toradex.com>
-Date: Wed, 27 Nov 2019 16:11:41 +0100
+From 5f2d71998eb77068cbaee2d468cbb296a42d5739 Mon Sep 17 00:00:00 2001
+From: Tom Hochstein <tom.hochstein@nxp.com>
+Date: Wed, 22 Feb 2017 15:53:30 +0200
 Subject: [PATCH] weston-launch: Provide a default version that doesn't require
  PAM
 
@@ -16,6 +16,7 @@ Signed-off-by: Tom Hochstein <tom.hochstein@nxp.com>
 Signed-off-by: Jussi Kukkonen <jussi.kukkonen@intel.com>
 Signed-off-by: Denys Dmytriyenko <denys@ti.com>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
+
 ---
  libweston/meson.build     | 16 ++++++++++++----
  libweston/weston-launch.c | 21 +++++++++++++++++++++
@@ -178,7 +179,7 @@ index 8a711b4..54c567a 100644
  	if (setup_launcher_socket(&wl) < 0)
  		exit(EXIT_FAILURE);
 diff --git a/meson_options.txt b/meson_options.txt
-index d5bf1d5..254eb2b 100644
+index c862ecc..73ef2c3 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -73,6 +73,13 @@ option(
@@ -195,6 +196,3 @@ index d5bf1d5..254eb2b 100644
  	'xwayland',
  	type: 'boolean',
  	value: true,
--- 
-2.7.4
-
