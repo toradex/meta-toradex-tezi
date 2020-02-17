@@ -11,7 +11,6 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://wallpaper.png \
            file://xwayland.weston-start \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
-           file://find-wayland-scanner.patch \
            file://0001-compositor-drop-libexec_weston-versioning.patch \
            file://0001-backend-vnc-initial-commit.patch \
            file://0001-screen-share-auto-enable-screen-share-on-startup.patch \
@@ -21,7 +20,7 @@ SRC_URI[sha256sum] = "7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
-inherit meson pkgconfig useradd distro_features_check
+inherit meson pkgconfig useradd
 
 export CFLAGS_class-target = "${TARGET_CFLAGS}"
 export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
