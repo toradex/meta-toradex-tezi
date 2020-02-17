@@ -10,17 +10,20 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b31d8f53b6aaf2b4985d7dd7810a70d1 \
                     file://src/wayland-server.c;endline=24;md5=b8e046164a766bb1ede8ba38e9dcd7ce"
 
-DEPENDS = "expat libxml2 libffi wayland-native"
+DEPENDS = "expat libffi wayland-native"
 
 SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
-	   file://fixpathinpcfiles.patch \
+           file://fixpathinpcfiles.patch \
            "
-SRC_URI[md5sum] = "d91f970aea11fd549eae023d06f91af3"
-SRC_URI[sha256sum] = "72aa11b8ac6e22f4777302c9251e8fec7655dc22f9d94ee676c6b276f95f91a4"
+SRC_URI[md5sum] = "23317697b6e3ff2e1ac8c5ba3ed57b65"
+SRC_URI[sha256sum] = "4675a79f091020817a98fd0484e7208c8762242266967f55a67776936c2e294d"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
 inherit autotools pkgconfig
+
+PACKAGECONFIG ??= "dtd-validation"
+PACKAGECONFIG[dtd-validation] = "--enable-dtd-validation,--disable-dtd-validation,libxml2,,"
 
 EXTRA_OECONF = "--disable-documentation --with-host-scanner"
 EXTRA_OECONF_class-native = "--disable-documentation --disable-libraries"
@@ -31,11 +34,6 @@ do_install_append_class-native() {
   sed -e 's,PKG_CHECK_MODULES(.*),,g' \
       -e 's,$PKG_CONFIG,pkg-config-native,g' \
       -i ${D}/${datadir}/aclocal/wayland-scanner.m4
-}
-
-# Avoid installation conflicts with vivante driver
-do_install_append() {
-    rm -f ${D}${libdir}/pkgconfig/wayland-egl.pc
 }
 
 sysroot_stage_all_append_class-target () {
