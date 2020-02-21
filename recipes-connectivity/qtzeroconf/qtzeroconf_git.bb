@@ -3,7 +3,7 @@ HOMEPAGE = "https://github.com/jonesmz/qtzeroconf"
 LICENSE = "LGPL-2.1"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=4fbd65380cdd255951079008b364516c"
 
-SRCREV = "1e51e93b3f1805599e04c01c1abd94e6d346d870"
+SRCREV = "806570b8eef52be8d10780716f3d227de5636c30"
 SRC_URI = " \
     git://github.com/jonesmz/qtzeroconf.git;protocol=https \
     file://0001-project_settings.pri-add-versioning-definitions.patch \
