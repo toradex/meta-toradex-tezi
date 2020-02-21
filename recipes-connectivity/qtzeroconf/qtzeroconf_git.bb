@@ -18,6 +18,14 @@ DEPENDS = "avahi"
 
 inherit qmake5
 
+EXTRAQCONFFUNCS += "qtzeroconf_preconfigure"
+
+qtzeroconf_preconfigure() {
+	if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
+		rm -rf ${S}/bin
+	fi
+}
+
 do_install () {
 	install -d ${D}${libdir}
 	cp -fP ${S}/bin/* ${D}${libdir}
