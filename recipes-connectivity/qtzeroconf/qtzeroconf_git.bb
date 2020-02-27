@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 
 PV = "0.0.1+git${SRCPV}"
 
-DEPENDS = "avahi"
+DEPENDS = "avahi qtbase"
 
 inherit qmake5
 
