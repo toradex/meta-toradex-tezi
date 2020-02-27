@@ -24,6 +24,7 @@ inherit qmake5
 DEPENDS += " \
     libusbgx \
     rapidjson \
+    qtbase \
     qtwayland \
     qtzeroconf \
 "
