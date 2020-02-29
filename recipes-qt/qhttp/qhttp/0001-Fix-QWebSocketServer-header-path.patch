@@ -1,0 +1,56 @@
+From 381e7248d49ed3d2c040e8f6b8465d57491b311d Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 25 Feb 2020 21:35:21 +0100
+Subject: [PATCH] Fix QWebSocketServer header path
+
+Upstream-Status: Pending
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ include/qhttp/qhttpserver.hpp       | 2 +-
+ src/private/qhttpserver_private.hpp | 2 +-
+ src/private/qsocket.hpp             | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/qhttp/qhttpserver.hpp b/include/qhttp/qhttpserver.hpp
+index 29733f9..f36d835 100644
+--- a/include/qhttp/qhttpserver.hpp
++++ b/include/qhttp/qhttpserver.hpp
+@@ -14,7 +14,7 @@
+ 
+ #include <QObject>
+ #include <QHostAddress>
+-#include <QWebSocket>
++#include <QtWebSockets/qwebsocket.h>
+ ///////////////////////////////////////////////////////////////////////////////
+ namespace qhttp {
+ namespace ssl{ struct Config; }
+diff --git a/src/private/qhttpserver_private.hpp b/src/private/qhttpserver_private.hpp
+index 5f41ea5..22fe53e 100644
+--- a/src/private/qhttpserver_private.hpp
++++ b/src/private/qhttpserver_private.hpp
+@@ -18,7 +18,7 @@
+ 
+ #include <QTcpServer>
+ #include <QLocalServer>
+-#include <QWebSocketServer>
++#include <QtWebSockets/qwebsocketserver.h>
+ ///////////////////////////////////////////////////////////////////////////////
+ namespace qhttp {
+ namespace server {
+diff --git a/src/private/qsocket.hpp b/src/private/qsocket.hpp
+index 77efa6b..8e4c7c7 100644
+--- a/src/private/qsocket.hpp
++++ b/src/private/qsocket.hpp
+@@ -14,7 +14,7 @@
+ 
+ #include <QTcpSocket>
+ #include <QLocalSocket>
+-#include <QWebSocketServer>
++#include <QtWebSockets/qwebsocketserver.h>
+ #include <QUrl>
+ ///////////////////////////////////////////////////////////////////////////////
+ namespace qhttp {
+-- 
+2.25.0
+

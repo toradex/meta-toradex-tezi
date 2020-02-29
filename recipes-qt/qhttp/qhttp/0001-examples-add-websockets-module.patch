@@ -1,0 +1,107 @@
+From 2d9d71a41d73595991e85dd4a884df63dd81cc07 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Fri, 28 Feb 2020 21:43:09 +0100
+Subject: [PATCH] examples: add websockets module
+
+Since all examples are depending on qtwebsockets, it should be added to
+QT.
+
+Also added install target for examples.
+
+Upstream-Status: Pending
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ example/basic-server/basic-server.pro   | 2 +-
+ example/example.pri                     | 8 ++++++++
+ example/helloworld/helloworld.pro       | 2 +-
+ example/keep-alive/keep-alive.pro       | 2 +-
+ example/postcollector/postcollector.pro | 2 +-
+ example/ssl-simple/ssl-simple.pro       | 2 +-
+ src/src.pro                             | 2 +-
+ 7 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/example/basic-server/basic-server.pro b/example/basic-server/basic-server.pro
+index b97c464..5bb1af1 100644
+--- a/example/basic-server/basic-server.pro
++++ b/example/basic-server/basic-server.pro
+@@ -1,4 +1,4 @@
+-QT          += core network
++QT          += core network websockets
+ QT          -= gui
+ CONFIG      += console
+ osx:CONFIG  -= app_bundle
+diff --git a/example/example.pri b/example/example.pri
+index 6bc2357..8790994 100644
+--- a/example/example.pri
++++ b/example/example.pri
+@@ -2,8 +2,16 @@ equals(ENABLE_QHTTP_CLIENT, "1") {
+     DEFINES *= QHTTP_HAS_CLIENT
+ }
+ 
++isEmpty(PREFIX) {
++    PREFIX = /usr/local
++}
++
+ CONFIG      += c++11 c++14
+ 
+ INCLUDEPATH += $$PWD/../include
+ 
+ LIBS        += $$OUT_PWD/../../src/libqhttp.a
++
++target.path = $$PREFIX/bin/
++
++INSTALLS    += target
+diff --git a/example/helloworld/helloworld.pro b/example/helloworld/helloworld.pro
+index febd3aa..9d70163 100644
+--- a/example/helloworld/helloworld.pro
++++ b/example/helloworld/helloworld.pro
+@@ -1,4 +1,4 @@
+-QT          += core network
++QT          += core network websockets
+ QT          -= gui
+ CONFIG      += console
+ osx:CONFIG  -= app_bundle
+diff --git a/example/keep-alive/keep-alive.pro b/example/keep-alive/keep-alive.pro
+index e742523..16d82dd 100644
+--- a/example/keep-alive/keep-alive.pro
++++ b/example/keep-alive/keep-alive.pro
+@@ -1,4 +1,4 @@
+-QT          += core network
++QT          += core network websockets
+ QT          -= gui
+ CONFIG      += console
+ osx:CONFIG  -= app_bundle
+diff --git a/example/postcollector/postcollector.pro b/example/postcollector/postcollector.pro
+index 4e1eb00..0b8e19c 100644
+--- a/example/postcollector/postcollector.pro
++++ b/example/postcollector/postcollector.pro
+@@ -1,4 +1,4 @@
+-QT          += core network
++QT          += core network websockets
+ QT          -= gui
+ CONFIG      += console
+ osx:CONFIG  -= app_bundle
+diff --git a/example/ssl-simple/ssl-simple.pro b/example/ssl-simple/ssl-simple.pro
+index ca3afe7..74def83 100644
+--- a/example/ssl-simple/ssl-simple.pro
++++ b/example/ssl-simple/ssl-simple.pro
+@@ -1,4 +1,4 @@
+-QT          += core network
++QT          += core network websockets
+ QT          -= gui
+ CONFIG      += console
+ osx:CONFIG  -= app_bundle
+diff --git a/src/src.pro b/src/src.pro
+index 036bc2c..2e0fa99 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -1,4 +1,4 @@
+-QT       += core network
++QT       += core network websockets
+ QT       -= gui
+ 
+ TARGET    = qhttp
+-- 
+2.25.0
+
