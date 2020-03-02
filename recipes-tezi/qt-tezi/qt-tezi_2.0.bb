@@ -27,6 +27,7 @@ DEPENDS += " \
     qtbase \
     qtwayland \
     qtzeroconf \
+    qttools-native \
 "
 
 RDEPENDS_${PN} += " \
