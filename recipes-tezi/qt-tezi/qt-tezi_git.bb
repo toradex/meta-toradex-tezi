@@ -15,6 +15,8 @@ SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
+PV = "${TDX_VER_PACKAGE_MIN}+git${SRCPV}"
+
 S = "${WORKDIR}/git"
 
 EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
@@ -55,13 +57,8 @@ RDEPENDS_${PN} += " \
     zstd \
 "
 
-FILES_${PN} = " \
-    ${sysconfdir} \
-    ${sysconfdir}/rc.local \
-    ${sysconfdir}/default/tezi \
-    ${sysconfdir}/udhcpd.conf \
-    ${bindir} \
-    ${datadir}/tezi/ \
+FILES_${PN} += " \
+    ${datadir}/tezi \
 "
 
 do_install() {
