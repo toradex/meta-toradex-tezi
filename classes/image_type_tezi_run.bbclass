@@ -52,6 +52,7 @@ def rootfs_tezi_run_emmc(d):
         }),
         OrderedDict({
           "name": "mmcblk0boot0",
+          "erase": True,
           "content": {
             "filesystem_type": "raw",
             "rawfiles": bootpart_rawfiles
@@ -80,6 +81,11 @@ def rootfs_tezi_run_rawnand(d):
               "size": 1
             }
           }
+        }),
+        OrderedDict({
+            "name": "u-boot-env",
+            "erase": True,
+            "content": {}
         }),
         OrderedDict({
           "name": "ubi",
