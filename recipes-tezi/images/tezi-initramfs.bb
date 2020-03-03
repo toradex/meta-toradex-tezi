@@ -7,6 +7,6 @@ PV = "${TDX_VER_PACKAGE_MIN}"
 IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"
 IMAGE_FEATURES += "read-only-rootfs"
 
-CORE_IMAGE_BASE_INSTALL_append = " qt-tezi drm-info"
+CORE_IMAGE_BASE_INSTALL_append = " qt-tezi qt-tezictl drm-info "
 
 inherit core-image

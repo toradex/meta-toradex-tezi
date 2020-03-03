@@ -9,7 +9,7 @@ SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};prot
     file://udhcpd.conf \
 "
 
-SRCREV = "ed91e48a3f17cf1886fc2847cebbe37a5afffbdd"
+SRCREV = "383cf40e33f13e888ec61a8705cf2de49da1387f"
 SRCBRANCH = "master"
 SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
@@ -30,6 +30,7 @@ DEPENDS += " \
     qtwayland \
     qtzeroconf \
     qttools-native \
+    qhttp \
 "
 
 RDEPENDS_${PN} += " \
