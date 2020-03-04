@@ -45,6 +45,8 @@ python __anonymous () {
 # Options for the device tree compiler passed to mkimage '-D' feature:
 UBOOT_MKIMAGE_DTCOPTS ??= ""
 
+UBOOT_KERNEL_TYPE ??= "kernel"
+
 uboot_prep_kimage() {
 	if [ -e arch/${ARCH}/boot/compressed/vmlinux ]; then
 		vmlinux_path="arch/${ARCH}/boot/compressed/vmlinux"
@@ -155,7 +157,7 @@ fitimage_emit_section_kernel() {
                 kernel@${2} {
                         description = "Linux kernel";
                         data = /incbin/("${3}");
-                        type = "kernel";
+                        type = "${UBOOT_KERNEL_TYPE}";
                         arch = "${UBOOT_ARCH}";
                         os = "linux";
                         compression = "${4}";
@@ -333,12 +335,12 @@ fitimage_emit_section_config() {
 	fi
 
 	if [ "${6}" = "1" ]; then
-		default_line="default = \"conf@${3}\";"
+		default_line="default = \"config@${3}\";"
 	fi
 
 	cat << EOF >> ${1}
                 ${default_line}
-                conf@${3} {
+                config@${3} {
 			description = "${6} ${conf_desc}";
 			${kernel_line}
 			${fdt_line}

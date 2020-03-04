@@ -7,4 +7,4 @@ setenv fdt_high
 # Load FIT image from location as detected by distroboot
 load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
 
-bootm ${ramdisk_addr_r}#conf@${fdt_module}
+bootm ${ramdisk_addr_r}#config@${fdt_module}

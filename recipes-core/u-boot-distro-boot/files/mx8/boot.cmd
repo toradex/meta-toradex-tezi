@@ -35,7 +35,7 @@ fi
 
 env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
 # TODO: modify once our refactoring to use kernel tezi.itb is done
-#env set bootcmd_run 'bootm ${ramdisk_addr_r}#conf@${fdt_file}'
+#env set bootcmd_run 'bootm ${ramdisk_addr_r}#config@${fdt_file}'
 env set bootcmd_run 'bootm ${ramdisk_addr_r}'
 env set bootcmd 'run bootcmd_args && run bootcmd_hdp && run bootcmd_tezi && run bootcmd_run'
 env set tezi_image ${prefix}tezi.itb
