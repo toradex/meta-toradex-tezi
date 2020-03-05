@@ -21,7 +21,7 @@ S = "${WORKDIR}/git"
 
 EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
 
-inherit qmake5
+inherit qmake5 pkgconfig
 
 DEPENDS += " \
     libusbgx \
