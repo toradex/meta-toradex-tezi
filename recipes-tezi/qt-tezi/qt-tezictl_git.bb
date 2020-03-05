@@ -1,3 +1,4 @@
+SUMMARY = "Toradex Easy Installer Console Control Tool"
 DESCRIPTION = "Toradex Easy Installer Console Control Tool"
 
 HOMEPAGE = "http://www.toradex.com"
