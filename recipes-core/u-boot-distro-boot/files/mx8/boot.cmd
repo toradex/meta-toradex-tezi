@@ -11,13 +11,13 @@ else
     then
         env set bootcmd_hdp ';'
 	env set ramdisk_addr_r 0x83000000
-        env set vidargs 'video=VGA-1:640x480-16@60D'
+        env set vidargs 'video=DPI-1:640x480-16@60D'
     else
         if test ${board} = "apalis-imx8x"
         then
             env set bootcmd_hdp ';'
 	    env set ramdisk_addr_r 0x83000000
-            env set vidargs 'video=HDMI-A-1:800x600D video=DPI-1:d video=LVDS-1:d'
+            env set vidargs 'video=HDMI-A-1:800x600D video=DPI-1:640x480-16@60D video=LVDS-1:d'
         else
             if test ${board} = "verdin-imx8mm"
             then
