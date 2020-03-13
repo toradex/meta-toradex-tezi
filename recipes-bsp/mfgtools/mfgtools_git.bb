@@ -10,10 +10,10 @@ SRC_URI = "gitsm://github.com/NXPmicro/mfgtools;branch=master \
            file://0001-CMakeLists.txt-do-not-override-CMAKE_CXX_FLAGS.patch \
           "
 
-# uuu_1.3.130
-SRCREV = "247629e14f31ec30488c3ccd60569039d675f491"
+# uuu_1.3.136
+SRCREV = "1ecc47fc0172983ac232dedfdae9240c52ea6300"
 
-PV = "1.3.130+git${SRCPV}"
+PV = "1.3.136+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
