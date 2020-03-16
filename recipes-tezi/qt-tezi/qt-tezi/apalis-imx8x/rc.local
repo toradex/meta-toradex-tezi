@@ -64,7 +64,8 @@ export QT_WAYLAND_FORCE_DPI=72
 # Determine default display interface
 DRM_DEVICE=card0
 LT8912_ID=`dmesg | grep 'LT8912 ID' | awk -F '[ ,]+' '{ print $(NF-1) }'`
-if [ "$LT8912_ID" -gt "256" ]
+LT8912_FAIL=`dmesg | grep 'lt8912 17-0048: failed to get display timings from EDID'`
+if [ "$LT8912_ID" -gt "256" ] || [ "$LT8912_FAIL" ]
 then
 	DRM_DEVICE=card1
 fi
