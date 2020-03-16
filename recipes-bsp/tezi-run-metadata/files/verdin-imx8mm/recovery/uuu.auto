@@ -2,9 +2,9 @@ uuu_version 1.3.136
 
 SDP: boot -f ../imx-boot
 CFG: SDPU: -vid 0x0525 -pid 0xb4a4
-SDPU: delay 1000
-SDPU: write -f ../imx-boot -offset 0x5fc00
-SDPU: jump
+SDPV: delay 1000
+SDPV: write -f ../imx-boot -skipspl
+SDPV: jump
 CFG: FB: -vid 0x0525 -pid 0x4000
 CFG: FB: -vid 0x0525 -pid 0x4037
 FB: ucmd setenv fastboot_buffer 0x42e00000
