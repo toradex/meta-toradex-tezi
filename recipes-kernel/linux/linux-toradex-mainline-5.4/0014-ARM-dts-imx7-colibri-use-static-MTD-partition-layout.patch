@@ -1,7 +1,4 @@
-From 9884ee974f52be0aa5e7c6c576bafe4977524da2 Mon Sep 17 00:00:00 2001
-Message-Id: <9884ee974f52be0aa5e7c6c576bafe4977524da2.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 36f53d33feb0dfa40679da4880a848ca377325ad Mon Sep 17 00:00:00 2001
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 16:37:20 +0100
 Subject: [PATCH 14/18] ARM: dts: imx7-colibri: use static MTD partition layout
@@ -15,10 +12,10 @@ Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
  1 file changed, 23 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index fa16826b2ea1..7ea42e67f96e 100644
+index e2f9de91acf4..3df5e03073f1 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -131,11 +131,34 @@
+@@ -322,11 +322,34 @@
  };
  
  &gpmi {
@@ -54,5 +51,5 @@ index fa16826b2ea1..7ea42e67f96e 100644
  
  &i2c1 {
 -- 
-2.24.1
+2.25.1
 

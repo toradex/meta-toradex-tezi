@@ -1,7 +1,4 @@
-From 75e22063ac3f84cd46812879295fa9b78a88a1c9 Mon Sep 17 00:00:00 2001
-Message-Id: <75e22063ac3f84cd46812879295fa9b78a88a1c9.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From e904f7b171fb4716910c29f28f10618c8011d655 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:06:54 +0100
 Subject: [PATCH 05/18] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
@@ -40,5 +37,5 @@ index 019dda6b88ad..c718cd907ced 100644
  		compatible = "pwm-backlight";
  		pinctrl-names = "default";
 -- 
-2.24.1
+2.25.1
 

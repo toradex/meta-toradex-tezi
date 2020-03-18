@@ -1,7 +1,4 @@
-From 1a50c381743f9ec3e24f635238c1e7d607f9ebc7 Mon Sep 17 00:00:00 2001
-Message-Id: <1a50c381743f9ec3e24f635238c1e7d607f9ebc7.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From b442b6fe3d571cbc4fb943322fe25195df4758a7 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 10:48:19 +0100
 Subject: [PATCH 07/18] arm: dts: imx6dl/q/ull/7-apalis/colibri-eval/eval-v3:
@@ -46,11 +43,11 @@ index 70e870385a09..0e27f180913b 100644
  
  		port {
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 8f98cb464a18..1972ec475ce9 100644
+index 9ba06b091790..550409bc0825 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -116,15 +116,17 @@
- 		data-mapping = "rgb24";
+@@ -103,15 +103,17 @@
+ 		data-mapping = "rgb565";
  
  		panel-timing {
 +			/* Default VESA VGA display timings */
@@ -74,7 +71,7 @@ index 8f98cb464a18..1972ec475ce9 100644
  
  		port {
 diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-index aeb5d3011d4f..822e3fa48d41 100644
+index e27abcc0a7fe..24af2b426337 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
 @@ -15,10 +15,27 @@
@@ -108,10 +105,10 @@ index aeb5d3011d4f..822e3fa48d41 100644
  		port {
  			panel_in: endpoint {
 diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 57eab2866ac8..cb64aa310f40 100644
+index 1fc754cf2887..77a1066c37c0 100644
 --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -63,15 +63,17 @@
+@@ -82,15 +82,17 @@
  		data-mapping = "bgr666";
  
  		panel-timing {
@@ -136,5 +133,5 @@ index 57eab2866ac8..cb64aa310f40 100644
  
  		port {
 -- 
-2.24.1
+2.25.1
 

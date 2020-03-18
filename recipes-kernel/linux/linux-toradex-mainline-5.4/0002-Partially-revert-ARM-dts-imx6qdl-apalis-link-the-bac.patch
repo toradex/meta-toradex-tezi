@@ -1,7 +1,4 @@
-From 1b8df4e75b8577568b4b14bedda7f4eb1169840d Mon Sep 17 00:00:00 2001
-Message-Id: <1b8df4e75b8577568b4b14bedda7f4eb1169840d.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From a505a6948bb2b4cb35938311e553e0fd7cb9901a Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:33:52 +0100
 Subject: [PATCH 02/18] Partially revert "ARM: dts: imx6qdl-apalis: link the
@@ -13,17 +10,17 @@ This partially reverts commit e1bfc3ddb9e2be45055e8e4835e22c48a1030103.
  1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 488192a34b1d..8f98cb464a18 100644
+index 9b7c7d7c7dcd..9ba06b091790 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -114,7 +114,6 @@
+@@ -101,7 +101,6 @@
  		height-mm = <86>;
  
- 		data-mapping = "rgb24";
+ 		data-mapping = "rgb565";
 -		status = "disabled";
  
  		panel-timing {
  			clock-frequency = <25175000>;
 -- 
-2.24.1
+2.25.1
 

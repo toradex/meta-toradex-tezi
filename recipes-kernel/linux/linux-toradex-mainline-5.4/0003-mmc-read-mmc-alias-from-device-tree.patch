@@ -1,7 +1,4 @@
-From 9691025be19161a88af88dc4b61a22388fc6dfb9 Mon Sep 17 00:00:00 2001
-Message-Id: <9691025be19161a88af88dc4b61a22388fc6dfb9.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 529efab3fa6b2d3b37d3dacedb07c12ef4649201 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Fri, 29 Apr 2016 10:32:17 -0700
 Subject: [PATCH 03/18] mmc: read mmc alias from device tree
@@ -25,10 +22,10 @@ Signed-off-by: Douglas Anderson <dianders@chromium.org>
  1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index 105b7a7c0251..6469080e422c 100644
+index b3484def0a8b..8e67114e846b 100644
 --- a/drivers/mmc/core/host.c
 +++ b/drivers/mmc/core/host.c
-@@ -400,15 +400,30 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
+@@ -397,15 +397,30 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
  {
  	int err;
  	struct mmc_host *host;
@@ -61,5 +58,5 @@ index 105b7a7c0251..6469080e422c 100644
  		kfree(host);
  		return NULL;
 -- 
-2.24.1
+2.25.1
 

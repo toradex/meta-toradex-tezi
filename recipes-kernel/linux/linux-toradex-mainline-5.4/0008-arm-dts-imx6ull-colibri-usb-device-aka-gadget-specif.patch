@@ -1,7 +1,4 @@
-From ab45c9f6aacb59420c71753d702abd7e64e636ab Mon Sep 17 00:00:00 2001
-Message-Id: <ab45c9f6aacb59420c71753d702abd7e64e636ab.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 5f1c26de83847222945cdc29949a24b9264feb44 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 18 Dec 2019 21:43:31 +0100
 Subject: [PATCH 08/18] arm: dts: imx6ull-colibri: usb device aka gadget
@@ -16,7 +13,7 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index d56728f03c35..a5d709a4b671 100644
+index 9d9dcc224abb..4f4e6285d5f2 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
 @@ -182,7 +182,7 @@
@@ -29,5 +26,5 @@ index d56728f03c35..a5d709a4b671 100644
  	hnp-disable;
  	adp-disable;
 -- 
-2.24.1
+2.25.1
 

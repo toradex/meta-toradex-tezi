@@ -1,5 +1,4 @@
-From fbe98d0f83aff5b59a677d46e7448536e119f3fa Mon Sep 17 00:00:00 2001
-Message-Id: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 18f235ae3c0bbf3817597ad07e5fe4efa8dcfb62 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:32:59 +0100
 Subject: [PATCH 01/18] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
@@ -7,23 +6,23 @@ Subject: [PATCH 01/18] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
 
 This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.
 ---
- arch/arm/boot/dts/imx6q-apalis-eval.dts | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/imx6q-apalis-eval.dts | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 02a63e666a0a..488192a34b1d 100644
+index 0040587cb815..9b7c7d7c7dcd 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -86,7 +86,7 @@
- 		#size-cells = <0>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
--		status = "disabled";
-+		status = "okay";
+@@ -81,6 +81,8 @@
+ 	};
  
- 		port@0 {
- 			reg = <0>;
-@@ -144,7 +144,6 @@
+ 	lcd_display: disp0 {
++		status = "okay";
++
+ 		port@1 {
+ 			reg = <1>;
+ 
+@@ -129,7 +131,6 @@
  		height-mm = <137>;
  
  		data-mapping = "vesa-24";
@@ -31,7 +30,7 @@ index 02a63e666a0a..488192a34b1d 100644
  
  		panel-timing {
  			clock-frequency = <68930000>;
-@@ -277,7 +276,7 @@
+@@ -262,7 +263,7 @@
  };
  
  &ldb {
@@ -41,5 +40,5 @@ index 02a63e666a0a..488192a34b1d 100644
  	lvds-channel@0 {
  		status = "okay";
 -- 
-2.24.1
+2.25.1
 

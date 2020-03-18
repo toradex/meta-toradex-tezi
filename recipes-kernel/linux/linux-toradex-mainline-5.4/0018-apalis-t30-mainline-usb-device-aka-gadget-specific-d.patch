@@ -1,7 +1,4 @@
-From 26bae8be3ed3d36cad972f9f48d0899b2284ed43 Mon Sep 17 00:00:00 2001
-Message-Id: <26bae8be3ed3d36cad972f9f48d0899b2284ed43.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 2a1bdce077ffeea6d067adc7e9a8bef89dd80a40 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Fri, 20 Apr 2018 10:04:33 +0200
 Subject: [PATCH 18/18] apalis-t30-mainline: usb device aka gadget specific
@@ -47,5 +44,5 @@ index 255a6388392a..b96b351d3157 100644
  
  	usb-phy@7d000000 {
 -- 
-2.24.1
+2.25.1
 

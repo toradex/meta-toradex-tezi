@@ -1,7 +1,4 @@
-From 24b07672c83976b99d2bc36c356032b6de3e45de Mon Sep 17 00:00:00 2001
-Message-Id: <24b07672c83976b99d2bc36c356032b6de3e45de.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 0dc4bcbf6f4e84c3e84ff082ed22f9411dd4ea59 Mon Sep 17 00:00:00 2001
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 15:47:51 +0100
 Subject: [PATCH 13/18] ARM: dts: imx7-colibri-eval-v3: disable PWM B/C/D
@@ -15,10 +12,10 @@ Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
  1 file changed, 12 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index cb64aa310f40..e67a3e50e962 100644
+index 77a1066c37c0..484b1393cc7c 100644
 --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -178,18 +178,6 @@
+@@ -222,18 +222,6 @@
  	status = "okay";
  };
  
@@ -38,5 +35,5 @@ index cb64aa310f40..e67a3e50e962 100644
  	status = "okay";
  };
 -- 
-2.24.1
+2.25.1
 

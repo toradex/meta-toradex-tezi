@@ -1,7 +1,4 @@
-From 588522a3181e04afc9162bb9a8ab53c754a4b63a Mon Sep 17 00:00:00 2001
-Message-Id: <588522a3181e04afc9162bb9a8ab53c754a4b63a.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 794d3710644e1b709e5cf3639da298c433d054ca Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Jul 2018 10:58:19 +0200
 Subject: [PATCH 04/18] arm: dts: imx6qdl-apalis: force fixed ids for usdhc
@@ -18,7 +15,7 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index f6dd48a4f89e..98b79a17ad9f 100644
+index 615c6d44574f..9aed9d3dc9e6 100644
 --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
 @@ -53,6 +53,18 @@
@@ -41,5 +38,5 @@ index f6dd48a4f89e..98b79a17ad9f 100644
  		compatible = "pwm-backlight";
  		pinctrl-names = "default";
 -- 
-2.24.1
+2.25.1
 

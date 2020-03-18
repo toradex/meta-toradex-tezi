@@ -1,7 +1,4 @@
-From 6f21ab16b48fb8f0b622577c827c46618802c1a9 Mon Sep 17 00:00:00 2001
-Message-Id: <6f21ab16b48fb8f0b622577c827c46618802c1a9.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 02b0a0e5a59bdc08585963e0912daa7e796a8737 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Jul 2018 10:58:19 +0200
 Subject: [PATCH 16/18] apalis-tk1: force fixed ids for sdmmc controllers
@@ -94,5 +91,5 @@ index 6337b7c9f136..e81b10b788a6 100644
  		bus-width = <4>;
  		/* SD1_CD# */
 -- 
-2.24.1
+2.25.1
 

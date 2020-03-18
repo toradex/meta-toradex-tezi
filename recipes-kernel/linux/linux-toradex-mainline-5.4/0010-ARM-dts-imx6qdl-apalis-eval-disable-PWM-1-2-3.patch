@@ -1,7 +1,4 @@
-From 37db71362da88405ec01c7f62c598cc688be008a Mon Sep 17 00:00:00 2001
-Message-Id: <37db71362da88405ec01c7f62c598cc688be008a.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 7c1842f33e848b2705407ec2f8d765825afa0bb2 Mon Sep 17 00:00:00 2001
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 15:53:51 +0100
 Subject: [PATCH 10/18] ARM: dts: imx6qdl-apalis-eval: disable PWM 1/2/3
@@ -15,10 +12,10 @@ Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
  1 file changed, 12 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 1972ec475ce9..fd2330e9e534 100644
+index 550409bc0825..de81050548a9 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -303,18 +303,6 @@
+@@ -290,18 +290,6 @@
  	status = "okay";
  };
  
@@ -38,5 +35,5 @@ index 1972ec475ce9..fd2330e9e534 100644
  	status = "okay";
  };
 -- 
-2.24.1
+2.25.1
 

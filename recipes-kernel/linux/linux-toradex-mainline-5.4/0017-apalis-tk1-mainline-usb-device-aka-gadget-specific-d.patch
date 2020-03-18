@@ -1,7 +1,4 @@
-From d8dc457ce62a1e8a0bd6a607466f7a2a2e0b980f Mon Sep 17 00:00:00 2001
-Message-Id: <d8dc457ce62a1e8a0bd6a607466f7a2a2e0b980f.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From aec04540d6a3d36b4f6131315ccd14611a3d11a9 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Tue, 27 Mar 2018 14:34:28 +0200
 Subject: [PATCH 17/18] apalis-tk1-mainline: usb device aka gadget specific
@@ -75,5 +72,5 @@ index adb66ad691a6..d0364ec800ea 100644
  
  					usb2-1 {
 -- 
-2.24.1
+2.25.1
 

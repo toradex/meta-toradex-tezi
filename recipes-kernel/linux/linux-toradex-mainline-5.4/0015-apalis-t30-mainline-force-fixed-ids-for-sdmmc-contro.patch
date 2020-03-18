@@ -1,7 +1,4 @@
-From 93938f47485b63e65923eceba28f30a24d8aed40 Mon Sep 17 00:00:00 2001
-Message-Id: <93938f47485b63e65923eceba28f30a24d8aed40.1577722306.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
-References: <fbe98d0f83aff5b59a677d46e7448536e119f3fa.1577722306.git.marcel.ziswiler@toradex.com>
+From 87686711555957ca2622e082435766c7414551bc Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Thu, 19 Apr 2018 14:01:58 +0200
 Subject: [PATCH 15/18] apalis-t30-mainline: force fixed ids for sdmmc
@@ -95,5 +92,5 @@ index e97bec341c21..255a6388392a 100644
  		bus-width = <8>;
  		/* MMC1_CD# */
 -- 
-2.24.1
+2.25.1
 
