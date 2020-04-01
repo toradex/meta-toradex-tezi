@@ -1,4 +1,4 @@
-From e904f7b171fb4716910c29f28f10618c8011d655 Mon Sep 17 00:00:00 2001
+From 5f320a6f3ff10326e51a996686229da78feedbcc Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:06:54 +0100
 Subject: [PATCH 05/18] arm: dts: imx6qdl-colibri: force fixed ids for usdhc

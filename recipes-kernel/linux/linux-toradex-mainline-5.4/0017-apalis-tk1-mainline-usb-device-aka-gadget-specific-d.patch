@@ -1,4 +1,4 @@
-From aec04540d6a3d36b4f6131315ccd14611a3d11a9 Mon Sep 17 00:00:00 2001
+From 5d0556f92d708465dd9562584b0c978e010c0900 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Tue, 27 Mar 2018 14:34:28 +0200
 Subject: [PATCH 17/18] apalis-tk1-mainline: usb device aka gadget specific

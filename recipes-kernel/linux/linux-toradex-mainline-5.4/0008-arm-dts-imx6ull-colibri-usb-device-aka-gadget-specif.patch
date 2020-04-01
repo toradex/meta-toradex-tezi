@@ -1,4 +1,4 @@
-From 5f1c26de83847222945cdc29949a24b9264feb44 Mon Sep 17 00:00:00 2001
+From eb9a8829866329cf7333155a47b98733eee676be Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 18 Dec 2019 21:43:31 +0100
 Subject: [PATCH 08/18] arm: dts: imx6ull-colibri: usb device aka gadget

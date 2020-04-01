@@ -1,4 +1,4 @@
-From 87686711555957ca2622e082435766c7414551bc Mon Sep 17 00:00:00 2001
+From 27a221919717b7070c44f3b20ab736194c30befe Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Thu, 19 Apr 2018 14:01:58 +0200
 Subject: [PATCH 15/18] apalis-t30-mainline: force fixed ids for sdmmc

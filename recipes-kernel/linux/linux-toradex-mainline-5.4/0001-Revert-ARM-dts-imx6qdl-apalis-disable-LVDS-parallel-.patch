@@ -1,4 +1,4 @@
-From 18f235ae3c0bbf3817597ad07e5fe4efa8dcfb62 Mon Sep 17 00:00:00 2001
+From 8c6defd20ca91ae84c205ff5e2739b5fa48ace30 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:32:59 +0100
 Subject: [PATCH 01/18] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
@@ -10,7 +10,7 @@ This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 0040587cb815..9b7c7d7c7dcd 100644
+index 7eda52797772..5ec0250beb23 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
 @@ -81,6 +81,8 @@
@@ -22,7 +22,7 @@ index 0040587cb815..9b7c7d7c7dcd 100644
  		port@1 {
  			reg = <1>;
  
-@@ -129,7 +131,6 @@
+@@ -134,7 +136,6 @@
  		height-mm = <137>;
  
  		data-mapping = "vesa-24";
@@ -30,7 +30,7 @@ index 0040587cb815..9b7c7d7c7dcd 100644
  
  		panel-timing {
  			clock-frequency = <68930000>;
-@@ -262,7 +263,7 @@
+@@ -267,7 +268,7 @@
  };
  
  &ldb {

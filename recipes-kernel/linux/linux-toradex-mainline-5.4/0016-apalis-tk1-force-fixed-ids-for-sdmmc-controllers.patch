@@ -1,4 +1,4 @@
-From 02b0a0e5a59bdc08585963e0912daa7e796a8737 Mon Sep 17 00:00:00 2001
+From bc1b96117c653cc276063e0de04f3609b019b73c Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Jul 2018 10:58:19 +0200
 Subject: [PATCH 16/18] apalis-tk1: force fixed ids for sdmmc controllers

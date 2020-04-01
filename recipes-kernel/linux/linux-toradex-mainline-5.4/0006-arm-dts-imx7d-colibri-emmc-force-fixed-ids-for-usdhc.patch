@@ -1,4 +1,4 @@
-From 8f62175de3087c8e689e8c92cbf8e9983a638681 Mon Sep 17 00:00:00 2001
+From a1acd0633151be3304d186f042c7af05ffa4605f Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:07:38 +0100
 Subject: [PATCH 06/18] arm: dts: imx7d-colibri-emmc: force fixed ids for usdhc

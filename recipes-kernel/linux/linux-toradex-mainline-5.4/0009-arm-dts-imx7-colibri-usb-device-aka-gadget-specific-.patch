@@ -1,4 +1,4 @@
-From af67146963a74316591f016813b815e387f83eb3 Mon Sep 17 00:00:00 2001
+From e8bb4970b07f024b626e2ae511ce282e318de427 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 18 Dec 2019 21:44:53 +0100
 Subject: [PATCH 09/18] arm: dts: imx7-colibri: usb device aka gadget specific
@@ -13,10 +13,10 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 19849d28547c..e2f9de91acf4 100644
+index c551aa1fc534..b5852091b85b 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -507,7 +507,7 @@
+@@ -509,7 +509,7 @@
  };
  
  &usbotg1 {

@@ -1,4 +1,4 @@
-From b442b6fe3d571cbc4fb943322fe25195df4758a7 Mon Sep 17 00:00:00 2001
+From e87d6426572ed7296e952e724fa5f9f4517ef3dd Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 10:48:19 +0100
 Subject: [PATCH 07/18] arm: dts: imx6dl/q/ull/7-apalis/colibri-eval/eval-v3:
@@ -43,11 +43,11 @@ index 70e870385a09..0e27f180913b 100644
  
  		port {
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 9ba06b091790..550409bc0825 100644
+index 3fd3a76fe2f5..40fd6098d43d 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -103,15 +103,17 @@
- 		data-mapping = "rgb565";
+@@ -108,15 +108,17 @@
+ 		data-mapping = "rgb24";
  
  		panel-timing {
 +			/* Default VESA VGA display timings */

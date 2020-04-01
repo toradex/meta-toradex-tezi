@@ -1,4 +1,4 @@
-From e3bffc8f313e54747e1c6ded2881d699327415aa Mon Sep 17 00:00:00 2001
+From 8a952c4cdad5fa8d3baf691d9e7baff522294315 Mon Sep 17 00:00:00 2001
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 15:51:37 +0100
 Subject: [PATCH 12/18] ARM: dts: imx6ull-colibri-eval-v3: disable PWM B/C/D

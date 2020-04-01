@@ -1,4 +1,4 @@
-From 2a1bdce077ffeea6d067adc7e9a8bef89dd80a40 Mon Sep 17 00:00:00 2001
+From 0f79020583aa256dd5267a7459f1e97054dbebcc Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Fri, 20 Apr 2018 10:04:33 +0200
 Subject: [PATCH 18/18] apalis-t30-mainline: usb device aka gadget specific
