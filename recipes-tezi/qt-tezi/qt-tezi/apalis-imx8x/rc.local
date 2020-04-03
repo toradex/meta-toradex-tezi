@@ -15,9 +15,6 @@ mkdir -p /var/run/dbus/
 dbus-daemon --system
 avahi-daemon --daemonize
 
-# Set loopback device to up
-ip link set up dev lo
-
 # Start Toradex Installer Qt user interface
 for p in `cat /proc/cmdline` ; do
 	if [ "${p%%=*}" == "lang" ] ; then
