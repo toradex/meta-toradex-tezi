@@ -5,8 +5,8 @@ recovery\uuu.exe recovery
 
 echo
 IF %ERRORLEVEL% EQU 0 (
-  echo [92mSuccessfully downloaded Tezi[0m
+  echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
 ) else (
-  echo [91mFailed downloading Tezi[0m
+  echo [91mDownloading Toradex Easy Installer failed...[0m
 )
 pause
