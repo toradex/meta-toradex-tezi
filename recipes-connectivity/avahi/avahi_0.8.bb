@@ -1,6 +1,7 @@
 require avahi.inc avahi-tezi.inc
 
-SRC_URI += "file://00avahi-autoipd \
+SRC_URI += "file://avahi-0.8-qt5.patch \
+           file://00avahi-autoipd \
            file://99avahi-autoipd \
            file://initscript.patch \
            file://0001-Fix-opening-etc-resolv.conf-error.patch \

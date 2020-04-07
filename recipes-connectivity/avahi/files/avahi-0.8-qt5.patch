@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 6678971..95845cd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -564,7 +564,7 @@
+         AC_SUBST(QT5_CFLAGS)
+         AC_SUBST(QT5_LIBS)
+         QT5_PREFIX="`$PKG_CONFIG --variable=host_bins Qt5Core`"
+-        AC_PATH_PROGS(MOC_QT5, [moc-qt5 moc], no, [$QT5_PREFIX])
++        AC_PATH_PROGS(MOC_QT5, [moc-qt5 moc], no)
+         if test "$MOC_QT5" = no; then
+             AC_MSG_ERROR([Could not find QT5 moc])
+         fi
