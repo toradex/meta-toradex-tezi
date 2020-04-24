@@ -1,0 +1,393 @@
+From 3bd23ea9c819524730844b3d586b55a8c00dfb17 Mon Sep 17 00:00:00 2001
+From: xeechou <xeechou@gmail.com>
+Date: Tue, 21 Jan 2020 23:40:18 -0500
+Subject: [PATCH] compositor: new algorithm to enable output
+
+Introduce a new option "clone-from" indicates independent crtc clone, to be
+different than "same-as" option for shared crtc clone.
+
+Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+---
+ compositor/main.c  | 208 +++++++++++++++++++++++++++++++++--------------------
+ man/weston-drm.man |   7 ++
+ 2 files changed, 137 insertions(+), 78 deletions(-)
+
+diff --git a/compositor/main.c b/compositor/main.c
+index 1483f02..4410d5c 100644
+--- a/compositor/main.c
++++ b/compositor/main.c
+@@ -78,6 +78,12 @@ struct wet_output_config {
+ 	uint32_t transform;
+ };
+ 
++enum wet_output_type {
++	WET_OUTPUT_NORMAL,
++	WET_OUTPUT_SHARE_CRTC,
++	WET_OUTPUT_CLONE
++};
++
+ struct wet_compositor;
+ struct wet_layoutput;
+ 
+@@ -97,6 +103,7 @@ struct wet_output {
+ 
+ struct wet_head_array {
+ 	struct weston_head *heads[MAX_CLONE_HEADS];	/**< heads to add */
++	enum wet_output_type types[MAX_CLONE_HEADS];
+ 	unsigned n;				/**< the number of heads */
+ };
+ 
+@@ -1755,19 +1762,14 @@ drm_backend_output_configure(struct weston_output *output,
+ 	return 0;
+ }
+ 
+-/* Find the output section to use for configuring the output with the
+- * named head. If an output section with the given name contains
+- * a "same-as" key, ignore all other settings in the output section and
+- * instead find an output section named by the "same-as". Do this
+- * recursively.
+- */
+ static struct weston_config_section *
+-drm_config_find_controlling_output_section(struct weston_config *config,
+-					   const char *head_name)
++drm_config_output_recursive_find_key(struct weston_config *config,
++                                     const char *head_name,
++                                     const char *key)
+ {
+-	struct weston_config_section *section;
+-	char *same_as;
++	struct weston_config_section *section = NULL;
+ 	int depth = 0;
++	char *same_as;
+ 
+ 	same_as = strdup(head_name);
+ 	do {
+@@ -1776,7 +1778,7 @@ drm_config_find_controlling_output_section(struct weston_config *config,
+ 		if (!section && depth > 0)
+ 			weston_log("Configuration error: "
+ 				   "output section referred to with "
+-				   "'same-as=%s' not found.\n", same_as);
++			           "'%s=%s' not found.\n", key, same_as);
+ 
+ 		free(same_as);
+ 
+@@ -1790,12 +1792,56 @@ drm_config_find_controlling_output_section(struct weston_config *config,
+ 			return NULL;
+ 		}
+ 
+-		weston_config_section_get_string(section, "same-as",
++		weston_config_section_get_string(section, key,
+ 						 &same_as, NULL);
+ 	} while (same_as);
+ 
+ 	return section;
+ }
++/* Find the output section to use for configuring the output with the
++ * named head. If an output section with the given name contains
++ * a "same-as" or a "clone-from" key, ignore all other settings in
++ * the output section and instead find an output section named by the
++ * key. Do this recursively and prioritize same-as.
++ */
++static struct weston_config_section *
++drm_config_find_controlling_output_section(struct weston_config *config,
++                                           const char *head_name,
++                                           enum wet_output_type *type)
++{
++	struct weston_config_section *section;
++	char *same_as;
++	char *cloned_from;
++
++	section = weston_config_get_section(config, "output",
++	                                    "name", head_name);
++	if (!section)
++		return NULL;
++	if (type)
++		*type = WET_OUTPUT_NORMAL;
++
++	weston_config_section_get_string(section, "same-as",
++	                                 &same_as, NULL);
++	weston_config_section_get_string(section, "clone-from",
++	                                 &cloned_from, NULL);
++	if (same_as) {
++		free(same_as);
++		if (type)
++			*type = WET_OUTPUT_SHARE_CRTC;
++		return drm_config_output_recursive_find_key(config,
++		                                            head_name,
++		                                            "same-as");
++	} else if (cloned_from) {
++		free(cloned_from);
++		if (type)
++			*type = WET_OUTPUT_CLONE;
++		return drm_config_output_recursive_find_key(config,
++		                                            head_name,
++		                                            "clone-from");
++	} else
++		return section;
++
++}
+ 
+ static struct wet_layoutput *
+ wet_compositor_create_layoutput(struct wet_compositor *compositor,
+@@ -1911,7 +1957,8 @@ static void
+ wet_compositor_layoutput_add_head(struct wet_compositor *wet,
+ 				  const char *output_name,
+ 				  struct weston_config_section *section,
+-				  struct weston_head *head)
++                                  struct weston_head *head,
++                                  enum wet_output_type type)
+ {
+ 	struct wet_layoutput *lo;
+ 
+@@ -1925,7 +1972,8 @@ wet_compositor_layoutput_add_head(struct wet_compositor *wet,
+ 	if (lo->add.n + 1 >= ARRAY_LENGTH(lo->add.heads))
+ 		return;
+ 
+-	lo->add.heads[lo->add.n++] = head;
++	lo->add.heads[lo->add.n] = head;
++	lo->add.types[lo->add.n++] = type;
+ }
+ 
+ static void
+@@ -1951,9 +1999,11 @@ drm_head_prepare_enable(struct wet_compositor *wet,
+ 	const char *name = weston_head_get_name(head);
+ 	struct weston_config_section *section;
+ 	char *output_name = NULL;
+-	char *mode = NULL;
++	char *mode;
++	enum wet_output_type config_type;
+ 
+-	section = drm_config_find_controlling_output_section(wet->config, name);
++	section = drm_config_find_controlling_output_section(wet->config, name,
++	                                                     &config_type);
+ 	if (section) {
+ 		/* skip outputs that are explicitly off, or non-desktop and not
+ 		 * explicitly enabled. The backend turns them off automatically.
+@@ -1972,10 +2022,11 @@ drm_head_prepare_enable(struct wet_compositor *wet,
+ 		assert(output_name);
+ 
+ 		wet_compositor_layoutput_add_head(wet, output_name,
+-						  section, head);
++		                                  section, head, config_type);
+ 		free(output_name);
+ 	} else {
+-		wet_compositor_layoutput_add_head(wet, name, NULL, head);
++		wet_compositor_layoutput_add_head(wet, name, NULL, head,
++		                                  WET_OUTPUT_NORMAL);
+ 	}
+ }
+ 
+@@ -1985,9 +2036,11 @@ drm_head_should_force_enable(struct wet_compositor *wet,
+ {
+ 	const char *name = weston_head_get_name(head);
+ 	struct weston_config_section *section;
++	enum wet_output_type type;
+ 	bool force;
+ 
+-	section = drm_config_find_controlling_output_section(wet->config, name);
++	section = drm_config_find_controlling_output_section(wet->config, name,
++	                                                     &type);
+ 	if (!section)
+ 		return false;
+ 
+@@ -2006,79 +2059,84 @@ drm_try_attach(struct weston_output *output,
+ 	for (i = 0; i < add->n; i++) {
+ 		if (!add->heads[i])
+ 			continue;
++		if (add->types[i] == WET_OUTPUT_CLONE) {
++			failed->heads[failed->n] = add->heads[i];
++			failed->types[failed->n++] = WET_OUTPUT_CLONE;
++			continue;
++		}
+ 
+ 		if (weston_output_attach_head(output, add->heads[i]) < 0) {
+ 			assert(failed->n < ARRAY_LENGTH(failed->heads));
+ 
+-			failed->heads[failed->n++] = add->heads[i];
++			failed->heads[failed->n] = add->heads[i];
++			failed->types[failed->n++] = WET_OUTPUT_CLONE;
+ 			add->heads[i] = NULL;
+ 		}
+ 	}
+ }
+ 
+ static int
+-drm_try_enable(struct weston_output *output,
+-	       struct wet_head_array *undo,
+-	       struct wet_head_array *failed)
++drm_try_attach_enable(struct weston_output *output, struct weston_head *head,
++                      struct wet_layoutput *lo)
+ {
+-	/* Try to enable, and detach heads one by one until it succeeds. */
+-	while (!output->enabled) {
+-		if (weston_output_enable(output) == 0)
+-			return 0;
+-
+-		/* the next head to drop */
+-		while (undo->n > 0 && undo->heads[--undo->n] == NULL)
+-			;
+-
+-		/* No heads left to undo and failed to enable. */
+-		if (undo->heads[undo->n] == NULL)
+-			return -1;
+-
+-		assert(failed->n < ARRAY_LENGTH(failed->heads));
+-
+-		/* undo one head */
+-		weston_head_detach(undo->heads[undo->n]);
+-		failed->heads[failed->n++] = undo->heads[undo->n];
+-		undo->heads[undo->n] = NULL;
+-	}
++	assert(!output->enabled);
++	if (weston_output_attach_head(output, head) < 0)
++		return -1;
++	if (drm_backend_output_configure(output, lo->section) < 0)
++		return -1;
++	if (weston_output_enable(output) != 0)
++		return -1;
++	wet_head_tracker_create(lo->compositor, head);
+ 
+ 	return 0;
+ }
+ 
+-static int
+-drm_try_attach_enable(struct weston_output *output, struct wet_layoutput *lo)
++static struct wet_output *
++drm_layoutput_create_master(struct wet_layoutput *lo)
+ {
+-	struct wet_head_array failed = {};
+-	unsigned i;
+-
+-	assert(!output->enabled);
+-
+-	drm_try_attach(output, &lo->add, &failed);
+-	if (drm_backend_output_configure(output, lo->section) < 0)
+-		return -1;
+-
+-	if (drm_try_enable(output, &lo->add, &failed) < 0)
+-		return -1;
++	struct wet_output *master = NULL;
++	struct wet_head_array copies = {};
++	unsigned int i;
+ 
+-	/* For all successfully attached/enabled heads */
+-	for (i = 0; i < lo->add.n; i++)
+-		if (lo->add.heads[i])
+-			wet_head_tracker_create(lo->compositor,
+-						lo->add.heads[i]);
++	if (wl_list_length(&lo->output_list))
++		return container_of(lo->output_list.next, struct wet_output,
++		                    link);
+ 
+-	/* Push failed heads to the next round. */
+-	lo->add = failed;
++	for (i = 0; i < lo->add.n; i++) {
++		assert(wl_list_length(&lo->output_list) <= 1);
+ 
+-	return 0;
++		if (lo->add.types[i] == WET_OUTPUT_NORMAL) {
++			master = wet_layoutput_create_output(
++				lo, weston_head_get_name(lo->add.heads[i]));
++			if (drm_try_attach_enable(master->output,
++			                          lo->add.heads[i], lo)) {
++				wet_output_destroy(master);
++				return NULL;
++			}
++		}
++		else {
++			copies.heads[copies.n] = lo->add.heads[i];
++			copies.types[copies.n++] = lo->add.types[i];
++		}
++	}
++	lo->add = copies;
++	return master;
+ }
+ 
++
+ static int
+ drm_process_layoutput(struct wet_compositor *wet, struct wet_layoutput *lo)
+ {
+-	struct wet_output *output, *tmp;
++	struct wet_output *output, *tmp, *master;
+ 	char *name = NULL;
++	unsigned int i;
+ 	int ret;
+ 
++	master = drm_layoutput_create_master(lo);
++
++        if (!master)
++	        return -1;
++
+ 	/*
+ 	 *   For each existing wet_output:
+ 	 *     try attach
+@@ -2086,7 +2144,6 @@ drm_process_layoutput(struct wet_compositor *wet, struct wet_layoutput *lo)
+ 	 *     Create output
+ 	 *     try attach, try enable
+ 	 */
+-
+ 	wl_list_for_each_safe(output, tmp, &lo->output_list, link) {
+ 		struct wet_head_array failed = {};
+ 
+@@ -2097,28 +2154,22 @@ drm_process_layoutput(struct wet_compositor *wet, struct wet_layoutput *lo)
+ 		}
+ 
+ 		assert(output->output->enabled);
+-
++		/* try to attach share_crtc clones */
+ 		drm_try_attach(output->output, &lo->add, &failed);
+ 		lo->add = failed;
+ 		if (lo->add.n == 0)
+ 			return 0;
+ 	}
+ 
+-	if (!weston_compositor_find_output_by_name(wet->compositor, lo->name))
+-		name = strdup(lo->name);
+-
+-	while (lo->add.n > 0) {
+-		if (!wl_list_empty(&lo->output_list)) {
+-			weston_log("Error: independent-CRTC clone mode is not implemented.\n");
+-			return -1;
+-		}
+-
++	for (i = 0; i < lo->add.n; i++) {
+ 		if (!name) {
+ 			ret = asprintf(&name, "%s:%s", lo->name,
+-				       weston_head_get_name(lo->add.heads[0]));
++			               weston_head_get_name(lo->add.heads[i]));
+ 			if (ret < 0)
+ 				return -1;
+ 		}
++
++		/* creates new output for every clone */
+ 		output = wet_layoutput_create_output(lo, name);
+ 		free(name);
+ 		name = NULL;
+@@ -2126,7 +2177,8 @@ drm_process_layoutput(struct wet_compositor *wet, struct wet_layoutput *lo)
+ 		if (!output)
+ 			return -1;
+ 
+-		if (drm_try_attach_enable(output->output, lo) < 0) {
++		weston_output_make_slave(output->output, master->output);
++		if (drm_try_attach_enable(output->output, lo->add.heads[i], lo)) {
+ 			wet_output_destroy(output);
+ 			return -1;
+ 		}
+diff --git a/man/weston-drm.man b/man/weston-drm.man
+index 488eef6..a2f5c87 100644
+--- a/man/weston-drm.man
++++ b/man/weston-drm.man
+@@ -138,6 +138,13 @@ chooses an arbitrary monitor to load the color profile for, but the
+ profile is applied equally to all cloned monitors regardless of their
+ properties.
+ .TP
++\fBclone-from\fR=\fIname\fR
++Make this output (crtc) a clone of another. The argument
++.IR name " is the "
++.BR name " value of another output section. The
++referred to output section must exist. When this key is present in an
++output section, all other keys have no effect on the configuration.
++.TP
+ \fBforce-on\fR=\fItrue\fR
+ Force the output to be enabled even if the connector is disconnected.
+ Defaults to false. Note that

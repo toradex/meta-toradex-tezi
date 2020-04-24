@@ -1,0 +1,334 @@
+From 8cd2e3c99fba7d1caa8af42713fbfa0b774965fa Mon Sep 17 00:00:00 2001
+From: xichen zhou <sichem.zh@gmail.com>
+Date: Fri, 10 Apr 2020 16:53:08 -0400
+Subject: [PATCH] libweston: per-output view damage tracking
+
+This patch enables per output view damage tracking. At `view_accumulate_damage`
+Views will copy its damage to all the outputs they touch, later be combined in
+`output_update_damage`.
+
+It also adds per-output link in `weston_view`, this list is built in
+`compositor_build_view_list` along with global view list. This enables each
+output to go through only views it touches.
+
+Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+---
+ include/libweston/libweston.h |   8 +++
+ libweston/compositor.c        | 155 +++++++++++++++++++++++++++---------------
+ 2 files changed, 108 insertions(+), 55 deletions(-)
+
+diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
+index 694cbb8..4f5199a 100644
+--- a/include/libweston/libweston.h
++++ b/include/libweston/libweston.h
+@@ -284,6 +284,7 @@ struct weston_output {
+ 	int disable_planes;
+ 	int destroying;
+ 	struct wl_list feedback_list;
++	struct wl_list view_list; /**< list of touched views */
+ 
+ 	uint32_t transform;
+ 	int32_t native_scale;
+@@ -1284,6 +1285,13 @@ struct weston_view {
+ 		struct weston_transform position; /* matrix from x, y */
+ 	} transform;
+ 
++        /* View damage output stage, write only.
++         * This is used by weston_surface_flush_damage()
++         */
++	struct {
++		struct wl_list link;
++		pixman_region32_t damage;
++	} output_damages[32];
+ 	/*
+ 	 * The primary output for this view.
+ 	 * Used for picking the output for driving internal animations on the
+diff --git a/libweston/compositor.c b/libweston/compositor.c
+index 3dc851e..dad8499 100644
+--- a/libweston/compositor.c
++++ b/libweston/compositor.c
+@@ -341,6 +341,9 @@ weston_view_create(struct weston_surface *surface)
+ 
+ 	pixman_region32_init(&view->clip);
+ 
++	for (int i = 0; i < 32; i++)
++		pixman_region32_init(&view->output_damages[i].damage);
++
+ 	view->alpha = 1.0;
+ 	pixman_region32_init(&view->transform.opaque);
+ 
+@@ -2146,6 +2149,9 @@ weston_view_destroy(struct weston_view *view)
+ 	pixman_region32_fini(&view->transform.boundingbox);
+ 	pixman_region32_fini(&view->transform.opaque);
+ 
++	for (int i = 0; i< 32; i++)
++		pixman_region32_fini(&view->output_damages[i].damage);
++
+ 	weston_view_set_transform_parent(view, NULL);
+ 	weston_view_set_output(view, NULL);
+ 
+@@ -2400,12 +2406,7 @@ WL_EXPORT void
+ weston_output_finish_damage(struct weston_output *output,
+                             pixman_region32_t *damage)
+ {
+-	struct weston_compositor *ec = output->compositor;
+-	
+ 	pixman_region32_subtract(&output->damage, &output->damage, damage);
+-	pixman_region32_subtract(&ec->primary_plane.damage,
+-	                         &ec->primary_plane.damage,
+-	                         damage);
+ }
+ 
+ static void
+@@ -2426,8 +2427,11 @@ static void
+ view_accumulate_damage(struct weston_view *view,
+ 		       pixman_region32_t *opaque)
+ {
+-	pixman_region32_t damage;
++	pixman_region32_t damage, below_damage;
++	struct weston_output *output;
++	struct weston_compositor *ec;
+ 
++	ec = view->surface->compositor;
+ 	pixman_region32_init(&damage);
+ 	if (view->transform.enabled) {
+ 		pixman_box32_t *extents;
+@@ -2443,24 +2447,59 @@ view_accumulate_damage(struct weston_view *view,
+ 	pixman_region32_intersect(&damage, &damage,
+ 				  &view->transform.boundingbox);
+ 	pixman_region32_subtract(&damage, &damage, opaque);
++
+ 	pixman_region32_union(&view->plane->damage,
+-			      &view->plane->damage, &damage);
+-	pixman_region32_fini(&damage);
++	                      &view->plane->damage, &damage);
++
+ 	pixman_region32_copy(&view->clip, opaque);
+ 	pixman_region32_union(opaque, opaque, &view->transform.opaque);
++
++	/* this part of the damage is added to plane_damage in
++	 * weston_view_damage_below, covering the region if view dispairs. Now
++	 * it is move here */
++	pixman_region32_init(&below_damage);
++	pixman_region32_subtract(&below_damage,
++	                         &view->transform.boundingbox,
++	                         &view->clip);
++
++	wl_list_for_each(output, &ec->output_list, link) {
++		pixman_region32_t *output_damage =
++			&view->output_damages[output->id].damage;
++
++                if (view->output_mask & (1u << output->id)) {
++			pixman_region32_union(output_damage,
++			                      output_damage, &damage);
++
++                        pixman_region32_union(output_damage, output_damage,
++			                      &below_damage);
++		}
++
++	}
++	pixman_region32_fini(&below_damage);
++	pixman_region32_fini(&damage);
+ }
+ 
+ static void
+ output_update_damage(struct weston_output *output)
+ {
+ 	struct weston_compositor *ec = output->compositor;
+-	pixman_region32_t new_damage;
++	pixman_region32_t *output_damage;
++	struct weston_view *view;
++
++	wl_list_for_each(view, &output->view_list,
++	                 output_damages[output->id].link) {
++
++		output_damage = &view->output_damages[output->id].damage;
+ 
+-	pixman_region32_init(&new_damage);
+-	pixman_region32_intersect(&new_damage, &ec->primary_plane.damage,
+-	                          &output->region);
+-	pixman_region32_union(&output->damage, &output->damage, &new_damage);
+-	pixman_region32_fini(&new_damage);
++		if (view->plane == &ec->primary_plane)
++			pixman_region32_union(&output->damage,
++			                      &output->damage,
++			                      output_damage);
++		pixman_region32_clear(output_damage);
++	}
++
++	pixman_region32_intersect(&output->damage,
++	                          &output->damage, &output->region);
+ }
+ 
+ static void
+@@ -2552,6 +2591,24 @@ surface_free_unused_subsurface_views(struct weston_surface *surface)
+ }
+ 
+ static void
++view_add_to_outputs(struct weston_view *view, struct weston_compositor *ec)
++{
++	struct weston_output *output;
++
++	if (!weston_view_is_mapped(view))
++		return;
++
++	wl_list_for_each(output, &ec->output_list, link) {
++		if (view->output_mask & (1u << output->id)) {
++			wl_list_init(&view->output_damages[output->id].link);
++			wl_list_insert(&output->view_list,
++			               &view->output_damages[output->id].link);
++		}
++	}
++
++}
++
++static void
+ view_list_add_subsurface_view(struct weston_compositor *compositor,
+ 			      struct weston_subsurface *sub,
+ 			      struct weston_view *parent)
+@@ -2586,14 +2643,16 @@ view_list_add_subsurface_view(struct weston_compositor *compositor,
+ 	view->is_mapped = true;
+ 
+ 	if (wl_list_empty(&sub->surface->subsurface_list)) {
++		view_add_to_outputs(view, compositor);
+ 		wl_list_insert(compositor->view_list.prev, &view->link);
+ 		return;
+ 	}
+ 
+ 	wl_list_for_each(child, &sub->surface->subsurface_list, parent_link) {
+-		if (child->surface == sub->surface)
++		if (child->surface == sub->surface) {
++			view_add_to_outputs(view, compositor);
+ 			wl_list_insert(compositor->view_list.prev, &view->link);
+-		else
++		} else
+ 			view_list_add_subsurface_view(compositor, child, view);
+ 	}
+ }
+@@ -2613,14 +2672,16 @@ view_list_add(struct weston_compositor *compositor,
+ 	weston_view_update_transform(view);
+ 
+ 	if (wl_list_empty(&view->surface->subsurface_list)) {
++		view_add_to_outputs(view, compositor);
+ 		wl_list_insert(compositor->view_list.prev, &view->link);
+ 		return;
+ 	}
+ 
+ 	wl_list_for_each(sub, &view->surface->subsurface_list, parent_link) {
+-		if (sub->surface == view->surface)
++		if (sub->surface == view->surface) {
++			view_add_to_outputs(view, compositor);
+ 			wl_list_insert(compositor->view_list.prev, &view->link);
+-		else
++		} else
+ 			view_list_add_subsurface_view(compositor, sub, view);
+ 	}
+ }
+@@ -2630,6 +2691,7 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
+ {
+ 	struct weston_view *view, *tmp;
+ 	struct weston_layer *layer;
++	struct weston_output *output;
+ 
+ 	wl_list_for_each(layer, &compositor->layer_list, link)
+ 		wl_list_for_each(view, &layer->view_list.link, layer_link.link)
+@@ -2639,6 +2701,9 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
+ 		wl_list_init(&view->link);
+ 	wl_list_init(&compositor->view_list);
+ 
++	wl_list_for_each(output, &compositor->output_list, link)
++		wl_list_init(&output->view_list);
++
+ 	wl_list_for_each(layer, &compositor->layer_list, link) {
+ 		wl_list_for_each(view, &layer->view_list.link, layer_link.link) {
+ 			view_list_add(compositor, view);
+@@ -2693,19 +2758,21 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+ 
+ 	TL_POINT(ec, "core_repaint_begin", TLP_OUTPUT(output), TLP_END);
+ 
++	/* Rebuild the surface list and update surface transforms up front. */
++	weston_compositor_build_view_list(ec);
++
+ 	/* Find the highest protection desired for an output */
+-	wl_list_for_each(ev, &ec->view_list, link) {
+-		if (ev->surface->output_mask & (1u << output->id)) {
+-			/*
+-			 * The desired_protection of the output should be the
+-			 * maximum of the desired_protection of the surfaces,
+-			 * that are displayed on that output, to avoid
+-			 * reducing the protection for existing surfaces.
+-			 */
+-			if (ev->surface->desired_protection > highest_requested)
+-				highest_requested =
+-						ev->surface->desired_protection;
+-		}
++	wl_list_for_each(ev, &output->view_list, output_damages[output->id].link) {
++		/*
++		 * The desired_protection of the output should be the
++		 * maximum of the desired_protection of the surfaces,
++		 * that are displayed on that output, to avoid
++		 * reducing the protection for existing surfaces.
++		 */
++		if (ev->surface->desired_protection > highest_requested)
++			highest_requested =
++				ev->surface->desired_protection;
++
+ 	}
+ 
+ 	output->desired_protection = highest_requested;
+@@ -2733,6 +2800,9 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+ 		}
+ 	}
+ 
++	compositor_accumulate_damage(ec);
++	output_update_damage(output);
++
+ 	pixman_region32_init(&output_damage);
+ 	pixman_region32_intersect(&output_damage, &output->damage, &output->region);
+ 	pixman_region32_subtract(&output_damage, &output->damage,
+@@ -2822,28 +2892,6 @@ err:
+ }
+ 
+ static void
+-weston_repaint_prepare(struct weston_compositor *ec)
+-{
+-	struct weston_view *ev;
+-	struct weston_output *output;
+-	
+-	/* Rebuild the surface list and update surface transforms up front. */
+-	weston_compositor_build_view_list(ec);
+-
+-	/* for accumulating damage, we just need to move all the views to
+-	 * primary plane */
+-	wl_list_for_each(ev, &ec->view_list, link) {
+-		weston_view_move_to_plane(ev, &ec->primary_plane);
+-		ev->psf_flags = 0;
+-	}
+-
+-	compositor_accumulate_damage(ec);
+-
+-	wl_list_for_each(output, &ec->output_list, link)
+-		output_update_damage(output);
+-}
+-
+-static void
+ output_repaint_timer_arm(struct weston_compositor *compositor)
+ {
+ 	struct weston_output *output;
+@@ -2896,8 +2944,6 @@ output_repaint_timer_handler(void *data)
+ 	if (compositor->backend->repaint_begin)
+ 		repaint_data = compositor->backend->repaint_begin(compositor);
+ 
+-	weston_repaint_prepare(compositor);
+-
+ 	wl_list_for_each(output, &compositor->output_list, link) {
+ 		ret = weston_output_maybe_repaint(output, &now, repaint_data);
+ 		if (ret)
+@@ -6287,7 +6333,6 @@ weston_output_enable(struct weston_output *output)
+ 
+ 	if (!wl_list_empty(&c->output_list))
+ 		x = iterator->x + iterator->width;
+-	
+ 
+ 	/* Make sure the scale is set up */
+ 	assert(output->scale);

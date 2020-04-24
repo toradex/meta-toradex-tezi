@@ -14,7 +14,13 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0001-compositor-drop-libexec_weston-versioning.patch \
            file://0001-backend-vnc-initial-commit.patch \
            file://0001-screen-share-auto-enable-screen-share-on-startup.patch \
-"
+           file://0001-libweston-properly-track-the-overlapping-output-dama.patch \
+           file://0002-libweston-per-output-view-damage-tracking.patch \
+           file://0003-libweston-remove-weston_plane.damage.patch \
+           file://0004-libweston-enable-API-to-make-output-a-slave-to-anoth.patch \
+           file://0005-compositor-new-algorithm-to-enable-output.patch \
+           file://0006-backend-vnc-drop-plane-damage-substraction.patch \
+           "
 SRC_URI[md5sum] = "53e4810d852df0601d01fd986a5b22b3"
 SRC_URI[sha256sum] = "7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c027848"
 

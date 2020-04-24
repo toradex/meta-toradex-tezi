@@ -1,0 +1,157 @@
+From cfbfba98a8821ed5f626a7fa6663fa4424dc73e3 Mon Sep 17 00:00:00 2001
+From: xichen zhou <sichem.zh@gmail.com>
+Date: Fri, 10 Apr 2020 18:55:30 -0400
+Subject: [PATCH] libweston: remove weston_plane.damage
+
+Right now damages are tracked for every output, so there is no actual reason to
+keep the damage in the plane. `weston_view_damage_below` now works a bit
+differently, it now directly updates on `output->damage` if the view resides on
+primary_plane. This will work for the case like `weston_view_unmap`.
+
+Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+---
+ include/libweston/libweston.h |  1 -
+ libweston/backend-drm/kms.c   |  5 -----
+ libweston/compositor.c        | 41 ++++++++++++++++-------------------------
+ 3 files changed, 16 insertions(+), 31 deletions(-)
+
+diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
+index 4f5199a..1f43969 100644
+--- a/include/libweston/libweston.h
++++ b/include/libweston/libweston.h
+@@ -873,7 +873,6 @@ struct weston_layer {
+ 
+ struct weston_plane {
+ 	struct weston_compositor *compositor;
+-	pixman_region32_t damage; /**< in global coords */
+ 	pixman_region32_t clip;
+ 	int32_t x, y;
+ 	struct wl_list link;
+diff --git a/libweston/backend-drm/kms.c b/libweston/backend-drm/kms.c
+index 192435c..7753f06 100644
+--- a/libweston/backend-drm/kms.c
++++ b/libweston/backend-drm/kms.c
+@@ -604,8 +604,6 @@ drm_output_set_cursor(struct drm_output_state *output_state)
+ 		return;
+ 
+ 	if (!state->fb) {
+-		pixman_region32_fini(&plane->base.damage);
+-		pixman_region32_init(&plane->base.damage);
+ 		drmModeSetCursor(b->drm.fd, output->crtc_id, 0, 0, 0);
+ 		return;
+ 	}
+@@ -623,9 +621,6 @@ drm_output_set_cursor(struct drm_output_state *output_state)
+ 		}
+ 	}
+ 
+-	pixman_region32_fini(&plane->base.damage);
+-	pixman_region32_init(&plane->base.damage);
+-
+ 	if (drmModeMoveCursor(b->drm.fd, output->crtc_id,
+ 	                      state->dest_x, state->dest_y)) {
+ 		weston_log("failed to move cursor: %s\n", strerror(errno));
+diff --git a/libweston/compositor.c b/libweston/compositor.c
+index dad8499..073865c 100644
+--- a/libweston/compositor.c
++++ b/libweston/compositor.c
+@@ -980,10 +980,10 @@ weston_view_move_to_plane(struct weston_view *view,
+  *
+  * \param view The view that causes the damage.
+  *
+- * If the view is currently on a plane (including the primary plane),
+- * take the view's boundingbox, subtract all the opaque views that cover it,
+- * and add the remaining region as damage to the plane. This corresponds
+- * to the damage inflicted to the plane if this view disappeared.
++ * If the view is currently on primary plane, take the view's boundingbox,
++ * subtract all the opaque views that cover it, and add the remaining region as
++ * damage to the plane. This corresponds to the damage inflicted to the plane if
++ * this view disappeared.
+  *
+  * A repaint is scheduled for this view.
+  *
+@@ -995,14 +995,22 @@ weston_view_move_to_plane(struct weston_view *view,
+ WL_EXPORT void
+ weston_view_damage_below(struct weston_view *view)
+ {
++	struct weston_compositor *ec;
++	struct weston_output *output;
+ 	pixman_region32_t damage;
+ 
++	ec = view->surface->compositor;
+ 	pixman_region32_init(&damage);
+ 	pixman_region32_subtract(&damage, &view->transform.boundingbox,
+ 				 &view->clip);
+-	if (view->plane)
+-		pixman_region32_union(&view->plane->damage,
+-				      &view->plane->damage, &damage);
++
++	if (view->plane == &ec->primary_plane) {
++		wl_list_for_each(output, &ec->output_list, link)
++			if (view->output_mask & 1u << output->id)
++				pixman_region32_union(&output->damage,
++				                      &output->damage,
++				                      &damage);
++	}
+ 	pixman_region32_fini(&damage);
+ 	weston_view_schedule_repaint(view);
+ }
+@@ -2427,7 +2435,7 @@ static void
+ view_accumulate_damage(struct weston_view *view,
+ 		       pixman_region32_t *opaque)
+ {
+-	pixman_region32_t damage, below_damage;
++	pixman_region32_t damage;
+ 	struct weston_output *output;
+ 	struct weston_compositor *ec;
+ 
+@@ -2448,20 +2456,9 @@ view_accumulate_damage(struct weston_view *view,
+ 				  &view->transform.boundingbox);
+ 	pixman_region32_subtract(&damage, &damage, opaque);
+ 
+-	pixman_region32_union(&view->plane->damage,
+-	                      &view->plane->damage, &damage);
+-
+ 	pixman_region32_copy(&view->clip, opaque);
+ 	pixman_region32_union(opaque, opaque, &view->transform.opaque);
+ 
+-	/* this part of the damage is added to plane_damage in
+-	 * weston_view_damage_below, covering the region if view dispairs. Now
+-	 * it is move here */
+-	pixman_region32_init(&below_damage);
+-	pixman_region32_subtract(&below_damage,
+-	                         &view->transform.boundingbox,
+-	                         &view->clip);
+-
+ 	wl_list_for_each(output, &ec->output_list, link) {
+ 		pixman_region32_t *output_damage =
+ 			&view->output_damages[output->id].damage;
+@@ -2469,13 +2466,9 @@ view_accumulate_damage(struct weston_view *view,
+                 if (view->output_mask & (1u << output->id)) {
+ 			pixman_region32_union(output_damage,
+ 			                      output_damage, &damage);
+-
+-                        pixman_region32_union(output_damage, output_damage,
+-			                      &below_damage);
+ 		}
+ 
+ 	}
+-	pixman_region32_fini(&below_damage);
+ 	pixman_region32_fini(&damage);
+ }
+ 
+@@ -4874,7 +4867,6 @@ weston_plane_init(struct weston_plane *plane,
+ 			struct weston_compositor *ec,
+ 			int32_t x, int32_t y)
+ {
+-	pixman_region32_init(&plane->damage);
+ 	pixman_region32_init(&plane->clip);
+ 	plane->x = x;
+ 	plane->y = y;
+@@ -4890,7 +4882,6 @@ weston_plane_release(struct weston_plane *plane)
+ {
+ 	struct weston_view *view;
+ 
+-	pixman_region32_fini(&plane->damage);
+ 	pixman_region32_fini(&plane->clip);
+ 
+ 	wl_list_for_each(view, &plane->compositor->view_list, link) {
