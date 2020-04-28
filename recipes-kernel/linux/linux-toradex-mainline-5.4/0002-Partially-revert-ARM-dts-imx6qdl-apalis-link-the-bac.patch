@@ -1,7 +1,10 @@
-From 5a51f318ce30c1be3ae11171869287a7d07b16b2 Mon Sep 17 00:00:00 2001
+From 898ea99915190ad97a641b5fd8da092ed5974755 Mon Sep 17 00:00:00 2001
+Message-Id: <898ea99915190ad97a641b5fd8da092ed5974755.1588111715.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
+References: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:33:52 +0100
-Subject: [PATCH 02/18] Partially revert "ARM: dts: imx6qdl-apalis: link the
+Subject: [PATCH 02/17] Partially revert "ARM: dts: imx6qdl-apalis: link the
  backlight to the panels"
 
 This partially reverts commit e1bfc3ddb9e2be45055e8e4835e22c48a1030103.
@@ -10,7 +13,7 @@ This partially reverts commit e1bfc3ddb9e2be45055e8e4835e22c48a1030103.
  1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 5ec0250beb23..3fd3a76fe2f5 100644
+index 10e365b678652..d63bb506b4f59 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
 @@ -106,7 +106,6 @@
@@ -19,8 +22,8 @@ index 5ec0250beb23..3fd3a76fe2f5 100644
  		data-mapping = "rgb24";
 -		status = "disabled";
  
+ 		/* VESA DMT v1.13 mode VGA 640x480 60Hz */
  		panel-timing {
- 			clock-frequency = <25175000>;
 -- 
-2.25.1
+2.25.4
 

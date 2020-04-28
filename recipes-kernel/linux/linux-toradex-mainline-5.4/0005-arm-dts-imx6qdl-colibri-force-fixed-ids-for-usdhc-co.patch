@@ -1,7 +1,10 @@
-From 5f320a6f3ff10326e51a996686229da78feedbcc Mon Sep 17 00:00:00 2001
+From f119184bae4dd19ee97252b9297df67ff788eee2 Mon Sep 17 00:00:00 2001
+Message-Id: <f119184bae4dd19ee97252b9297df67ff788eee2.1588111715.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
+References: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:06:54 +0100
-Subject: [PATCH 05/18] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
+Subject: [PATCH 05/17] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
  controllers
 
 The following, together with kernel patches, forces a fixed assignment
@@ -15,7 +18,7 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index 019dda6b88ad..c718cd907ced 100644
+index 019dda6b88ad7..c718cd907cedb 100644
 --- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
 @@ -47,6 +47,17 @@
@@ -37,5 +40,5 @@ index 019dda6b88ad..c718cd907ced 100644
  		compatible = "pwm-backlight";
  		pinctrl-names = "default";
 -- 
-2.25.1
+2.25.4
 

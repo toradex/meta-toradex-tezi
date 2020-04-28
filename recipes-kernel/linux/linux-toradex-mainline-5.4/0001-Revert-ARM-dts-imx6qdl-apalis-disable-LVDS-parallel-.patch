@@ -1,7 +1,8 @@
-From 8c6defd20ca91ae84c205ff5e2739b5fa48ace30 Mon Sep 17 00:00:00 2001
+From e468d4ece1c2f170254466333c90efcbb368da5d Mon Sep 17 00:00:00 2001
+Message-Id: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 11 Dec 2019 22:32:59 +0100
-Subject: [PATCH 01/18] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
+Subject: [PATCH 01/17] Revert "ARM: dts: imx6qdl-apalis: disable LVDS/parallel
  RGB ports by default"
 
 This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.
@@ -10,7 +11,7 @@ This reverts commit b553db1c53a44e7044b8480803a8f80344e255a9.
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 7eda52797772..5ec0250beb23 100644
+index 1735216816889..10e365b678652 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
 @@ -81,6 +81,8 @@
@@ -22,7 +23,7 @@ index 7eda52797772..5ec0250beb23 100644
  		port@1 {
  			reg = <1>;
  
-@@ -134,7 +136,6 @@
+@@ -135,7 +137,6 @@
  		height-mm = <137>;
  
  		data-mapping = "vesa-24";
@@ -30,7 +31,7 @@ index 7eda52797772..5ec0250beb23 100644
  
  		panel-timing {
  			clock-frequency = <68930000>;
-@@ -267,7 +268,7 @@
+@@ -268,7 +269,7 @@
  };
  
  &ldb {
@@ -40,5 +41,5 @@ index 7eda52797772..5ec0250beb23 100644
  	lvds-channel@0 {
  		status = "okay";
 -- 
-2.25.1
+2.25.4
 

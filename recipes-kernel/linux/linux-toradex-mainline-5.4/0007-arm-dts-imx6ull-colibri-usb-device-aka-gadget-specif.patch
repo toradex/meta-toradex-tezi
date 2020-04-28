@@ -1,7 +1,10 @@
-From eb9a8829866329cf7333155a47b98733eee676be Mon Sep 17 00:00:00 2001
+From 68cf481451b95047c96dcc3eff1d4ae9ec7e6ef5 Mon Sep 17 00:00:00 2001
+Message-Id: <68cf481451b95047c96dcc3eff1d4ae9ec7e6ef5.1588111715.git.marcel.ziswiler@toradex.com>
+In-Reply-To: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
+References: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Wed, 18 Dec 2019 21:43:31 +0100
-Subject: [PATCH 08/18] arm: dts: imx6ull-colibri: usb device aka gadget
+Subject: [PATCH 07/17] arm: dts: imx6ull-colibri: usb device aka gadget
  specific device tree
 
 USB device aka gadget specific device trees for the Toradex Easy
@@ -13,7 +16,7 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 9d9dcc224abb..4f4e6285d5f2 100644
+index 5e6bcb999de81..7895e84eeca52 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
 @@ -182,7 +182,7 @@
@@ -26,5 +29,5 @@ index 9d9dcc224abb..4f4e6285d5f2 100644
  	hnp-disable;
  	adp-disable;
 -- 
-2.25.1
+2.25.4
 
