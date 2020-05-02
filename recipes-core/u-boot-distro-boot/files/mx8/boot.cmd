@@ -10,19 +10,20 @@ else
     if test ${board} = "colibri-imx8qxp"
     then
         env set bootcmd_hdp ';'
-	env set ramdisk_addr_r 0x83000000
+        env set ramdisk_addr_r 0x83000000
         env set vidargs 'video=DPI-1:640x480-16@60D'
     else
         if test ${board} = "apalis-imx8x"
         then
             env set bootcmd_hdp ';'
-	    env set ramdisk_addr_r 0x83000000
+            env set ramdisk_addr_r 0x83000000
             env set vidargs 'video=HDMI-A-1:800x600D video=DPI-1:640x480-16@60D video=LVDS-1:d'
         else
             if test ${board} = "verdin-imx8mm"
             then
                 env set bootcmd_hdp ';'
-		env set ramdisk_addr_r 0x43000000
+                test -n ${fdtfile} || env set fdtfile fsl-imx8mm-verdin-wifi-dev.dtb
+                env set ramdisk_addr_r 0x43000000
                 env set vidargs 'video=HDMI-A-1:1024x768-16@60D'
             else
                 echo "This script is only meant for Apalis iMX8 / Apalis iMX8X / Colibri iMX8X"
