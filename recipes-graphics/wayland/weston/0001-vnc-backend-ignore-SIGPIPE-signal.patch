@@ -1,0 +1,69 @@
+From 4fb3ac34de5f3e1018dc3131dcf8b748829d8c76 Mon Sep 17 00:00:00 2001
+From: Igor Opaniuk <igor.opaniuk@toradex.com>
+Date: Wed, 6 May 2020 17:48:49 +0300
+Subject: [PATCH] vnc-backend: ignore SIGPIPE signal
+
+Ignore the SIGPIPE signal, which can be send when client unexpectedly
+closes connection and it leads to VNC server crash.
+
+Example:
+[13:54:23.258] Security: 1
+[13:54:23.275] Client Init, shared: 1
+[13:54:23.320] SetPixelFormat
+[13:54:23.368] SetPixelFormat
+
+Program received signal SIGPIPE, Broken pipe.
+0xb6edc6c6 in ?? () from /lib/libc.so.6
+(gdb) bt
+0  0xb6edc6c6 in ?? () from /lib/libc.so.6
+1  0xb6f4fa3a in write () from /lib/libc.so.6
+2  0xb66fe9e4 in vnc_send_raw_framebuffer_update (
+   client=client@entry=0x2c1a8, x=x@entry=0, y=y@entry=0,
+   width=width@entry=640, height=height@entry=480, data=0xb5cb7008)
+   at ../../../../../../workspace/sources/weston/libweston/backend-vnc/vnc-protocol.c:180
+3  0xb66fe188 in vnc_handle_update_request (client=0x2c1a8, x=0, y=0,
+   width=640, height=480)
+   at ../../../../../../workspace/sources/weston/libweston/backend-vnc/vnc.c:376
+4  0xb66febc2 in vnc_handle_client_message (client=<optimized out>,
+   fd=<optimized out>) at /usr/include/bits/byteswap.h:37
+5  vnc_client_handle_activity (client=<optimized out>)
+   at ../../../../../../workspace/sources/weston/libweston/backend-vnc/vnc-protocol.c:290
+6  0xb6e6106a in wl_event_loop_dispatch ()
+  from /usr/lib/libwayland-server.so.0
+7  0xb6e600b4 in wl_display_run () from /usr/lib/libwayland-server.so.0
+8  0xb6fbfaa2 in wet_main (argc=<optimized out>, argv=0xbefffe44)
+   at ../../../../../../workspace/sources/weston/compositor/main.c:3502
+9  0xb6edc4a4 in __libc_start_main () from /lib/libc.so.6
+10 0x000103d4 in _start () at ../sysdeps/arm/start.S:126
+
+Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+---
+ libweston/backend-vnc/vnc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/libweston/backend-vnc/vnc.c b/libweston/backend-vnc/vnc.c
+index b19104d1..7546fc8d 100644
+--- a/libweston/backend-vnc/vnc.c
++++ b/libweston/backend-vnc/vnc.c
+@@ -28,6 +28,7 @@
+ #include "config.h"
+ 
+ #include <assert.h>
++#include <signal.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -789,6 +790,13 @@ weston_backend_init(struct weston_compositor *compositor,
+ 
+ 	weston_log("Initializing VNC backend\n");
+ 
++	/*
++	 * Ignore the SIGPIPE signal, which can
++	 * be send when client unexpectedly
++	 * closes connection and it leads to VNC server crash.
++	 */
++	signal(SIGPIPE, SIG_IGN);
++
+ 	if (config_base == NULL ||
+ 	    config_base->struct_version != WESTON_VNC_BACKEND_CONFIG_VERSION ||
+ 	    config_base->struct_size > sizeof(struct weston_vnc_backend_config)) {
