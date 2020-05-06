@@ -1,0 +1,73 @@
+From 0321e8924b56c2ca9742db4357cd53c63957de38 Mon Sep 17 00:00:00 2001
+From: Igor Opaniuk <igor.opaniuk@toradex.com>
+Date: Wed, 6 May 2020 21:05:30 +0300
+Subject: [PATCH] vnc-backend: workaround for seat releasing
+
+According to ba2ad0ee4f61("rdp: don't release the seat until it is safe v2"),
+releasing a seat is not safe because of design pitfalls and ill-conceived
+syncronization [1], which leads to vnc-backend crash with this error:
+wl_registry@2: error 0: invalid global wl_seat (13)
+
+weston_seat_release already calls weston_keyboard_destroy(seat->keyboardstate),
+but later wl_resource_destroy->destroy_resource->wl_list_remove() accesses
+this memory.
+
+address sanitizer report :
+==10695==ERROR: AddressSanitizer: heap-use-after-free on address 0x611000020d50 at pc 0x7f05e9f6c567 bp 0x7ffee886bf10 sp 0x7ffee886bf00
+WRITE of size 8 at 0x611000020d50 thread T0
+    #0 0x7f05e9f6c566 in wl_list_remove /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/wayland-util.c:57
+    #1 0x7f05e9f5df7a in destroy_resource /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/wayland-server.c:571
+    #2 0x7f05e9f5f89e in wl_resource_destroy /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/wayland-server.c:584
+    #3 0x7f05e84cae2f in ffi_call_unix64 (/usr/lib64/libffi.so.6+0xce2f)
+    #4 0x7f05e84c9a2d in ffi_call (/usr/lib64/libffi.so.6+0xba2d)
+    #5 0x7f05e9f6af75 in wl_closure_invoke /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/connection.c:949
+    #6 0x7f05e9f603b5 in wl_client_connection_data /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/wayland-server.c:337
+    #7 0x7f05e9f650d1 in wl_event_loop_dispatch /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/event-loop.c:421
+    #8 0x7f05e9f611af in wl_display_run /usr/src/debug/dev-libs/wayland-9999/wayland-9999/src/wayland-server.c:1051
+    #9 0x40a333 in main src/main.c:859
+    #10 0x7f05e8ea459f in __libc_start_main (/lib64/libc.so.6+0x2059f)
+    #11 0x40a8c8 in _start (/usr/bin/weston+0x40a8c8)
+
+0x611000020d50 is located 16 bytes inside of 232-byte region [0x611000020d40,0x611000020e28)
+freed by thread T0 here:
+    #0 0x7f05ea1d455f in __interceptor_free (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/libasan.so.1+0x5755f)
+    #1 0x42c92c in weston_seat_release src/input.c:2675
+
+previously allocated by thread T0 here:
+    #0 0x7f05ea1d4935 in calloc (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/libasan.so.1+0x57935)
+    #1 0x423e6f in zalloc shared/zalloc.h:38
+    #2 0x423e6f in weston_keyboard_create src/input.c:756
+
+As the solution isn't found yet for RDP, lets use the same workaround
+till it's correctly fixed.
+
+[1] https://gitlab.freedesktop.org/wayland/weston/issues/72
+[2] https://bugs.freedesktop.org/show_bug.cgi?id=94519
+
+Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+---
+ libweston/backend-vnc/vnc.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/libweston/backend-vnc/vnc.c b/libweston/backend-vnc/vnc.c
+index 7546fc8d..c5bd132a 100644
+--- a/libweston/backend-vnc/vnc.c
++++ b/libweston/backend-vnc/vnc.c
+@@ -335,7 +335,16 @@ vnc_disconnect_event(struct vnc_client *client)
+ 	wl_event_source_remove(peer->socket_event);
+ 	weston_seat_release_keyboard(peer->seat);
+ 	weston_seat_release_pointer(peer->seat);
+-	weston_seat_release(peer->seat);
++	/*
++	 * According to ba2ad0ee4f61("rdp: don't release the seat until it is safe v2"),
++	 * releasing a seat is not safe because of design pitfalls
++	 * and ill-conceived syncronization, which leads to vnc-backend
++	 * crash with this error:
++	 * wl_registry@2: error 0: invalid global wl_seat (13)
++	 * https://gitlab.freedesktop.org/wayland/weston/issues/72
++	 *
++	 * weston_seat_release(peer->seat);
++	 */
+ 	free(peer);
+ 	weston_log("VNC Client disconnected\n");
+ }

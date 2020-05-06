@@ -1,4 +1,4 @@
-From 4fb3ac34de5f3e1018dc3131dcf8b748829d8c76 Mon Sep 17 00:00:00 2001
+From 1b679b7216a77aa6003d72070b71eee4a0b1cc12 Mon Sep 17 00:00:00 2001
 From: Igor Opaniuk <igor.opaniuk@toradex.com>
 Date: Wed, 6 May 2020 17:48:49 +0300
 Subject: [PATCH] vnc-backend: ignore SIGPIPE signal

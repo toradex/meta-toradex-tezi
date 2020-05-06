@@ -21,6 +21,7 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://0005-compositor-new-algorithm-to-enable-output.patch \
            file://0006-backend-vnc-drop-plane-damage-substraction.patch \
            file://0001-vnc-backend-ignore-SIGPIPE-signal.patch \
+           file://0002-vnc-backend-workaround-for-seat-releasing.patch \
            "
 SRC_URI[md5sum] = "53e4810d852df0601d01fd986a5b22b3"
 SRC_URI[sha256sum] = "7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c027848"
