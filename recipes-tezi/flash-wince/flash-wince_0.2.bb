@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://flash-wince.c;beginline=2;endline=6;md5=6f49165cd70d5
 
 SRC_URI = "git://gitlab.toradex.int/tezi/flash-wince.git;branch=master;protocol=http"
 
-SRCREV = "dca3954ccf57a5a5f237de626d5206acda80ee0f"
+SRCREV = "1c79234a6951a23924756b4563154c93af45a52d"
 
 S = "${WORKDIR}/git"
 
