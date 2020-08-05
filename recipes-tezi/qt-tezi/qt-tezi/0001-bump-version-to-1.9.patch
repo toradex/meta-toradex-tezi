@@ -1,0 +1,27 @@
+From d0feb14ca8ce0309da39770525621478ed9b717a Mon Sep 17 00:00:00 2001
+Message-Id: <d0feb14ca8ce0309da39770525621478ed9b717a.1596529827.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Tue, 4 Aug 2020 10:29:08 +0200
+Subject: [PATCH] bump version to 1.9
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ config.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.h b/config.h
+index fb0f288..3ac6a69 100644
+--- a/config.h
++++ b/config.h
+@@ -2,7 +2,7 @@
+ #define CONFIG_H
+ 
+ /* Version number */
+-#define VERSION_NUMBER "1.8"
++#define VERSION_NUMBER "1.9"
+ 
+ /* Supported config format */
+ #define IMAGE_LIST_CONFIG_FORMAT 1
+-- 
+2.25.4
+

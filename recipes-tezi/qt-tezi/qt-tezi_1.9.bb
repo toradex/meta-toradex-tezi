@@ -10,6 +10,7 @@ SRC_URI = "git://gitlab.toradex.int/tezi/qt-tezi.git;branch=master;protocol=http
     file://udhcpd.conf \
     file://ifplugd.dhcp.action \
     file://ifplugd.usb.action \
+    file://0001-bump-version-to-1.9.patch \
 "
 
 SRCREV = "9bc7d7b9773d9e071957dcd4e86dc58b9adefc15"
