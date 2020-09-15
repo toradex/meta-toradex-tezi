@@ -1,0 +1,86 @@
+From 4898a998372033b7f85421cc2349a78a66f351a4 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 14 Sep 2020 19:42:30 +0200
+Subject: [PATCH 4/6] drm-backend: removing the restriction of exclusively
+ presenting in plane-assignment
+
+Upstream-Status: Submitted
+
+Reference:
+https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/357
+
+in `drm_output_propose_state`, we are removing the restriction of exclusively
+present for view to be assigned on a plane, as in the case of cloning outputs,
+no views would fit this condition. Now one view can be assigned to different
+planes on different outputs.
+
+Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ libweston/backend-drm/state-propose.c | 29 ++++++++++-----------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
+
+diff --git a/libweston/backend-drm/state-propose.c b/libweston/backend-drm/state-propose.c
+index b403e30..132e5c3 100644
+--- a/libweston/backend-drm/state-propose.c
++++ b/libweston/backend-drm/state-propose.c
+@@ -843,7 +843,13 @@ drm_output_propose_state(struct weston_output *output_base,
+ 	pixman_region32_init(&planes_region);
+ 	pixman_region32_init(&occluded_region);
+ 
+-	wl_list_for_each(ev, &output_base->compositor->view_list, link) {
++	/* using output->view_list we could avoid testing if the view touches
++	 * the output. Also, since we enable independent overlapping damage
++	 * tracking, for cloning outputs, we would need to allow view assign on
++	 * different planes in different outputs.
++	 */
++	wl_list_for_each(ev, &output_base->view_list,
++	                 output_damages[output_base->id].link) {
+ 		struct drm_plane_state *ps = NULL;
+ 		bool force_renderer = false;
+ 		pixman_region32_t clipped_view;
+@@ -854,14 +860,6 @@ drm_output_propose_state(struct weston_output *output_base,
+ 		          ev, output->base.name,
+ 			  (unsigned long) output->base.id);
+ 
+-		/* If this view doesn't touch our output at all, there's no
+-		 * reason to do anything with it. */
+-		if (!(ev->output_mask & (1u << output->base.id))) {
+-			drm_debug(b, "\t\t\t\t[view] ignoring view %p "
+-			             "(not on our output)\n", ev);
+-			continue;
+-		}
+-
+ 		/* Ignore views we know to be totally occluded. */
+ 		pixman_region32_init(&clipped_view);
+ 		pixman_region32_intersect(&clipped_view,
+@@ -883,14 +881,6 @@ drm_output_propose_state(struct weston_output *output_base,
+ 			continue;
+ 		}
+ 
+-		/* We only assign planes to views which are exclusively present
+-		 * on our output. */
+-		if (ev->output_mask != (1u << output->base.id)) {
+-			drm_debug(b, "\t\t\t\t[view] not assigning view %p to plane "
+-			             "(on multiple outputs)\n", ev);
+-			force_renderer = true;
+-		}
+-
+ 		if (!weston_view_has_valid_buffer(ev)) {
+ 			drm_debug(b, "\t\t\t\t[view] not assigning view %p to plane "
+ 			             "(no buffer available)\n", ev);
+@@ -1073,7 +1063,10 @@ drm_assign_planes(struct weston_output *output_base, void *repaint_data)
+ 	drm_debug(b, "\t[repaint] Using %s composition\n",
+ 		  drm_propose_state_mode_to_string(mode));
+ 
+-	wl_list_for_each(ev, &output_base->compositor->view_list, link) {
++	/* using output->view_list we could avoid testing if the view touches
++	 * the output */
++	wl_list_for_each(ev, &output_base->view_list,
++	                 output_damages[output_base->id].link) {
+ 		struct drm_plane *target_plane = NULL;
+ 
+ 		/* If this view doesn't touch our output at all, there's no
+-- 
+2.28.0
+

@@ -1,7 +1,12 @@
-From 8cd2e3c99fba7d1caa8af42713fbfa0b774965fa Mon Sep 17 00:00:00 2001
-From: xichen zhou <sichem.zh@gmail.com>
-Date: Fri, 10 Apr 2020 16:53:08 -0400
-Subject: [PATCH] libweston: per-output view damage tracking
+From 2ad203b7c4949c5d5068162721442db75df6b273 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 14 Sep 2020 14:19:49 +0200
+Subject: [PATCH 2/6] libweston: per-output view damage tracking
+
+Upstream-Status: Submitted
+
+Reference:
+https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/357
 
 This patch enables per output view damage tracking. At `view_accumulate_damage`
 Views will copy its damage to all the outputs they touch, later be combined in
@@ -12,16 +17,17 @@ It also adds per-output link in `weston_view`, this list is built in
 output to go through only views it touches.
 
 Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- include/libweston/libweston.h |   8 +++
- libweston/compositor.c        | 155 +++++++++++++++++++++++++++---------------
- 2 files changed, 108 insertions(+), 55 deletions(-)
+ include/libweston/libweston.h |   8 ++
+ libweston/compositor.c        | 157 ++++++++++++++++++++++------------
+ 2 files changed, 108 insertions(+), 57 deletions(-)
 
 diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
-index 694cbb8..4f5199a 100644
+index f3eac80..070d1bf 100644
 --- a/include/libweston/libweston.h
 +++ b/include/libweston/libweston.h
-@@ -284,6 +284,7 @@ struct weston_output {
+@@ -291,6 +291,7 @@ struct weston_output {
  	int disable_planes;
  	int destroying;
  	struct wl_list feedback_list;
@@ -29,7 +35,7 @@ index 694cbb8..4f5199a 100644
  
  	uint32_t transform;
  	int32_t native_scale;
-@@ -1284,6 +1285,13 @@ struct weston_view {
+@@ -1291,6 +1292,13 @@ struct weston_view {
  		struct weston_transform position; /* matrix from x, y */
  	} transform;
  
@@ -44,7 +50,7 @@ index 694cbb8..4f5199a 100644
  	 * The primary output for this view.
  	 * Used for picking the output for driving internal animations on the
 diff --git a/libweston/compositor.c b/libweston/compositor.c
-index 3dc851e..dad8499 100644
+index adbfa67..19c1ed9 100644
 --- a/libweston/compositor.c
 +++ b/libweston/compositor.c
 @@ -341,6 +341,9 @@ weston_view_create(struct weston_surface *surface)
@@ -57,7 +63,7 @@ index 3dc851e..dad8499 100644
  	view->alpha = 1.0;
  	pixman_region32_init(&view->transform.opaque);
  
-@@ -2146,6 +2149,9 @@ weston_view_destroy(struct weston_view *view)
+@@ -2197,6 +2200,9 @@ weston_view_destroy(struct weston_view *view)
  	pixman_region32_fini(&view->transform.boundingbox);
  	pixman_region32_fini(&view->transform.opaque);
  
@@ -67,7 +73,7 @@ index 3dc851e..dad8499 100644
  	weston_view_set_transform_parent(view, NULL);
  	weston_view_set_output(view, NULL);
  
-@@ -2400,12 +2406,7 @@ WL_EXPORT void
+@@ -2451,12 +2457,7 @@ WL_EXPORT void
  weston_output_finish_damage(struct weston_output *output,
                              pixman_region32_t *damage)
  {
@@ -80,7 +86,7 @@ index 3dc851e..dad8499 100644
  }
  
  static void
-@@ -2426,8 +2427,11 @@ static void
+@@ -2477,8 +2478,11 @@ static void
  view_accumulate_damage(struct weston_view *view,
  		       pixman_region32_t *opaque)
  {
@@ -93,7 +99,7 @@ index 3dc851e..dad8499 100644
  	pixman_region32_init(&damage);
  	if (view->transform.enabled) {
  		pixman_box32_t *extents;
-@@ -2443,24 +2447,59 @@ view_accumulate_damage(struct weston_view *view,
+@@ -2494,24 +2498,59 @@ view_accumulate_damage(struct weston_view *view,
  	pixman_region32_intersect(&damage, &damage,
  				  &view->transform.boundingbox);
  	pixman_region32_subtract(&damage, &damage, opaque);
@@ -161,10 +167,11 @@ index 3dc851e..dad8499 100644
  }
  
  static void
-@@ -2552,6 +2591,24 @@ surface_free_unused_subsurface_views(struct weston_surface *surface)
+@@ -2606,6 +2645,24 @@ surface_free_unused_subsurface_views(struct weston_surface *surface)
+ 	}
  }
  
- static void
++static void
 +view_add_to_outputs(struct weston_view *view, struct weston_compositor *ec)
 +{
 +	struct weston_output *output;
@@ -175,18 +182,17 @@ index 3dc851e..dad8499 100644
 +	wl_list_for_each(output, &ec->output_list, link) {
 +		if (view->output_mask & (1u << output->id)) {
 +			wl_list_init(&view->output_damages[output->id].link);
-+			wl_list_insert(&output->view_list,
++			wl_list_insert(output->view_list.prev,
 +			               &view->output_damages[output->id].link);
 +		}
 +	}
 +
 +}
 +
-+static void
+ static void
  view_list_add_subsurface_view(struct weston_compositor *compositor,
  			      struct weston_subsurface *sub,
- 			      struct weston_view *parent)
-@@ -2586,14 +2643,16 @@ view_list_add_subsurface_view(struct weston_compositor *compositor,
+@@ -2641,14 +2698,16 @@ view_list_add_subsurface_view(struct weston_compositor *compositor,
  	view->is_mapped = true;
  
  	if (wl_list_empty(&sub->surface->subsurface_list)) {
@@ -205,7 +211,7 @@ index 3dc851e..dad8499 100644
  			view_list_add_subsurface_view(compositor, child, view);
  	}
  }
-@@ -2613,14 +2672,16 @@ view_list_add(struct weston_compositor *compositor,
+@@ -2668,14 +2727,16 @@ view_list_add(struct weston_compositor *compositor,
  	weston_view_update_transform(view);
  
  	if (wl_list_empty(&view->surface->subsurface_list)) {
@@ -224,7 +230,7 @@ index 3dc851e..dad8499 100644
  			view_list_add_subsurface_view(compositor, sub, view);
  	}
  }
-@@ -2630,6 +2691,7 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
+@@ -2685,6 +2746,7 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
  {
  	struct weston_view *view, *tmp;
  	struct weston_layer *layer;
@@ -232,7 +238,7 @@ index 3dc851e..dad8499 100644
  
  	wl_list_for_each(layer, &compositor->layer_list, link)
  		wl_list_for_each(view, &layer->view_list.link, layer_link.link)
-@@ -2639,6 +2701,9 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
+@@ -2694,6 +2756,9 @@ weston_compositor_build_view_list(struct weston_compositor *compositor)
  		wl_list_init(&view->link);
  	wl_list_init(&compositor->view_list);
  
@@ -242,7 +248,7 @@ index 3dc851e..dad8499 100644
  	wl_list_for_each(layer, &compositor->layer_list, link) {
  		wl_list_for_each(view, &layer->view_list.link, layer_link.link) {
  			view_list_add(compositor, view);
-@@ -2693,19 +2758,21 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+@@ -2748,19 +2813,21 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
  
  	TL_POINT(ec, "core_repaint_begin", TLP_OUTPUT(output), TLP_END);
  
@@ -276,20 +282,21 @@ index 3dc851e..dad8499 100644
  	}
  
  	output->desired_protection = highest_requested;
-@@ -2733,6 +2800,9 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+@@ -2788,6 +2855,9 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
  		}
  	}
  
-+	compositor_accumulate_damage(ec);
++	output_accumulate_damage(output);
 +	output_update_damage(output);
 +
  	pixman_region32_init(&output_damage);
  	pixman_region32_intersect(&output_damage, &output->damage, &output->region);
  	pixman_region32_subtract(&output_damage, &output->damage,
-@@ -2822,28 +2892,6 @@ err:
+@@ -2876,30 +2946,6 @@ err:
+ 	return ret;
  }
  
- static void
+-static void
 -weston_repaint_prepare(struct weston_compositor *ec)
 -{
 -	struct weston_view *ev;
@@ -307,15 +314,16 @@ index 3dc851e..dad8499 100644
 -
 -	compositor_accumulate_damage(ec);
 -
--	wl_list_for_each(output, &ec->output_list, link)
+-	wl_list_for_each(output, &ec->output_list, link) {
+-		output_accumulate_damage(output);
 -		output_update_damage(output);
+-	}
 -}
 -
--static void
+ static void
  output_repaint_timer_arm(struct weston_compositor *compositor)
  {
- 	struct weston_output *output;
-@@ -2896,8 +2944,6 @@ output_repaint_timer_handler(void *data)
+@@ -2953,8 +2999,6 @@ output_repaint_timer_handler(void *data)
  	if (compositor->backend->repaint_begin)
  		repaint_data = compositor->backend->repaint_begin(compositor);
  
@@ -324,7 +332,7 @@ index 3dc851e..dad8499 100644
  	wl_list_for_each(output, &compositor->output_list, link) {
  		ret = weston_output_maybe_repaint(output, &now, repaint_data);
  		if (ret)
-@@ -6287,7 +6333,6 @@ weston_output_enable(struct weston_output *output)
+@@ -6420,7 +6464,6 @@ weston_output_enable(struct weston_output *output)
  
  	if (!wl_list_empty(&c->output_list))
  		x = iterator->x + iterator->width;
@@ -332,3 +340,6 @@ index 3dc851e..dad8499 100644
  
  	/* Make sure the scale is set up */
  	assert(output->scale);
+-- 
+2.28.0
+

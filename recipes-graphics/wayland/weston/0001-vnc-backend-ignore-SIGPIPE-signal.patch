@@ -1,7 +1,9 @@
-From 1b679b7216a77aa6003d72070b71eee4a0b1cc12 Mon Sep 17 00:00:00 2001
-From: Igor Opaniuk <igor.opaniuk@toradex.com>
-Date: Wed, 6 May 2020 17:48:49 +0300
+From 3d01121445ebf11c31dd17c0f5e00738186bd6ef Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 15 Sep 2020 08:41:59 +0200
 Subject: [PATCH] vnc-backend: ignore SIGPIPE signal
+
+Upstream-Status: Pending
 
 Ignore the SIGPIPE signal, which can be send when client unexpectedly
 closes connection and it leads to VNC server crash.
@@ -37,12 +39,13 @@ Program received signal SIGPIPE, Broken pipe.
 10 0x000103d4 in _start () at ../sysdeps/arm/start.S:126
 
 Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  libweston/backend-vnc/vnc.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
 diff --git a/libweston/backend-vnc/vnc.c b/libweston/backend-vnc/vnc.c
-index b19104d1..7546fc8d 100644
+index d574c59..5c486e5 100644
 --- a/libweston/backend-vnc/vnc.c
 +++ b/libweston/backend-vnc/vnc.c
 @@ -28,6 +28,7 @@
@@ -53,7 +56,7 @@ index b19104d1..7546fc8d 100644
  #include <stdint.h>
  #include <stdlib.h>
  #include <string.h>
-@@ -789,6 +790,13 @@ weston_backend_init(struct weston_compositor *compositor,
+@@ -834,6 +835,13 @@ weston_backend_init(struct weston_compositor *compositor,
  
  	weston_log("Initializing VNC backend\n");
  
@@ -67,3 +70,6 @@ index b19104d1..7546fc8d 100644
  	if (config_base == NULL ||
  	    config_base->struct_version != WESTON_VNC_BACKEND_CONFIG_VERSION ||
  	    config_base->struct_size > sizeof(struct weston_vnc_backend_config)) {
+-- 
+2.28.0
+

@@ -1,7 +1,12 @@
-From 47861fc42276d2cb5e1b1314866b29ea9cc23568 Mon Sep 17 00:00:00 2001
-From: xeechou <xeechou@gmail.com>
-Date: Sat, 1 Feb 2020 22:16:57 -0500
-Subject: [PATCH] libweston: properly track the overlapping output damage
+From 1bdff50e6afbeafab848f23a670d6d6e35210381 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 14 Sep 2020 12:50:17 +0200
+Subject: [PATCH 1/6] libweston: properly track the overlapping output damage
+
+Upstream-Status: Submitted
+
+Reference:
+https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/357
 
 By moving `compositor_accumulate_damage` outside the `weston_repaint_output`, we
 are able to properly track the damage of every output before the damage gets
@@ -11,23 +16,24 @@ The damage tracking at every weston_output level Mainly adopted from patch here:
 https://lists.freedesktop.org/archives/wayland-devel/2014-March/013571.html
 
 Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  include/libweston/libweston.h         |  3 ++
- libweston/backend-drm/drm.c           |  5 +--
+ libweston/backend-drm/drm.c           |  4 +-
  libweston/backend-fbdev/fbdev.c       |  3 +-
  libweston/backend-headless/headless.c |  4 +-
  libweston/backend-rdp/rdp.c           |  4 +-
- libweston/backend-wayland/wayland.c   |  9 +++--
- libweston/backend-x11/x11.c           |  7 ++--
- libweston/compositor.c                | 74 ++++++++++++++++++++++++++++-------
+ libweston/backend-wayland/wayland.c   |  9 ++--
+ libweston/backend-x11/x11.c           |  7 ++-
+ libweston/compositor.c                | 76 ++++++++++++++++++++++-----
  libweston/libweston-internal.h        |  3 ++
- 9 files changed, 81 insertions(+), 31 deletions(-)
+ 9 files changed, 83 insertions(+), 30 deletions(-)
 
 diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
-index 8241abf..694cbb8 100644
+index 2c1e4bb..f3eac80 100644
 --- a/include/libweston/libweston.h
 +++ b/include/libweston/libweston.h
-@@ -249,6 +249,9 @@ struct weston_output {
+@@ -256,6 +256,9 @@ struct weston_output {
  	/** Output area in global coordinates, simple rect */
  	pixman_region32_t region;
  
@@ -38,7 +44,7 @@ index 8241abf..694cbb8 100644
  	 *  if set, a repaint will eventually occur. */
  	bool repaint_needed;
 diff --git a/libweston/backend-drm/drm.c b/libweston/backend-drm/drm.c
-index e0b1cbd..c594546 100644
+index 2780f3b..f075020 100644
 --- a/libweston/backend-drm/drm.c
 +++ b/libweston/backend-drm/drm.c
 @@ -52,6 +52,7 @@
@@ -49,19 +55,18 @@ index e0b1cbd..c594546 100644
  #include "shared/helpers.h"
  #include "shared/timespec-util.h"
  #include "shared/string-helpers.h"
-@@ -412,9 +413,7 @@ drm_output_render(struct drm_output_state *state, pixman_region32_t *damage)
- 					  &scanout_state->damage,
- 					  &scanout_state->damage);
- 	}
--
+@@ -405,8 +406,7 @@ drm_output_render(struct drm_output_state *state, pixman_region32_t *damage)
+ 	scanout_state->dest_w = output->base.current_mode->width;
+ 	scanout_state->dest_h = output->base.current_mode->height;
+ 
 -	pixman_region32_subtract(&c->primary_plane.damage,
 -				 &c->primary_plane.damage, damage);
 +	weston_output_finish_damage(&output->base, damage);
- }
  
- static int
+ 	/* Don't bother calculating plane damage if the plane doesn't support it */
+ 	if (damage_info->prop_id == 0)
 diff --git a/libweston/backend-fbdev/fbdev.c b/libweston/backend-fbdev/fbdev.c
-index ae289cc..ae8a656 100644
+index a43f648..1c8af9a 100644
 --- a/libweston/backend-fbdev/fbdev.c
 +++ b/libweston/backend-fbdev/fbdev.c
 @@ -154,8 +154,7 @@ fbdev_output_repaint(struct weston_output *base, pixman_region32_t *damage,
@@ -75,7 +80,7 @@ index ae289cc..ae8a656 100644
  	/* Schedule the end of the frame. We do not sync this to the frame
  	 * buffer clock because users who want that should be using the DRM
 diff --git a/libweston/backend-headless/headless.c b/libweston/backend-headless/headless.c
-index c98bdc2..1fc816a 100644
+index c312a0f..7e0514a 100644
 --- a/libweston/backend-headless/headless.c
 +++ b/libweston/backend-headless/headless.c
 @@ -36,6 +36,7 @@
@@ -97,7 +102,7 @@ index c98bdc2..1fc816a 100644
  	wl_event_source_timer_update(output->finish_frame_timer, 16);
  
 diff --git a/libweston/backend-rdp/rdp.c b/libweston/backend-rdp/rdp.c
-index ce91ced..5d22efe 100644
+index 9e414aa..52744dd 100644
 --- a/libweston/backend-rdp/rdp.c
 +++ b/libweston/backend-rdp/rdp.c
 @@ -101,6 +101,7 @@
@@ -108,7 +113,7 @@ index ce91ced..5d22efe 100644
  
  #define MAX_FREERDP_FDS 32
  #define DEFAULT_AXIS_STEP_DISTANCE 10
-@@ -414,8 +415,7 @@ rdp_output_repaint(struct weston_output *output_base, pixman_region32_t *damage,
+@@ -422,8 +423,7 @@ rdp_output_repaint(struct weston_output *output_base, pixman_region32_t *damage,
  		}
  	}
  
@@ -119,7 +124,7 @@ index ce91ced..5d22efe 100644
  	wl_event_source_timer_update(output->finish_frame_timer, 16);
  	return 0;
 diff --git a/libweston/backend-wayland/wayland.c b/libweston/backend-wayland/wayland.c
-index 42af0c8..89260f5 100644
+index 60d42bf..5b9f8ed 100644
 --- a/libweston/backend-wayland/wayland.c
 +++ b/libweston/backend-wayland/wayland.c
 @@ -48,6 +48,7 @@
@@ -130,7 +135,7 @@ index 42af0c8..89260f5 100644
  #include "renderer-gl/gl-renderer.h"
  #include "shared/weston-egl-ext.h"
  #include "pixman-renderer.h"
-@@ -528,8 +529,8 @@ wayland_output_repaint_gl(struct weston_output *output_base,
+@@ -531,8 +532,8 @@ wayland_output_repaint_gl(struct weston_output *output_base,
  
  	ec->renderer->repaint_output(&output->base, damage);
  
@@ -141,7 +146,7 @@ index 42af0c8..89260f5 100644
  	return 0;
  }
  #endif
-@@ -661,8 +662,8 @@ wayland_output_repaint_pixman(struct weston_output *output_base,
+@@ -664,8 +665,8 @@ wayland_output_repaint_pixman(struct weston_output *output_base,
  	pixman_region32_init(&sb->damage);
  	sb->frame_damaged = 0;
  
@@ -153,7 +158,7 @@ index 42af0c8..89260f5 100644
  }
  
 diff --git a/libweston/backend-x11/x11.c b/libweston/backend-x11/x11.c
-index 5fda056..b7ed2db 100644
+index 387e97a..bc9bac7 100644
 --- a/libweston/backend-x11/x11.c
 +++ b/libweston/backend-x11/x11.c
 @@ -53,6 +53,7 @@
@@ -185,7 +190,7 @@ index 5fda056..b7ed2db 100644
  	cookie = xcb_shm_put_image_checked(b->conn, output->window, output->gc,
  					pixman_image_get_width(output->hw_surface),
 diff --git a/libweston/compositor.c b/libweston/compositor.c
-index 3710405..3dc851e 100644
+index 2bdbb40..adbfa67 100644
 --- a/libweston/compositor.c
 +++ b/libweston/compositor.c
 @@ -53,6 +53,7 @@
@@ -204,7 +209,7 @@ index 3710405..3dc851e 100644
  #include "pixel-formats.h"
  #include "backend.h"
  #include "libweston-internal.h"
-@@ -2387,14 +2389,25 @@ weston_compositor_damage_all(struct weston_compositor *compositor)
+@@ -2438,14 +2440,25 @@ weston_compositor_damage_all(struct weston_compositor *compositor)
  WL_EXPORT void
  weston_output_damage(struct weston_output *output)
  {
@@ -235,10 +240,11 @@ index 3710405..3dc851e 100644
  static void
  surface_flush_damage(struct weston_surface *surface)
  {
-@@ -2438,6 +2451,19 @@ view_accumulate_damage(struct weston_view *view,
+@@ -2488,6 +2501,19 @@ view_accumulate_damage(struct weston_view *view,
+ 	pixman_region32_union(opaque, opaque, &view->transform.opaque);
  }
  
- static void
++static void
 +output_update_damage(struct weston_output *output)
 +{
 +	struct weston_compositor *ec = output->compositor;
@@ -251,11 +257,10 @@ index 3710405..3dc851e 100644
 +	pixman_region32_fini(&new_damage);
 +}
 +
-+static void
- compositor_accumulate_damage(struct weston_compositor *ec)
+ static void
+ output_accumulate_damage(struct weston_output *output)
  {
- 	struct weston_plane *plane;
-@@ -2667,9 +2693,6 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+@@ -2722,9 +2748,6 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
  
  	TL_POINT(ec, "core_repaint_begin", TLP_OUTPUT(output), TLP_END);
  
@@ -265,11 +270,11 @@ index 3710405..3dc851e 100644
  	/* Find the highest protection desired for an output */
  	wl_list_for_each(ev, &ec->view_list, link) {
  		if (ev->surface->output_mask & (1u << output->id)) {
-@@ -2710,13 +2733,10 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
+@@ -2765,13 +2788,10 @@ weston_output_repaint(struct weston_output *output, void *repaint_data)
  		}
  	}
  
--	compositor_accumulate_damage(ec);
+-	output_accumulate_damage(output);
 -
  	pixman_region32_init(&output_damage);
 -	pixman_region32_intersect(&output_damage,
@@ -282,10 +287,11 @@ index 3710405..3dc851e 100644
  
  	if (output->dirty)
  		weston_output_update_matrix(output);
-@@ -2802,6 +2822,28 @@ err:
+@@ -2856,6 +2876,30 @@ err:
+ 	return ret;
  }
  
- static void
++static void
 +weston_repaint_prepare(struct weston_compositor *ec)
 +{
 +	struct weston_view *ev;
@@ -303,15 +309,16 @@ index 3710405..3dc851e 100644
 +
 +	compositor_accumulate_damage(ec);
 +
-+	wl_list_for_each(output, &ec->output_list, link)
++	wl_list_for_each(output, &ec->output_list, link) {
++		output_accumulate_damage(output);
 +		output_update_damage(output);
++	}
 +}
 +
-+static void
+ static void
  output_repaint_timer_arm(struct weston_compositor *compositor)
  {
- 	struct weston_output *output;
-@@ -2854,6 +2896,8 @@ output_repaint_timer_handler(void *data)
+@@ -2909,6 +2953,8 @@ output_repaint_timer_handler(void *data)
  	if (compositor->backend->repaint_begin)
  		repaint_data = compositor->backend->repaint_begin(compositor);
  
@@ -320,7 +327,7 @@ index 3710405..3dc851e 100644
  	wl_list_for_each(output, &compositor->output_list, link) {
  		ret = weston_output_maybe_repaint(output, &now, repaint_data);
  		if (ret)
-@@ -6243,6 +6287,7 @@ weston_output_enable(struct weston_output *output)
+@@ -6374,6 +6420,7 @@ weston_output_enable(struct weston_output *output)
  
  	if (!wl_list_empty(&c->output_list))
  		x = iterator->x + iterator->width;
@@ -328,7 +335,7 @@ index 3710405..3dc851e 100644
  
  	/* Make sure the scale is set up */
  	assert(output->scale);
-@@ -6262,6 +6307,7 @@ weston_output_enable(struct weston_output *output)
+@@ -6393,6 +6440,7 @@ weston_output_enable(struct weston_output *output)
  	weston_output_init_zoom(output);
  
  	weston_output_init_geometry(output, x, y);
@@ -350,3 +357,6 @@ index 66c38e8..ae01549 100644
  /* weston_plane */
  
  void
+-- 
+2.28.0
+

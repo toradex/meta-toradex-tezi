@@ -11,21 +11,21 @@ SRC_URI = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz \
            file://wallpaper.png \
            file://xwayland.weston-start \
            file://0001-weston-launch-Provide-a-default-version-that-doesn-t.patch \
-           file://0001-compositor-drop-libexec_weston-versioning.patch \
-           file://0001-backend-vnc-initial-commit.patch \
+           file://0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch \
+           file://0001-backend-vnc-add-VNC-support-using-Neat-VNC-library.patch \
            file://0001-screen-share-auto-enable-screen-share-on-startup.patch \
            file://0001-libweston-properly-track-the-overlapping-output-dama.patch \
            file://0002-libweston-per-output-view-damage-tracking.patch \
            file://0003-libweston-remove-weston_plane.damage.patch \
-           file://0004-libweston-enable-API-to-make-output-a-slave-to-anoth.patch \
-           file://0005-compositor-new-algorithm-to-enable-output.patch \
-           file://0006-backend-vnc-drop-plane-damage-substraction.patch \
+           file://0004-drm-backend-removing-the-restriction-of-exclusively-.patch \
+           file://0005-libweston-enable-API-to-make-output-a-slave-to-anoth.patch \
+           file://0006-compositor-new-algorithm-to-enable-output.patch \
+           file://0001-backend-vnc-drop-plane-damage-substraction.patch \
            file://0001-vnc-backend-ignore-SIGPIPE-signal.patch \
-           file://0002-vnc-backend-workaround-for-seat-releasing.patch \
-           file://0001-weston-backend-vnc-treat-shift-as-a-hint.patch \
-           "
-SRC_URI[md5sum] = "53e4810d852df0601d01fd986a5b22b3"
-SRC_URI[sha256sum] = "7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c027848"
+           file://0001-vnc-backend-workaround-for-seat-releasing.patch \
+          "
+
+SRC_URI[sha256sum] = "5cf5d6ce192e0eb15c1fc861a436bf21b5bb3b91dbdabbdebe83e1f83aa098fe"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
@@ -36,7 +36,7 @@ export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
 export CXXFLAGS_class-target = "${TARGET_CXXFLAGS}"
 export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
 
-DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm"
+DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm neatvnc"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
 
 WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
@@ -44,12 +44,7 @@ WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false \
 		-Dpipewire=false -Dbackend-rdp=false \
 		"
-EXTRA_OECONF_append_qemux86 = "\
-		WESTON_NATIVE_BACKEND=fbdev-backend.so \
-		"
-EXTRA_OECONF_append_qemux86-64 = "\
-		WESTON_NATIVE_BACKEND=fbdev-backend.so \
-		"
+
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'kms', '', d)} \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'x11 wayland', 'xwayland', '', d)} \
                    ${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
@@ -118,7 +113,8 @@ do_install_append() {
 PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', '${PN}-xwayland', '', d)} \
              libweston-${WESTON_MAJOR_VERSION} ${PN}-examples"
 
-FILES_${PN} = "${bindir}/weston ${bindir}/weston-terminal ${bindir}/weston-info ${bindir}/weston-launch ${bindir}/wcap-decode ${libexecdir} ${libdir}/${BPN}/*.so ${datadir}"
+FILES_${PN}-dev += "${libdir}/${BPN}/libexec_weston.so"
+FILES_${PN} = "${bindir}/weston ${bindir}/weston-terminal ${bindir}/weston-info ${bindir}/weston-launch ${bindir}/wcap-decode ${libexecdir} ${libdir}/${BPN}/*.so* ${datadir}"
 
 FILES_libweston-${WESTON_MAJOR_VERSION} = "${libdir}/lib*${SOLIBS} ${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.so"
 SUMMARY_libweston-${WESTON_MAJOR_VERSION} = "Helper library for implementing 'wayland window managers'."

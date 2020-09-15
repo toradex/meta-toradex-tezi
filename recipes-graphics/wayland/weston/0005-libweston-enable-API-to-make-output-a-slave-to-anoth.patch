@@ -1,23 +1,29 @@
-From bb31474f3bf4e8a64b163aed51e8ba5d447bce8c Mon Sep 17 00:00:00 2001
-From: xichen zhou <sichem.zh@gmail.com>
-Date: Fri, 10 Apr 2020 20:01:58 -0400
-Subject: [PATCH] libweston: enable API to make output a slave to another
+From d6e0fccd0c202fe0e512566daa45334010b5cbc4 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 14 Sep 2020 19:54:02 +0200
+Subject: [PATCH 5/6] libweston: enable API to make output a slave to another
+
+Upstream-Status: Submitted
+
+Reference:
+https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/381
 
 adding one function `weston_output_make_slave` in libweston to facilitate
 creating a clone_output, it is called at before enabling to so the cloning
 output will take the sames top-left position as its master.
 
 Signed-off-by: xichen zhou <sichem.zh@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  include/libweston/libweston.h |  5 ++++-
  libweston/compositor.c        | 27 ++++++++++++++++++++++++++-
  2 files changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/include/libweston/libweston.h b/include/libweston/libweston.h
-index 1f43969..e9f4c02 100644
+index f268e67..1808ab0 100644
 --- a/include/libweston/libweston.h
 +++ b/include/libweston/libweston.h
-@@ -297,6 +297,7 @@ struct weston_output {
+@@ -304,6 +304,7 @@ struct weston_output {
  	struct wl_list mode_list;
  
  	struct wl_list head_list; /**< List of driven weston_heads */
@@ -25,7 +31,7 @@ index 1f43969..e9f4c02 100644
  
  	enum weston_hdcp_protection desired_protection;
  	enum weston_hdcp_protection current_protection;
-@@ -2005,7 +2006,9 @@ weston_output_destroy(struct weston_output *output);
+@@ -2013,7 +2014,9 @@ weston_output_destroy(struct weston_output *output);
  int
  weston_output_attach_head(struct weston_output *output,
  			  struct weston_head *head);
@@ -37,10 +43,10 @@ index 1f43969..e9f4c02 100644
  weston_output_iterate_heads(struct weston_output *output,
  			    struct weston_head *iter);
 diff --git a/libweston/compositor.c b/libweston/compositor.c
-index 073865c..4494bfe 100644
+index a8aa2df..1566558 100644
 --- a/libweston/compositor.c
 +++ b/libweston/compositor.c
-@@ -5248,6 +5248,27 @@ weston_output_iterate_heads(struct weston_output *output,
+@@ -5339,6 +5339,27 @@ weston_output_iterate_heads(struct weston_output *output,
  	return container_of(node, struct weston_head, output_link);
  }
  
@@ -68,7 +74,7 @@ index 073865c..4494bfe 100644
  /** Attach a head to an output
   *
   * \param output The output to attach to.
-@@ -6322,7 +6343,11 @@ weston_output_enable(struct weston_output *output)
+@@ -6453,7 +6474,11 @@ weston_output_enable(struct weston_output *output)
  	iterator = container_of(c->output_list.prev,
  				struct weston_output, link);
  
@@ -81,3 +87,6 @@ index 073865c..4494bfe 100644
  		x = iterator->x + iterator->width;
  
  	/* Make sure the scale is set up */
+-- 
+2.28.0
+

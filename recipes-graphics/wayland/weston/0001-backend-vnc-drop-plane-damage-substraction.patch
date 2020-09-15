@@ -1,0 +1,30 @@
+From a41ca7983d1e1c64ae538fb508e28140fb82447d Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 15 Sep 2020 08:39:09 +0200
+Subject: [PATCH] backend-vnc: drop plane damage substraction
+
+Upstream-Status: Pending
+
+Signed-off-by: Igor Opaniuk <igor.opaniuk@gmail.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ libweston/backend-vnc/vnc.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/libweston/backend-vnc/vnc.c b/libweston/backend-vnc/vnc.c
+index 51c7d19..d574c59 100644
+--- a/libweston/backend-vnc/vnc.c
++++ b/libweston/backend-vnc/vnc.c
+@@ -602,9 +602,6 @@ vnc_output_repaint(struct weston_output *base, pixman_region32_t *damage,
+ 		pixman_region_fini(&region);
+ 	}
+ 
+-	pixman_region32_subtract(&ec->primary_plane.damage,
+-				 &ec->primary_plane.damage, damage);
+-
+ 	/*
+ 	 * Make sure damage of this (or previous) damage is handled
+ 	 *
+-- 
+2.28.0
+
