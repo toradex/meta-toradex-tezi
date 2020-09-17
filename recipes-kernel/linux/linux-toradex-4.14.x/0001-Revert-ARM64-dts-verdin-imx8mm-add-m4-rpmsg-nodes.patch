@@ -1,0 +1,71 @@
+From f22ad09ed397190f950feec1a3f34e24c2595eba Mon Sep 17 00:00:00 2001
+Message-Id: <f22ad09ed397190f950feec1a3f34e24c2595eba.1600333027.git.marcel.ziswiler@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Thu, 17 Sep 2020 10:51:01 +0200
+Subject: [PATCH] Revert "ARM64: dts: verdin-imx8mm: add m4/rpmsg nodes"
+
+In order to avoid the following issue:
+
+[    1.927380] Unable to handle kernel paging request at virtual address ffff800 040ef0000
+[    1.935435] Mem abort info:
+[    1.938253]   Exception class = DABT (current EL), IL = 32 bits
+[    1.944230]   SET = 0, FnV = 0
+[    1.947346]   EA = 0, S1PTW = 0
+[    1.950513] Data abort info:
+[    1.953426]   ISV = 0, ISS = 0x00000047
+[    1.957347]   CM = 0, WnR = 1
+[    1.960399] swapper pgtable: 4k pages, 48-bit VAs, pgd = ffff000008ed1000
+[    1.967253] [ffff800040ef0000] *pgd=00000000bfff8003, *pud=00000000bfff7003, *pmd=00000000bfff5003, *pte=0000000000000000
+[    1.978322] Internal error: Oops: 96000047 [#1] PREEMPT SMP
+[    1.983934] Modules linked in:
+[    1.987012] Process swapper/0 (pid: 1, stack limit = 0xffff000008078000)
+[    1.993761] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.14.170-2.0.6+gcd185ff 20570 #1
+[    2.001644] Hardware name: Toradex Verdin iMX8M Mini WB on Verdin Development Board (DT)
+
+This reverts commit cd185ff20570d68dd4155fe1ed76287ccc9fa486.
+---
+ .../boot/dts/freescale/fsl-imx8mm-verdin.dtsi | 21 -------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/fsl-imx8mm-verdin.dtsi
+index b6b10e2338cc..cb6b6d7287ba 100755
+--- a/arch/arm64/boot/dts/freescale/fsl-imx8mm-verdin.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-imx8mm-verdin.dtsi
+@@ -7,17 +7,6 @@
+ #include "fsl-imx8mm.dtsi"
+ 
+ / {
+-	reserved-memory {
+-		#address-cells = <2>;
+-		#size-cells = <2>;
+-		ranges;
+-
+-		m4_reserved: m4@0x80000000 {
+-			no-map;
+-			reg = <0 0x80000000 0 0x1000000>;
+-		};
+-	};
+-
+ 	backlight: backlight {
+ 		compatible = "pwm-backlight";
+ 		pinctrl-names = "default";
+@@ -365,16 +354,6 @@
+ 	};
+ };
+ 
+-&rpmsg{
+-	/*
+-	 * 64K for one rpmsg instance:
+-	 * --0xb8000000~0xb800ffff: pingpong
+-	 */
+-	vdev-nums = <1>;
+-	reg = <0x0 0xb8000000 0x0 0x10000>;
+-	status = "okay";
+-};
+-
+ &gpu {
+ 	status = "okay";
+ };
+-- 
+2.25.4
+
