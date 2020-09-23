@@ -3,17 +3,16 @@ DESCRIPTION = "Freescale/NXP I.MX Chip image deploy tools, uuu (Universal Update
 HOMEPAGE = "https://github.com/NXPmicro/mfgtools"
 SECTION = "devel"
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://README.md;md5=eab17ab7606a35858f2f781aeec08b1c"
+LIC_FILES_CHKSUM = "file://README.md;md5=77eb0ff1922382a72698fdbdbf2df358"
 
-SRC_URI = "gitsm://github.com/NXPmicro/mfgtools;branch=master \
+SRC_URI = "git://github.com/NXPmicro/mfgtools;branch=master \
            file://0001-CMakeLists.txt-fix-libzip-name.patch \
-           file://0001-CMakeLists.txt-do-not-override-CMAKE_CXX_FLAGS.patch \
           "
 
-# uuu_1.3.136
-SRCREV = "1ecc47fc0172983ac232dedfdae9240c52ea6300"
+# tag uuu_1.4.43
+SRCREV = "a9c099a8b4205a9c0af4b620478d393709d3575c"
 
-PV = "1.3.136+git${SRCPV}"
+PV = "1.4.43+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
