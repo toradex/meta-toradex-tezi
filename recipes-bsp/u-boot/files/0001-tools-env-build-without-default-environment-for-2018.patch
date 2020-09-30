@@ -1,0 +1,84 @@
+From 9206ed769020844c2c291c20b9bbebabce188648 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 1 Mar 2018 17:03:24 +0100
+Subject: [PATCH] tools: env: build without default environment for 2018.03
+
+Build U-Boot environment tools without default environment.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+
+Conflicts:
+	tools/env/fw_env.c
+	tools/env/fw_env.h
+
+Applied patch carefully to 2018.03 U-boot and changed commit title
+slightly to differentiate it from 2016.11 patch.
+
+Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+---
+ tools/env/fw_env.c | 12 ++++++++++++
+ tools/env/fw_env.h |  1 +
+ 2 files changed, 13 insertions(+)
+
+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+index 0e3e34321f..a54626402d 100644
+--- a/tools/env/fw_env.c
++++ b/tools/env/fw_env.c
+@@ -422,6 +422,7 @@ char *fw_getenv (char *name)
+  */
+ char *fw_getdefenv(char *name)
+ {
++#ifndef NO_DEFAULT_ENVIRONMENT
+ 	char *env, *nxt;
+ 
+ 	for (env = default_environment; *env; env = nxt + 1) {
+@@ -439,6 +440,7 @@ char *fw_getdefenv(char *name)
+ 			continue;
+ 		return val;
+ 	}
++#endif
+ 	return NULL;
+ }
+ 
+@@ -1362,7 +1364,12 @@ int fw_env_open(struct env_opts *opts)
+ 		if (!crc0_ok) {
+ 			fprintf (stderr,
+ 				"Warning: Bad CRC, using default environment\n");
++#ifdef NO_DEFAULT_ENVIRONMENT
++			environment.data[0] = '\0';
++			environment.data[1] = '\0';
++#else
+ 			memcpy(environment.data, default_environment, sizeof default_environment);
++#endif
+ 		}
+ 	} else {
+ 		flag0 = *environment.flags;
+@@ -1423,8 +1430,13 @@ int fw_env_open(struct env_opts *opts)
+ 		} else if (!crc0_ok && !crc1_ok) {
+ 			fprintf (stderr,
+ 				"Warning: Bad CRC, using default environment\n");
++#ifdef NO_DEFAULT_ENVIRONMENT
++			environment.data[0] = '\0';
++			environment.data[1] = '\0';
++#else
+ 			memcpy (environment.data, default_environment,
+ 				sizeof default_environment);
++#endif
+ 			dev_current = 0;
+ 		} else {
+ 			switch (environment.flag_scheme) {
+diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
+index b86ca78ba2..1a800a1adf 100644
+--- a/tools/env/fw_env.h
++++ b/tools/env/fw_env.h
+@@ -13,6 +13,7 @@
+  * This can be changed in future
+  */
+ #define FW_ENV_API_VERSION	1
++#define NO_DEFAULT_ENVIRONMENT
+ 
+ struct env_opts {
+ #ifdef CONFIG_FILE
+-- 
+2.28.0
+
