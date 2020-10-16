@@ -6,4 +6,5 @@ RDEPENDS_${PN} += " \
     libusbgx \
     rapidjson \
     qtzeroconf \
+    qhttp \
 "
