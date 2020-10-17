@@ -24,7 +24,7 @@ do_install_append_colibri-imx7() {
     install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
-COMPATIBLE_MACHINE = "(mxs|mx5|mx6|mx7|vf)"
+COMPATIBLE_MACHINE = "(mxs|mx5|mx6|mx7|vf|use-mainline-bsp)"
 
 PN = "kobs-ng"
 
