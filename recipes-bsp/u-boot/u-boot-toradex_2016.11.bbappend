@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
 SRCREV = "5c2d46b32533cd873c7d821d9842905c9ef48765"
 SRCBRANCH = "2016.11-toradex"
-COMPATIBLE_MACHINE = "(mx6|mx7|tegra3|tegra124|vf)"
+COMPATIBLE_MACHINE = "(mx6|mx7|tegra3|tegra124|vf|use-mainline-bsp)"
 
 SRC_URI_append_apalis-t30-mainline = " \
     file://apalis_t30.img.cfg \
