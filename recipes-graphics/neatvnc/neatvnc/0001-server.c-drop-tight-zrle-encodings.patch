@@ -1,0 +1,30 @@
+From c4e613c89a4c90467f4375ac1289d28a0edd377b Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Wed, 16 Sep 2020 13:49:11 +0200
+Subject: [PATCH] server.c: drop tight/zrle encodings
+
+Upstream-Status: Inappropriate [Tezi specific]
+
+They are consuming a lot of CPU resources, let's drop them.
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ src/server.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/server.c b/src/server.c
+index 1072461..36c4164 100644
+--- a/src/server.c
++++ b/src/server.c
+@@ -1102,8 +1102,6 @@ static enum rfb_encodings choose_frame_encoding(struct nvnc_client* client)
+ 	for (size_t i = 0; i < client->n_encodings; ++i)
+ 		switch (client->encodings[i]) {
+ 		case RFB_ENCODING_RAW:
+-		case RFB_ENCODING_TIGHT:
+-		case RFB_ENCODING_ZRLE:
+ 			return client->encodings[i];
+ 		default:
+ 			break;
+-- 
+2.28.0
+
