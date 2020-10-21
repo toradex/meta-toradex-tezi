@@ -21,6 +21,8 @@ S = "${WORKDIR}/git"
 
 EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
 
+QMAKE_PROFILES = "${S}/tezi.pro"
+
 inherit qmake5 pkgconfig
 
 DEPENDS += " \
