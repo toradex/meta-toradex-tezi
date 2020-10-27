@@ -7,6 +7,9 @@ SDPV: write -f ../imx-boot -skipspl
 SDPV: jump
 CFG: FB: -vid 0x0525 -pid 0x4000
 CFG: FB: -vid 0x0525 -pid 0x4037
+CFG: FB: -vid 0x0525 -pid 0x4039
+CFG: FB: -vid 0x0525 -pid 0x403b
+CFG: FB: -vid 0x0525 -pid 0x403c
 FB: ucmd setenv fastboot_buffer 0x42e00000
 FB: download -f ../boot.scr
 FB: ucmd setenv fastboot_buffer 0x43000000
