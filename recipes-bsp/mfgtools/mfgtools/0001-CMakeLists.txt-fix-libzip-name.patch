@@ -1,6 +1,6 @@
-From 5bd27f441fc929af7c306a5a82f8f7ae8f9bbf00 Mon Sep 17 00:00:00 2001
+From 85d4a509da704e9a423de1044644030b8b0f3b2e Mon Sep 17 00:00:00 2001
 From: Ming Liu <ming.liu@toradex.com>
-Date: Sun, 3 Nov 2019 12:56:11 +0100
+Date: Thu, 24 Dec 2020 12:45:31 +0100
 Subject: [PATCH] CMakeLists.txt: fix libzip name
 
 Change libzip -> zlib, this is needed for building with OE.
@@ -14,10 +14,10 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  2 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/libuuu/CMakeLists.txt b/libuuu/CMakeLists.txt
-index 21ae944..3358e83 100644
+index 1f68418..482b22d 100644
 --- a/libuuu/CMakeLists.txt
 +++ b/libuuu/CMakeLists.txt
-@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -7,7 +7,7 @@ set(CMAKE_SKIP_RPATH ON)
  find_package(BZip2 REQUIRED)
  find_package(PkgConfig REQUIRED)
  pkg_check_modules(LIBUSB REQUIRED libusb-1.0>=1.0.16)
@@ -27,10 +27,10 @@ index 21ae944..3358e83 100644
  
  if (STATIC)
 diff --git a/uuu/CMakeLists.txt b/uuu/CMakeLists.txt
-index 3e85051..356c981 100644
+index 22880f5..ea6eb8b 100644
 --- a/uuu/CMakeLists.txt
 +++ b/uuu/CMakeLists.txt
-@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -6,7 +6,6 @@ set(CMAKE_SKIP_RPATH ON)
  
  find_package(PkgConfig REQUIRED)
  pkg_check_modules(LIBUSB REQUIRED libusb-1.0>=1.0.16)
@@ -38,7 +38,7 @@ index 3e85051..356c981 100644
  pkg_check_modules(LIBZ REQUIRED zlib)
  find_package(Threads)
  
-@@ -33,7 +32,7 @@ set(LSTS
+@@ -34,7 +33,7 @@ set(LSTS
  	nand_burn_loader.lst
  )
  
@@ -47,7 +47,7 @@ index 3e85051..356c981 100644
  
  set(CLIST_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/gen_txt_include.sh)
  set(generated_files_dir "${CMAKE_BINARY_DIR}/uuu/gen")
-@@ -69,6 +68,6 @@ set(SOURCES
+@@ -70,7 +69,7 @@ set(SOURCES
  )
  
  add_executable(uuu ${SOURCES})
@@ -55,6 +55,7 @@ index 3e85051..356c981 100644
 +target_link_libraries(uuu uuc_s ${OPENSSL_LIBRARIES} ${LIBUSB_LIBRARIES} ${LIBZ_LIBRARIES} dl bz2)
  
  install(TARGETS uuu DESTINATION bin)
+ add_compile_definitions(TARGET_PATH="${CMAKE_INSTALL_PREFIX}/bin/uuu")
 -- 
-2.7.4
+2.29.0
 
