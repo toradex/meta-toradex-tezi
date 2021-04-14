@@ -8,7 +8,7 @@ PR = "${TDX_VER_ITEM}+gitr${SRCPV}"
 
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-SRCREV = "5c2d46b32533cd873c7d821d9842905c9ef48765"
+SRCREV = "1e8dc5e388e692e657c4cfb4a883b73cde9997bc"
 SRCBRANCH = "2016.11-toradex"
 COMPATIBLE_MACHINE = "(mx6|mx7|tegra3|tegra124|vf|use-mainline-bsp)"
 
