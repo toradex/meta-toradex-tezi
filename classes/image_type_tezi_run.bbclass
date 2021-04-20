@@ -106,6 +106,7 @@ def rootfs_tezi_run_rawnand(d):
 def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     import json
     from collections import OrderedDict
+    from datetime import datetime
 
     deploydir = d.getVar('DEPLOY_DIR_IMAGE')
 
@@ -114,8 +115,8 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY')
     data["description"] = d.getVar('DESCRIPTION')
-    data["version"] = d.getVar('TDX_VER_PACKAGE_MIN')
-    data["release_date"] = d.getVar('TDX_VERDATE')[1:9]
+    data["version"] = d.getVar('TDX_VERSION')
+    data["release_date"] = datetime.strptime(d.getVar('DATE', False), '%Y%m%d').date().isoformat()
     if os.path.exists(os.path.join(deploydir, "tezi-run-metadata", "wrapup.sh")):
         data["wrapup_script"] = "wrapup.sh"
     if os.path.exists(os.path.join(deploydir, "tezi-run-metadata", "tezi.png")):
@@ -183,3 +184,4 @@ do_image_tezirunimg[prefuncs] += "rootfs_tezirun_run_json"
 do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy tezi-run-metadata:do_deploy \
                                  ${@'%s:do_deploy' % d.getVar('IMAGE_BOOTLOADER') if d.getVar('IMAGE_BOOTLOADER') else ''} \
                                 "
+do_image_teziimg[vardepsexclude] = "DATE"

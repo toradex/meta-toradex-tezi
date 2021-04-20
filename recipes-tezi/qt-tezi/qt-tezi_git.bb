@@ -15,11 +15,11 @@ SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
 
-PV = "${TDX_VER_PACKAGE_MIN}+git${SRCPV}"
+PV = "${TDX_VERSION}+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
-EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
+EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
 
 QMAKE_PROFILES = "${S}/tezi.pro"
 

@@ -15,9 +15,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1611c5652037dacc6ac585f2443a1979"
 
 S = "${WORKDIR}/git"
 
-PV = "${TDX_VER_PACKAGE_MIN}+git${SRCPV}"
+PV = "${TDX_VERSION}+git${SRCPV}"
 
-EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VER_PACKAGE_MIN}\\\\\\\""
+EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
 
 inherit qmake5
 
