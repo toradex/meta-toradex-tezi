@@ -109,7 +109,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
 
     deploydir = d.getVar('DEPLOY_DIR_IMAGE')
 
-    data = OrderedDict({ "config_format": 1, "autoinstall": False })
+    data = OrderedDict({ "config_format": 4, "autoinstall": False })
 
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY')
