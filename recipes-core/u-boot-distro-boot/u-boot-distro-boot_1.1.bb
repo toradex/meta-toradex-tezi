@@ -31,5 +31,6 @@ addtask deploy after do_unpack before do_build
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-# apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-imx8|apalis-imx8x|apalis-tk1|colibri-imx6|colibri-imx7|colibri-imx8x|verdin-imx8mm)"
+PROVIDES += "u-boot-default-script"
+
+COMPATIBLE_MACHINE = "(apalis|colibri|verdin)"
