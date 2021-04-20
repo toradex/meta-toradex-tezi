@@ -1,7 +1,13 @@
 # Hardware dependant setup
 
+
+# TODO: We keep fdt_prefix set to "fsl-" for compatibility with Linux kernel 4.14
+# For Linux kernel 5.4, this has to be unset
+env set fdt_prefix fsl-
+
 if test ${board} = "apalis-imx8"
 then
+    env set fdtfile ${fdt_prefix}imx8qm-apalis-eval.dtb
     env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
     env set ramdisk_addr_r 0x83000000
     env set vidargs 'video=LVDS-1:d video=HDMI-A-1:640x480-16@60D'
@@ -9,12 +15,14 @@ else
     # TODO: modify once we move to mainline U-Boot
     if test ${board} = "colibri-imx8qxp"
     then
+	env set fdtfile ${fdt_prefix}imx8qxp-colibri-eval-v3.dtb
         env set bootcmd_hdp ';'
         env set ramdisk_addr_r 0x83000000
         env set vidargs 'video=DPI-1:640x480-16@60D'
     else
         if test ${board} = "apalis-imx8x"
         then
+	    env set fdtfile ${fdt_prefix}imx8qxp-apalis-eval.dtb
             env set bootcmd_hdp ';'
             env set ramdisk_addr_r 0x83000000
             env set vidargs 'video=HDMI-A-1:800x600D video=DPI-1:640x480-16@60D video=LVDS-1:d'
@@ -22,7 +30,7 @@ else
             if test ${board} = "verdin-imx8mm"
             then
                 env set bootcmd_hdp ';'
-                test -n ${fdtfile} || env set fdtfile fsl-imx8mm-verdin-wifi-dev.dtb
+                env set fdtfile ${fdt_prefix}imx8mm-verdin-wifi-dev.dtb
                 env set ramdisk_addr_r 0x43000000
                 env set vidargs 'video=HDMI-A-1:1024x768-16@60D'
             else
