@@ -2,7 +2,9 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-5.4:"
 
 require linux-toradex-tezi-common.inc
 
+KBUILD_DEFCONFIG_${MACHINE} = ""
 SRC_URI_append = " \
+    file://defconfig \
     file://0001-Revert-ARM-dts-imx6qdl-apalis-disable-LVDS-parallel-.patch \
     file://0002-Partially-revert-ARM-dts-imx6qdl-apalis-link-the-bac.patch \
     file://0003-mmc-read-mmc-alias-from-device-tree.patch \
@@ -21,6 +23,9 @@ SRC_URI_append = " \
 SRC_URI_append_apalis-tk1 = " \
     file://xusb.bin \
 "
+
+SRCREV_machine = "664411bde9c033778f85f9ae3a74351406642f6a"
+SRCREV_machine_use-head-next = "664411bde9c033778f85f9ae3a74351406642f6a"
 
 do_configure_prepend_apalis-tk1 () {
     mkdir -p ${S}/firmware/nvidia/tegra124
