@@ -1,0 +1,3 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+REQUIRED_DISTRO_FEATURES_remove = "opengl"
