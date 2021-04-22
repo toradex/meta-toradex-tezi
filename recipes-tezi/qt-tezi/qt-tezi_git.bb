@@ -10,7 +10,7 @@ SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};prot
 "
 
 SRCREV = "ad50cbc9edee32c5cdbf2cb2b080305f1253f141"
-SRCBRANCH = "master"
+SRCBRANCH = "2.0"
 SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
