@@ -1,7 +1,5 @@
 # verdin-imx8mm hardware setup
 
-env set fdt_prefix fsl-
-
 env set bootcmd_hdp ';'
 env set fdtfile ${fdt_prefix}imx8mm-verdin-wifi-dev.dtb
 env set ramdisk_addr_r 0x43000000

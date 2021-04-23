@@ -1,7 +1,5 @@
 # colibri-imx8x hardware setup
 
-env set fdt_prefix fsl-
-
 env set fdtfile ${fdt_prefix}imx8qxp-colibri-eval-v3.dtb
 env set bootcmd_hdp ';'
 env set ramdisk_addr_r 0x83000000
