@@ -1,0 +1,52 @@
+From 2affb0d9b9e4e1989c1b83c5089b7e53fa53c8f3 Mon Sep 17 00:00:00 2001
+From: Denys Drozdov <denys.drozdov@toradex.com>
+Date: Tue, 27 Apr 2021 11:50:33 +0300
+Subject: [PATCH] Makefile: fix generation of defaultenv.h from empty initial
+ yfile
+
+When CONFIG_USE_DEFAULT_ENV_FILE=y and the file
+CONFIG_DEFAULT_ENV_FILE is empty (or at least doesn't contain any
+non-comment, non-empty lines), we end up feeding nothing into xxd,
+which in turn then outputs nothing. Then blindly appending ", 0x00"
+means that we end up trying to compile (roughly)
+
+const char defaultenv[] = { , 0x00 }
+
+which is of course broken.
+
+To fix that, change the frobbing of the text file so that we always
+end up printing an extra empty line (which gets turned into that extra
+nul byte we need) - that corresponds better to the binary format
+consisting of a series of key=val nul terminated strings, terminated
+by an empty string.
+
+(cherry-picked from https://patchwork.ozlabs.org/project/uboot/patch/20210422074418.1573153-1-rasmus.villemoes@prevas.dk/)
+
+Reported-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Reviewed-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+---
+ Makefile | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 312bb794c3..ae0cc69480 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1827,11 +1827,10 @@ define filechk_timestamp.h
+ endef
+ 
+ define filechk_defaultenv.h
+-	(grep -v '^#' | \
+-	 grep -v '^$$' | \
++	( { grep -v '^#' | grep -v '^$$' || true ; echo '' ; } | \
+ 	 tr '\n' '\0' | \
+ 	 sed -e 's/\\\x0\s*//g' | \
+-	 xxd -i ; echo ", 0x00" ; )
++	 xxd -i ; )
+ endef
+ 
+ $(version_h): include/config/uboot.release FORCE
+-- 
+2.17.1
+
