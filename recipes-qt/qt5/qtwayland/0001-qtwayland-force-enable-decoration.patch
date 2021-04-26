@@ -1,0 +1,33 @@
+From 19728b1fb12638ac0d79a6d0dee526fe62faff43 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Mon, 26 Apr 2021 12:10:18 +0200
+Subject: [PATCH] qtwayland: force enable decoration
+
+Force enable decoration even if client integration claims not
+to support/use it.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+
+forward port to 5.14.2 as used in dunfell:
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ src/client/qwaylandwindow.cpp | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
+index 0df99d9f..b313dcf3 100644
+--- a/src/client/qwaylandwindow.cpp
++++ b/src/client/qwaylandwindow.cpp
+@@ -746,9 +746,6 @@ void QWaylandWindow::setWindowFlags(Qt::WindowFlags flags)
+ 
+ bool QWaylandWindow::createDecoration()
+ {
+-    if (!mDisplay->supportsWindowDecoration())
+-        return false;
+-
+     static bool decorationPluginFailed = false;
+     bool decoration = false;
+     switch (window()->type()) {
+-- 
+2.20.1
+
