@@ -1,4 +1,4 @@
-From 036ada856681133795ff83e49a5027187aa15a75 Mon Sep 17 00:00:00 2001
+From d96e2cea6a7b59ad1be62c3fddffc5e00d499779 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -7,29 +7,60 @@ If continue/resume is enabled, try to also resume when retrying due to
 transient connection problems.
 
 Closes #1084
+
+See also:
+https://github.com/curl/curl/pull/2450
+
+- Forward port to curl 7.69.1
+- No longer throw away the already downloaded data when resuming with a
+  fall back to not trying to resume if server doesn't support resuming.
+  Taken partly from https://github.com/curl/curl/pull/2450
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
- src/tool_operate.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ src/tool_operate.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 0aad54282..210402520 100644
+index 4b3caa80c..d069c2856 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -1595,6 +1595,14 @@ static CURLcode operate_do(struct GlobalConfig *global,
-                     "%ld retries left.\n",
-                     m[retry], retry_sleep/1000L, retry_numretries);
+@@ -488,6 +488,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+         }
+       }
+     } /* if CURLE_OK */
++    else if(result == CURLE_RANGE_ERROR) {
++      /* Retry failed last time, don't retry with resume anymore */
++      config->use_resume = 0;
++      retry = RETRY_HTTP;
++    }
+     else if(result) {
+       long protocol;
  
-+              /* If resume is requested, resume at last byte on retry too */
-+              if (config->use_resume) {
-+                fprintf(global->errors, "Continuing at %"
-+                                CURL_FORMAT_CURL_OFF_T " bytes\n",
-+                                outs.bytes);
-+                my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs.bytes);
-+              }
+@@ -531,6 +536,14 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+             "%ld retries left.\n",
+             m[retry], sleeptime/1000L, per->retry_numretries);
+ 
++      /* If resume is requested, resume at last byte on retry too */
++      if (config->use_resume) {
++        fprintf(global->errors, "Continuing at %"
++                CURL_FORMAT_CURL_OFF_T " bytes\n",
++                outs->bytes);
++        my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
++      }
 +
-               tool_go_sleep(retry_sleep);
-               retry_numretries--;
-               if(!config->retry_delay) {
+       per->retry_numretries--;
+       tool_go_sleep(sleeptime);
+       if(!config->retry_delay) {
+@@ -538,7 +551,7 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+         if(per->retry_sleep > RETRY_SLEEP_MAX)
+           per->retry_sleep = RETRY_SLEEP_MAX;
+       }
+-      if(outs->bytes && outs->filename && outs->stream) {
++      if(outs->bytes && outs->filename && outs->stream && !config->use_resume) {
+         int rc;
+         /* We have written data to a output file, we truncate file
+          */
 -- 
-2.16.3
+2.26.2
 
