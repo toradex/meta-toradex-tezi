@@ -1,6 +1,5 @@
 DEPENDS_append_apalis-t30-mainline = " cbootimage-native"
 DEPENDS_append_apalis-tk1 = " cbootimage-native"
-DEPENDS_append_apalis-tk1-mainline = " cbootimage-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 PV = "2016.11"
@@ -20,10 +19,6 @@ SRC_URI_append_apalis-tk1 = " \
     file://apalis-tk1.img.cfg \
     file://PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
-SRC_URI_append_apalis-tk1-mainline = " \
-    file://apalis-tk1.img.cfg \
-    file://PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
-"
 
 do_deploy_append_apalis-t30-mainline() {
     cd ${DEPLOYDIR}
@@ -32,12 +27,6 @@ do_deploy_append_apalis-t30-mainline() {
     rm Apalis_T30_2GB_800Mhz.bct
 }
 do_deploy_append_apalis-tk1() {
-    cd ${DEPLOYDIR}
-    cp ${WORKDIR}/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct .
-    cbootimage -s tegra124 ${WORKDIR}/apalis-tk1.img.cfg apalis-tk1.img
-    rm PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct
-}
-do_deploy_append_apalis-tk1-mainline() {
     cd ${DEPLOYDIR}
     cp ${WORKDIR}/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct .
     cbootimage -s tegra124 ${WORKDIR}/apalis-tk1.img.cfg apalis-tk1.img

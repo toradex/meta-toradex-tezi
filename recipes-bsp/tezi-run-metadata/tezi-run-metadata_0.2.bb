@@ -29,9 +29,6 @@ SRC_URI_append_apalis-t30-mainline = " \
 SRC_URI_append_apalis-tk1 = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
-SRC_URI_append_apalis-tk1-mainline = " \
-    file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
-"
 SRC_URI_append_colibri-imx8x = " \
     file://imx-boot-v10b \
     file://recovery/uuu.auto-v10b \
@@ -109,14 +106,6 @@ do_deploy_apalis-tk1 () {
     install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-do_deploy_apalis-tk1-mainline () {
-    deploy_common
-
-    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
-}
-
 do_deploy_colibri-imx8x () {
     deploy_common
 
@@ -129,7 +118,6 @@ do_deploy_colibri-imx8x () {
 
 addtask deploy before do_build after do_install
 
-# apalis-tk1 will include apalis-tk1-mainline as well
-COMPATIBLE_MACHINE = "(apalis-imx6|apalis-imx8|apalis-imx8x|apalis-t30-mainline|apalis-tk1|colibri-imx6|colibri-imx7|colibri-imx8x|verdin-imx8mm)"
+COMPATIBLE_MACHINE = "(apalis|colibri|verdin)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

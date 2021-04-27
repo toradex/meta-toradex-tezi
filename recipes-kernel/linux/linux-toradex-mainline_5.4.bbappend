@@ -25,7 +25,7 @@ SRC_URI_append_apalis-t30-mainline = " \
     file://xusb.bin \
 "
 
-SRC_URI_append_apalis-tk1-mainline = " \
+SRC_URI_append_apalis-tk1 = " \
     file://xusb.bin \
 "
 
@@ -33,7 +33,7 @@ do_configure_prepend_apalis-t30-mainline () {
     mkdir -p ${S}/firmware/nvidia/tegra124
     cp ${WORKDIR}/xusb.bin ${S}/firmware/nvidia/tegra124/
 }
-do_configure_prepend_apalis-tk1-mainline () {
+do_configure_prepend_apalis-tk1 () {
     mkdir -p ${S}/firmware/nvidia/tegra124
     cp ${WORKDIR}/xusb.bin ${S}/firmware/nvidia/tegra124/
 }
