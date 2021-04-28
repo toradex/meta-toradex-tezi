@@ -23,9 +23,6 @@ SRC_URI_append_apalis-imx8x = " \
     file://imx-boot-v11a \
     file://recovery/uuu.auto-v11a \
 "
-SRC_URI_append_apalis-t30-mainline = " \
-    file://recovery/Apalis_T30_2GB_800Mhz.bct \
-"
 SRC_URI_append_apalis-tk1 = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
@@ -88,14 +85,6 @@ do_deploy_apalis-imx8x () {
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${WORKDIR}/recovery/uuu.auto-v11a ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
-}
-
-do_deploy_apalis-t30-mainline () {
-    deploy_common
-
-    install -m 644 ${WORKDIR}/recovery/Apalis_T30_2GB_800Mhz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy_apalis-tk1 () {

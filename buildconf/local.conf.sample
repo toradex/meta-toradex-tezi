@@ -41,7 +41,6 @@ PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
 #MACHINE ?= "apalis-imx6"
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "apalis-imx8x"
-#MACHINE ?= "apalis-t30-mainline"
 #MACHINE ?= "apalis-tk1"
 #
 #MACHINE ?= "colibri-imx6"
