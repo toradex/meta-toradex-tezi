@@ -1,6 +1,5 @@
 # apalis-imx8 hardware setup
 
-env set fdtfile ${fdt_prefix}imx8qm-apalis-v1.1-eval.dtb
 env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
 env set ramdisk_addr_r 0x83000000
 env set vidargs 'video=LVDS-1:d video=HDMI-A-1:640x480-16@60D'
