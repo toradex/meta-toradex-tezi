@@ -34,6 +34,13 @@ python __anonymous () {
         if image:
             d.appendVarFlag('do_assemble_fitimage_initramfs', 'depends', ' ${INITRAMFS_IMAGE}:do_image_complete')
 
+        #check if there are any dtb providers
+        providerdtb = d.getVar("PREFERRED_PROVIDER_virtual/dtb")
+        if providerdtb:
+            d.appendVarFlag('do_assemble_fitimage', 'depends', ' virtual/dtb:do_populate_sysroot')
+            d.appendVarFlag('do_assemble_fitimage_initramfs', 'depends', ' virtual/dtb:do_populate_sysroot')
+            d.setVar('EXTERNAL_KERNEL_DEVICETREE', "${RECIPE_SYSROOT}/boot/devicetree")
+
         # Verified boot will sign the fitImage and append the public key to
         # U-Boot dtb. We ensure the U-Boot dtb is deployed before assembling
         # the fitImage:
@@ -433,6 +440,21 @@ fitimage_assemble() {
             DTB=$(echo "${DTB}" | tr '/' '_')
             DTBS="${DTBS} ${DTB}"
             fitimage_emit_section_dtb ${1} ${DTB} ${DTB_PATH}
+        done
+    fi
+
+    # overlays that we want to be applied during boot time
+    if [ -n "${EXTERNAL_KERNEL_DEVICETREE}" ] && [ -n "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}" ]; then
+        for DTB in ${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}; do
+            if [ ! -e ${EXTERNAL_KERNEL_DEVICETREE}/${DTB} ]; then
+                bbfatal "$DTB is not installed in your boot filesystem, please make sure it's in $EXTERNAL_KERNEL_DEVICETREE or being provided by virtual/dtb."
+            fi
+
+            DTB=`basename ${DTB}`
+
+            DTB=$(echo "${DTB}" | tr '/' '_')
+            DTBS="${DTBS} ${DTB}"
+            fitimage_emit_section_dtb ${1} ${DTB} "${EXTERNAL_KERNEL_DEVICETREE}/${DTB}"
         done
     fi
 
