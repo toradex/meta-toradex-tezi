@@ -327,7 +327,17 @@ fitimage_emit_section_config() {
     if [ -n "${3}" ]; then
         conf_desc="${conf_desc}${sep}FDT blob"
         sep=", "
-        fdt_line="fdt = \"fdt@${3}\";"
+        fdt_line="fdt = \"fdt@${3}\""
+
+        # Adding overlays to Flattened Device Tree Blob section
+        if [ -n "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}" ]; then
+            for dtbo in ${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}; do
+                dtbo=`basename ${dtbo}`
+                dtbo=$(echo "${dtbo}" | tr '/' '_')
+                fdt_line="${fdt_line}, \"fdt@${dtbo}\""
+            done
+        fi
+        fdt_line="${fdt_line} ;"
     fi
 
     if [ -n "${4}" ]; then
