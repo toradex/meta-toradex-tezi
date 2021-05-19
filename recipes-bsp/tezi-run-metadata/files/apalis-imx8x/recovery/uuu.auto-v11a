@@ -9,7 +9,7 @@ CFG: FB: -vid 0x0525 -pid 0x4036
 CFG: FB: -vid 0x0525 -pid 0x4a28
 FB: ucmd setenv fastboot_buffer 0x82e00000
 FB: download -f ../boot.scr
-FB: ucmd setenv fastboot_buffer 0x83000000
+FB: ucmd setenv fastboot_buffer 0x8a000000
 FB: download -f ../tezi.itb
 FB: acmd source 0x82e00000
 FB: done
