@@ -2,7 +2,7 @@
 
 env set fdtfile ${fdt_prefix}imx8qxp-colibri-eval-v3.dtb
 env set bootcmd_hdp ';'
-env set ramdisk_addr_r 0x83000000
+env set ramdisk_addr_r 0x8a000000
 env set vidargs 'video=DPI-1:640x480-16@60D'
 
 env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
