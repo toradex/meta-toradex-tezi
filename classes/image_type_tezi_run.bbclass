@@ -1,3 +1,7 @@
+EMMCDEV = "mmcblk0"
+EMMCDEV_verdin-imx8mp = "emmc"
+EMMCDEVBOOT0 = "mmcblk0boot0"
+EMMCDEVBOOT0_verdin-imx8mp = "emmc-boot0"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_EMMC_mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
@@ -15,9 +19,11 @@ def fitimg_get_size(d):
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
-    uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC')
+    emmcdev = d.getVar('EMMCDEV')
+    emmcdevboot0 = d.getVar('EMMCDEVBOOT0')
     offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD')
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD')
+    uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC')
 
     bootpart_rawfiles = []
     bootpart_filelist = ["tezi.itb"] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
@@ -35,7 +41,7 @@ def rootfs_tezi_run_emmc(d):
 
     return [
         OrderedDict({
-          "name": "mmcblk0",
+          "name": emmcdev,
           "partitions": [
             {
               "partition_size_nominal": 128,
@@ -51,7 +57,7 @@ def rootfs_tezi_run_emmc(d):
           ]
         }),
         OrderedDict({
-          "name": "mmcblk0boot0",
+          "name": emmcdevboot0,
           "erase": True,
           "content": {
             "filesystem_type": "raw",
