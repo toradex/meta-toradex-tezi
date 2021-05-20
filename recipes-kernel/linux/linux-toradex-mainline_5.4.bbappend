@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-5.4:"
 
 require linux-toradex-tezi-common.inc
 
-KBUILD_DEFCONFIG_${MACHINE} = ""
+KBUILD_DEFCONFIG_forcevariable = ""
 SRC_URI_append = " \
     file://defconfig \
     file://0001-Revert-ARM-dts-imx6qdl-apalis-disable-LVDS-parallel-.patch \
