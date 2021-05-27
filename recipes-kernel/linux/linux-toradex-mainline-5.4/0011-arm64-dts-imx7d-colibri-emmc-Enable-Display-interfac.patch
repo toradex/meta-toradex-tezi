@@ -1,0 +1,39 @@
+From 20babe8506cdb260c737ce944a558aac93f2eca8 Mon Sep 17 00:00:00 2001
+From: Denys Drozdov <denys.drozdov@toradex.com>
+Date: Thu, 27 May 2021 14:41:34 +0300
+Subject: [PATCH] arm64: dts: imx7d-colibri-emmc: Enable Display interfaces
+
+Toradex Easy Installer does not support dedicated colibri-imx7-emmc
+target. Overlays can't be clearly applied to NAND device tree.
+
+Enable lcdif, backlight and panel-dpi interfaces by default.
+
+Related-to: TEI-746
+Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+---
+ arch/arm/boot/dts/imx7d-colibri-emmc.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+index af39e5370fa1..32c91d324ce8 100644
+--- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
++++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+@@ -46,3 +46,15 @@
+ &usdhc3 {
+ 	status = "okay";
+ };
++
++&backlight {
++	status = "okay";
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
+-- 
+2.17.1
+
