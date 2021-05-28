@@ -3,7 +3,7 @@
 env set bootcmd_hdp ';'
 env set fdtfile ${fdt_prefix}imx8mp-verdin-wifi-dev.dtb
 env set ramdisk_addr_r 0x46400000
-env set vidargs 'video=HDMI-A-1:1024x768-16@60D'
+env set vidargs 'video=HDMI-A-1:1280x720-16@60D video=HDMI-A-2:1280x720-16@60D'
 
 env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
 env set bootcmd_run 'bootm ${ramdisk_addr_r}#config@freescale_${fdtfile}'
