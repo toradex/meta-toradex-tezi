@@ -327,17 +327,7 @@ fitimage_emit_section_config() {
     if [ -n "${3}" ]; then
         conf_desc="${conf_desc}${sep}FDT blob"
         sep=", "
-        fdt_line="fdt = \"fdt@${3}\""
-
-        # Adding overlays to Flattened Device Tree Blob section
-        if [ -n "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}" ]; then
-            for dtbo in ${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}; do
-                dtbo=`basename ${dtbo}`
-                dtbo=$(echo "${dtbo}" | tr '/' '_')
-                fdt_line="${fdt_line}, \"fdt@${dtbo}\""
-            done
-        fi
-        fdt_line="${fdt_line} ;"
+        fdt_line="fdt = \"fdt@${3}\";"
     fi
 
     if [ -n "${4}" ]; then
@@ -435,6 +425,7 @@ fitimage_assemble() {
     #
     # Step 2: Prepare a DTB image section
     #
+
     if [ -n "${KERNEL_DEVICETREE}" ]; then
         dtbcount=1
         for DTB in ${KERNEL_DEVICETREE}; do
@@ -450,23 +441,18 @@ fitimage_assemble() {
             DTB=$(echo "${DTB}" | tr '/' '_')
             DTBS="${DTBS} ${DTB}"
             fitimage_emit_section_dtb ${1} ${DTB} ${DTB_PATH}
-        done
+	done
     fi
 
-    # overlays that we want to be applied during boot time
-    if [ -n "${EXTERNAL_KERNEL_DEVICETREE}" ] && [ -n "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}" ]; then
-        for DTB in ${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}; do
-            if [ ! -e ${EXTERNAL_KERNEL_DEVICETREE}/${DTB} ]; then
-                bbfatal "$DTB is not installed in your boot filesystem, please make sure it's in $EXTERNAL_KERNEL_DEVICETREE or being provided by virtual/dtb."
-            fi
-
-            DTB=`basename ${DTB}`
-
+    if [ -n "${EXTERNAL_KERNEL_DEVICETREE}" ]; then
+        dtbcount=1
+        for DTB in $(find "${EXTERNAL_KERNEL_DEVICETREE}" \( -name '*.dtb' -o -name '*.dtbo' \) -printf '%P\n' | sort); do
             DTB=$(echo "${DTB}" | tr '/' '_')
             DTBS="${DTBS} ${DTB}"
             fitimage_emit_section_dtb ${1} ${DTB} "${EXTERNAL_KERNEL_DEVICETREE}/${DTB}"
         done
     fi
+
 
     #
     # Step 3: Prepare a setup section. (For x86)
