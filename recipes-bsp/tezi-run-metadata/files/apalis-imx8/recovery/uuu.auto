@@ -8,6 +8,8 @@ CFG: FB: -vid 0x0525 -pid 0x4030
 CFG: FB: -vid 0x0525 -pid 0x4031
 FB: ucmd setenv fastboot_buffer 0x82e00000
 FB: download -f ../boot.scr
+FB: ucmd setenv fastboot_buffer 0x82e10000
+FB: download -f ../overlays.txt
 FB: ucmd setenv fastboot_buffer 0x9c000000
 FB: download -f ../hdmitxfw.bin
 FB: ucmd setenv fastboot_buffer 0x8a000000
