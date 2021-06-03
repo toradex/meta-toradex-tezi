@@ -37,11 +37,6 @@ test -n ${boot_devtype} || env set boot_devtype ${devtype}
 test -n ${overlays_file} || env set overlays_file "overlays.txt"
 test -n ${overlays_prefix} || env set overlays_prefix "overlays/"
 
-# TODO: U-boot has to enable these variables fastboot protocol
-env set boot_devtype    mmc
-env set boot_devnum     0
-env set boot_part       1
-
 test ${boot_devtype} = "mmc" && env set load_cmd 'load ${boot_devtype} ${boot_devnum}:${boot_part}'
 test ${boot_devtype} = "usb" && env set load_cmd 'load ${boot_devtype} ${boot_devnum}:${boot_part}'
 test ${boot_devtype} = "tftp" && env set load_cmd 'tftp'
@@ -51,7 +46,15 @@ env set fdt_high
 env set fdt_resize true
 env set fitconf_fdt_overlays
 
-env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file}; env import -t \\${loadaddr} \\${filesize}"'
+if test -n ${devtype}
+then
+       # We have devtype, devnum and boot_part defined for boot from USB and eMMC
+       env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file}; env import -t \\${loadaddr} \\${filesize}"'
+else
+       # Recovery-mode: load overlays.txt from the address provided by uuu utility
+       env set set_load_overlays_file 'env set load_overlays_file "env import -t 0x42e10000 0x200"'
+fi
+
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#config@\\${overlay_file}\\"\"; env set overlay_file; done; true"'
 
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#config@freescale_\${fdtfile}\${fitconf_fdt_overlays}'
