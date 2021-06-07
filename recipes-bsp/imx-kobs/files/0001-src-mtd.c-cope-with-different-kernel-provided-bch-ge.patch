@@ -1,0 +1,59 @@
+From 4ecda4885cb186d9f614cd484d76875dcccd9367 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Mon, 7 Jun 2021 14:45:29 +0200
+Subject: [PATCH 1/2] src/mtd.c: cope with different kernel provided bch
+ geometries
+
+Compared to mainline the downstream kernel uses a extended struct
+representing the BCH NAND geometry compared to mainline. kobs-ng
+expects the downstream geometry flavour struct in a sysfs file.
+Check depending on file size if the mainlinsh version was provided
+and convert as needed.
+
+See kernel toradex_5.4-2.3.x-imx commit 'ae980dccc618 ("MLK-11719-4:
+mtd: nand: raw: gpmi-nand: change the BCH layout setting for large oob NAND")'
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ src/mtd.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/src/mtd.c b/src/mtd.c
+index 53ed5a5..d801bd9 100644
+--- a/src/mtd.c
++++ b/src/mtd.c
+@@ -731,13 +731,30 @@ int parse_nfc_geometry(struct mtd_data *md)
+ 	unsigned int       value;
+ 
+ 	if (!plat_config_data->m_u32UseNfcGeo) {
++		int len;
+ 		/* fsl kernel patch provides bch_geometry via debugfs */
+ 		if (!(node = fopen(dbg_geometry_node_path, "r"))) {
+ 			fprintf(stderr, "Cannot open BCH geometry node: \"%s\"\n",
+ 				dbg_geometry_node_path);
+ 			return cal_nfc_geometry(md);
+ 		}
+-		fread(&md->nfc_geometry, sizeof(struct nfc_geometry), 1, node);
++		len = fread(&md->nfc_geometry, 1, sizeof(struct nfc_geometry), node);
++		/* old, resp. mainline kernel provided data is 2 integers smaller */
++		if (len == (sizeof(struct nfc_geometry) - 8)) {
++			/*
++			 * assume we read from an old, resp. mainline kernel without
++			 * ecc_chunkn_size_in_bytes and ecc_for_meta in the struct.
++			 * Convert the struct.
++			 */
++			md->nfc_geometry.block_mark_bit_offset = md->nfc_geometry.block_mark_byte_offset;
++			md->nfc_geometry.block_mark_byte_offset = md->nfc_geometry.auxiliary_status_offset;
++			md->nfc_geometry.auxiliary_status_offset = md->nfc_geometry.auxiliary_size;
++			md->nfc_geometry.auxiliary_size = md->nfc_geometry.payload_size;
++			md->nfc_geometry.payload_size = md->nfc_geometry.ecc_chunk_count;
++			md->nfc_geometry.ecc_chunk_count = md->nfc_geometry.ecc_chunkn_size_in_bytes;
++			md->nfc_geometry.ecc_chunkn_size_in_bytes = md->nfc_geometry.ecc_chunk0_size_in_bytes;
++			md->nfc_geometry.ecc_for_meta = 0;
++		}
+ 		fclose(node);
+ 		return 0;
+ 	}
+-- 
+2.20.1
+

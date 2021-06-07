@@ -1,0 +1,62 @@
+From 5bd5bb5c4cdeda46182587f8d72073389d53d09d Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Mon, 7 Jun 2021 19:09:45 +0200
+Subject: [PATCH 2/2] src/mtd.c: fix compiler warnings
+
+Fix the following compiler warnings which look really suspicious:
+
+../../git/src/mtd.c: In function 'mtd_open':
+../../git/src/mtd.c:987:37: warning: array subscript 2 is above array bounds of 'struct mtd_part[2]' [-Warray-bounds]
+  987 |  if (md->part[1].fd >= 0 && md->part[2].fd >=0)
+      |                             ~~~~~~~~^~~
+../../git/src/mtd.c: In function 'mtd_read_page':
+../../git/src/mtd.c:307:15: warning: 'dst_bit_off' may be used uninitialized in this function [-Wmaybe-uninitialized]
+  307 |   dst_bit_off += nfc_geo->metadata_size_in_bytes;
+      |               ^~
+../../git/src/mtd.c: In function 'mtd_write_page':
+../../git/src/mtd.c:427:15: warning: 'src_bit_off' may be used uninitialized in this function [-Wmaybe-uninitialized]
+  427 |   src_bit_off += nfc_geo->metadata_size_in_bytes * 8;
+      |               ^~
+
+Note that those code paths likely were not used with the Toradex Easy
+Installer and no negative effects were observed at runtime.
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ src/mtd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/mtd.c b/src/mtd.c
+index d801bd9..b773db9 100644
+--- a/src/mtd.c
++++ b/src/mtd.c
+@@ -333,7 +333,7 @@ int mtd_read_page(struct mtd_data *md, int chip, loff_t ofs, int ecc)
+ 		/* swap first */
+ 		swap_bad_block_mark(data, oobdata, nfc_geo, 0);
+ 		memcpy(md->buf, oobdata, nfc_geo->metadata_size_in_bytes);
+-		dst_bit_off += nfc_geo->metadata_size_in_bytes;
++		dst_bit_off = nfc_geo->metadata_size_in_bytes;
+ 		oob_bit_off = dst_bit_off;
+ 		ecc_chunk_count = nfc_geo->ecc_chunk_count;
+ 
+@@ -456,7 +456,7 @@ int mtd_write_page(struct mtd_data *md, int chip, loff_t ofs, int ecc)
+ 
+ 		/* copy meta first */
+ 		memcpy(oobdata, md->buf, nfc_geo->metadata_size_in_bytes);
+-		src_bit_off += nfc_geo->metadata_size_in_bytes * 8;
++		src_bit_off = nfc_geo->metadata_size_in_bytes * 8;
+ 		oob_bit_off = src_bit_off;
+ 		ecc_chunk_count = nfc_geo->ecc_chunk_count;
+ 
+@@ -1070,7 +1070,7 @@ struct mtd_data *mtd_open(const struct mtd_config *cfg, int flags)
+ 		mp->ecc = 1;
+ 	}
+ 
+-	if (md->part[1].fd >= 0 && md->part[2].fd >=0)
++	if (md->part[0].fd >= 0 && md->part[1].fd >=0)
+ 		md->flags |= F_MULTICHIP;
+ 
+ 	/* if a second partition has been opened, verify that are compatible */
+-- 
+2.20.1
+
