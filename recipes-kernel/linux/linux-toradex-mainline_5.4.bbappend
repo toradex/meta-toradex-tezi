@@ -13,6 +13,7 @@ SRC_URI_append = " \
     file://0013-ARM-dts-imx7-colibri-use-static-MTD-partition-layout.patch \
     file://0015-apalis-tk1-force-fixed-ids-for-sdmmc-controllers.patch \
     file://0016-apalis-tk1-mainline-usb-device-aka-gadget-specific-d.patch \
+    file://0001-MLK-11747-mtd-nand-raw-gpmi-nand-add-the-debugfs-fil.patch \
 "
 
 SRC_URI_append_apalis-tk1 = " \
