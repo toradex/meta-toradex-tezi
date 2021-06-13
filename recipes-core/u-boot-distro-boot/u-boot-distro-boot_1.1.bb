@@ -16,8 +16,8 @@ do_deploy () {
     sed -i 's/@@INITRAMFS_FSTYPES@@/${INITRAMFS_FSTYPES}/' ${WORKDIR}/boot*.cmd
 
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
-        -n "Distro boot script" -d ${WORKDIR}/boot.cmd ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}
-    ln -sf boot.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot.scr
+        -n "Distro boot script" -d ${WORKDIR}/boot.cmd ${DEPLOYDIR}/boot-tezi.scr-${MACHINE}-${PV}-${PR}
+    ln -sf boot-tezi.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot-tezi.scr
 
     if [ "${UBOOT_SDP_SUPPORT}" = "1" ]; then
         uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
