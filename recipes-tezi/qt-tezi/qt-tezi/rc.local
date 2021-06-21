@@ -7,7 +7,7 @@ TEZI_LOGFILE=tezi.log
 # Start services and customize the boot process here.
 echo "Running /etc/rc.local..."
 
-cat /etc/tezi-version
+cat /etc/issue
 
 # Start services
 mkdir -p /var/run/dbus/

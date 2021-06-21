@@ -49,7 +49,6 @@ RDEPENDS_${PN} += " \
     pv \
     qtwayland-plugins \
     tar \
-    tezi-version \
     u-boot-fw-utils \
     unzip \
     util-linux-blkdiscard \
