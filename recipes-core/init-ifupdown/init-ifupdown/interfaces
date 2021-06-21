@@ -9,7 +9,7 @@ auto eth0
 iface eth0 inet manual
 	up ip link set up dev $IFACE
 	up udhcpc -i $IFACE
-	up ntpd -p pool.ntp.org
+	up ntpd -p time.cloudflare.com
 	down killall ntpd
 	down ip link set down dev $IFACE
 	down ip addr flush dev $IFACE
