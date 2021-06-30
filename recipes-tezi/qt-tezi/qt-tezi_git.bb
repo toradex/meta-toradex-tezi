@@ -13,7 +13,7 @@ SRCREV = "ad50cbc9edee32c5cdbf2cb2b080305f1253f141"
 SRCBRANCH = "master"
 SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=81f0d32e0eab9775391c3bdeb681aadb"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
 
 PV = "${TDX_VERSION}+git${SRCPV}"
 
