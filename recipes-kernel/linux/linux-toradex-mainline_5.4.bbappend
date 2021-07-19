@@ -20,7 +20,6 @@ SRC_URI_append_apalis-tk1 = " \
     file://xusb.bin \
 "
 
-SRCREV_machine = "a2e5dc80229e114cee12a54c4717f9b2a31546c6"
 
 do_configure_prepend_apalis-tk1 () {
     mkdir -p ${S}/firmware/nvidia/tegra124
