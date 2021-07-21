@@ -14,6 +14,15 @@ iface eth0 inet manual
 	down ip link set down dev $IFACE
 	down ip addr flush dev $IFACE
 
+auto eth1
+iface eth1 inet manual
+	up ip link set up dev $IFACE
+	up udhcpc -i $IFACE
+	up ntpd -p time.cloudflare.com
+	down killall ntpd
+	down ip link set down dev $IFACE
+	down ip addr flush dev $IFACE
+
 auto usb0
 iface usb0 inet manual
 	up ip addr add 192.168.11.1/24 dev $IFACE || true

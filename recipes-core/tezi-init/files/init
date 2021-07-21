@@ -28,8 +28,8 @@ echo "This is a Linux based installer for Toradex modules. Currently, the instal
 echo "does not have a serial console interface. You can use the Toradex Easy Installer"
 echo "via any of the available display interfaces using USB mouse/keyboard or via a"
 echo "network connection using VNC. Use:"
-echo "  # ip addr show eth0"
-echo "to display the Ethernet IP address or use USB RNDIS at IP 192.168.11.1."
+echo "  # ip addr show"
+echo "to display the Ethernet IP address(es) or use USB RNDIS at IP 192.168.11.1."
 echo
 echo "Check our documentation at:"
 echo "  https://developer.toradex.com/software/toradex-easy-installer"
