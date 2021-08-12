@@ -14,12 +14,13 @@ SRC_URI_append = " \
     file://0015-apalis-tk1-force-fixed-ids-for-sdmmc-controllers.patch \
     file://0016-apalis-tk1-mainline-usb-device-aka-gadget-specific-d.patch \
     file://0001-MLK-11747-mtd-nand-raw-gpmi-nand-add-the-debugfs-fil.patch \
+    file://0001-ARM-dts-colibri-imx6ull-emmc-add-device-trees.patch \
+    file://0001-ARM-dts-imx6ull-colibri-use-static-MTD-partition-lay.patch \
 "
 
 SRC_URI_append_apalis-tk1 = " \
     file://xusb.bin \
 "
-
 
 do_configure_prepend_apalis-tk1 () {
     mkdir -p ${S}/firmware/nvidia/tegra124
