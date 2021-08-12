@@ -3,6 +3,8 @@ EMMCDEV_verdin-imx8mp = "emmc"
 EMMCDEVBOOT0 = "mmcblk0boot0"
 EMMCDEVBOOT0_verdin-imx8mp = "emmc-boot0"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
+TEZI_CONFIG_FORMAT ??= "4"
+TEZI_AUTO_INSTALL ??= "false"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_EMMC_mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
@@ -116,7 +118,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
 
     deploydir = d.getVar('DEPLOY_DIR_IMAGE')
 
-    data = OrderedDict({ "config_format": 4, "autoinstall": False })
+    data = OrderedDict({ "config_format": d.getVar('TEZI_CONFIG_FORMAT'), "autoinstall": oe.types.boolean(d.getVar('TEZI_AUTO_INSTALL')) })
 
     # Use image recipes SUMMARY/DESCRIPTION/PV...
     data["name"] = d.getVar('SUMMARY')
