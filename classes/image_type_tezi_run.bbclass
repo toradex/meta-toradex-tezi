@@ -10,6 +10,12 @@ TEZI_UBOOT_BINARY_EMMC_mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
 TORADEX_FLASH_TYPE ??= "emmc"
+CREATE_LEGACY_JSON = "false"
+CREATE_LEGACY_JSON_apalis-imx6 = "true"
+CREATE_LEGACY_JSON_apalis-tk1 = "true"
+CREATE_LEGACY_JSON_colibri-imx6 = "true"
+CREATE_LEGACY_JSON_colibri-imx6ull = "true"
+CREATE_LEGACY_JSON_colibri-imx7 = "true"
 
 RM_WORK_EXCLUDE += "${PN}"
 
@@ -180,8 +186,32 @@ python rootfs_tezirun_run_json() {
 }
 
 IMAGE_CMD_tezirunimg () {
+    # create and deploy an additional json file which allows installing a
+    # newer Toradex Easy Installer (5.3.0 and later) from a running
+    # older (2.0b3 and older) one.
+    if [ "${CREATE_LEGACY_JSON}" = "true" ]; then
+        rm -f ${IMGDEPLOYDIR}/*-legacy.json
+        LEGACY_IMAGE_FILES=""
+        for JSON in ${IMGDEPLOYDIR}/image*.json; do
+            LEGACY=$(basename -s .json $JSON)-legacy.json
+            LEGACY_IMAGE_FILES="$LEGACY_IMAGE_FILES $LEGACY"
+            #-    "config_format": "4",
+            #+    "config_format": "1",
+            sed 's/\(\"config_format\"[^0-9]*\).*/\11",/' $JSON > ${IMGDEPLOYDIR}/$LEGACY
+            #-    "name": "Toradex Easy Installer",
+            #+    "name": "Toradex Easy Installer (Package for Installing this version with Easy Installer 1.8)",
+            sed -i 's/\(\"name\".*Toradex.*\)\"/\1 (Package for Installing this version with Easy Installer 1.8)"/' ${IMGDEPLOYDIR}/$LEGACY
+            #-    "description": "Toradex Easy Installer for colibri-imx7 machine",
+            #+    "description": "Legacy Toradex Easy Installer Package for 1.8 for colibri-imx7 machine",
+            sed -i 's/\(\"description\".*\)Toradex.*for/\1Legacy Toradex Easy Installer Package for 1.8 for/' ${IMGDEPLOYDIR}/$LEGACY
+            #-    "version": "5.3.0+build.3",
+            #+    "version": "5.30",
+            sed -i 's/\(\"version\".*\"[0-9]*\.[0-9]*\)\.\([0-9]*\)\+.*/\1\2",/' ${IMGDEPLOYDIR}/$LEGACY
+        done
+    fi
+
     (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi.itb tezi-run-metadata/* ${WORKDIR}/${TDX_VER_ID})
-    (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} ${WORKDIR}/${TDX_VER_ID})
+    (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} $LEGACY_IMAGE_FILES ${WORKDIR}/${TDX_VER_ID})
     zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
     mv ${TDX_VER_ID}.zip ${IMGDEPLOYDIR}
 }
