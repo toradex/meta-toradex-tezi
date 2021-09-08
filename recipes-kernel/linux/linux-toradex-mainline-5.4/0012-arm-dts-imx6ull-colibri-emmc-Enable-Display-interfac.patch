@@ -1,0 +1,43 @@
+From 20babe8506cdb260c737ce944a558aac93f2eca8 Mon Sep 17 00:00:00 2001
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Wed Sep 8 10:47:23 2021 +0200
+Subject: [PATCH] arm: dts: imx6ull-colibri-emmc: Enable Display interfaces
+
+Toradex Easy Installer does not support dedicated colibri-imx6ull-emmc
+target. Overlays can't be clearly applied to NAND device tree.
+
+Enable lcdif, backlight, panel-dpi and pwm interfaces by default.
+
+Related-to: TEI-921
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/boot/dts/imx7d-colibri-emmc.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+index af39e5370fa1..32c91d324ce8 100644
+--- a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
++++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+@@ -46,3 +46,19 @@
+         vmmc-supply = <&reg_module_3v3>;
+         status = "okay";
+ };
++
++&backlight {
++	status = "okay";
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
++
++&pwm4 {
++       status = "okay";
++};
+-- 
+2.17.1
+
