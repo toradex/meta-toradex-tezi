@@ -6,7 +6,6 @@ env set ramdisk_addr_r 0x8a000000
 env set vidargs 'video=HDMI-A-1:1280x720D video=DPI-1:800x480-16@60D video=LVDS-1:d'
 
 env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
-env set bootcmd_run 'bootm ${ramdisk_addr_r}#config@freescale_${fdtfile}'
 env set bootcmd 'run bootcmd_args && run bootcmd_hdp && run bootcmd_tezi && run bootcmd_run'
 env set tezi_image ${prefix}tezi.itb
 
@@ -27,7 +26,6 @@ fi
 # Load user specified overlays from eMMC partition (file overlays.txt)
 
 test -n ${m4boot} || env set m4boot ';'
-test -n ${fdtfile} || env set fdtfile ${fdt_file}
 test -n ${boot_part} || env set boot_part ${distro_bootpart}
 test -n ${root_part} || env set root_part 2
 test -n ${boot_devnum} || env set boot_devnum ${devnum}

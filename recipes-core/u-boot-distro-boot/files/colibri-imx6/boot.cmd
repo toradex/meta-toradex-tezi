@@ -1,7 +1,6 @@
-# env set ramdisk_addr_r 0x12100000
 setenv bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D video=HDMI-A-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
 
-# Reenable fdt relocation since in place fdt edits corrupt the ramdisk
+# Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...
 setenv fdt_high
 
@@ -44,4 +43,3 @@ run load_overlays_file
 run apply_overlays
 
 run bootcmd_run
-

@@ -27,7 +27,6 @@ fi
 # Load user specified overlays from eMMC partition (file overlays.txt)
 
 test -n ${m4boot} || env set m4boot ';'
-test -n ${fdtfile} || env set fdtfile ${fdt_file}
 test -n ${boot_part} || env set boot_part ${distro_bootpart}
 test -n ${root_part} || env set root_part 2
 test -n ${boot_devnum} || env set boot_devnum ${devnum}

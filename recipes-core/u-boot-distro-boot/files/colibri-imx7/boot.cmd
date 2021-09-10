@@ -1,6 +1,6 @@
 setenv bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
 
-# Reenable fdt relocation since in place fdt edits corrupt the ramdisk
+# Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...
 setenv fdt_high
 
