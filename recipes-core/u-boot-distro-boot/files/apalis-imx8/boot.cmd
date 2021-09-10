@@ -1,5 +1,6 @@
 # apalis-imx8 hardware setup
 
+env set fdtfile ${fdt_prefix}${soc}-apalis${variant}-${fdt_board}.dtb
 env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
 env set ramdisk_addr_r 0x8a000000
 env set hdp_addr 0x9c000000
@@ -27,7 +28,6 @@ fi
 # Load user specified overlays from eMMC partition (file overlays.txt)
 
 test -n ${m4boot} || env set m4boot ';'
-test -n ${fdtfile} || env set fdtfile ${fdt_file}
 test -n ${boot_part} || env set boot_part ${distro_bootpart}
 test -n ${root_part} || env set root_part 2
 test -n ${boot_devnum} || env set boot_devnum ${devnum}
@@ -56,6 +56,7 @@ else
 fi
 
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#config@\\${overlay_file}\\"\"; env set overlay_file; done; true"'
+
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#config@freescale_\${fdtfile}\${fitconf_fdt_overlays}'
 
 run set_load_overlays_file
