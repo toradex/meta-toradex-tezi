@@ -1,5 +1,8 @@
 # apalis-imx8 hardware setup
 
+test -n ${soc} || env set soc imx8qm
+test -n ${variant} || env set variant -v1.1
+test -n ${fdt_board} || env set fdt_board eval
 env set fdtfile ${fdt_prefix}${soc}-apalis${variant}-${fdt_board}.dtb
 env set bootcmd_hdp 'load ${devtype} ${devnum}:${distro_bootpart} ${hdp_addr} ${hdp_file}; hdp load ${hdp_addr}'
 env set ramdisk_addr_r 0x8a000000
