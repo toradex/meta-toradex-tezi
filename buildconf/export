@@ -18,9 +18,25 @@ fi
 . $TOP_DIR/layers/openembedded-core/oe-init-build-env
 
 if [ ! -z "$FIRST_TIME" ]; then
+    # add use-head-next to MACHINEOVERRIDES if one uses the integration or next manifests.
+    if grep -q "meta-toradex-bsp-common" ../.repo/manifest.xml && \
+       ! grep -q "meta-toradex-bsp-common.git.*upstream" ../.repo/manifest.xml || \
+       grep -qE "(integration.xml|next.xml)" ../.repo/manifest.xml
+    then
+        {
+            echo "# This is needed when building on integration. With use-head-next you"
+            echo "# always get the newest kernel. Without use-head-next your build may fail."
+            echo "MACHINEOVERRIDES =. \"use-head-next:\""
+            echo ""
+        } > conf/local.conf.new
+
+        cat conf/local.conf >> conf/local.conf.new
+        mv conf/local.conf.new conf/local.conf
+    fi
+
     cat <<EOM
 Check and edit conf/local.conf to adapt to your local needs.
 The following likely need your attention:
-BB_NUMBER_THREADS, PARALLEL_MAKE, DL_DIR
+DL_DIR
 EOM
 fi
