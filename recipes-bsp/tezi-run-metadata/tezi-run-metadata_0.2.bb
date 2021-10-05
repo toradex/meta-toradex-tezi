@@ -19,16 +19,8 @@ SRC_URI = " \
     file://recovery/uuu \
     file://recovery/uuu.exe \
 "
-SRC_URI_append_apalis-imx8x = " \
-    file://imx-boot-v11a \
-    file://recovery/uuu.auto-v11a \
-"
 SRC_URI_append_apalis-tk1 = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
-"
-SRC_URI_append_colibri-imx8x = " \
-    file://imx-boot-v10b \
-    file://recovery/uuu.auto-v10b \
 "
 SRC_URI_append_mx8 = " \
     file://recovery/uuu.auto \
@@ -77,32 +69,12 @@ do_deploy_mx8 () {
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-do_deploy_apalis-imx8x () {
-    deploy_common
-
-    install -m 644 ${WORKDIR}/imx-boot-v11a ${TEZI_RUN_DEPLOYDIR}/
-    install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/uuu.auto-v11a ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
-}
-
 do_deploy_apalis-tk1 () {
     deploy_common
 
     install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
     install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
-}
-
-do_deploy_colibri-imx8x () {
-    deploy_common
-
-    install -m 644 ${WORKDIR}/imx-boot-v10b ${TEZI_RUN_DEPLOYDIR}/
-    install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/uuu.auto-v10b ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 addtask deploy before do_build after do_install
