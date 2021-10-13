@@ -1,0 +1,35 @@
+From b38420bd72bd9160f182ad3c5cd1f5e6cd681787 Mon Sep 17 00:00:00 2001
+From: Oleksii Bidnichenko <oleksii.bidnichenko@toradex.com>
+Date: Wed, 13 Oct 2021 19:08:14 +0300
+Subject: [PATCH] drm: bridge: cadence: lower mhdp hdmi bridge ddc/edid read delay
+
+The MHDP HDMI bridge driver is implemented in such a way that mostly it does
+not check the status of PHY read operations and continuing normal execution even
+if the status of the previous read operation is an error. Such an implementation
+reduces the boot process speed in case if the hardware setup has a special
+configuration e.g. I2C bus used for the display mode configuration is disabled.
+Due to a testing need to have a stable boot time, a low-level read timeout
+(MAILBOX_TIMEOUT_US) is lowered from 5 seconds to 50 milliseconds.
+
+Related-to: ELB-4132
+Related-to: TEI-998
+Signed-off-by: Oleksii Bidnichenko <oleksii.bidnichenko@toradex.com>
+---
+ drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.c
+index 2043016f176b..7629ee54fb99 100644
+--- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.c
++++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.c
+@@ -30,7 +30,7 @@
+ #define CDNS_DP_SPDIF_CLK		200000000
+ #define FW_ALIVE_TIMEOUT_US		1000000
+ #define MAILBOX_RETRY_US		1000
+-#define MAILBOX_TIMEOUT_US		5000000
++#define MAILBOX_TIMEOUT_US		50000
+
+ #define mhdp_readx_poll_timeout(op, addr, offset, val, cond, sleep_us, timeout_us)	\
+ ({ \
+--
+2.25.1
