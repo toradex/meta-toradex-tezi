@@ -1,6 +1,8 @@
 # colibri-imx8x hardware setup
 
-env set fdtfile ${fdt_prefix}imx8qxp-colibri-eval-v3.dtb
+test -n ${soc} || env set soc imx8qxp
+test -n ${fdt_board} || env set fdt_board eval-v3
+env set fdtfile ${fdt_prefix}${soc}-colibri${variant}-${fdt_board}.dtb
 env set bootcmd_hdp ';'
 env set ramdisk_addr_r 0x8a000000
 env set vidargs 'video=DPI-1:640x480-16@60D'
