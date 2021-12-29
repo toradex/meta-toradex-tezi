@@ -14,6 +14,7 @@ inherit deploy nopackages
 
 do_deploy () {
     sed -i 's/@@INITRAMFS_FSTYPES@@/${INITRAMFS_FSTYPES}/' ${WORKDIR}/boot*.cmd
+    sed -i 's/@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@/${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}/' ${WORKDIR}/boot*.cmd
 
     uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
         -n "Distro boot script" -d ${WORKDIR}/boot.cmd ${DEPLOYDIR}/boot-tezi.scr-${MACHINE}-${PV}-${PR}
