@@ -30,7 +30,7 @@ env set fdt_resize true
 env set fitconf_fdt_overlays
 
 # We have devtype, devnum and boot_part defined for boot from USB and eMMC
-env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file}; env import -t \\${loadaddr} \\${filesize}"'
+env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file} && env import -t \\${loadaddr} \\${filesize}"'
 
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#config@\\${overlay_file}\\"\"; env set overlay_file; done; true"'
 

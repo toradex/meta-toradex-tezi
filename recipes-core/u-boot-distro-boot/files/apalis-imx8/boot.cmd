@@ -50,7 +50,7 @@ env set fitconf_fdt_overlays
 if test -n ${devtype}
 then
        # We have devtype, devnum and boot_part defined for boot from USB and eMMC
-       env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file}; env import -t \\${loadaddr} \\${filesize}"'
+       env set set_load_overlays_file 'env set load_overlays_file "${load_cmd} \\${loadaddr} \\${overlays_file} && env import -t \\${loadaddr} \\${filesize}"'
 else
        # Recovery-mode: load overlays.txt from the address provided by uuu utility
        env set set_load_overlays_file 'env set load_overlays_file "env import -t 0x82e10000 0x200"'
