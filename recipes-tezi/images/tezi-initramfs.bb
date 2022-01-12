@@ -9,7 +9,6 @@ IMAGE_FSTYPES_remove ="teziimg"
 IMAGE_FEATURES += "read-only-rootfs"
 
 CORE_IMAGE_BASE_INSTALL_append = " \
-    edid-blob \
     drm-info \
     qt-tezi \
     qt-tezictl \
