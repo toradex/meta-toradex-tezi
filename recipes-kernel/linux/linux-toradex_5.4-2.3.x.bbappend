@@ -4,6 +4,7 @@ require linux-toradex-tezi-common.inc
 
 SRC_URI_append = " \
     file://0001-arm64-dts-apalis-imx8-drop-m4-and-rpmsg-from-reserve.patch \
+    file://0002-drm-add-1280x720-as-builtin-edid.patch \
 "
 
 do_configure_append () {
