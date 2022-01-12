@@ -7,7 +7,7 @@ LICENSE = "BSD-3-Clause"
 
 SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezictl.git;branch=${SRCBRANCH};protocol=http"
 
-SRCREV = "debb33028a2548b913c74253f362192abd45e5df"
+SRCREV = "8feb64026685eeb49b5b60ab85e1a78b1b131d2b"
 SRCBRANCH = "master"
 SRCREV_use-head-next = "${AUTOREV}"
 SRCBRANCH_use-head-next = "master"
