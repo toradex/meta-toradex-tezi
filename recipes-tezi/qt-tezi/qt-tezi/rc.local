@@ -59,7 +59,22 @@ export XDG_RUNTIME_DIR=/run/wayland
 export QT_WAYLAND_FORCE_DPI=72
 
 # Start in background
-nohup /usr/bin/weston --tty=2 --current-mode >> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} &
-sleep 0.5
+# if the first command fails due to any reason e.g. no card available we spin
+# only vnc-backend up
+{
+	nohup /usr/bin/weston --tty=2 --current-mode \
+		>> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} || \
+	nohup /usr/bin/weston --backend=vnc-backend.so \
+		--modules=screen-share.so --shell=kiosk-shell.so \
+		>> ${RW_MEMORY_DIR}/${WESTON_LOGFILE};
+} &
+
+# Wait for the completion of the Weston init process. In the very last turn, it
+# starts sharing the screen over VNC
+while ! ps | grep -q [v]nc-backend
+do
+    sleep 0.5
+done
+
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
 	-platform wayland < /dev/null >> ${RW_MEMORY_DIR}/${TEZI_LOGFILE} &
