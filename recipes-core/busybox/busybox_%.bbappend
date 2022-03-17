@@ -4,7 +4,6 @@ SRC_URI_append = "\
     file://tinyinit.cfg \
     file://ntpd.cfg \
     file://ifplugd.cfg \
-    file://remove.cfg \
     file://utils.cfg \
 "
 
