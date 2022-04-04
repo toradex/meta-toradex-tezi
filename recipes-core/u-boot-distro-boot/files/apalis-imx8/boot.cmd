@@ -60,7 +60,7 @@ fi
 
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#conf-\\${overlay_file}\\"\"; env set overlay_file; done; true"'
 
-env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#conf-freescale_\${fdtfile}\${fitconf_fdt_overlays}'
+env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
 
 run set_load_overlays_file
 run set_apply_overlays
