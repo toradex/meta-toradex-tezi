@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-5.4:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-git:"
 
 require linux-toradex-tezi-common.inc
 
