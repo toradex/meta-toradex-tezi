@@ -22,7 +22,7 @@ SRC_URI = " \
 SRC_URI:append:apalis-tk1 = " \
     file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
 "
-SRC_URI:append:mx8 = " \
+SRC_URI:append:mx8-generic-bsp = " \
     file://recovery/uuu.auto \
 "
 
@@ -61,7 +61,7 @@ do_deploy () {
     install -m 644 ${S}/imx_usb.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-do_deploy:mx8 () {
+do_deploy:mx8-generic-bsp () {
     deploy_common
 
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
