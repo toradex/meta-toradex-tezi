@@ -16,7 +16,7 @@ PV = "0.0.1+git${SRCPV}"
 
 DEPENDS = "avahi qtbase"
 
-inherit qmake5
+inherit pkgconfig qmake5
 
 EXTRAQCONFFUNCS += "qtzeroconf_preconfigure"
 
