@@ -1,3 +1,4 @@
+#
 # This file is your local configuration file and is where all local user settings
 # are placed. The comments in this file give some guide to the options a new user
 # to the system might want to change but pretty much any configuration option can
@@ -11,44 +12,25 @@
 # variable as required.
 
 #
-# Parallelism Options
-#
-# These two options control how much parallelism BitBake should use. The first
-# option determines how many tasks bitbake should run in parallel:
-#
-#BB_NUMBER_THREADS ?= "4"
-#
-# Default to setting automatically based on cpu count
-BB_NUMBER_THREADS ?= "${@oe.utils.cpu_count()}"
-#
-# The second option controls how many processes make should run in parallel when
-# running compile tasks:
-#
-#PARALLEL_MAKE ?= "-j 4"
-#
-# Default to setting automatically based on cpu count
-PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
-#
-# For a quad-core machine, BB_NUMBER_THREADS = "4", PARALLEL_MAKE = "-j 4" would
-# be appropriate for example.
-
-#
 # Machine Selection
 #
 # You need to select a specific machine to target the build with. These are the
-# machines which for the Toradex Colibri and Apalis computer on module families
+# machines which target the Toradex Apalis, Colibri and Verdin computer on
+# module families:
 #
 #MACHINE ?= "apalis-imx6"
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "apalis-tk1"
 #
 #MACHINE ?= "colibri-imx6"
+#MACHINE ?= "colibri-imx6ull"
+#MACHINE ?= "colibri-imx6ull-emmc"
 #MACHINE ?= "colibri-imx7"
+#MACHINE ?= "colibri-imx7-emmc"
 #MACHINE ?= "colibri-imx8x"
 #
 #MACHINE ?= "verdin-imx8mm"
 #MACHINE ?= "verdin-imx8mp"
-
 #
 # There are also a selection of emulated machines available which can boot and run
 # in the QEMU emulator:
@@ -123,9 +105,9 @@ DEPLOY_DIR = "${TOPDIR}/deploy"
 PACKAGE_CLASSES ?= "package_ipk"
 
 #
-# SDK/ADT target architecture
+# SDK target architecture
 #
-# This variable specifies the architecture to build SDK/ADT items for and means
+# This variable specifies the architecture to build SDK items for and means
 # you can build the SDK packages for architectures other than the machine you are
 # running the build on (i.e. building i686 packages on an x86_64 host).
 # Supported values are i686 and x86_64
@@ -139,6 +121,8 @@ PACKAGE_CLASSES ?= "package_ipk"
 # variable can contain the following options:
 #  "dbg-pkgs"       - add -dbg packages for all installed packages
 #                     (adds symbol information for debugging/profiling)
+#  "src-pkgs"       - add -src packages for all installed packages
+#                     (adds source code for debugging)
 #  "dev-pkgs"       - add -dev packages for all installed packages
 #                     (useful if you want to develop against libs in the image)
 #  "ptest-pkgs"     - add -ptest packages for all ptest-enabled packages
@@ -146,7 +130,7 @@ PACKAGE_CLASSES ?= "package_ipk"
 #  "tools-sdk"      - add development tools (gcc, make, pkgconfig etc.)
 #  "tools-debug"    - add debugging tools (gdb, strace)
 #  "eclipse-debug"  - add Eclipse remote debugging support
-#  "tools-profile"  - add profiling tools (oprofile, exmap, lttng, valgrind)
+#  "tools-profile"  - add profiling tools (oprofile, lttng, valgrind)
 #  "tools-testapps" - add useful testing tools (ts_print, aplay, arecord etc.)
 #  "debug-tweaks"   - make an image suitable for development
 #                     e.g. ssh root access has a blank password
@@ -165,7 +149,6 @@ EXTRA_IMAGE_FEATURES = "debug-tweaks"
 #   - 'buildstats' collect build statistics
 #   - 'image-mklibs' to reduce shared library files size for an image
 #   - 'image-prelink' in order to prelink the filesystem image
-#   - 'image-swab' to perform host system intrusion detection
 # NOTE: if listing mklibs & prelink both, then make sure mklibs is before prelink
 # NOTE: mklibs also needs to be explicitly enabled for a given image, see local.conf.extended
 USER_CLASSES ?= "buildstats image-mklibs image-prelink"
@@ -174,10 +157,11 @@ USER_CLASSES ?= "buildstats image-mklibs image-prelink"
 # Runtime testing of images
 #
 # The build system can test booting virtual machine images under qemu (an emulator)
-# after any root filesystems are created and run tests against those images. To
-# enable this uncomment this line. See classes/testimage(-auto).bbclass for
-# further details.
-#TEST_IMAGE = "1"
+# after any root filesystems are created and run tests against those images. It can also
+# run tests against any SDK that are built. To enable this uncomment these lines.
+# See classes/test{image,sdk}.bbclass for further details.
+#IMAGE_CLASSES += "testimage testsdk"
+#TESTIMAGE_AUTO_qemuall = "1"
 
 #
 # Interactive shell configuration
@@ -206,13 +190,17 @@ PATCHRESOLVE = "noop"
 # shutdown the build. If there is less that 100MB or 1K inodes, perform a hard abort
 # of the build. The reason for this is that running completely out of space can corrupt
 # files and damages the build in ways which may not be easily recoverable.
-BB_DISKMON_DIRS = "\
+# It's necesary to monitor /tmp, if there is no space left the build will fail
+# with very exotic errors.
+BB_DISKMON_DIRS ??= "\
     STOPTASKS,${TMPDIR},1G,100K \
     STOPTASKS,${DL_DIR},1G,100K \
     STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
     ABORT,${TMPDIR},100M,1K \
     ABORT,${DL_DIR},100M,1K \
-    ABORT,${SSTATE_DIR},100M,1K"
+    ABORT,${SSTATE_DIR},100M,1K \
+    ABORT,/tmp,10M,1K"
 
 #
 # Shared-state files from other locations
@@ -237,9 +225,26 @@ BB_DISKMON_DIRS = "\
 # Qemu configuration
 #
 # By default qemu will build with a builtin VNC server where graphical output can be
-# seen. The two lines below enable the SDL backend too. This assumes there is a
-# libsdl library available on your build system.
-PACKAGECONFIG:pn-qemu-native = "sdl"
+# seen. The two lines below enable the SDL backend too. By default libsdl2-native will
+# be built, if you want to use your host's libSDL instead of the minimal libsdl built
+# by libsdl2-native then uncomment the ASSUME_PROVIDED line below.
+PACKAGECONFIG_append_pn-qemu-system-native = " sdl"
+PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
+#ASSUME_PROVIDED += "libsdl2-native"
+
+#
+# Hash Equivalence
+#
+# Enable support for automatically running a local hash equivalence server and
+# instruct bitbake to use a hash equivalence aware signature generator. Hash
+# equivalence improves reuse of sstate by detecting when a given sstate
+# artifact can be reused as equivalent, even if the current task hash doesn't
+# match the one that generated the artifact.
+#
+# A shared hash equivalent server can be set with "<HOSTNAME>:<PORT>" format
+#
+#BB_HASHSERVE = "auto"
+#BB_SIGNATURE_HANDLER = "OEEquivHash"
 
 
 # CONF_VERSION is increased each time build/conf/ changes incompatibly and is used to
@@ -250,7 +255,13 @@ CONF_VERSION = "1"
 # Delete the the source/object/binary files once a package is built to preserve disk space
 INHERIT += "rm_work"
 
+# Add Toradex bbclasses
+INHERIT += "toradex-mirrors toradex-sanity"
+
 DISTRO = "tezi"
+
+# Don't generate the mirror tarball for SCM repos, the snapshot is enough
+# BB_GENERATE_MIRROR_TARBALLS = "0"
 
 # To build a Toradex Easy Installer image which is installable via the Toradex Installer
 # Image itself
