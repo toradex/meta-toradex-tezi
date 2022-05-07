@@ -1,10 +1,10 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_append = " file://fw_env_emmc.config \
+SRC_URI:append = " file://fw_env_emmc.config \
                    file://fw_env_mtd4.config \
 "
 
-FILES_${PN}-env += " \
+FILES:${PN}-env += " \
     ${sysconfdir}/fw_env*.config \
 "
 
@@ -19,10 +19,10 @@ install_emmc_nand_fw_env() {
     install -D -m 644 ${WORKDIR}/fw_env_emmc.config ${D}${sysconfdir}/fw_env.config
 }
 
-do_install_append_colibri-imx6ull() {
+do_install:append:colibri-imx6ull() {
     install_emmc_nand_fw_env
 }
 
-do_install_append_colibri-imx7() {
+do_install:append:colibri-imx7() {
     install_emmc_nand_fw_env
 }

@@ -1,21 +1,21 @@
 EMMCDEV = "mmcblk0"
-EMMCDEV_verdin-imx8mp = "emmc"
+EMMCDEV:verdin-imx8mp = "emmc"
 EMMCDEVBOOT0 = "mmcblk0boot0"
-EMMCDEVBOOT0_verdin-imx8mp = "emmc-boot0"
+EMMCDEVBOOT0:verdin-imx8mp = "emmc-boot0"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_CONFIG_FORMAT ?= "4"
 TEZI_AUTO_INSTALL ??= "false"
 TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
-TEZI_UBOOT_BINARY_EMMC_mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
+TEZI_UBOOT_BINARY_EMMC:mx8 ??= "${UBOOT_BINARY_TEZI_EMMC}"
 TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}"
 TORADEX_FLASH_TYPE ??= "emmc"
 CREATE_LEGACY_JSON = "false"
-CREATE_LEGACY_JSON_apalis-imx6 = "true"
-CREATE_LEGACY_JSON_apalis-tk1 = "true"
-CREATE_LEGACY_JSON_colibri-imx6 = "true"
-CREATE_LEGACY_JSON_colibri-imx6ull = "true"
-CREATE_LEGACY_JSON_colibri-imx7 = "true"
+CREATE_LEGACY_JSON:apalis-imx6 = "true"
+CREATE_LEGACY_JSON:apalis-tk1 = "true"
+CREATE_LEGACY_JSON:colibri-imx6 = "true"
+CREATE_LEGACY_JSON:colibri-imx6ull = "true"
+CREATE_LEGACY_JSON:colibri-imx7 = "true"
 
 RM_WORK_EXCLUDE += "${PN}"
 
@@ -185,7 +185,7 @@ python rootfs_tezirun_run_json() {
         rootfs_tezi_run_create_json(d, flash_type, len(flash_types_list) > 1)
 }
 
-IMAGE_CMD_tezirunimg () {
+IMAGE_CMD:tezirunimg () {
     # create and deploy an additional json file which allows installing a
     # newer Toradex Easy Installer (5.3.0 and later) from a running
     # older (2.0b3 and older) one.

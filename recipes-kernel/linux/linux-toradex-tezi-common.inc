@@ -11,7 +11,7 @@ kernel_configure_variable() {
     fi
 }
 
-kernel_do_deploy_append () {
+kernel_do_deploy:append () {
 	# Create tezi.itb symbolic link
 	if echo ${KERNEL_IMAGETYPES} | grep -wq "fitImage"; then
 		if [ -n "${INITRAMFS_IMAGE}" ]; then

@@ -5,10 +5,10 @@ LICENSE = "MIT"
 PV = "${TDX_VERSION}"
 
 IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"
-IMAGE_FSTYPES_remove ="teziimg"
+IMAGE_FSTYPES:remove ="teziimg"
 IMAGE_FEATURES += "read-only-rootfs"
 
-CORE_IMAGE_BASE_INSTALL_append = " \
+CORE_IMAGE_BASE_INSTALL:append = " \
     drm-info \
     qt-tezi \
     qt-tezictl \

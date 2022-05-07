@@ -9,14 +9,14 @@ SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezictl.git;branch=${SRCBRANCH};p
 
 SRCREV = "8feb64026685eeb49b5b60ab85e1a78b1b131d2b"
 SRCBRANCH = "master"
-SRCREV_use-head-next = "${AUTOREV}"
+SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1611c5652037dacc6ac585f2443a1979"
 
 S = "${WORKDIR}/git"
 
 PV = "${TDX_VERSION}+git${SRCPV}"
 
-EXTRA_QMAKEVARS_PRE_append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
+EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
 
 inherit qmake5
 

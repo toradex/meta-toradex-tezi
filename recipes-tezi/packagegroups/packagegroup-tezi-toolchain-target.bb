@@ -2,7 +2,7 @@ LICENSE = "MIT"
 
 inherit packagegroup
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
     libusbgx \
     rapidjson \
     qtzeroconf \

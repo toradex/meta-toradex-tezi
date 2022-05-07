@@ -1,1 +1,1 @@
-PACKAGECONFIG_remove = "hwdb"
+PACKAGECONFIG:remove = "hwdb"

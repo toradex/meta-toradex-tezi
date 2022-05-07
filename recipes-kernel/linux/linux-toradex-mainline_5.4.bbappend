@@ -1,9 +1,9 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-5.4:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-5.4:"
 
 require linux-toradex-tezi-common.inc
 
-KBUILD_DEFCONFIG_forcevariable = ""
-SRC_URI_append = " \
+KBUILD_DEFCONFIG:forcevariable = ""
+SRC_URI:append = " \
     file://defconfig \
     file://0003-mmc-read-mmc-alias-from-device-tree.patch \
     file://0004-arm-dts-imx6qdl-apalis-force-fixed-ids-for-usdhc-con.patch \
@@ -18,11 +18,11 @@ SRC_URI_append = " \
     file://0001-ARM-dts-imx6ull-colibri-use-static-MTD-partition-lay.patch \
 "
 
-SRC_URI_append_apalis-tk1 = " \
+SRC_URI:append:apalis-tk1 = " \
     file://xusb.bin \
 "
 
-do_configure_prepend_apalis-tk1 () {
+do_configure:prepend:apalis-tk1 () {
     mkdir -p ${S}/firmware/nvidia/tegra124
     cp ${WORKDIR}/xusb.bin ${S}/firmware/nvidia/tegra124/
 }

@@ -1,3 +1,3 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-REQUIRED_DISTRO_FEATURES_remove = "opengl"
+REQUIRED_DISTRO_FEATURES:remove = "opengl"

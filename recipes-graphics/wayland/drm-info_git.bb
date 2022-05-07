@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 
 inherit meson pkgconfig
 
-EXTRA_OEMESON_class-target = "-Dpkgconfig-sysroot-path=${PKG_CONFIG_SYSROOT_DIR}"
+EXTRA_OEMESON:class-target = "-Dpkgconfig-sysroot-path=${PKG_CONFIG_SYSROOT_DIR}"
 
 
 DEPENDS = "drm json-c"

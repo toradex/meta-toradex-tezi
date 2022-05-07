@@ -1,4 +1,4 @@
-RDEPENDS_${PN}_remove = " \
+RDEPENDS:${PN}:remove = " \
     qtcharts-dev \
     qtcharts-mkspecs \
     qtmultimedia-dev \

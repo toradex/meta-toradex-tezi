@@ -1,1 +1,1 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/base-files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/base-files:"

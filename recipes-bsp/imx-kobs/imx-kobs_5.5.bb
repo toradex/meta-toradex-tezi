@@ -18,11 +18,11 @@ S = "${WORKDIR}/git"
 
 inherit autotools
 
-do_install_append_colibri-imx6ull() {
+do_install:append:colibri-imx6ull() {
     install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
-do_install_append_colibri-imx7() {
+do_install:append:colibri-imx7() {
     install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
@@ -30,6 +30,6 @@ COMPATIBLE_MACHINE = "(mxs|mx5|mx6|mx7|vf|use-mainline-bsp)"
 
 PN = "kobs-ng"
 
-FILES_${PN} += " \
+FILES:${PN} += " \
     /.kobs \
 "

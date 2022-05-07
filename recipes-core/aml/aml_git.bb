@@ -16,12 +16,12 @@ PACKAGECONFIG ??= ""
 PACKAGECONFIG[examples] = "-Dexamples=true,-Dexamples=false"
 
 PACKAGE_BEFORE_PN += "${PN}-examples"
-ALLOW_EMPTY_${PN}-examples = "1"
-FILES_${PN}-examples = "${bindir}"
+ALLOW_EMPTY:${PN}-examples = "1"
+FILES:${PN}-examples = "${bindir}"
 
 inherit meson pkgconfig
 
-do_install_append () {
+do_install:append () {
     if ${@bb.utils.contains('PACKAGECONFIG', 'examples', 'true', 'false', d)}; then
         install -d ${D}${bindir}
         install -m 0755 ${B}/examples/ticker ${D}${bindir}

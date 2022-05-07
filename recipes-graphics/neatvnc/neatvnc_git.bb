@@ -27,14 +27,14 @@ PACKAGECONFIG[examples] = "-Dexamples=true,-Dexamples=false,libpng"
 PACKAGECONFIG[benchmarks] = "-Dbenchmarks=true,-Dbenchmarks=false,libpng"
 
 PACKAGE_BEFORE_PN += "${PN}-examples"
-ALLOW_EMPTY_${PN}-examples = "1"
-FILES_${PN}-examples = "${bindir}"
+ALLOW_EMPTY:${PN}-examples = "1"
+FILES:${PN}-examples = "${bindir}"
 
 NEATVNC_EXAMPLES = "draw png-server"
 
 inherit meson pkgconfig
 
-do_install_append () {
+do_install:append () {
     if ${@bb.utils.contains('PACKAGECONFIG', 'examples', 'true', 'false', d)}; then
         install -d ${D}${bindir}
         for bin in ${NEATVNC_EXAMPLES}; do

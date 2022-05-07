@@ -22,6 +22,6 @@ EXTRA_QMAKEVARS_PRE += "PREFIX=${prefix} ENABLE_QHTTP_CLIENT=0"
 
 PACKAGES =+ "${PN}-examples"
 
-FILES_${PN}-examples = "${bindir}/*"
+FILES:${PN}-examples = "${bindir}/*"
 
 inherit qmake5

@@ -59,16 +59,16 @@ EXTRA_OECONF = "--with-avahi-priv-access-group=adm \
 EXTRA_OECONF_SYSVINIT = "${@bb.utils.contains('DISTRO_FEATURES','sysvinit','--with-distro=debian','--with-distro=none',d)}"
 EXTRA_OECONF_SYSTEMD = "${@bb.utils.contains('DISTRO_FEATURES','systemd','--with-systemdsystemunitdir=${systemd_unitdir}/system/','--without-systemdsystemunitdir',d)}"
 
-do_configure_prepend() {
+do_configure:prepend() {
     # This m4 file will get in the way of our introspection.m4 with special cross-compilation fixes
     rm "${S}/common/introspection.m4" || true
 }
 
-do_compile_prepend() {
+do_compile:prepend() {
     export GIR_EXTRA_LIBS_PATH="${B}/avahi-gobject/.libs:${B}/avahi-common/.libs:${B}/avahi-client/.libs:${B}/avahi-glib/.libs"
 }
 
-RRECOMMENDS_${PN}_append_libc-glibc = " libnss-mdns"
+RRECOMMENDS:${PN}:append:libc-glibc = " libnss-mdns"
 
 do_install() {
 	autotools_do_install
@@ -80,6 +80,6 @@ do_install() {
 
 PACKAGES =+ "${@bb.utils.contains("PACKAGECONFIG", "libdns_sd", "libavahi-compat-libdnssd", "", d)}"
 
-FILES_libavahi-compat-libdnssd = "${libdir}/libdns_sd.so.*"
+FILES:libavahi-compat-libdnssd = "${libdir}/libdns_sd.so.*"
 
-RPROVIDES_libavahi-compat-libdnssd = "libdns-sd"
+RPROVIDES:libavahi-compat-libdnssd = "libdns-sd"

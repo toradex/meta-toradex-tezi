@@ -1,1 +1,1 @@
-DEPENDS_remove = "qtdeclarative"
+DEPENDS:remove = "qtdeclarative"

@@ -31,10 +31,10 @@ UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 
 inherit meson pkgconfig useradd
 
-export CFLAGS_class-target = "${TARGET_CFLAGS}"
-export CPPFLAGS_class-target = "${TARGET_CPPFLAGS}"
-export CXXFLAGS_class-target = "${TARGET_CXXFLAGS}"
-export LDFLAGS_class-target = "${TARGET_LDFLAGS}"
+export CFLAGS:class-target = "${TARGET_CFLAGS}"
+export CPPFLAGS:class-target = "${TARGET_CPPFLAGS}"
+export CXXFLAGS:class-target = "${TARGET_CXXFLAGS}"
+export LDFLAGS:class-target = "${TARGET_LDFLAGS}"
 
 DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm neatvnc"
 DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
@@ -86,7 +86,7 @@ PACKAGECONFIG[remoting] = "-Dremoting=true,-Dremoting=false,gstreamer-1.0"
 # Weston with PAM support
 PACKAGECONFIG[pam] = "-Dpam=true,-Dpam=false,libpam"
 
-do_install_append() {
+do_install:append() {
 	# Weston doesn't need the .la files to load modules, so wipe them
 	rm -f ${D}/${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.la
 
@@ -113,20 +113,20 @@ do_install_append() {
 PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', '${PN}-xwayland', '', d)} \
              libweston-${WESTON_MAJOR_VERSION} ${PN}-examples"
 
-FILES_${PN}-dev += "${libdir}/${BPN}/libexec_weston.so"
-FILES_${PN} = "${bindir}/weston ${bindir}/weston-terminal ${bindir}/weston-info ${bindir}/weston-launch ${bindir}/wcap-decode ${libexecdir} ${libdir}/${BPN}/*.so* ${datadir}"
+FILES:${PN}-dev += "${libdir}/${BPN}/libexec_weston.so"
+FILES:${PN} = "${bindir}/weston ${bindir}/weston-terminal ${bindir}/weston-info ${bindir}/weston-launch ${bindir}/wcap-decode ${libexecdir} ${libdir}/${BPN}/*.so* ${datadir}"
 
-FILES_libweston-${WESTON_MAJOR_VERSION} = "${libdir}/lib*${SOLIBS} ${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.so"
-SUMMARY_libweston-${WESTON_MAJOR_VERSION} = "Helper library for implementing 'wayland window managers'."
+FILES:libweston-${WESTON_MAJOR_VERSION} = "${libdir}/lib*${SOLIBS} ${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.so"
+SUMMARY:libweston-${WESTON_MAJOR_VERSION} = "Helper library for implementing 'wayland window managers'."
 
-FILES_${PN}-examples = "${bindir}/*"
+FILES:${PN}-examples = "${bindir}/*"
 
-FILES_${PN}-xwayland = "${libdir}/libweston-${WESTON_MAJOR_VERSION}/xwayland.so"
-RDEPENDS_${PN}-xwayland += "xserver-xorg-xwayland"
+FILES:${PN}-xwayland = "${libdir}/libweston-${WESTON_MAJOR_VERSION}/xwayland.so"
+RDEPENDS:${PN}-xwayland += "xserver-xorg-xwayland"
 
-RDEPENDS_${PN} += "xkeyboard-config"
-RRECOMMENDS_${PN} = "weston-init ttf-bitstream-vera"
-RRECOMMENDS_${PN}-dev += "wayland-protocols"
+RDEPENDS:${PN} += "xkeyboard-config"
+RRECOMMENDS:${PN} = "weston-init ttf-bitstream-vera"
+RRECOMMENDS:${PN}-dev += "wayland-protocols"
 
 USERADD_PACKAGES = "${PN}"
-GROUPADD_PARAM_${PN} = "--system weston-launch"
+GROUPADD_PARAM:${PN} = "--system weston-launch"

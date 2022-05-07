@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 PR = "r1"
 
-RDEPENDS_${PN} = "busybox"
+RDEPENDS:${PN} = "busybox"
 
 SRC_URI = " \
     file://init \
@@ -26,7 +26,7 @@ do_install() {
 	install -m 0755 ${WORKDIR}/init ${D}/${base_sbindir}/init
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /init \
     ${base_sbindir}/init \
 "
