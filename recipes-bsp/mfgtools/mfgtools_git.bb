@@ -5,7 +5,7 @@ SECTION = "devel"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=38ec0c18112e9a92cffc4951661e85a5"
 
-SRC_URI = "git://github.com/NXPmicro/mfgtools;branch=master \
+SRC_URI = "git://github.com/NXPmicro/mfgtools;branch=master;protocol=https \
            file://0001-CMakeLists.txt-fix-libzip-name.patch \
           "
 

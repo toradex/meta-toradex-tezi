@@ -4,7 +4,7 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
 
-SRC_URI = "git://github.com/NXPmicro/imx-kobs.git;protocal=https \
+SRC_URI = "git://github.com/NXPmicro/imx-kobs.git;branch=master;protocal=https \
     file://add_chip_0_size_param.patch \
     file://0001-src-mtd.c-cope-with-different-kernel-provided-bch-ge.patch \
     file://0002-src-mtd.c-fix-compiler-warnings.patch \

@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = " \
-    http://sources.toradex.com/tezi/${PN}_${PV}.tar.xz \
+    http://sources.toradex.com/tezi/${BPN}_${PV}.tar.xz \
     file://wrapup.sh \
     file://tezi.png \
     file://recovery-linux.sh \

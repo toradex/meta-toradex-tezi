@@ -4,7 +4,7 @@ HOMEPAGE = "https://github.com/any1/aml"
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://COPYING;md5=af623d135dc7dd7e8963c0051f96aa37"
 
-SRC_URI = "git://github.com/any1/aml;protocol=https"
+SRC_URI = "git://github.com/any1/aml;branch=master;protocol=https"
 
 SRCREV = "1d8185ec15c68074cec1fd252c01c5ecad877b73"
 

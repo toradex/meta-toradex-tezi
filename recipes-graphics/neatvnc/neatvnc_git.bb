@@ -7,7 +7,7 @@ HOMEPAGE = "https://github.com/any1/neatvnc"
 LICENSE = "BSD & ISC & MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94fc374e7174f41e3afe0f027ee59ff7"
 
-SRC_URI = "git://github.com/any1/neatvnc;protocol=https \
+SRC_URI = "git://github.com/any1/neatvnc;branch=master;protocol=https \
            file://0001-Explicitly-require-aml.patch \
            file://0001-server.c-drop-tight-zrle-encodings.patch \
 "

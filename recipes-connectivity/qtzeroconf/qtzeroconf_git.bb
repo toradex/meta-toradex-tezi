@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=4fbd65380cdd255951079008b364516c"
 
 SRCREV = "806570b8eef52be8d10780716f3d227de5636c30"
 SRC_URI = " \
-    git://github.com/jonesmz/qtzeroconf.git;protocol=https \
+    git://github.com/jonesmz/qtzeroconf.git;branch=master;protocol=https \
     file://0001-project_settings.pri-add-versioning-definitions.patch \
     file://0001-dependency.pri-support-static-libraries.patch \
 "

@@ -5,7 +5,7 @@ and building HTTP requests and responses."
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c758fe2787c648b41befe35a54326b03"
 
-SRC_URI = "gitsm://github.com/Hypelab/qhttp;protocol=git \
+SRC_URI = "gitsm://github.com/Hypelab/qhttp;branch=master;protocol=https \
            file://0001-Fix-QWebSocketServer-header-path.patch \
            file://0001-examples-add-websockets-module.patch \
 "
