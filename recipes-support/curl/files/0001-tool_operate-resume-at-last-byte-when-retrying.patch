@@ -1,4 +1,4 @@
-From d96e2cea6a7b59ad1be62c3fddffc5e00d499779 Mon Sep 17 00:00:00 2001
+From 51a3bf3aef4acd6b960c72b0ea039d76eecd013e Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -16,16 +16,17 @@ https://github.com/curl/curl/pull/2450
   fall back to not trying to resume if server doesn't support resuming.
   Taken partly from https://github.com/curl/curl/pull/2450
 
+- Forward port to curl 7.87.0, remove fuzz
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  src/tool_operate.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 4b3caa80c..d069c2856 100644
+index 79db063..5b42fcd 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -488,6 +488,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+@@ -515,6 +515,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
          }
        }
      } /* if CURLE_OK */
@@ -35,9 +36,9 @@ index 4b3caa80c..d069c2856 100644
 +      retry = RETRY_HTTP;
 +    }
      else if(result) {
-       long protocol;
+       const char *scheme;
  
-@@ -531,6 +536,14 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+@@ -577,13 +582,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
              "%ld retries left.\n",
              m[retry], sleeptime/1000L, per->retry_numretries);
  
@@ -50,17 +51,16 @@ index 4b3caa80c..d069c2856 100644
 +      }
 +
        per->retry_numretries--;
-       tool_go_sleep(sleeptime);
        if(!config->retry_delay) {
-@@ -538,7 +551,7 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+         per->retry_sleep *= 2;
          if(per->retry_sleep > RETRY_SLEEP_MAX)
            per->retry_sleep = RETRY_SLEEP_MAX;
        }
 -      if(outs->bytes && outs->filename && outs->stream) {
 +      if(outs->bytes && outs->filename && outs->stream && !config->use_resume) {
          int rc;
-         /* We have written data to a output file, we truncate file
+         /* We have written data to an output file, we truncate file
           */
 -- 
-2.26.2
+2.35.3
 
