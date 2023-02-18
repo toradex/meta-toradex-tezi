@@ -19,9 +19,6 @@ SRC_URI = " \
     file://recovery/uuu \
     file://recovery/uuu.exe \
 "
-SRC_URI:append:apalis-tk1 = " \
-    file://recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct \
-"
 SRC_URI:append:mx8-generic-bsp = " \
     file://recovery/uuu.auto \
 "
@@ -67,14 +64,6 @@ do_deploy:mx8-generic-bsp () {
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
-}
-
-do_deploy:apalis-tk1 () {
-    deploy_common
-
-    install -m 644 ${WORKDIR}/recovery/PM375_Hynix_2GB_H5TC4G63AFR_RDA_924MHz.bct ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${S}/README.tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/README
-    install -m 755 ${S}/tegrarcm ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 addtask deploy before do_build after do_install

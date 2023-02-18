@@ -20,7 +20,6 @@
 #
 #MACHINE ?= "apalis-imx6"
 #MACHINE ?= "apalis-imx8"
-#MACHINE ?= "apalis-tk1"
 #
 #MACHINE ?= "colibri-imx6"
 #MACHINE ?= "colibri-imx6ull"
