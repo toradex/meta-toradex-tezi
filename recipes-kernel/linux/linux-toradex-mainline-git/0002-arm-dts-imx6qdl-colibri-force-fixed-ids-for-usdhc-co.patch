@@ -1,10 +1,7 @@
-From f119184bae4dd19ee97252b9297df67ff788eee2 Mon Sep 17 00:00:00 2001
-Message-Id: <f119184bae4dd19ee97252b9297df67ff788eee2.1588111715.git.marcel.ziswiler@toradex.com>
-In-Reply-To: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
-References: <e468d4ece1c2f170254466333c90efcbb368da5d.1588111715.git.marcel.ziswiler@toradex.com>
+From 82791e749f5b17b6362f254d787fe22c49ef5143 Mon Sep 17 00:00:00 2001
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Date: Mon, 16 Dec 2019 08:06:54 +0100
-Subject: [PATCH 05/17] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
+Subject: [PATCH 2/8] arm: dts: imx6qdl-colibri: force fixed ids for usdhc
  controllers
 
 The following, together with kernel patches, forces a fixed assignment
@@ -18,27 +15,27 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index 019dda6b88ad7..c718cd907cedb 100644
+index f894d6907604..bb987ad66821 100644
 --- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-@@ -47,6 +47,17 @@
+@@ -12,6 +12,17 @@ / {
  	model = "Toradex Colibri iMX6DL/S Module";
  	compatible = "toradex,colibri_imx6dl", "fsl,imx6dl";
  
 +	aliases {
 +		/*
-+		* The following, together with kernel patches, forces a fixed
-+		* assignment between device id and SDMMC controllers.
-+		*
-+		* I.e. the eMMC on uSDHC3 will be /dev/mmcblk0.
-+		*/
++		 * The following forces a fixed assignment between device id
++		 * and SDMMC controllers.
++		 *
++		 * I.e. the eMMC on uSDHC3 will be /dev/mmcblk0.
++		 */
 +		mmc0 = &usdhc3; /* eMMC */
 +		mmc1 = &usdhc1; /* MMC/SD slot */
 +	};
 +
  	backlight: backlight {
  		compatible = "pwm-backlight";
- 		pinctrl-names = "default";
+ 		brightness-levels = <0 45 63 88 119 158 203 255>;
 -- 
-2.25.4
+2.35.3
 

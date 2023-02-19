@@ -1,7 +1,7 @@
-From fea9f46d10d2df32a52d8b068334ef7915dd01fa Mon Sep 17 00:00:00 2001
+From f339ad6aa71e74c654734b6ce4c1b94ced6cb8d2 Mon Sep 17 00:00:00 2001
 From: Han Xu <han.xu@nxp.com>
 Date: Mon, 9 Dec 2019 15:32:31 -0600
-Subject: [PATCH]  MLK-11747: mtd: nand: raw: gpmi-nand: add the debugfs files
+Subject: [PATCH] MLK-11747: mtd: nand: raw: gpmi-nand: add the debugfs files
  for gpmi-nand for kobs-ng
 
 add the debugfs files in gpmi-nand driver for kobs-ng
@@ -13,7 +13,7 @@ Signed-off-by: Han Xu <han.xu@nxp.com>
  1 file changed, 39 insertions(+)
 
 diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index ef89947ee319..c63abe0d691e 100644
+index 01ccbde748f3..bd75ba6fd4b1 100644
 --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
 +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
 @@ -6,6 +6,7 @@
@@ -41,8 +41,8 @@ index ef89947ee319..c63abe0d691e 100644
  /* Resource names for the GPMI NAND driver. */
  #define GPMI_NAND_GPMI_REGS_ADDR_RES_NAME  "gpmi-nand"
  #define GPMI_NAND_BCH_REGS_ADDR_RES_NAME   "bch"
-@@ -529,6 +534,35 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
- 	return 0;
+@@ -729,6 +734,35 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
+ 	return err;
  }
  
 +int bch_create_debugfs(struct gpmi_nand_data *this)
@@ -77,7 +77,7 @@ index ef89947ee319..c63abe0d691e 100644
  /* Configures the geometry for BCH.  */
  static int bch_set_geometry(struct gpmi_nand_data *this)
  {
-@@ -2176,6 +2210,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
+@@ -2264,6 +2298,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
  	if (ret)
  		return ret;
  
@@ -90,5 +90,5 @@ index ef89947ee319..c63abe0d691e 100644
  	ecc->read_page	= gpmi_ecc_read_page;
  	ecc->write_page	= gpmi_ecc_write_page;
 -- 
-2.20.1
+2.35.3
 
