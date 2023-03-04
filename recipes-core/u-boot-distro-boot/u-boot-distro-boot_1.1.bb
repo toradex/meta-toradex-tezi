@@ -30,6 +30,9 @@ do_deploy () {
         ln -sf boot-sdp.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot-sdp.scr
     fi
 }
+do_deploy:append:am62xx () {
+    ln -sf boot-tezi.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot.scr
+}
 
 addtask deploy after do_install before do_build
 
