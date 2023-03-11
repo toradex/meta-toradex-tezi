@@ -2,6 +2,11 @@ DESCRIPTION = "Toradex Easy Installer Metadata for Toradex Easy Installer"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
+DEPENDS:am62xx = "dfu-util-native patchelf-native"
+MCDEPENDS = ""
+MCDEPENDS:am62xx = "mc::k3r5-gp:ti-sci-fw:do_deploy"
+do_deploy[mcdepends] = "${MCDEPENDS}"
+
 SRC_URI = " \
     http://sources.toradex.com/tezi/${BPN}_${PV}.tar.xz \
     file://wrapup.sh \
@@ -56,6 +61,12 @@ do_deploy () {
     install -m 644 ${S}/README.imx_usb ${TEZI_RUN_DEPLOYDIR}/recovery/README
     install -m 755 ${S}/imx_usb ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${S}/imx_usb.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+}
+
+do_deploy:am62xx () {
+    deploy_common
+
+    install -m 755 ${RECIPE_SYSROOT_NATIVE}/usr/bin/dfu-util ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 do_deploy:mx8-generic-bsp () {
