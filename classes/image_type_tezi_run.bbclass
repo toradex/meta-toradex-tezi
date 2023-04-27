@@ -30,7 +30,7 @@ def rootfs_tezi_run_emmc(d):
     emmcdev = d.getVar('EMMCDEV')
     emmcdevboot0 = d.getVar('EMMCDEVBOOT0')
     offset_bootrom = d.getVar('OFFSET_BOOTROM_PAYLOAD')
-    offset_tpl = d.getVar('OFFSET_TPL_PAYLOAD')
+    offset_fw = d.getVar('OFFSET_FW_PAYLOAD')
     offset_spl = d.getVar('OFFSET_SPL_PAYLOAD')
     uboot = d.getVar('TEZI_UBOOT_BINARY_EMMC')
 
@@ -38,17 +38,17 @@ def rootfs_tezi_run_emmc(d):
     bootpart_filelist = ["tezi.itb"] + (d.getVar('MACHINE_BOOT_FILES') or "").split()
 
     offset_payload = offset_bootrom
-    if offset_tpl:
-        # TPL_BINARY contain product_id <-> filename mapping
-        tplmapping = d.getVarFlags('TPL_BINARY')
-        for f, v in tplmapping.items():
+    if offset_fw:
+        # FIRMWARE_BINARY contain product_id <-> filename mapping
+        fwmapping = d.getVarFlags('FIRMWARE_BINARY')
+        for f, v in fwmapping.items():
             bootpart_rawfiles.append(
               {
                 "filename": v,
                 "dd_options": "seek=" + offset_payload,
                 "product_ids": f
               })
-        offset_payload = offset_tpl
+        offset_payload = offset_fw
     if offset_spl:
         bootpart_rawfiles.append(
               {
@@ -132,15 +132,15 @@ def rootfs_tezi_run_rawnand(d):
           ]
         })]
 
-def tpl_binaries(d):
-    tplmapping = d.getVarFlags('TPL_BINARY')
+def fw_binaries(d):
+    fwmapping = d.getVarFlags('FIRMWARE_BINARY')
 
-    if tplmapping is not None:
-        tpl_bins = []
-        for key, val in tplmapping.items():
-            if val not in tpl_bins:
-                tpl_bins.append(val)
-        return " " + " ".join(tpl_bins)
+    if fwmapping is not None:
+        fw_bins = []
+        for key, val in fwmapping.items():
+            if val not in fw_bins:
+                fw_bins.append(val)
+        return " " + " ".join(fw_bins)
     else:
         return ""
 
@@ -187,7 +187,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
         data["blockdevs"] = rootfs_tezi_run_emmc(d)
         uboot_file = d.getVar('TEZI_UBOOT_BINARY_EMMC')
         # TODO: Multi image/raw NAND with SPL currently not supported
-        uboot_file += tpl_binaries(d);
+        uboot_file += fw_binaries(d);
         if d.getVar('OFFSET_SPL_PAYLOAD'):
             uboot_file += " " + d.getVar('SPL_BINARY')
     else:
