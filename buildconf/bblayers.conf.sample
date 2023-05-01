@@ -5,16 +5,29 @@ LCONF_VERSION = "7"
 BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
+BBLAYERS_TI ?= " \
+  ${TOPDIR}/../layers/meta-arm/meta-arm-toolchain \
+  ${TOPDIR}/../layers/meta-arm/meta-arm \
+  ${TOPDIR}/../layers/meta-ti/meta-ti-bsp \
+  ${TOPDIR}/../layers/meta-ti/meta-ti-extras \
+  ${TOPDIR}/../layers/meta-toradex-ti \
+"
+
+BBLAYERS_NXP ?= " \
+  ${TOPDIR}/../layers/meta-freescale \
+  ${TOPDIR}/../layers/meta-freescale-3rdparty \
+  ${TOPDIR}/../layers/meta-toradex-nxp \
+"
+
 BBLAYERS ?= " \
+  ${BBLAYERS_TI} \
+  ${BBLAYERS_NXP} \
+  \
   ${TOPDIR}/../layers/openembedded-core/meta \
   ${TOPDIR}/../layers/meta-openembedded/meta-oe \
   ${TOPDIR}/../layers/meta-openembedded/meta-python \
   ${TOPDIR}/../layers/meta-toradex-tezi \
-  ${TOPDIR}/../layers/meta-toradex-tegra \
-  ${TOPDIR}/../layers/meta-toradex-nxp \
   ${TOPDIR}/../layers/meta-toradex-bsp-common \
-  ${TOPDIR}/../layers/meta-freescale \
-  ${TOPDIR}/../layers/meta-freescale-3rdparty \
   ${TOPDIR}/../layers/meta-qt5 \
   "
 
