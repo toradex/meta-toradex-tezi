@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DFU_UTIL=$(which dfu-util 2>/dev/null)
-if [ -z "$DFU_UTIL" ]
+if [ -z "$DFU_UTIL" ] || ! $DFU_UTIL -w -V &>/dev/null
 then
-	echo "Install dfu-util from your distro should the provided one not work with your distro"
+	echo "Install or update dfu-util from your distro should the provided one not work with your distro"
 	DFU_UTIL=recovery/dfu-util
 fi
 
