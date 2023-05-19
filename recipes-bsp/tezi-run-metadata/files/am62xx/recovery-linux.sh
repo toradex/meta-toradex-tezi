@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DFU_UTIL=$(which dfu-util 2>/dev/null)
 if [ -z "$DFU_UTIL" ]
 then
