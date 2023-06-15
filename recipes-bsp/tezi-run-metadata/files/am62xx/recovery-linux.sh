@@ -12,6 +12,10 @@ VID_PID_ROM="0451:6165"
 VID_PID_R5="0451:6165"
 VID_PID_A53="0451:6165"
 
+# tiboot3.bin depends on the SoC type, GP or HS-FS
+TIBOOT3_GP_BIN=tiboot3-am62x-gp-evm.bin-dfu
+TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-evm.bin-dfu
+
 wait_usb_device()
 {
 	VID_PID=$1
@@ -22,9 +26,37 @@ wait_usb_device()
 	done
 }
 
+# set TIBOOT3_BIN variable according to the SoC type (GP or HF-FS)
+select_tiboot3_bin()
+{
+	local soc_type
+	local tmp_dir
+	local soc_id_bin
+
+	wait_usb_device $VID_PID_ROM
+
+	tmp_dir=$(mktemp -d) || exit 1
+	soc_id_bin=$tmp_dir/SocId.bin
+	sudo dfu-util -R -a SocId -U $soc_id_bin
+
+	soc_type=$(dd if=$soc_id_bin bs=1 count=4 skip=20 2>/dev/null)
+
+	if [[ "$soc_type" == *"GP"* ]]
+	then
+		TIBOOT3_BIN=$TIBOOT3_GP_BIN
+	else
+		TIBOOT3_BIN=$TIBOOT3_HSFS_BIN
+	fi
+
+	rm -rf $tmp_dir
+}
+
+# select correct tiboot3.bin depending on SoC type
+select_tiboot3_bin
+
 # load boot binaries, boot script and tezi fitimage to RAM and boot U-Boot
 wait_usb_device $VID_PID_ROM
-sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D tiboot3-am62x-gp-evm.bin-dfu
+sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D $TIBOOT3_GP_BIN
 wait_usb_device $VID_PID_R5
 sudo $DFU_UTIL -w -R -a tispl.bin --device $VID_PID_R5 -D tispl.bin
 wait_usb_device $VID_PID_A53
