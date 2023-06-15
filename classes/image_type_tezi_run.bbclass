@@ -39,10 +39,14 @@ def rootfs_tezi_run_emmc(d):
 
     offset_payload = offset_bootrom
     if offset_tpl:
-        bootpart_rawfiles.append(
+        # TPL_BINARY contain product_id <-> filename mapping
+        tplmapping = d.getVarFlags('TPL_BINARY')
+        for f, v in tplmapping.items():
+            bootpart_rawfiles.append(
               {
-                "filename": d.getVar('TPL_BINARY'),
-                "dd_options": "seek=" + offset_payload
+                "filename": v,
+                "dd_options": "seek=" + offset_payload,
+                "product_ids": f
               })
         offset_payload = offset_tpl
     if offset_spl:
@@ -128,6 +132,18 @@ def rootfs_tezi_run_rawnand(d):
           ]
         })]
 
+def tpl_binaries(d):
+    tplmapping = d.getVarFlags('TPL_BINARY')
+
+    if tplmapping is not None:
+        tpl_bins = []
+        for key, val in tplmapping.items():
+            if val not in tpl_bins:
+                tpl_bins.append(val)
+        return " " + " ".join(tpl_bins)
+    else:
+        return ""
+
 def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     import json
     from collections import OrderedDict
@@ -171,7 +187,7 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
         data["blockdevs"] = rootfs_tezi_run_emmc(d)
         uboot_file = d.getVar('TEZI_UBOOT_BINARY_EMMC')
         # TODO: Multi image/raw NAND with SPL currently not supported
-        uboot_file += " " + d.getVar('TPL_BINARY') if d.getVar('OFFSET_TPL_PAYLOAD') else ""
+        uboot_file += tpl_binaries(d);
         if d.getVar('OFFSET_SPL_PAYLOAD'):
             uboot_file += " " + d.getVar('SPL_BINARY')
     else:
