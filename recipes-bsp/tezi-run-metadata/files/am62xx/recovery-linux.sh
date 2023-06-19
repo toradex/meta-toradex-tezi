@@ -56,7 +56,7 @@ select_tiboot3_bin
 
 # load boot binaries, boot script and tezi fitimage to RAM and boot U-Boot
 wait_usb_device $VID_PID_ROM
-sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D $TIBOOT3_GP_BIN
+sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D $TIBOOT3_BIN
 wait_usb_device $VID_PID_R5
 sudo $DFU_UTIL -w -R -a tispl.bin --device $VID_PID_R5 -D tispl.bin
 wait_usb_device $VID_PID_A53
