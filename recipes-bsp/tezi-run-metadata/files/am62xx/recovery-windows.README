@@ -1,0 +1,24 @@
+The bat file recovery-windows.bat allows loading the Toradex Easy Installer
+using a USB connection, while running Microsoft Windows on host computer.
+It uses these tools, provided in binary form:
+* dfu-util: 
+    * https://dfu-util.sourceforge.net/releases/
+    * git://git.code.sf.net/p/dfu-util/dfu-util
+* GnuWin32 CoreUtils (dd and relevant dependencies):
+    * https://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php
+    * https://gnuwin32.sourceforge.net/downlinks/coreutils-src-zip.php
+    * https://gnuwin32.sourceforge.net/downlinks/coreutils-dep-zip.php
+
+It may not work out of the box because a DFU mode device
+does not have a dedicated driver under Windows.
+The device is shown under Device Manager as "AM62x DFU" with 
+an exclamation mark next to it.
+In this case the WinUSB driver must be associated with the device.
+WinUSB driver is already present in the system, it shall be manually installed
+for the "AM62x DFU" device:
+ - Right-click on the device and click on "Update driver"
+ - Click on "Browse my computer for drivers"
+ - Select Universal Serial Bus devices and click "next" button
+ - Select "WinUsb Device" as Manufacturer and Model and click "next" button
+
+Alternatively, zadig (https://zadig.akeo.ie/) allow install WinUSB driver using a user-friendly interface.
