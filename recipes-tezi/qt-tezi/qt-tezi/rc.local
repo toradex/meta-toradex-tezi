@@ -71,9 +71,11 @@ export QT_WAYLAND_FORCE_DPI=72
 
 # Wait for the completion of the Weston init process. In the very last turn, it
 # starts sharing the screen over VNC
-while ! ps | grep -q [v]nc-backend
+max_wait_cnt=0
+while ! ps | grep -q [v]nc-backend && [ $max_wait_cnt -le 10 ]
 do
     sleep 0.5
+    max_wait_cnt=$((max_wait_cnt + 1))
 done
 
 nohup /usr/bin/tezi $DEFAULT_KBD $DEFAULT_LANG $AUTOINSTALL $FULLSCREEN \
