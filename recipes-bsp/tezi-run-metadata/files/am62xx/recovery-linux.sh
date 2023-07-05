@@ -37,7 +37,7 @@ select_tiboot3_bin()
 
 	tmp_dir=$(mktemp -d) || exit 1
 	soc_id_bin=$tmp_dir/SocId.bin
-	sudo dfu-util -R -a SocId -U $soc_id_bin
+	sudo $DFU_UTIL -R -a SocId --device $VID_PID_ROM -U $soc_id_bin
 
 	soc_type=$(dd if=$soc_id_bin bs=1 count=4 skip=20 2>/dev/null)
 
