@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# ask for the password early
+sudo true
+
 DFU_UTIL=$(which dfu-util 2>/dev/null)
 if [ -z "$DFU_UTIL" ] || ! $DFU_UTIL -w -V &>/dev/null
 then
