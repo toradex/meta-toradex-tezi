@@ -13,8 +13,8 @@ VID_PID_R5="0451:6165"
 VID_PID_A53="0451:6165"
 
 # tiboot3.bin depends on the SoC type, GP or HS-FS
-TIBOOT3_GP_BIN=tiboot3-am62x-gp-evm.bin-dfu
-TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-evm.bin-dfu
+TIBOOT3_GP_BIN=tiboot3-am62x-gp-verdin.bin-dfu
+TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-verdin.bin-dfu
 
 wait_usb_device()
 {
