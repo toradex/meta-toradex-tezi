@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS:am62xx = "dfu-util-native patchelf-native"
 MCDEPENDS = ""
-MCDEPENDS:am62xx = "mc::k3r5-gp:ti-sci-fw:do_deploy"
+MCDEPENDS:am62xx = "mc::k3r5:virtual/bootloader:do_deploy"
 do_deploy[mcdepends] = "${MCDEPENDS}"
 
 SRC_URI = " \
