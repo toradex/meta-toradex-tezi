@@ -27,4 +27,7 @@ do_configure:prepend:verdin-am62 () {
     configure_variable BOOTCOMMAND	'"env set recovery_tezi 1; source ${scriptaddr}"'	$recoveryconf
     configure_variable ENV_IS_IN_MMC	n	$recoveryconf
     configure_variable ENV_IS_NOWHERE	y	$recoveryconf
+    configure_variable FIT_SIGNATURE_ENFORCE    n       $recoveryconf
+
+    configure_variable FIT_SIGNATURE_ENFORCE    n       ${S}/configs/verdin-am62_a53_defconfig
 }
