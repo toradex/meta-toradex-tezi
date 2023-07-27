@@ -9,8 +9,8 @@ fi
 
 # USB DFU device vendor and product ID used in the boot ROM, the R5 SPL and the A53 SPL
 VID_PID_ROM="0451:6165"
-VID_PID_R5="0451:6165"
-VID_PID_A53="0451:6165"
+VID_PID_R5="1b67:4000"
+VID_PID_A53="1b67:4000"
 
 # tiboot3.bin depends on the SoC type, GP or HS-FS
 TIBOOT3_GP_BIN=tiboot3-am62x-gp-verdin.bin-dfu
