@@ -19,7 +19,7 @@ call :select_tiboot3_bin
 %DFU_UTIL% -w -a u-boot.img --device %VID_PID_A53% -D u-boot.img-recoverytezi
 %DFU_UTIL% -w -a ramdisk_addr_r --device %VID_PID_A53% -D tezi.itb
 %DFU_UTIL% -w -a loadaddr --device %VID_PID_A53% -D overlays.txt
-%DFU_UTIL% -w -R -a scriptaddr --device %VID_PID_A53% -D boot-tezi.scr
+%DFU_UTIL% -w -R -a scriptaddr --device %VID_PID_A53% -D boot.scr
 goto :EOF
 
 REM set TIBOOT3_BIN variable according to the SoC type (GP or HF-FS)

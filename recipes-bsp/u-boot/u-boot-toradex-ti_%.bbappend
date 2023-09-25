@@ -1,9 +1,5 @@
 # build additionally a U-Boot used when starting TEZI over USB/RECOVERY
 
-UBOOT_CONFIG:verdin-am62 = "recoverytezi sd"
-RECOVERY_CONFIG:verdin-am62 = "verdin-am62_a53_usbdfu_defconfig"
-UBOOT_CONFIG[recoverytezi] = "${RECOVERY_CONFIG}"
-
 # Assign/change a config variable
 # $1 - config variable to be set
 # $2 - value [n/y/value]
@@ -22,8 +18,8 @@ configure_variable() {
 }
 
 do_configure:prepend:verdin-am62 () {
-    recoveryconf=${S}/configs/verdin-am62_a53_usbdfu_defconfig
-    cp ${S}/configs/verdin-am62_a53_defconfig	$recoveryconf
+    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
+    cp ${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig $recoveryconf
     configure_variable BOOTCOMMAND	'"env set recovery_tezi 1; source ${scriptaddr}"'	$recoveryconf
     configure_variable ENV_IS_IN_MMC	n	$recoveryconf
     configure_variable ENV_IS_NOWHERE	y	$recoveryconf

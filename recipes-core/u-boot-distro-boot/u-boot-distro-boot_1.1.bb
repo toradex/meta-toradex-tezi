@@ -17,9 +17,6 @@ do_deploy () {
         -n "TEZI distro boot script" -d boot.cmd ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}
     ln -sf boot.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot.scr
 }
-do_deploy:append:am62xx () {
-    ln -sf boot-tezi.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot.scr
-}
 
 addtask deploy after do_install before do_build
 

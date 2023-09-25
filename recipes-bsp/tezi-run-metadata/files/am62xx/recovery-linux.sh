@@ -66,6 +66,6 @@ wait_usb_device $VID_PID_A53
 sudo $DFU_UTIL -w -a u-boot.img --device $VID_PID_A53 -D u-boot.img-recoverytezi
 sudo $DFU_UTIL -w -a ramdisk_addr_r --device $VID_PID_A53 -D tezi.itb
 sudo $DFU_UTIL -w -a loadaddr --device $VID_PID_A53 -D overlays.txt
-sudo $DFU_UTIL -w -R -a scriptaddr --device $VID_PID_A53 -D boot-tezi.scr
+sudo $DFU_UTIL -w -R -a scriptaddr --device $VID_PID_A53 -D boot.scr
 
 exit 0
