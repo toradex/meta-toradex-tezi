@@ -1,11 +1,11 @@
 uuu_version 1.4.243
 
 # Boot Rom calls U-Boot over SDP
-SDP: boot -f ../u-boot.imx
+SDP: boot -f ../u-boot.imx-recoverytezi
 # U-Boot new VID:PID over USB for Toradex Board
 CFG: SDPV: -chip SPL1 -vid 0x1b67 -pid 0x4000
 # U-Boot download all files using SDP
-SDPV: write -f ../boot-sdp.scr -addr 0x82000000
-SDPV: write -f ../tezi.itb -addr 0x82100000
-SDPV: jump -addr 0x82000000
+SDPV: write -f ../boot.scr -addr 0x81000000
+SDPV: write -f ../tezi.itb -addr 0x81100000
+SDPV: jump -addr 0x81000000
 SDPV: done

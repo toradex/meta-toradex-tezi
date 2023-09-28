@@ -123,6 +123,16 @@ def rootfs_tezi_run_rawnand(d):
           "name": "ubi",
           "ubivolumes": [
             {
+                "name": "bootscr",
+                "type": "static",
+                "content": {
+                    "rawfile": {
+                        "filename": "boot.scr"
+                    }
+                },
+                "size_kib": 128
+            },
+            {
               "name": "rootfs",
               "type": "static",
               "content": {

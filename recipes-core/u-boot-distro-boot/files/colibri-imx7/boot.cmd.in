@@ -1,10 +1,18 @@
-setenv bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
+# colibri-imx7 TEZI script
 
-# Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
-# in a FIT image...
-setenv fdt_high
+env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
+env set fitimage_addr 0x81100000
 
-# Load FIT image from location as detected by distroboot
-load ${devtype} ${devnum}:${distro_bootpart} ${ramdisk_addr_r} ${prefix}tezi.itb
+if test x${recovery_tezi} != x1
+then
+    # If variant is not set, then we're in a NAND device. Otherwise, if variant
+    # is "-emmc", this a an eMMC device.
+    if test x${variant} = x
+    then
+        ubi read ${fitimage_addr} rootfs
+    else
+        load mmc 0:1 ${fitimage_addr} ${prefix}tezi.itb
+    fi
+fi
 
-bootm ${ramdisk_addr_r}#conf-${soc}-colibri${variant}-${fdt_board}.dtb
+bootm ${fitimage_addr}#conf-${soc}-colibri${variant}-${fdt_board}.dtb
