@@ -4,7 +4,7 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://gitlab.toradex.int/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};protocol=http \
+SRC_URI = "git://gitlab.int.toradex.com/rd/tezi/qt-tezi.git;branch=${SRCBRANCH};protocol=https \
     file://rc.local \
     file://udhcpd.conf \
 "
