@@ -101,6 +101,7 @@ SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
 # if you have several build directories you need to adjust deploy
 # to something unique, e.g. "${TOPDIR}/../deploy_fb" "${TOPDIR}/../deploy_x11"
 DEPLOY_DIR = "${TOPDIR}/deploy"
+TI_COMMON_DEPLOY = "${DEPLOY_DIR}"
 
 #
 # Package Management configuration
