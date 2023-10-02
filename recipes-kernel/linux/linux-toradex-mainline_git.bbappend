@@ -2,9 +2,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-git:"
 
 require linux-toradex-tezi-common.inc
 
-KBUILD_DEFCONFIG:forcevariable = ""
 SRC_URI:append = " \
-    file://defconfig \
     file://0001-arm-dts-imx6qdl-apalis-force-fixed-ids-for-usdhc-con.patch \
     file://0002-arm-dts-imx6qdl-colibri-force-fixed-ids-for-usdhc-co.patch \
     file://0003-arm-dts-imx7d-colibri-emmc-force-fixed-ids-for-usdhc.patch \
