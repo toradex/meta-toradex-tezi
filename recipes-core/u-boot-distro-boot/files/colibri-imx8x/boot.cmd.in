@@ -3,19 +3,14 @@
 test -n ${soc} || env set soc imx8qxp
 test -n ${fdt_board} || env set fdt_board eval-v3
 env set fdtfile ${fdt_prefix}${soc}-colibri${variant}-${fdt_board}.dtb
-env set bootcmd_hdp ';'
 env set ramdisk_addr_r 0x8a000000
 env set vidargs 'video=DPI-1:640x480-16@60D'
 
 env set bootcmd_args 'env set bootargs quiet ${vidargs} initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
-env set bootcmd 'run bootcmd_args && run bootcmd_hdp && run bootcmd_tezi && run bootcmd_run'
+env set bootcmd 'run bootcmd_args && run bootcmd_tezi && run bootcmd_run'
 env set tezi_image ${prefix}tezi.itb
 
-# Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
-# in a FIT image...
-env set fdt_high
-
-if test -n ${fastboot_buffer}
+if test x${recovery_tezi} = x1
 then
     # Recovery mode
     # Note: the memory locations are bound to the ones as used in uuu.auto
