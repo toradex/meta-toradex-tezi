@@ -7,7 +7,10 @@ env set fitconf_fdt_overlays
 env set prefix
 test -n ${overlays_file} || env set overlays_file "overlays.txt"
 env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
-env set ramdisk_addr_r 0x12100000
+# This address needs to be the alligned with the one used by imx_usb/uuu loader
+# inside the 'recovery' folder
+env set fitimage_addr 0x14420000
+env set overlays_addr 0x14410000
 
 # Re-enable fdt relocation since in place fdt edits corrupt the ramdisk
 # in a FIT image...
@@ -16,7 +19,7 @@ env set fdt_resize true
 
 env set fdtfile "imx6q-apalis-${fdt_board}.dtb"
 env set bootcmd_args 'env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480D video=HDMI-A-1:640x480-16@60D video=LVDS-1:d video=VGA-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
-env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
+env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
 env set tezi_image ${prefix}tezi.itb
 
 env set set_default_overlays 'env set fdt_overlays "@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@"'
@@ -25,10 +28,10 @@ if test x${recovery_tezi} = x1
 then
     # ${tezi_image} has been loaded over usb, don't try to load from eMMC
     env set bootcmd_tezi ';'
-    env set load_overlays_file 'env import -t ${loadaddr} 0x200; test -n ${fdt_overlays} || run set_default_overlays'
+    env set load_overlays_file 'env import -t ${overlays_addr} 0x200; test -n ${fdt_overlays} || run set_default_overlays'
 else
-    env set bootcmd_tezi '${load_cmd} ${ramdisk_addr_r} ${tezi_image}'
-    env set load_overlays_file '${load_cmd} ${loadaddr} ${overlays_file} && env import -t ${loadaddr} ${filesize}; test -n ${fdt_overlays} || run set_default_overlays'
+    env set bootcmd_tezi '${load_cmd} ${fitimage_addr} ${tezi_image}'
+    env set load_overlays_file '${load_cmd} ${overlays_addr} ${overlays_file} && env import -t ${overlays_addr} ${filesize}; test -n ${fdt_overlays} || run set_default_overlays'
 fi
 
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#conf-\\${overlay_file}\\"\"; env set overlay_file; done; true"'
