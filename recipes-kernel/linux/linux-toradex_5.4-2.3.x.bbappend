@@ -1,5 +1,6 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}_5.4-2.3.x:"
 
+inherit toradex-kernel-config
 require linux-toradex-tezi-common.inc
 
 SRC_URI:append = " \
