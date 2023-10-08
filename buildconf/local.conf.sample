@@ -19,8 +19,8 @@
 # module families:
 #
 
-# DISTRO = "tezi" chooses the right kernel flavour for each machine
-# Toradex Modules based on i.MX 6/6ULL/7 use a kernel pulled from
+# Toradex Modules based on i.MX 6/6ULL/7 are only supported with the
+# tdx-xwayland-upstream DISTRO which builds a kernel pulled from
 # kernel.org and use matching userspace components.
 #MACHINE ?= "apalis-imx6"
 #MACHINE ?= "colibri-imx6"
@@ -29,13 +29,20 @@
 #MACHINE ?= "colibri-imx7"
 #MACHINE ?= "colibri-imx7-emmc"
 #
-# Toradex Modules based on SoC of the i.MX 8 and AM62x family use a kernel based
-# on NXP's or TI's downstream fork and matching userspace components.
+# Toradex Modules based on SoC of the i.MX 8 family are supported with the
+# tdx-xwayland DISTRO which builds a kernel based on NXP's downstream fork
+# and matching userspace components. Support with tdx-xwayland-upstream
+# DISTRO is experimental and currently only builds for Verdin modules.
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "colibri-imx8x"
 #MACHINE ?= "verdin-am62"
 #MACHINE ?= "verdin-imx8mm"
 #MACHINE ?= "verdin-imx8mp"
+#
+# Toradex Modules based on SoC of the TI AM62x family are supported with the
+# tdx-xwayland DISTRO which builds a kernel based on TI downstream fork
+# and matching userspace components.
+#MACHINE ?= "verdin-am62"
 #
 # There are also a selection of emulated machines available which can boot and run
 # in the QEMU emulator:
