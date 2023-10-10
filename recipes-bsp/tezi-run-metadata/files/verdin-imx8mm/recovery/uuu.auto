@@ -1,21 +1,16 @@
 uuu_version 1.4.243
 
-SDP: boot -f ../imx-boot
-CFG: SDPU: -vid 0x0525 -pid 0xb4a4
+SDP: boot -f ../imx-boot-recoverytezi
+CFG: SDPV: -chip SPL1 -vid 0x1b67 -pid 0x4fff
 SDPV: delay 1000
-SDPV: write -f ../imx-boot -skipspl
+SDPV: write -f ../imx-boot-recoverytezi -skipspl
 SDPV: jump
-CFG: FB: -vid 0x0525 -pid 0x4000
-CFG: FB: -vid 0x0525 -pid 0x4037
-CFG: FB: -vid 0x0525 -pid 0x4039
-CFG: FB: -vid 0x0525 -pid 0x403b
-CFG: FB: -vid 0x0525 -pid 0x403c
-CFG: FB: -vid 0x0525 -pid 0x4044
+CFG: FB: -vid 0x1b67 -pid 0x4000
 FB: ucmd setenv fastboot_buffer 0x42e00000
-FB: download -f ../boot-tezi.scr
+FB: download -f ../boot.scr
 FB: ucmd setenv fastboot_buffer 0x42e10000
 FB: download -f ../overlays.txt
-FB: ucmd setenv fastboot_buffer 0x47400000
+FB: ucmd setenv fastboot_buffer 0x44200000
 FB: download -f ../tezi.itb
 FB: acmd source 0x42e00000
 FB: done

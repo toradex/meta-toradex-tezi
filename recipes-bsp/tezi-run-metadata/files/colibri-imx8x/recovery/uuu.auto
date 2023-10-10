@@ -1,13 +1,9 @@
 uuu_version 1.4.243
 
-SDPS: boot -f ../imx-boot
-CFG: FB: -vid 0x0525 -pid 0x4000
-CFG: FB: -vid 0x0525 -pid 0x4026
-CFG: FB: -vid 0x0525 -pid 0x4032
-CFG: FB: -vid 0x0525 -pid 0x4033
-CFG: FB: -vid 0x0525 -pid 0x4034
+SDPS: boot -f ../imx-boot-recoverytezi
+CFG: FB: -vid 0x1b67 -pid 0x4000
 FB: ucmd setenv fastboot_buffer 0x82e00000
-FB: download -f ../boot-tezi.scr
+FB: download -f ../boot.scr
 FB: ucmd setenv fastboot_buffer 0x82e10000
 FB: download -f ../overlays.txt
 FB: ucmd setenv fastboot_buffer 0x8a000000
