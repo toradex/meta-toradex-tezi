@@ -21,8 +21,6 @@ SRC_URI = " \
     file://recovery/mx7_usb_sdp_uboot.conf \
     file://recovery/mx6ull_usb_rom.conf \
     file://recovery/mx6ull_usb_sdp_uboot.conf \
-    file://recovery/uuu \
-    file://recovery/uuu.exe \
 "
 SRC_URI:append:mx8-generic-bsp = " \
     file://recovery/uuu.auto \
@@ -92,8 +90,6 @@ do_deploy:am62xx () {
 do_deploy:mx8-generic-bsp () {
     deploy_common
 
-    install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
