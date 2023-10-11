@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# Use imx_usb batch download capabilities
+# Use uuu
 echo "Downloading Toradex Easy Installer..."
-if [ "$1" = "-d" ]; then
-	sudo ./recovery/imx_usb
+if [ "$1" = "-q" ]; then
+	sudo ./recovery/uuu recovery > /dev/null
 else
-	sudo ./recovery/imx_usb > /dev/null
+	sudo ./recovery/uuu recovery
 fi
 if [ $? != 0 ]; then
 	echo ""
