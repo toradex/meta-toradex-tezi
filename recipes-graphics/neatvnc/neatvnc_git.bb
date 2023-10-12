@@ -4,7 +4,7 @@ that's intended to be fast and neat. Note: This is a\
 beta release, so the interface is not yet stable."
 HOMEPAGE = "https://github.com/any1/neatvnc"
 
-LICENSE = "BSD & ISC & MIT"
+LICENSE = "BSD-2-Clause & BSD-3-Clause & ISC & MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94fc374e7174f41e3afe0f027ee59ff7"
 
 SRC_URI = "git://github.com/any1/neatvnc;branch=master;protocol=https \

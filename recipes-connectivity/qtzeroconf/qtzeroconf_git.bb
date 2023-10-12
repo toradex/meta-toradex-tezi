@@ -1,6 +1,6 @@
 SUMMARY = "A high-level Zeroconf interface for Qt-based client-server applications."
 HOMEPAGE = "https://github.com/jonesmz/qtzeroconf"
-LICENSE = "LGPL-2.1"
+LICENSE = "LGPL-2.1-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=4fbd65380cdd255951079008b364516c"
 
 SRCREV = "806570b8eef52be8d10780716f3d227de5636c30"

@@ -1,7 +1,7 @@
 SUMMARY = "Tool to create and write Freescale/NXP I.MX NAND boot related boot data structure to nand flash"
 DESCRIPTION = "NXP utility to write FCB, DBBT and boot image."
 SECTION = "kernel"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
 
 SRC_URI = "git://github.com/NXPmicro/imx-kobs.git;branch=master;protocol=https \
