@@ -23,3 +23,5 @@ addtask deploy after do_install before do_build
 PROVIDES += "u-boot-default-script"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+COMPATIBLE_MACHINE:k3r5 = "(^$)"
