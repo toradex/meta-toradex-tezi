@@ -31,13 +31,14 @@ do_install:append:colibri-imx7() {
 }
 
 do_configure:prepend () {
-    cp ${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig    
+    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
+    cp ${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig $recoverytezi
     
-    kconfig_configure_variable ENV_IS_IN_MMC n ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    kconfig_configure_variable ENV_IS_NOWHERE y ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    kconfig_configure_variable ENV_IMPORT_FDT y ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    kconfig_configure_variable TDX_CFG_BLOCK_USB_GADGET_PID n ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    kconfig_configure_variable DEVICE_TREE_INCLUDES \"toradex-recovery-u-boot.dtsi\" ${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
+    kconfig_configure_variable ENV_IS_IN_MMC n $recoverytezi
+    kconfig_configure_variable ENV_IS_NOWHERE y $recoverytezi
+    kconfig_configure_variable ENV_IMPORT_FDT y $recoverytezi
+    kconfig_configure_variable TDX_CFG_BLOCK_USB_GADGET_PID n $recoverytezi
+    kconfig_configure_variable DEVICE_TREE_INCLUDES \"toradex-recovery-u-boot.dtsi\" $recoverytezi
 }
 
 do_compile:prepend () {
