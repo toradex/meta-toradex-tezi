@@ -14,36 +14,36 @@ This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
 openembedded/meta
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 URI: git://git.openembedded.org/meta-openembedded
 meta-openembedded/meta-oe
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 URI: https://github.com/meta-qt5/meta-qt5
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-freescale
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 URI: https://github.com/Freescale/meta-freescale-3rdparty
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-nxp
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
-URI: git://git.toradex.com/meta-toradex-tegra
-branch: rocko
+URI: git://git.toradex.com/meta-toradex-ti
+branch: kirkstone
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-bsp-common
-branch: rocko
+branch: kirkstone
 revision: HEAD
 
 Contributing
