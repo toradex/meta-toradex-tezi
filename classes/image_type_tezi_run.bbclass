@@ -5,9 +5,11 @@ EMMCDEVBOOT0:verdin-imx8mp = "emmc-boot0"
 UBOOT_BINARY ??= "u-boot.${UBOOT_SUFFIX}"
 TEZI_CONFIG_FORMAT ?= "4"
 TEZI_AUTO_INSTALL ??= "false"
-TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_EMMC ??= "${UBOOT_BINARY}-emmc"
 TEZI_UBOOT_BINARY_EMMC:mx8-generic-bsp ??= "${UBOOT_BINARY_TEZI_EMMC}-sd"
-TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}"
+TEZI_UBOOT_BINARY_EMMC:apalis-imx6 ??= "${UBOOT_BINARY}-sd"
+TEZI_UBOOT_BINARY_EMMC:colibri-imx6 ??= "${UBOOT_BINARY}-sd"
+TEZI_UBOOT_BINARY_RAWNAND ??= "${UBOOT_BINARY}-rawnand"
 TEZI_UBOOT_BINARY_RECOVERY ??= "${UBOOT_BINARY}-recoverytezi"
 TEZI_UBOOT_BINARY_RECOVERY:mx8-generic-bsp ??= "${UBOOT_BINARY_TEZI_EMMC}-recoverytezi"
 TEZI_UBOOT_BINARY_RECOVERY:am62xx ??= "tiboot3-am62x-gp-verdin.bin-dfu tiboot3-am62x-hs-fs-verdin.bin-dfu u-boot.img-recoverytezi"
@@ -169,17 +171,18 @@ def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     if product_ids is None:
         bb.fatal("Supported Toradex product ids missing, assign TORADEX_PRODUCT_IDS with a list of product ids.")
 
-    dtmapping = d.getVarFlags('TORADEX_PRODUCT_IDS')
     data["supported_product_ids"] = []
-
-    # If no varflags are set, we assume all product ids supported with single image/U-Boot
-    if dtmapping is not None:
-        for f, v in dtmapping.items():
-            dtbflashtypearr = v.split(',')
-            if len(dtbflashtypearr) < 2 or dtbflashtypearr[1] == flash_type:
-                data["supported_product_ids"].append(f)
-    else:
-        data["supported_product_ids"].extend(product_ids.split())
+    pids_splitted = product_ids.split(' ')
+    for id_num in pids_splitted:
+        dtbflashtype = d.getVarFlag('TORADEX_PRODUCT_IDS', id_num)
+        if dtbflashtype is None:
+            data["supported_product_ids"].append(id_num)
+        else:
+          dtbflashtype_arr = dtbflashtype.split(',')
+          if (len(dtbflashtype_arr) == 1):
+              data["supported_product_ids"].append(id_num)
+          elif (dtbflashtype_arr[1] == flash_type):
+              data["supported_product_ids"].append(id_num)
 
     if flash_type == "rawnand":
         data["mtddevs"] = rootfs_tezi_run_rawnand(d)

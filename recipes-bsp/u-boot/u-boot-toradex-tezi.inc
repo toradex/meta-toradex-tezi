@@ -30,6 +30,19 @@ do_install:append:colibri-imx7() {
     install_emmc_nand_fw_env
 }
 
+configure_bootcmd_nand () {
+    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
+    kconfig_configure_variable BOOTCOMMAND \""ubi part ubi ; ubi read \${scriptaddr} bootscr; source \${scriptaddr} ;"\" $recoveryconf
+}
+
+do_configure:prepend:colibri-imx6ull () {
+    configure_bootcmd_nand
+}
+
+do_configure:prepend:colibri-imx7 () {
+    configure_bootcmd_nand
+}
+
 do_configure:prepend:verdin-am62 () {
     kconfig_configure_variable BOOTCOMMAND '"source ${scriptaddr}"' $recoveryconf
 }
