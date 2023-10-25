@@ -3,15 +3,17 @@ uuu_version 1.4.127
 # Boot Rom calls SPL over SDP
 SDP: boot -f ../SPL
 # SPL new VID:PID over USB for Toradex Board
-CFG: SDPU: -chip SPL -vid 0x1b67 -pid 0x4fff
+CFG: SDPV: -chip SPL -vid 0x1b67 -pid 0x4fff
 # SPL downloads U-Boot to address define by CONFIG_TEXT_BASE
-SDPU: write -f ../u-boot.img-recoverytezi -addr 0x177fffc0
-SDPU: jump -addr 0x177fffc0
+SDPV: write -f ../u-boot.img-recoverytezi -addr 0x177fffc0
+SDPV: jump -addr 0x177fffc0
 # U-Boot new VID:PID over USB for Toradex Board
-CFG: SDPV: -chip SPL1 -vid 0x1b67 -pid 0x4000
+CFG: FB: -vid 0x1b67 -pid 0x4000
 # U-Boot download all necessary files for Tezi
-SDPV: write -f ../boot.scr -addr 0x14400000
-SDPV: write -f ../overlays.txt -addr 0x14410000
-SDPV: write -f ../tezi.itb -addr 0x14420000
-SDPV: jump -addr 0x14400000
-SDPV: done
+FB: download -f ../boot.scr
+FB: ucmd cp.b 0x14420000 0x14400000 0x10000
+FB: download -f ../overlays.txt
+FB: ucmd cp.b 0x14420000 0x14410000 0x10000
+FB: download -f ../tezi.itb
+FB: acmd source 0x14400000
+FB: done

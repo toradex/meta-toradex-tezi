@@ -25,6 +25,7 @@ do_configure:prepend () {
     recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
     cp ${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig $recoveryconf
     
+    kconfig_configure_variable CMD_USB_SDP n $recoveryconf
     kconfig_configure_variable DEVICE_TREE_INCLUDES \"toradex-recovery-u-boot.dtsi\" $recoveryconf
     kconfig_configure_variable ENV_IMPORT_FDT y $recoveryconf
     kconfig_configure_variable ENV_IS_IN_MMC n $recoveryconf
