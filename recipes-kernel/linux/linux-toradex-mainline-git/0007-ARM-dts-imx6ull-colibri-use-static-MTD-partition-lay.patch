@@ -34,7 +34,7 @@ index 336ab2e0534c..f9721d6bbcbb 100644
  	status = "okay";
 +
 +	partition@0 {
-+		label = "mx7-bcb";
++		label = "mx6ull-bcb";
 +		reg = <0x00000000 0x00080000>;
 +	};
 +	partition@80000 {
