@@ -23,7 +23,8 @@ do_configure:prepend:verdin-am62 () {
 
 do_configure:prepend () {
     recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    cp ${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig $recoveryconf
+    defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
+    cp $defaultconf $recoveryconf
     
     kconfig_configure_variable CMD_USB_SDP n $recoveryconf
     kconfig_configure_variable DEVICE_TREE_INCLUDES \"toradex-recovery-u-boot.dtsi\" $recoveryconf

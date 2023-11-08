@@ -6,6 +6,7 @@
 / {
 	config {
 		environment {
+			bootdelay = "0";
 			recovery_tezi = "1";
 		};
 	};
