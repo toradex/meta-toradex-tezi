@@ -63,9 +63,22 @@ sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D $TIBOOT3_BIN
 wait_usb_device $VID_PID_R5
 sudo $DFU_UTIL -w -R -a tispl.bin --device $VID_PID_R5 -D tispl.bin
 wait_usb_device $VID_PID_A53
-sudo $DFU_UTIL -w -a u-boot.img --device $VID_PID_A53 -D u-boot.img-recoverytezi
-sudo $DFU_UTIL -w -a ramdisk_addr_r --device $VID_PID_A53 -D tezi.itb
-sudo $DFU_UTIL -w -a loadaddr --device $VID_PID_A53 -D overlays.txt
-sudo $DFU_UTIL -w -R -a scriptaddr --device $VID_PID_A53 -D boot.scr
+sudo $DFU_UTIL -w -R -a u-boot.img --device $VID_PID_A53 -D u-boot.img-recoverytezi
+
+# call uuu to download FIT
+echo "Downloading Toradex Easy Installer..."
+if [ "$1" = "-q" ]; then
+        sudo ./recovery/uuu recovery > /dev/null
+else
+        sudo ./recovery/uuu recovery
+fi
+
+if [ $? != 0 ]; then
+        echo ""
+        printf "\033[31mDownloading Toradex Easy Installer failed...\033[0m\n";
+        exit 1
+fi
+
+printf "\033[32mSuccessfully downloaded Toradex Easy Installer.\033[0m\n\n"
 
 exit 0

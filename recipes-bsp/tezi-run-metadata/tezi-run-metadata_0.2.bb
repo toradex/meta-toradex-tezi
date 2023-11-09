@@ -14,9 +14,6 @@ SRC_URI = " \
     file://recovery-windows.bat \
     file://recovery/uuu \
     file://recovery/uuu.exe \
-"
-
-SRC_URI:append:imx-generic-bsp = " \
     file://recovery/uuu.auto \
 "
 
@@ -45,24 +42,19 @@ DEPENDS = "virtual/kernel"
 
 KERNEL_VERSION = "${@get_kernelversion_file("${STAGING_KERNEL_BUILDDIR}")}"
 
-deploy_common () {
+do_deploy() {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
     install -m 644 ${WORKDIR}/wrapup.sh ${TEZI_RUN_DEPLOYDIR}
     install -m 644 ${WORKDIR}/tezi.png ${TEZI_RUN_DEPLOYDIR}
     install -m 755 ${WORKDIR}/recovery-linux.sh ${TEZI_RUN_DEPLOYDIR}
     install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
-}
-
-do_deploy () {
-    deploy_common
 
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
-do_deploy:am62xx () {
-    deploy_common
+do_deploy:append:am62xx () {
 
     install -m 755 ${RECIPE_SYSROOT_NATIVE}/usr/bin/dfu-util ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/dfu-util-0.11-binaries/win64/dfu-util.exe ${TEZI_RUN_DEPLOYDIR}/recovery/

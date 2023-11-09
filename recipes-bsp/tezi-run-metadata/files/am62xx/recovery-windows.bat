@@ -16,10 +16,7 @@ set TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-verdin.bin-dfu
 call :select_tiboot3_bin
 %DFU_UTIL% -w -R -a bootloader --device %VID_PID_ROM% -D %TIBOOT3_BIN%
 %DFU_UTIL% -w -R -a tispl.bin --device %VID_PID_R5% -D tispl.bin
-%DFU_UTIL% -w -a u-boot.img --device %VID_PID_A53% -D u-boot.img-recoverytezi
-%DFU_UTIL% -w -a ramdisk_addr_r --device %VID_PID_A53% -D tezi.itb
-%DFU_UTIL% -w -a loadaddr --device %VID_PID_A53% -D overlays.txt
-%DFU_UTIL% -w -R -a scriptaddr --device %VID_PID_A53% -D boot.scr
+%DFU_UTIL% -w -R -a u-boot.img --device %VID_PID_A53% -D u-boot.img-recoverytezi
 goto :EOF
 
 REM set TIBOOT3_BIN variable according to the SoC type (GP or HF-FS)
@@ -34,6 +31,17 @@ IF %ERRORLEVEL% EQU 0 (
 	set TIBOOT3_BIN=%TIBOOT3_HSFS_BIN%
 )
 del /Q SocId.bin SocType.bin
+
+recovery\uuu.exe recovery
+
+echo
+IF %ERRORLEVEL% EQU 0 (
+  echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
+) else (
+  echo [91mDownloading Toradex Easy Installer failed...[0m
+)
+pause
+
 exit /b
 
 :EOF

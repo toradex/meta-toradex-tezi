@@ -18,7 +18,7 @@ do_configure:prepend:colibri-imx7 () {
 }
 
 do_configure:prepend:verdin-am62 () {
-    kconfig_configure_variable BOOTCOMMAND '"source ${scriptaddr}"' $recoveryconf
+    kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
 }
 
 do_configure:prepend () {
