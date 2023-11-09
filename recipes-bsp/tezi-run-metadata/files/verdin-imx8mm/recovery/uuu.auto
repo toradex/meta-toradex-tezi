@@ -1,4 +1,4 @@
-uuu_version 1.4.243
+uuu_version 1.4.127
 
 SDP: boot -f ../imx-boot-recoverytezi
 CFG: SDPV: -chip SPL1 -vid 0x1b67 -pid 0x4fff
