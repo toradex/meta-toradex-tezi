@@ -1,4 +1,4 @@
-From 51a3bf3aef4acd6b960c72b0ea039d76eecd013e Mon Sep 17 00:00:00 2001
+From 5f5974bb7bef65388f281bce70f09b2dfdeacf6d Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -17,16 +17,20 @@ https://github.com/curl/curl/pull/2450
   Taken partly from https://github.com/curl/curl/pull/2450
 
 - Forward port to curl 7.87.0, remove fuzz
+
+- Remove fuzz
+
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
 ---
  src/tool_operate.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 79db063..5b42fcd 100644
+index 07fb37a..9158240 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -515,6 +515,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+@@ -468,6 +468,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
          }
        }
      } /* if CURLE_OK */
@@ -36,9 +40,9 @@ index 79db063..5b42fcd 100644
 +      retry = RETRY_HTTP;
 +    }
      else if(result) {
-       const char *scheme;
+       long protocol = 0;
  
-@@ -577,13 +582,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+@@ -530,13 +535,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
              "%ld retries left.\n",
              m[retry], sleeptime/1000L, per->retry_numretries);
  
@@ -62,5 +66,5 @@ index 79db063..5b42fcd 100644
          /* We have written data to an output file, we truncate file
           */
 -- 
-2.35.3
+2.42.0
 
