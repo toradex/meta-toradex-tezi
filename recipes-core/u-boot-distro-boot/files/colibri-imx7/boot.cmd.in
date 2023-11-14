@@ -1,6 +1,6 @@
 # colibri-imx7 TEZI script
 
-env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
+env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
 env set fitimage_addr 0x81100000
 
 if test x${recovery_tezi} != x1
