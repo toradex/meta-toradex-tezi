@@ -5,6 +5,8 @@ SDP: boot -f ../u-boot.imx-recoverytezi
 # U-Boot new VID:PID over USB for Toradex Board
 CFG: FB: -vid 0x1b67 -pid 0x4000
 # U-Boot download all files using Fastboot
+FB: download -f ../overlays.txt
+FB: ucmd cp.b 0x81100000 0x80f00000 0x100000
 FB: download -f ../boot.scr
 FB: ucmd cp.b 0x81100000 0x81000000 0x100000
 FB: download -f ../tezi.itb
