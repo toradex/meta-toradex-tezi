@@ -19,4 +19,4 @@ then
     fi
 fi
 
-bootm ${fitimage_addr}#conf-imx6ull-colibri${variant}-${fdt_board}.dtb
+bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@imx6ull-colibri${variant}-${fdt_board}.dtb
