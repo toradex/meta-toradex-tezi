@@ -1,6 +1,6 @@
 # colibri-imx6ull TEZI script
 
-env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused ${teziargs}
+env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused ${teziargs}
 # Addresses defined by uuu.auto script
 env set fitimage_addr 0x81100000
 env set overlays_addr 0x80f00000
