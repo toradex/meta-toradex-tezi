@@ -10,7 +10,7 @@ env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
 env set fitimage_addr 0x8a000000
 env set overlays_addr 0x82e10000
 
-env set fdtfile "freescale_imx8qm-apalis-eval.dtb"
+env set fdtfile "freescale_${fdtfile}"
 env set bootcmd_args 'env set bootargs quiet video=LVDS-1:d video=HDMI-A-1:640x480-16@60D initcall_blacklist=vpu_driver_init rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall clk_ignore_unused pci=nomsi ${teziargs}'
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
 env set tezi_image ${prefix}tezi.itb
