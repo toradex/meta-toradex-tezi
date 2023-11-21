@@ -3,6 +3,10 @@
 env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
 env set fitimage_addr 0x81100000
 
+test -n ${devtype} || env set devtype mmc
+test -n ${devnum} || env set devnum 0
+test -n ${distro_bootpart} || env set distro_bootpart 1
+
 if test x${recovery_tezi} != x1
 then
     # If variant is not set, then we're in a NAND device. Otherwise, if variant
@@ -11,7 +15,7 @@ then
     then
         ubi read ${fitimage_addr} rootfs
     else
-        load mmc 0:1 ${fitimage_addr} ${prefix}tezi.itb
+        load ${devtype} ${devnum}:${distro_bootpart} ${fitimage_addr} ${prefix}tezi.itb
     fi
 fi
 

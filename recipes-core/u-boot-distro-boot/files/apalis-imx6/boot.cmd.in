@@ -1,8 +1,9 @@
 # apalis-imx6 TEZI script
 
-env set devtype mmc
-env set devnum 0
-env set distro_bootpart 1
+test -n ${devtype} || env set devtype mmc
+test -n ${devnum} || env set devnum 0
+test -n ${distro_bootpart} || env set distro_bootpart 1
+
 env set fitconf_fdt_overlays
 env set prefix
 test -n ${overlays_file} || env set overlays_file "overlays.txt"
