@@ -3,6 +3,7 @@
 echo [93mDownloading Toradex Easy Installer...[0m
 
 set DFU_UTIL=recovery\dfu-util
+set UUU=recovery\uuu.exe
 
 REM USB DFU device vendor and product ID used in the boot ROM, the R5 SPL and the A53 SPL
 set VID_PID_ROM="0451:6165"
@@ -17,6 +18,18 @@ call :select_tiboot3_bin
 %DFU_UTIL% -w -R -a bootloader --device %VID_PID_ROM% -D %TIBOOT3_BIN%
 %DFU_UTIL% -w -R -a tispl.bin --device %VID_PID_R5% -D tispl.bin
 %DFU_UTIL% -w -R -a u-boot.img --device %VID_PID_A53% -D u-boot.img-recoverytezi
+
+REM call universal update utility (uuu) to download FIT with fastboot
+%UUU% recovery
+
+echo
+IF %ERRORLEVEL% EQU 0 (
+  echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
+) else (
+  echo [91mDownloading Toradex Easy Installer failed...[0m
+)
+pause
+
 goto :EOF
 
 REM set TIBOOT3_BIN variable according to the SoC type (GP or HF-FS)
@@ -31,16 +44,6 @@ IF %ERRORLEVEL% EQU 0 (
 	set TIBOOT3_BIN=%TIBOOT3_HSFS_BIN%
 )
 del /Q SocId.bin SocType.bin
-
-recovery\uuu.exe recovery
-
-echo
-IF %ERRORLEVEL% EQU 0 (
-  echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
-) else (
-  echo [91mDownloading Toradex Easy Installer failed...[0m
-)
-pause
 
 exit /b
 
