@@ -1,0 +1,35 @@
+The bat file recovery-windows.bat allows loading the Toradex Easy Installer
+using a USB connection, while running Microsoft Windows on host computer.
+
+To download the tezi.itb file, U-Boot will use the Fastboot protocol to
+comunicate with UUU. If this doesn't work out of the box, you might have to
+manually select the correct driver inside the device manager.
+
+If that is the case, on the host side, do the following:
+
+1. Open "Computer Management" -> "Device Manager", and you will note that the
+USB appears as:
+	Universal Serial Bus devices -> USB download gadget
+
+2. Right click on it and choose “Updated Driver" -> "Browse my computer for
+"driver software" -> "Let me pick from a list of available drivers on my
+computer” and clear “Show compatible hardware” item.
+
+3. Choose “ADB devices”.
+
+4. Select yes to the pop-up window, this will select the USB as an ADB device.
+
+Reboot your device and it should be listed on your host for ADB/Fastboot tools.
+
+If step 3 fails and you can not find the driver from Windows list, please
+download it from the Android documentation here:
+
+https://developer.android.com/studio/run/win-usb
+
+Download the zip file, extract it contents and again on step 3,	select the
+"from disk" button and finally select "android_winusb.inf".
+
+After that, Windows will display the Android ADB option and you can continue
+to step 4.
+
+Reference: https://community.nxp.com/t5/i-MX-Processors/imx8-fastboot-and-UUU-tools/m-p/970759

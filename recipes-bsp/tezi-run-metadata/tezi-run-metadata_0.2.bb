@@ -15,6 +15,7 @@ SRC_URI = " \
     file://recovery/uuu \
     file://recovery/uuu.exe \
     file://recovery/uuu.auto \
+    file://recovery-windows.README \
 "
 
 SRC_URI:append:am62xx = " \
@@ -22,7 +23,6 @@ SRC_URI:append:am62xx = " \
     https://sourceforge.net/projects/gnuwin32/files/coreutils/5.3.0/coreutils-5.3.0-bin.zip;name=coreutils-5.3.0-bin;subdir=coreutils-5.3.0 \
     https://sourceforge.net/projects/gnuwin32/files/coreutils/5.3.0/coreutils-5.3.0-dep.zip;name=coreutils-5.3.0-dep;subdir=coreutils-5.3.0 \
     file://recovery/SocTypeGP.bin \
-    file://recovery-windows.README \
 "
 
 SRC_URI[md5sum] = "11cf6d9b4b18b7f35f06ed91bfc0b3a8"
@@ -52,6 +52,7 @@ do_deploy() {
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${WORKDIR}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
 do_deploy:append:am62xx () {
@@ -63,7 +64,6 @@ do_deploy:append:am62xx () {
     install -m 755 ${WORKDIR}/coreutils-5.3.0/bin/libiconv2.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${WORKDIR}/coreutils-5.3.0/bin/libintl3.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${WORKDIR}/recovery/SocTypeGP.bin ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
 addtask deploy before do_build after do_install
