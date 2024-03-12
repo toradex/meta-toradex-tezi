@@ -10,7 +10,7 @@ do_deploy:append() {
         else
             IMX_BOOT_BINARY="${BOOT_NAME}-${MACHINE}-$config.bin-${IMAGE_IMXBOOT_TARGET}"
         fi
-        cp "${DEPLOYDIR}/$IMX_BOOT_BINARY" "${DEPLOYDIR}/${BOOT_NAME}-$config"
+        cp "${DEPLOYDIR}/${IMX_BOOT_BINARY}" "${DEPLOYDIR}/${BOOT_NAME}-$config"
         i=$(expr $i + 1);
     done
 }
