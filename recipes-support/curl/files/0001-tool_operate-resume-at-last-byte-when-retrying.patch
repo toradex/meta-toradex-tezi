@@ -1,4 +1,4 @@
-From 5f5974bb7bef65388f281bce70f09b2dfdeacf6d Mon Sep 17 00:00:00 2001
+From ac389337dd54bb195bb7508450f947bb2523aea8 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -22,15 +22,21 @@ https://github.com/curl/curl/pull/2450
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+
+- Forward port to curl 8.5.0
+- Follow commit 2f17a9b65 ("tool: improve --stderr handling")
+
+Upstream-Status: Denied [https://github.com/curl/curl/pull/2450]
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  src/tool_operate.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 07fb37a..9158240 100644
+index c805b7732..05bdd6f9d 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -468,6 +468,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+@@ -533,6 +533,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
          }
        }
      } /* if CURLE_OK */
@@ -40,15 +46,15 @@ index 07fb37a..9158240 100644
 +      retry = RETRY_HTTP;
 +    }
      else if(result) {
-       long protocol = 0;
+       const char *scheme;
  
-@@ -530,13 +535,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
-             "%ld retries left.\n",
+@@ -595,13 +600,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
+             "%ld retries left.",
              m[retry], sleeptime/1000L, per->retry_numretries);
  
 +      /* If resume is requested, resume at last byte on retry too */
 +      if (config->use_resume) {
-+        fprintf(global->errors, "Continuing at %"
++        fprintf(stderr, "Continuing at %"
 +                CURL_FORMAT_CURL_OFF_T " bytes\n",
 +                outs->bytes);
 +        my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
@@ -62,9 +68,9 @@ index 07fb37a..9158240 100644
        }
 -      if(outs->bytes && outs->filename && outs->stream) {
 +      if(outs->bytes && outs->filename && outs->stream && !config->use_resume) {
-         int rc;
          /* We have written data to an output file, we truncate file
           */
+         notef(config->global,
 -- 
 2.42.0
 
