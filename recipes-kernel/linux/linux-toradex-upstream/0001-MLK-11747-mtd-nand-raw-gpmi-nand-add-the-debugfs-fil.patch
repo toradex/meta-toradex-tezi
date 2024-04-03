@@ -1,4 +1,4 @@
-From f339ad6aa71e74c654734b6ce4c1b94ced6cb8d2 Mon Sep 17 00:00:00 2001
+From 289e86bbbd219eb7a5e939cd444eb32f6174ed46 Mon Sep 17 00:00:00 2001
 From: Han Xu <han.xu@nxp.com>
 Date: Mon, 9 Dec 2019 15:32:31 -0600
 Subject: [PATCH] MLK-11747: mtd: nand: raw: gpmi-nand: add the debugfs files
@@ -8,12 +8,15 @@ add the debugfs files in gpmi-nand driver for kobs-ng
 
 Signed-off-by: Han Xu <han.xu@nxp.com>
 (cherry picked from commit 99e0cd1cdcf64f9faa39e45c2e7ef116f2169ce1)
+
+Forward port to v6.7
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 39 ++++++++++++++++++++++
  1 file changed, 39 insertions(+)
 
 diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index 01ccbde748f3..bd75ba6fd4b1 100644
+index e71ad2fcec23..3fe42f9bbda1 100644
 --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
 +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
 @@ -6,6 +6,7 @@
@@ -24,14 +27,15 @@ index 01ccbde748f3..bd75ba6fd4b1 100644
  #include <linux/delay.h>
  #include <linux/slab.h>
  #include <linux/sched/task_stack.h>
-@@ -14,12 +15,16 @@
+@@ -13,6 +14,7 @@
+ #include <linux/module.h>
  #include <linux/mtd/partitions.h>
  #include <linux/of.h>
- #include <linux/of_device.h>
 +#include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
  #include <linux/pm_runtime.h>
  #include <linux/dma/mxs-dma.h>
- #include "gpmi-nand.h"
+@@ -20,6 +22,9 @@
  #include "gpmi-regs.h"
  #include "bch-regs.h"
  
@@ -41,7 +45,7 @@ index 01ccbde748f3..bd75ba6fd4b1 100644
  /* Resource names for the GPMI NAND driver. */
  #define GPMI_NAND_GPMI_REGS_ADDR_RES_NAME  "gpmi-nand"
  #define GPMI_NAND_BCH_REGS_ADDR_RES_NAME   "bch"
-@@ -729,6 +734,35 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
+@@ -727,6 +732,35 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
  	return err;
  }
  
@@ -77,7 +81,7 @@ index 01ccbde748f3..bd75ba6fd4b1 100644
  /* Configures the geometry for BCH.  */
  static int bch_set_geometry(struct gpmi_nand_data *this)
  {
-@@ -2264,6 +2298,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
+@@ -2262,6 +2296,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
  	if (ret)
  		return ret;
  
@@ -90,5 +94,5 @@ index 01ccbde748f3..bd75ba6fd4b1 100644
  	ecc->read_page	= gpmi_ecc_read_page;
  	ecc->write_page	= gpmi_ecc_write_page;
 -- 
-2.35.3
+2.42.0
 

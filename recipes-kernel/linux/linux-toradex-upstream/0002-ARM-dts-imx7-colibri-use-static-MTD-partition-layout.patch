@@ -1,21 +1,21 @@
-From 9eec14cd73dfd380e1beea74a4755947d149c9be Mon Sep 17 00:00:00 2001
+From 5e57fdd5d21f981446ce5900dee9b7193ba8262f Mon Sep 17 00:00:00 2001
 From: Gerard Salvatella <gerard.salvatella@toradex.com>
 Date: Fri, 23 Nov 2018 16:37:20 +0100
-Subject: [PATCH 6/8] ARM: dts: imx7-colibri: use static MTD partition layout
+Subject: [PATCH 1/3] ARM: dts: imx7-colibri: use static MTD partition layout
 
 Use static MTD partition layout so that we are not dependent
 on U-Boot providing proper MTD partition information.
 
 Signed-off-by: Gerard Salvatella <gerard.salvatella@toradex.com>
 ---
- arch/arm/boot/dts/imx7-colibri.dtsi | 23 +++++++++++++++++++++++
+ arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi | 23 +++++++++++++++++++++
  1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index a8c31ee65623..160781028dea 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -375,11 +375,34 @@ &gpio7 {
+diff --git a/arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi b/arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi
+index 9fe51884af79..b907a2387919 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi
+@@ -374,11 +374,34 @@ &gpio7 {
  
  /* NAND on such SKUs */
  &gpmi {
@@ -51,5 +51,5 @@ index a8c31ee65623..160781028dea 100644
  
  /* On-module Power I2C */
 -- 
-2.35.3
+2.42.0
 

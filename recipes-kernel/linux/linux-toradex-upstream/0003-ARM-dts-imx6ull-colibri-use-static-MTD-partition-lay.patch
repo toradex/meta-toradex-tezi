@@ -1,7 +1,7 @@
-From 4c306e37015e9aabb0a4714714d0e3e20beed708 Mon Sep 17 00:00:00 2001
+From 23dda8d39c718a9c58c860f989180a13778d9bcc Mon Sep 17 00:00:00 2001
 From: Max Krummenacher <max.krummenacher@toradex.com>
 Date: Wed, 11 Aug 2021 19:42:46 +0200
-Subject: [PATCH 7/8] ARM: dts: imx6ull-colibri: use static MTD partition
+Subject: [PATCH 2/3] ARM: dts: imx6ull-colibri: use static MTD partition
  layout
 
 For the recovery U-Boot we neither have eMMC nor NAND support in
@@ -12,14 +12,14 @@ on U-Boot providing proper MTD partition information.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 23 +++++++++++++++++++++++
+ .../arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi | 23 +++++++++++++++++++
  1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 336ab2e0534c..f9721d6bbcbb 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -164,6 +164,8 @@ ethphy1: ethernet-phy@2 {
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi b/arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi
+index ec3c1e7301f4..1a29b5137069 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi
+@@ -157,6 +157,8 @@ ethphy1: ethernet-phy@2 {
  
  /* NAND */
  &gpmi {
@@ -28,7 +28,7 @@ index 336ab2e0534c..f9721d6bbcbb 100644
  	pinctrl-names = "default";
  	pinctrl-0 = <&pinctrl_gpmi_nand>;
  	fsl,use-minimum-ecc;
-@@ -172,6 +174,27 @@ &gpmi {
+@@ -165,6 +167,27 @@ &gpmi {
  	nand-ecc-strength = <8>;
  	nand-ecc-step-size = <512>;
  	status = "okay";
@@ -57,5 +57,5 @@ index 336ab2e0534c..f9721d6bbcbb 100644
  
  /* I2C3_SDA/SCL on SODIMM 194/196 (e.g. RTC on carrier board) */
 -- 
-2.35.3
+2.42.0
 
