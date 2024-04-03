@@ -7,6 +7,8 @@ PV = "${TDX_VERSION}"
 IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"
 IMAGE_FSTYPES:remove ="teziimg"
 IMAGE_FEATURES += "read-only-rootfs"
+# drop the ".rootfs" default for a INITRAMFS_IMAGE_NAME
+IMAGE_NAME_SUFFIX ?= ""
 
 CORE_IMAGE_BASE_INSTALL:append = " \
     drm-info \
