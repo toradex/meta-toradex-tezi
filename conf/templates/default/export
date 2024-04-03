@@ -9,7 +9,7 @@ else
 fi
 
 TOP_DIR=$(realpath $THIS_SCRIPT_DIR)
-TEMPLATECONF=$TOP_DIR/layers/meta-toradex-tezi/buildconf
+TEMPLATECONF=$TOP_DIR/layers/meta-toradex-tezi/conf/templates/default
 
 if [ ! -r "$TOP_DIR/build/conf/local.conf" ]; then
     FIRST_TIME="yes"
