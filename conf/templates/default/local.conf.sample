@@ -100,8 +100,16 @@ SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
 # This places the build output in parallel to build and layers thus
 # if you have several build directories you need to adjust deploy
 # to something unique, e.g. "${TOPDIR}/../deploy_fb" "${TOPDIR}/../deploy_x11"
-DEPLOY_DIR = "${TOPDIR}/deploy"
-TI_COMMON_DEPLOY = "${DEPLOY_DIR}"
+# Handle TI k3 multiconfig, keep all but deploy/images in the k3r5 TMPDIR
+# so licenses et.al built by the default multiconfig don't clash with the
+# k3r5 ones.
+# We have to do this for all our images in order to be able to build
+# TI and non TI based images in one setup.
+TI_COMMON_DEPLOY = "${TOPDIR}/deploy"
+
+# for k3 BB_CURRENT_MC is set to "k3r5", for k3r5 the variable does not
+# exist. For non multiconfig configurations it is set to "default"
+DEPLOY_DIR = "${TI_COMMON_DEPLOY}${@'' if d.getVar('BB_CURRENT_MC') == 'default' else '/${BB_CURRENT_MC}'}"
 
 #
 # Package Management configuration
