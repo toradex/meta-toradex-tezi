@@ -1,0 +1,37 @@
+From 87adcb2cd4345bea7fbc1b4e7924d71692f9e4e9 Mon Sep 17 00:00:00 2001
+From: Max Krummenacher <max.krummenacher@toradex.com>
+Date: Thu, 18 Apr 2024 14:46:46 +0000
+Subject: [PATCH] Revert "mke2fs.conf: enable the metadata_csum_seed and
+ orphan_file features by default"
+
+This reverts commits:
+515268b0 ("Fix typo in defeult /etc/mke2fs.conf file")
+fe341d59 ("mke2fs.conf: enable the metadata_csum_seed and orphan_file features by default")
+
+The Toradex Easy Installer should be able to install images where the
+e2fsck binary does not yet know about the orphan_file feature and thus
+fails to check a ext4 fs with that feature present.
+Remove the newly added features from the features created by default.
+
+Upstream-Status: Inappropriate [oe specific]
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+---
+ misc/mke2fs.conf.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/misc/mke2fs.conf.in b/misc/mke2fs.conf.in
+index b7fc95df..05680992 100644
+--- a/misc/mke2fs.conf.in
++++ b/misc/mke2fs.conf.in
+@@ -11,7 +11,7 @@
+ 		features = has_journal
+ 	}
+ 	ext4 = {
+-		features = has_journal,extent,huge_file,flex_bg,metadata_csum,metadata_csum_seed,64bit,dir_nlink,extra_isize,orphan_file
++		features = has_journal,extent,huge_file,flex_bg,metadata_csum,64bit,dir_nlink,extra_isize
+ 	}
+ 	small = {
+ 		blocksize = 1024
+-- 
+2.42.0
+
