@@ -41,7 +41,7 @@ do_compile:prepend () {
 
 do_deploy:append() {
     # If using binman deploy the resulted flash.bin for WIC to pick it up
-    if [ -n "${UBOOT_CONFIG}" -a "x${UBOOT_PROVIDES_BOOT_CONTAINER}" == "x1" ]; then
+    if [ -n "${UBOOT_CONFIG}" -a "x${UBOOT_PROVIDES_BOOT_CONTAINER}" = "x1" ]; then
         for config in ${UBOOT_MACHINE}; do
             i=$(expr $i + 1);
             for type in ${UBOOT_CONFIG}; do
