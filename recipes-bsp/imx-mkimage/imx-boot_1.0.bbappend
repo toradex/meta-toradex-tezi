@@ -6,11 +6,11 @@ do_deploy:append() {
     i=0
     for config in ${UBOOT_CONFIG}; do
         if [ "$config" = "recoverytezi" ] && [ "$i" -eq 0 ]; then
-            IMX_BOOT_BINARY="${BOOT_NAME}-untagged"
+            IMX_BOOT_BINARY="imx-boot"
         else
-            IMX_BOOT_BINARY="${BOOT_NAME}-${MACHINE}-$config.bin-${IMAGE_IMXBOOT_TARGET}"
+            IMX_BOOT_BINARY="imx-boot-${MACHINE}-$config.bin-${IMAGE_IMXBOOT_TARGET}"
         fi
-        cp "${DEPLOYDIR}/${IMX_BOOT_BINARY}" "${DEPLOYDIR}/${BOOT_NAME}-$config"
+        cp "${DEPLOYDIR}/${IMX_BOOT_BINARY}" "${DEPLOYDIR}/imx-boot-$config"
         i=$(expr $i + 1);
     done
 }
