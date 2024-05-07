@@ -2,9 +2,9 @@ DESCRIPTION = "Toradex Easy Installer Metadata for Toradex Easy Installer"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS:am62xx = "dfu-util-native patchelf-native"
+DEPENDS:k3 = "dfu-util-native patchelf-native"
 MCDEPENDS = ""
-MCDEPENDS:am62xx = "mc::k3r5:virtual/bootloader:do_deploy"
+MCDEPENDS:k3 = "mc::k3r5:virtual/bootloader:do_deploy"
 do_deploy[mcdepends] = "${MCDEPENDS}"
 
 SRC_URI = " \
@@ -18,7 +18,7 @@ SRC_URI = " \
     file://recovery-windows.README \
 "
 
-SRC_URI:append:am62xx = " \
+SRC_URI:append:k3 = " \
     https://dfu-util.sourceforge.net/releases/dfu-util-0.11-binaries.tar.xz;name=dfu-util \
     https://sourceforge.net/projects/gnuwin32/files/coreutils/5.3.0/coreutils-5.3.0-bin.zip;name=coreutils-5.3.0-bin;subdir=coreutils-5.3.0 \
     https://sourceforge.net/projects/gnuwin32/files/coreutils/5.3.0/coreutils-5.3.0-dep.zip;name=coreutils-5.3.0-dep;subdir=coreutils-5.3.0 \
@@ -57,7 +57,7 @@ do_deploy() {
     install -m 644 ${S}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
-do_deploy:append:am62xx () {
+do_deploy:append:k3 () {
 
     install -m 755 ${RECIPE_SYSROOT_NATIVE}/usr/bin/dfu-util ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${S}/dfu-util-0.11-binaries/win64/dfu-util.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
