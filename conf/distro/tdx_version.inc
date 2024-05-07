@@ -33,6 +33,7 @@ DISTRO_VERSION = "${TDX_RELEASE}${TDX_PRERELEASE}${TDX_BUILD}"
 
 TDX_VER_ID:apalis-imx6 = "Apalis-iMX6_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:apalis-imx8 = "Apalis-iMX8_ToradexEasyInstaller_${DISTRO_VERSION}"
+TDX_VER_ID:aquila-am69 = "Aquila-AM69_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:colibri-imx6 = "Colibri-iMX6_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:colibri-imx6ull = "Colibri-iMX6ULL_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:colibri-imx7 = "Colibri-iMX7_ToradexEasyInstaller_${DISTRO_VERSION}"
