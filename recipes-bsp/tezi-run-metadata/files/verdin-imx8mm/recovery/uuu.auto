@@ -13,6 +13,7 @@ CFG: FB: -vid 0x0525 -pid 0x403c
 CFG: FB: -vid 0x0525 -pid 0x4044
 CFG: FB: -vid 0x0525 -pid 0x4056
 CFG: FB: -vid 0x0525 -pid 0x4057
+CFG: FB: -vid 0x0525 -pid 0x405A
 FB: ucmd setenv fastboot_buffer 0x42e00000
 FB: download -f ../boot-tezi.scr
 FB: ucmd setenv fastboot_buffer 0x42e10000
