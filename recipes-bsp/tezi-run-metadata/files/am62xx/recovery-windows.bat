@@ -11,8 +11,8 @@ set VID_PID_R5="1b67:4000"
 set VID_PID_A53="1b67:4000"
 
 REM tiboot3.bin depends on the SoC type, GP or HS-FS
-set TIBOOT3_GP_BIN=tiboot3-am62x-gp-verdin.bin-dfu
-set TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-verdin.bin-dfu
+set TIBOOT3_GP_BIN=tiboot3-am62x-gp-verdin.bin
+set TIBOOT3_HSFS_BIN=tiboot3-am62x-hs-fs-verdin.bin
 
 call :select_tiboot3_bin
 %DFU_UTIL% -w -R -a bootloader --device %VID_PID_ROM% -D %TIBOOT3_BIN%
