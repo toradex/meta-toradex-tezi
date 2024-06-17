@@ -7,6 +7,7 @@ Add --chip_0_size param to override the size of the mtd partition which is
 required if the SPL does not occupy the entire partition. For Gateworks
 Ventana boards the 'uboot' partition contains both the SPL and uboot.
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 Signed-off-by: Pushpal Sidhu <psidhu@gateworks.com>
 ---

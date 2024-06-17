@@ -13,6 +13,7 @@ and convert as needed.
 See kernel toradex_5.4-2.3.x-imx commit 'ae980dccc618 ("MLK-11719-4:
 mtd: nand: raw: gpmi-nand: change the BCH layout setting for large oob NAND")'
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  src/mtd.c | 19 ++++++++++++++++++-

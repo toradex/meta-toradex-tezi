@@ -1,3 +1,4 @@
+Upstream-Status: Inappropriate [TEZI specific]
 diff --git a/configure.ac b/configure.ac
 index 6678971..95845cd 100644
 --- a/configure.ac

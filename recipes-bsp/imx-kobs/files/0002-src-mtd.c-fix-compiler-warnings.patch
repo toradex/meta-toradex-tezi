@@ -21,6 +21,7 @@ Fix the following compiler warnings which look really suspicious:
 Note that those code paths likely were not used with the Toradex Easy
 Installer and no negative effects were observed at runtime.
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  src/mtd.c | 6 +++---

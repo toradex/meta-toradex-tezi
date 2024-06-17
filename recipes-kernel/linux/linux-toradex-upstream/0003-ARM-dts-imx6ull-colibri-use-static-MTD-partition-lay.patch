@@ -10,6 +10,7 @@ U-Boot. Thus the fdt fixup for the MTD partitions does not work.
 Use a static MTD partition layout so that we are not dependent
 on U-Boot providing proper MTD partition information.
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  .../arm/boot/dts/nxp/imx/imx6ull-colibri.dtsi | 23 +++++++++++++++++++

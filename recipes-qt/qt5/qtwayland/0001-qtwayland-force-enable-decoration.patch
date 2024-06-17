@@ -6,6 +6,7 @@ Subject: [PATCH] qtwayland: force enable decoration
 Force enable decoration even if client integration claims not
 to support/use it.
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 
 forward port to 5.14.2 as used in dunfell:

@@ -3,6 +3,7 @@ From: Ming Liu <ming.liu@toradex.com>
 Date: Mon, 14 Sep 2020 09:43:15 +0200
 Subject: [PATCH] screen-share: auto enable screen share on startup
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---

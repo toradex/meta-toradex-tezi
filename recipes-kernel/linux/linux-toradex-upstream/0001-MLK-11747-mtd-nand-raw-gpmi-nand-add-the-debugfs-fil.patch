@@ -6,6 +6,7 @@ Subject: [PATCH] MLK-11747: mtd: nand: raw: gpmi-nand: add the debugfs files
 
 add the debugfs files in gpmi-nand driver for kobs-ng
 
+Upstream-Status: Inappropriate [TEZI specific]
 Signed-off-by: Han Xu <han.xu@nxp.com>
 (cherry picked from commit 99e0cd1cdcf64f9faa39e45c2e7ef116f2169ce1)
 
