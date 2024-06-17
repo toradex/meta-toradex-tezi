@@ -35,8 +35,10 @@ do_configure:prepend () {
     kconfig_configure_variable TDX_CFG_BLOCK_USB_GADGET_PID n $recoveryconf
 }
 
+OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+
 do_compile:prepend () {
-    cp ${WORKDIR}/toradex-recovery-u-boot.dtsi ${S}/arch/arm/dts/
+    cp ${OURFILEPATH}/toradex-recovery-u-boot.dtsi ${S}/arch/arm/dts/
 }
 
 do_deploy:append() {

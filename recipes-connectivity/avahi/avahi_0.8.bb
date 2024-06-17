@@ -77,10 +77,12 @@ SYSTEMD_PACKAGES = "${PN}-daemon ${PN}-dnsconfd"
 SYSTEMD_SERVICE:${PN}-daemon = "avahi-daemon.service"
 SYSTEMD_SERVICE:${PN}-dnsconfd = "avahi-dnsconfd.service"
 
+OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+
 do_install:append() {
 	install -d ${D}${sysconfdir}/udhcpc.d
-	install ${WORKDIR}/00avahi-autoipd ${D}${sysconfdir}/udhcpc.d
-	install ${WORKDIR}/99avahi-autoipd ${D}${sysconfdir}/udhcpc.d
+	install ${OURFILEPATH}/00avahi-autoipd ${D}${sysconfdir}/udhcpc.d
+	install ${OURFILEPATH}/99avahi-autoipd ${D}${sysconfdir}/udhcpc.d
 }
 
 # At the time the postinst runs, dbus might not be setup so only restart if running 

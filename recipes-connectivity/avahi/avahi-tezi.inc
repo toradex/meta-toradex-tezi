@@ -9,8 +9,10 @@ FILES:libavahi-qt5 = "${libdir}/libavahi-qt5.so.*"
 
 PACKAGECONFIG = "qt5 dbus"
 
+OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+
 do_install:append() {
-        install -m 0644 ${WORKDIR}/rfb.service ${D}${sysconfdir}/avahi/services
+        install -m 0644 ${OURFILEPATH}/rfb.service ${D}${sysconfdir}/avahi/services
         rm -f ${D}${sysconfdir}/avahi/services/sftp-ssh.service
         rm -f ${D}${sysconfdir}/avahi/services/ssh.service
 }
