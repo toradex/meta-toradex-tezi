@@ -11,9 +11,8 @@ SRC_URI = " \
 
 S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
 
-do_configure() {
-	:
-}
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
 
 do_install () {
 	install -d ${D}${sysconfdir}/udev/rules.d
