@@ -14,13 +14,8 @@ SRC_URI = " \
 
 S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
 
-do_configure() {
-	:
-}
-
-do_compile() {
-	:
-}
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
 
 do_install() {
 	install -m 0755 ${S}/initrd ${D}/init
