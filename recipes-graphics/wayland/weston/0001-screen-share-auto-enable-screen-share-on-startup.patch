@@ -36,7 +36,7 @@ index 8c37452..ca51e6d 100644
 +				    wl_fixed_to_int(0));
 +	if (!output) {
 +		weston_log("Cannot pick output: Pointer not on any output\n");
-+		return;
++		return 0;
 +	}
 +
 +	weston_output_share(output, ss->command);
