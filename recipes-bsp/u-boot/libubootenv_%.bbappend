@@ -9,12 +9,14 @@ SRC_URI:append = " \
 # a eMMC based module and fw_env_mtd4.config for a NAND based one.
 copy_emmc_env_cfg () {
     # replace the NAND fw_env.config with the one for eMMC
-    cp ${WORKDIR}/fw_env_emmc.config ${WORKDIR}/fw_env.config
+    cp ${OURFILEPATH}/fw_env_emmc.config ${OURFILEPATH}/fw_env.config
 }
+
+OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
 
 install_mtd4_cfg () {
     install -d ${D}${sysconfdir}
-    install -m 0644 ${WORKDIR}/fw_env_mtd4.config ${D}${sysconfdir}/
+    install -m 0644 ${OURFILEPATH}/fw_env_mtd4.config ${D}${sysconfdir}/
 }
 
 do_install:prepend:colibri-imx6ull () {

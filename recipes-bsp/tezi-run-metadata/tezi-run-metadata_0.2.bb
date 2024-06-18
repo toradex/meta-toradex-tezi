@@ -34,6 +34,8 @@ SRC_URI[coreutils-5.3.0-bin.sha256sum] = "5646a3c2d466ca3cc9f27df91f2e9ffd870c61
 SRC_URI[coreutils-5.3.0-dep.md5sum] = "6cf05855b6902dffa2cf4ba8b90e82e6"
 SRC_URI[coreutils-5.3.0-dep.sha256sum] = "0e516b603b5d39cfd64737ffdc043b1977a4e10a3d93b55144fcb48f761c67c7"
 
+S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+
 TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 
 inherit deploy linux-kernel-base nopackages
@@ -44,26 +46,26 @@ KERNEL_VERSION = "${@get_kernelversion_file("${STAGING_KERNEL_BUILDDIR}")}"
 
 do_deploy() {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
-    install -m 644 ${WORKDIR}/wrapup.sh ${TEZI_RUN_DEPLOYDIR}
-    install -m 644 ${WORKDIR}/tezi.png ${TEZI_RUN_DEPLOYDIR}
-    install -m 755 ${WORKDIR}/recovery-linux.sh ${TEZI_RUN_DEPLOYDIR}
-    install -m 644 ${WORKDIR}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
+    install -m 644 ${S}/wrapup.sh ${TEZI_RUN_DEPLOYDIR}
+    install -m 644 ${S}/tezi.png ${TEZI_RUN_DEPLOYDIR}
+    install -m 755 ${S}/recovery-linux.sh ${TEZI_RUN_DEPLOYDIR}
+    install -m 644 ${S}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
 
-    install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
+    install -m 644 ${S}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
 do_deploy:append:am62xx () {
 
     install -m 755 ${RECIPE_SYSROOT_NATIVE}/usr/bin/dfu-util ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/dfu-util-0.11-binaries/win64/dfu-util.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/dfu-util-0.11-binaries/win64/libusb-1.0.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/coreutils-5.3.0/bin/dd.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/coreutils-5.3.0/bin/libiconv2.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${WORKDIR}/coreutils-5.3.0/bin/libintl3.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 644 ${WORKDIR}/recovery/SocTypeGP.bin ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/dfu-util-0.11-binaries/win64/dfu-util.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/dfu-util-0.11-binaries/win64/libusb-1.0.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/coreutils-5.3.0/bin/dd.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/coreutils-5.3.0/bin/libiconv2.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/coreutils-5.3.0/bin/libintl3.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 644 ${S}/recovery/SocTypeGP.bin ${TEZI_RUN_DEPLOYDIR}/recovery/
 }
 
 addtask deploy before do_build after do_install
