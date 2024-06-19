@@ -10,10 +10,10 @@ then
 	DFU_UTIL=recovery/dfu-util
 fi
 
-# USB DFU device vendor and product ID used in the boot ROM, the R5 SPL and the A53 SPL
+# USB DFU device vendor and product ID used in the boot ROM, the R5 SPL and the A72 SPL
 VID_PID_ROM="0451:6167"
 VID_PID_R5="1b67:4000"
-VID_PID_A53="1b67:4000"
+VID_PID_A72="1b67:4000"
 
 TIBOOT3_BIN=tiboot3-am69-hs-fs-aquila.bin
 
@@ -32,8 +32,8 @@ wait_usb_device $VID_PID_ROM
 sudo $DFU_UTIL -w -R -a bootloader --device $VID_PID_ROM -D $TIBOOT3_BIN
 wait_usb_device $VID_PID_R5
 sudo $DFU_UTIL -w -R -a tispl.bin --device $VID_PID_R5 -D tispl.bin
-wait_usb_device $VID_PID_A53
-sudo $DFU_UTIL -w -R -a u-boot.img --device $VID_PID_A53 -D u-boot.img-recoverytezi
+wait_usb_device $VID_PID_A72
+sudo $DFU_UTIL -w -R -a u-boot.img --device $VID_PID_A72 -D u-boot.img-recoverytezi
 
 # call uuu to download FIT
 echo "Downloading Toradex Easy Installer..."
