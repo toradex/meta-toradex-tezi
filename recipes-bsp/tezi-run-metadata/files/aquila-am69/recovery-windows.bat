@@ -13,21 +13,9 @@ set TIBOOT3_BIN=tiboot3-am69-hs-fs-aquila.bin
 
 %DFU_UTIL% -w -R -a bootloader --device %VID_PID_ROM% -D %TIBOOT3_BIN%
 %DFU_UTIL% -w -R -a tispl.bin --device %VID_PID_R5% -D tispl.bin
-%DFU_UTIL% -w -R -a u-boot.img --device %VID_PID_A72% -D u-boot.img-recoverytezi
-
-REM call universal update utility (uuu) to download FIT with fastboot
-%UUU% recovery
-
-echo
-IF %ERRORLEVEL% EQU 0 (
-  echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
-) else (
-  echo [91mDownloading Toradex Easy Installer failed...[0m
-)
-pause
-
-goto :EOF
+%DFU_UTIL% -w -a u-boot.img --device %VID_PID_A72% -D u-boot.img-recoverytezi
+%DFU_UTIL% -w -a ramdisk_addr_r --device %VID_PID_A72% -D tezi.itb
+%DFU_UTIL% -w -a loadaddr --device %VID_PID_A72% -D overlays.txt
+%DFU_UTIL% -w -R -a scriptaddr --device %VID_PID_A72% -D boot.scr
 
 exit /b
-
-:EOF

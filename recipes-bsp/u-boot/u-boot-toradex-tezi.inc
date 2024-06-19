@@ -17,8 +17,12 @@ do_configure:prepend:colibri-imx7 () {
     configure_bootcmd_nand
 }
 
-do_configure:prepend:k3 () {
+do_configure:prepend:verdin-am62 () {
     kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
+}
+
+do_configure:prepend:aquila-am69 () {
+    kconfig_configure_variable BOOTCOMMAND '"source ${scriptaddr}"' $recoveryconf
 }
 
 do_configure:prepend () {
