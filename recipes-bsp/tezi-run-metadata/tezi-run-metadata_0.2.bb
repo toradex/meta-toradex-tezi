@@ -14,6 +14,7 @@ SRC_URI = " \
     file://recovery-windows.bat \
     file://recovery/uuu.auto \
     file://recovery-windows.README \
+    file://recovery-linux.README \
 "
 
 SRC_URI:append:k3 = " \
@@ -49,6 +50,7 @@ do_deploy() {
 
     install -m 644 ${WORKDIR}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${WORKDIR}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
+    install -m 644 ${WORKDIR}/recovery-linux.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
 do_deploy:append:k3 () {
