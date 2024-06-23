@@ -12,8 +12,6 @@ SRC_URI = " \
     file://tezi.png \
     file://recovery-linux.sh \
     file://recovery-windows.bat \
-    file://recovery/uuu \
-    file://recovery/uuu.exe \
     file://recovery/uuu.auto \
     file://recovery-windows.README \
 "
@@ -52,8 +50,6 @@ do_deploy() {
     install -m 644 ${S}/recovery-windows.bat ${TEZI_RUN_DEPLOYDIR}
 
     install -m 644 ${S}/recovery/uuu.auto ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${S}/recovery/uuu ${TEZI_RUN_DEPLOYDIR}/recovery/
-    install -m 755 ${S}/recovery/uuu.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 644 ${S}/recovery-windows.README ${TEZI_RUN_DEPLOYDIR}/
 }
 
