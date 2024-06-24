@@ -1,0 +1,14 @@
+The script file recovery-linux.sh allows loading the Toradex Easy Installer
+using a USB connection, while running GNU/Linux distro on your host computer.
+
+To download the tezi.itb file, U-Boot will use the DFU and Fastboot protocol
+to comunicate with AM6*. If this doesn't work out of the box, you might have
+to manually install the correct libraries.
+
+For a Debian based distro, run the following command:
+
+$ sudo apt install libudev1 libusb-1.0-0 dfu-util usbutils
+
+To run the script:
+
+$ ./recovery-linux.sh
