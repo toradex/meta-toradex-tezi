@@ -1,4 +1,4 @@
-The script file recovery-linhux.sh allows loading the Toradex Easy Installer
+The script file recovery-linux.sh allows loading the Toradex Easy Installer
 using a USB connection, while running GNU/Linux distro on your host computer.
 
 To download the tezi.itb file, U-Boot will use the SDP and Fastboot protocol
