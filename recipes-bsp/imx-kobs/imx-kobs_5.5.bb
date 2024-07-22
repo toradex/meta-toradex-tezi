@@ -18,14 +18,12 @@ S = "${WORKDIR}/git"
 
 inherit autotools
 
-OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
-
 do_install:append:colibri-imx6ull() {
-    install -m 0644 ${OURFILEPATH}/dot-kobs ${D}/.kobs
+    install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
 do_install:append:colibri-imx7() {
-    install -m 0644 ${OURFILEPATH}/dot-kobs ${D}/.kobs
+    install -m 0644 ${WORKDIR}/dot-kobs ${D}/.kobs
 }
 
 COMPATIBLE_MACHINE = "(mxs-generic-bsp|mx5-generic-bsp|mx6-nxp-bsp|mx7-nxp-bsp|vf-generic-bsp|use-mainline-bsp)"
