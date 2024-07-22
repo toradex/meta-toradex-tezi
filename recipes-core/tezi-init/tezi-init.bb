@@ -12,15 +12,13 @@ SRC_URI = " \
     file://initrd \
 "
 
-S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
-
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install() {
-	install -m 0755 ${S}/initrd ${D}/init
+	install -m 0755 ${WORKDIR}/initrd ${D}/init
 	install -d ${D}${base_sbindir}
-	install -m 0755 ${S}/init ${D}/${base_sbindir}/init
+	install -m 0755 ${WORKDIR}/init ${D}/${base_sbindir}/init
 }
 
 FILES:${PN} = " \
