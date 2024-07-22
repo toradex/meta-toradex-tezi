@@ -34,7 +34,7 @@ SRC_URI[coreutils-5.3.0-bin.sha256sum] = "5646a3c2d466ca3cc9f27df91f2e9ffd870c61
 SRC_URI[coreutils-5.3.0-dep.md5sum] = "6cf05855b6902dffa2cf4ba8b90e82e6"
 SRC_URI[coreutils-5.3.0-dep.sha256sum] = "0e516b603b5d39cfd64737ffdc043b1977a4e10a3d93b55144fcb48f761c67c7"
 
-S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+S = "${UNPACKDIR}"
 
 TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 

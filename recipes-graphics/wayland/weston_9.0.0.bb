@@ -86,8 +86,6 @@ PACKAGECONFIG[remoting] = "-Dremoting=true,-Dremoting=false,gstreamer-1.0"
 # Weston with PAM support
 PACKAGECONFIG[pam] = "-Dpam=true,-Dpam=false,libpam"
 
-OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
-
 do_install:append() {
 	# Weston doesn't need the .la files to load modules, so wipe them
 	rm -f ${D}/${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.la
@@ -95,21 +93,21 @@ do_install:append() {
 	# If X11, ship a desktop file to launch it
 	if [ "${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}" ]; then
 		install -d ${D}${datadir}/applications
-		install ${OURFILEPATH}/weston.desktop ${D}${datadir}/applications
+		install ${UNPACKDIR}/weston.desktop ${D}${datadir}/applications
 
 		install -d ${D}${datadir}/icons/hicolor/48x48/apps
-		install ${OURFILEPATH}/weston.png ${D}${datadir}/icons/hicolor/48x48/apps
+		install ${UNPACKDIR}/weston.png ${D}${datadir}/icons/hicolor/48x48/apps
 	fi
 
 	if [ "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', 'yes', 'no', d)}" = "yes" ]; then
-		install -Dm 644 ${OURFILEPATH}/xwayland.weston-start ${D}${datadir}/weston-start/xwayland
+		install -Dm 644 ${UNPACKDIR}/xwayland.weston-start ${D}${datadir}/weston-start/xwayland
 	fi
 
 	if [ "${@bb.utils.contains('PACKAGECONFIG', 'launch', 'yes', 'no', d)}" = "yes" ]; then
 		chmod u+s ${D}${bindir}/weston-launch
 	fi
 
-	install ${OURFILEPATH}/wallpaper.png ${D}${datadir}/weston
+	install ${UNPACKDIR}/wallpaper.png ${D}${datadir}/weston
 }
 
 PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', '${PN}-xwayland', '', d)} \

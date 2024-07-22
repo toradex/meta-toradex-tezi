@@ -12,7 +12,7 @@ SRC_URI = " \
     file://initrd \
 "
 
-S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+S = "${UNPACKDIR}"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"

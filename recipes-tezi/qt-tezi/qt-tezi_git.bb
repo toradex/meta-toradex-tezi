@@ -62,8 +62,6 @@ FILES:${PN} += " \
     ${datadir}/tezi \
 "
 
-OURFILEPATH = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
-
 do_install() {
     install -d ${D}${bindir}/
     install -m 0755 ${S}/../build/tezi ${D}${bindir}/
@@ -71,9 +69,9 @@ do_install() {
     install -m 0644 ${S}/keymaps/*qmap ${D}${datadir}/tezi/keymaps/
 
     install -d ${D}${sysconfdir}
-    install -m 0755 ${OURFILEPATH}/rc.local ${D}${sysconfdir}
+    install -m 0755 ${UNPACKDIR}/rc.local ${D}${sysconfdir}
 
     install -d ${D}${sysconfdir}
-    install -m 0755 ${OURFILEPATH}/udhcpd.conf ${D}${sysconfdir}
+    install -m 0755 ${UNPACKDIR}/udhcpd.conf ${D}${sysconfdir}
 
 }

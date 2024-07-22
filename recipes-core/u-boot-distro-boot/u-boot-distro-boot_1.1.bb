@@ -7,7 +7,7 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = "file://boot.cmd.in"
 
-S = "${@d.getVar("UNPACKDIR") or '${WORKDIR}'}"
+S = "${UNPACKDIR}"
 
 DTB_PREFIX ??= "${@d.getVar('KERNEL_DTB_PREFIX').replace("/", "_") if d.getVar('KERNEL_DTB_PREFIX') else ''}"
 
