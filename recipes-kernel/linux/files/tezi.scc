@@ -1,4 +1,0 @@
-define KFEATURE_DESCRIPTION "Changes for TEZI, reduce size and more builtins"
-define KFEATURE_COMPATIBILITY board
-
-kconf non-hardware tezi.cfg
