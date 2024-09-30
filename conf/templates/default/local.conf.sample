@@ -1,3 +1,9 @@
+# The kernel and meta-qt5 have generated code which does contain the
+# absolute build path. The *-src packages now generate the qs error
+# [buildpaths]. Demote that back to a WARNING
+ERROR_QA:remove = "buildpaths"
+WARN_QA:append = " buildpaths"
+
 #
 # This file is your local configuration file and is where all local user settings
 # are placed. The comments in this file give some guide to the options a new user
