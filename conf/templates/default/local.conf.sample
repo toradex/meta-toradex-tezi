@@ -1,8 +1,10 @@
-# The kernel and meta-qt5 have generated code which does contain the
-# absolute build path. The *-src packages now generate the qs error
-# [buildpaths]. Demote that back to a WARNING
-ERROR_QA:remove = "buildpaths"
-WARN_QA:append = " buildpaths"
+# meta-qt5 layer have generated code which does contain the
+# absolute build path. The *-src packages now generate the QA error
+# [buildpaths] [1]. Demote that back to a WARNING.
+#
+# [1] https://git.openembedded.org/openembedded-core/commit/?id=b79b191cc43a45dde2adb61ea349b426cb2461d1
+ERROR_QA:remove:layer-qt5-layer = "buildpaths"
+WARN_QA:append:layer-qt5-layer = " buildpaths"
 
 #
 # This file is your local configuration file and is where all local user settings
