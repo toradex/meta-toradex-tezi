@@ -21,6 +21,14 @@ do_configure:prepend:verdin-am62 () {
     kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
 }
 
+do_configure:prepend:verdin-imx8mm () {
+    kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
+}
+
+do_configure:prepend:verdin-imx8mp () {
+    kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
+}
+
 do_configure:prepend:aquila-am69 () {
     kconfig_configure_variable BOOTCOMMAND '"source ${scriptaddr}"' $recoveryconf
 }
