@@ -6,11 +6,10 @@ SDPV: delay 1000
 SDPV: write -f ../imx-boot-recoverytezi -skipspl
 SDPV: jump
 CFG: FB: -vid 0x1b67 -pid 0x4000
-FB: ucmd setenv fastboot_buffer 0x42e00000
 FB: download -f ../boot.scr
-FB: ucmd setenv fastboot_buffer 0x42e10000
+FB: ucmd cp.b 0x44200000 0x42e00000 0x100000
 FB: download -f ../overlays.txt
-FB: ucmd setenv fastboot_buffer 0x44200000
+FB: ucmd cp.b 0x44200000 0x42e10000 0x100000
 FB: download -f ../tezi.itb
 FB: acmd source 0x42e00000
 FB: done
