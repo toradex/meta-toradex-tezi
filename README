@@ -1,49 +1,60 @@
 OpenEmbedded/Yocto BSP layer for Toradex Easy Installer
-=======================================================
+-------------------------------------------------------
 
 This layer is used to build the Toradex Easy Installer utility.
-It provides a small distro called "tezi" along with image recipes
-for the root file system and recipies for the Qt based UI.
+It provides a small distro called `tezi` along with image recipes
+for the root file system and recipes for the Qt based UI.
 
 Currently the Qt User Interface as well as the utility flash-wince
 are not publicly available and stored on internal only git
 repositories. In order to build an image one needs to remove those
-two utilities from the image recipes.
+two utilities from the image recipe:
+
+
+    CORE_IMAGE_BASE_INSTALL:remove = "qt-tezi qt-tezictl"
+
+
+As well as rename the recipes from recipes-tezi directory to avoid
+bitbake parsing/fetching:
+
+    mv recipes-tezi/flash-wince/flash-wince_0.2.bb recipes-tezi/flash-wince/flash-wince_0.2.bb.INTERNAL
+    mv recipes-tezi/qt-tezi/qt-tezi_git.bb recipes-tezi/qt-tezi/qt-tezi_git.bb.INTERNAL
+    mv recipes-tezi/qt-tezi/qt-tezictl_git.bb recipes-tezi/qt-tezi/qt-tezictl_git.bb.INTERNAL
 
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
 openembedded/meta
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: git://git.openembedded.org/meta-openembedded
 meta-openembedded/meta-oe
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: https://github.com/meta-qt5/meta-qt5
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: git://git.yoctoproject.org/meta-freescale
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: https://github.com/Freescale/meta-freescale-3rdparty
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-nxp
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-ti
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 URI: git://git.toradex.com/meta-toradex-bsp-common
-branch: kirkstone
+branch: scarthgap
 revision: HEAD
 
 Contributing
@@ -58,7 +69,6 @@ When creating a patch of the last commit, use
 To send it to the community, use
 
     git send-email --to yocto-patches@toradex.com <generated patch>
-
 
 License
 -------
