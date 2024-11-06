@@ -17,7 +17,7 @@ do_configure:prepend:colibri-imx7 () {
     configure_bootcmd_nand
 }
 
-do_configure:prepend:verdin-am62 () {
+do_configure:prepend:k3 () {
     kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
 }
 
