@@ -11,7 +11,6 @@ IMAGE_FEATURES += "read-only-rootfs"
 IMAGE_NAME_SUFFIX ?= ""
 
 CORE_IMAGE_BASE_INSTALL:append = " \
-    drm-info \
     qt-tezi \
     qt-tezictl \
     udev-toradex-rules \
