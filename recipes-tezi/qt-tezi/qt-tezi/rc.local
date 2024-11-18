@@ -65,7 +65,7 @@ export QT_WAYLAND_FORCE_DPI=72
 	nohup /usr/bin/weston --tty=2 --current-mode --continue-without-input \
 		>> ${RW_MEMORY_DIR}/${WESTON_LOGFILE} || \
 	nohup /usr/bin/weston --backend=vnc-backend.so \
-		--modules=screen-share.so --shell=kiosk-shell.so --no-config \
+		--shell=kiosk-shell.so --no-config \
 		>> ${RW_MEMORY_DIR}/${WESTON_LOGFILE};
 } &
 
