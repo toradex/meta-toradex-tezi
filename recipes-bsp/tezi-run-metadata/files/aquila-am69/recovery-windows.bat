@@ -3,6 +3,7 @@
 echo [93mDownloading Toradex Easy Installer...[0m
 
 set DFU_UTIL=recovery\dfu-util
+set UUU=recovery\uuu.exe
 
 REM USB DFU device vendor and product ID used in the boot ROM, the R5 SPL and the A72 SPL
 set VID_PID_ROM="0451:6167"
