@@ -1,4 +1,4 @@
-From 289e86bbbd219eb7a5e939cd444eb32f6174ed46 Mon Sep 17 00:00:00 2001
+From 3bab6f86aab8fd846f5db7ac4522f8eb149e4a6a Mon Sep 17 00:00:00 2001
 From: Han Xu <han.xu@nxp.com>
 Date: Mon, 9 Dec 2019 15:32:31 -0600
 Subject: [PATCH] MLK-11747: mtd: nand: raw: gpmi-nand: add the debugfs files
@@ -12,31 +12,38 @@ Signed-off-by: Han Xu <han.xu@nxp.com>
 
 Forward port to v6.7
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+
+Forward port to v6.13:
+
+- Make bch_create_debugfs static to prevent:
+  warning: no previous prototype for 'bch_create_debugfs' [-Wmissing-prototypes]
+- debugfs_create_file() was changed. Creating a zero lenght file is
+  no longer possible easily. kobs uses the existence of the file or
+  kernel version > 3.18 as a boolean. Drop creating the debugfs file
+  and rely on the kernel version.
+  https://github.com/nxp-imx/imx-kobs/blob/master/src/mtd.c#L848
+- The include pinctl_consumer.h was added upstream. Keep it for now
+  to be backwards compatible but move it so that we have less fuzz.
+
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index e71ad2fcec23..3fe42f9bbda1 100644
+index d76802944453..c94987c42bbf 100644
 --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
 +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -6,6 +6,7 @@
+@@ -6,6 +6,8 @@
   * Copyright (C) 2008 Embedded Alley Solutions, Inc.
   */
  #include <linux/clk.h>
 +#include <linux/debugfs.h>
++#include <linux/pinctrl/consumer.h>
  #include <linux/delay.h>
  #include <linux/slab.h>
  #include <linux/sched/task_stack.h>
-@@ -13,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/mtd/partitions.h>
- #include <linux/of.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/dma/mxs-dma.h>
-@@ -20,6 +22,9 @@
+@@ -21,6 +23,9 @@
  #include "gpmi-regs.h"
  #include "bch-regs.h"
  
@@ -46,11 +53,11 @@ index e71ad2fcec23..3fe42f9bbda1 100644
  /* Resource names for the GPMI NAND driver. */
  #define GPMI_NAND_GPMI_REGS_ADDR_RES_NAME  "gpmi-nand"
  #define GPMI_NAND_BCH_REGS_ADDR_RES_NAME   "bch"
-@@ -727,6 +732,35 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
+@@ -728,6 +733,28 @@ static int common_nfc_set_geometry(struct gpmi_nand_data *this)
  	return err;
  }
  
-+int bch_create_debugfs(struct gpmi_nand_data *this)
++static int bch_create_debugfs(struct gpmi_nand_data *this)
 +{
 +	struct bch_geometry *bch_geo = &this->bch_geometry;
 +	struct dentry *dbg_root;
@@ -69,20 +76,13 @@ index e71ad2fcec23..3fe42f9bbda1 100644
 +		return -EINVAL;
 +	}
 +
-+	/* create raw mode flag */
-+	if (!debugfs_create_file("raw_mode", S_IRUGO,
-+				dbg_root, NULL, NULL)) {
-+		dev_err(this->dev, "failed to create raw mode flag\n");
-+		return -EINVAL;
-+	}
-+
 +	return 0;
 +}
 +
  /* Configures the geometry for BCH.  */
  static int bch_set_geometry(struct gpmi_nand_data *this)
  {
-@@ -2262,6 +2296,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
+@@ -2279,6 +2306,11 @@ static int gpmi_init_last(struct gpmi_nand_data *this)
  	if (ret)
  		return ret;
  
