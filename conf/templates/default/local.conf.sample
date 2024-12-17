@@ -35,6 +35,7 @@
 # DISTRO is experimental and currently only builds for Verdin modules.
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "colibri-imx8x"
+#MACHINE ?= "toradex-smarc-imx8mp"
 #MACHINE ?= "verdin-imx8mm"
 #MACHINE ?= "verdin-imx8mp"
 #
