@@ -1,0 +1,11 @@
+uuu_version 1.5.165
+
+SDPS: boot -f ../imx-boot-recoverytezi
+CFG: FB: -vid 0x1b67 -pid 0x4000
+FB: download -f ../boot.scr
+FB: ucmd cp.b 0x44200000 0x42e00000 0x100000
+FB: download -f ../overlays.txt
+FB: ucmd cp.b 0x44200000 0x42e10000 0x100000
+FB: download -f ../tezi.itb
+FB: acmd source 0x42e00000
+FB: done
