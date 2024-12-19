@@ -14,11 +14,11 @@ It may not work out of the box because:
 1) You might have to give permission to run the recovery-windows.bat file.
 
 2) The DFU mode device does not have a dedicated driver under Windows.
-The device is shown under Device Manager as "AM62x DFU" with 
-an exclamation mark next to it.
+The device is shown under Device Manager as "AM62x DFU" for Verdin-AM62 and as
+"J784 DFU" for Aquila-AM69, with an exclamation mark next to it.
 In this case the WinUSB driver must be associated with the device.
 WinUSB driver is already present in the system, it shall be manually installed
-for the "AM62x DFU" device:
+for the AM62x/J784 DFU device:
  - Right-click on the device and click on "Update driver"
  - Click on "Browse my computer for drivers"
  - Select Universal Serial Bus devices and click "next" button
