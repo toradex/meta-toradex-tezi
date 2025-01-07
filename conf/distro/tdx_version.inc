@@ -20,7 +20,7 @@ TDX_MATRIX_BUILD_TIME ?= "${DATETIME}"
 TDX_MATRIX_BUILD_TIME[vardepsexclude] = "DATETIME"
 TDX_PRERELEASE ?= "${@get_tdx_prerelease(d.getVar('TDX_PURPOSE'), d.getVar('TDX_MATRIX_BUILD_TIME'))}"
 TDX_MAJOR ?= "7"
-TDX_MINOR ?= "1"
+TDX_MINOR ?= "2"
 TDX_PATCH ?= "0"
 TDX_RELEASE ?= "${TDX_MAJOR}.${TDX_MINOR}.${TDX_PATCH}"
 
