@@ -21,7 +21,7 @@ TDX_MATRIX_BUILD_TIME[vardepsexclude] = "DATETIME"
 TDX_PRERELEASE ?= "${@get_tdx_prerelease(d.getVar('TDX_PURPOSE'), d.getVar('TDX_MATRIX_BUILD_TIME'))}"
 TDX_MAJOR ?= "6"
 TDX_MINOR ?= "8"
-TDX_PATCH ?= "1"
+TDX_PATCH ?= "2"
 TDX_RELEASE ?= "${TDX_MAJOR}.${TDX_MINOR}.${TDX_PATCH}"
 
 # Toradex Version number without date for U-Boot/Kernel and other Toradex
