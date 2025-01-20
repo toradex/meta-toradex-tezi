@@ -8,8 +8,8 @@ env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
 
 # This address needs to be the alligned with the one used by imx_usb/uuu loader
 # inside the 'recovery' folder
-env set fitimage_addr 0x8a000000
-env set overlays_addr 0x82e10000
+env set fitimage_addr 0x90400000
+env set overlays_addr 0x9c800000
 
 env set bootcmd_args 'env set bootargs quiet edid/1280x720.bin video=HDMI-A-1:1280x720-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
