@@ -29,13 +29,14 @@
 #MACHINE ?= "colibri-imx7"
 #MACHINE ?= "colibri-imx7-emmc"
 #
-# Toradex Modules based on SoC of the i.MX 8 family are supported with the
+# Toradex Modules based on SoC of the i.MX 8/9 family are supported with the
 # tdx-xwayland DISTRO which builds a kernel based on NXP's downstream fork
 # and matching userspace components. Support with tdx-xwayland-upstream
 # DISTRO is experimental and currently only builds for Verdin modules.
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "colibri-imx8x"
 #MACHINE ?= "toradex-smarc-imx8mp"
+#MACHINE ?= "toradex-smarc-imx95"
 #MACHINE ?= "verdin-imx8mm"
 #MACHINE ?= "verdin-imx8mp"
 #
