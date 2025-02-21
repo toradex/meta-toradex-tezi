@@ -1,0 +1,10 @@
+uuu_version 1.5.165
+
+CFG: FB: -vid 0x1b67 -pid 0x4000
+FB: download -f ../tezi.itb
+FB: ucmd cp.b 0x88200000 0x90300000 ${filesize}
+FB: download -f ../boot.scr
+FB: ucmd cp.b 0x88200000 0x90280000 ${filesize}
+FB: download -f ../overlays.txt
+FB: acmd source 0x90280000
+FB: done

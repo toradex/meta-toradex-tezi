@@ -53,6 +53,7 @@ WARN_QA:append:layer-qt5-layer = " buildpaths"
 # and matching userspace components.
 #MACHINE ?= "aquila-am69"
 #MACHINE ?= "verdin-am62"
+#MACHINE ?= "verdin-am62p"
 #
 # There are also a selection of emulated machines available which can boot and run
 # in the QEMU emulator:
