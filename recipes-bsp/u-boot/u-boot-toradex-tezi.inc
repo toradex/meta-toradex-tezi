@@ -29,6 +29,10 @@ do_configure:prepend:verdin-imx8mp () {
     kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
 }
 
+do_configure:prepend:verdin-imx95 () {
+    kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
+}
+
 do_configure:prepend:toradex-smarc-imx8mp () {
     kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
 }
