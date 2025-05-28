@@ -39,6 +39,7 @@
 #MACHINE ?= "toradex-smarc-imx95"
 #MACHINE ?= "verdin-imx8mm"
 #MACHINE ?= "verdin-imx8mp"
+#MACHINE ?= "verdin-imx95"
 #
 # Toradex Modules based on SoC of the TI AM62x family are supported with the
 # tdx-xwayland DISTRO which builds a kernel based on TI downstream fork
