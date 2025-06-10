@@ -268,5 +268,5 @@ IMAGE_CMD:tezirunimg () {
 do_image_tezirunimg[dirs] += "${WORKDIR}/${TDX_VER_ID} ${WORKDIR}"
 do_image_tezirunimg[cleandirs] += "${WORKDIR}/${TDX_VER_ID}"
 do_image_tezirunimg[prefuncs] += "rootfs_tezirun_run_json"
-do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy virtual/kernel:do_deploy tezi-run-metadata:do_deploy uuu-bin:do_deploy"
+do_image_tezirunimg[depends] += "virtual/bootloader:do_deploy u-boot-distro-boot:do_deploy linux-yocto-fitimage:do_deploy tezi-run-metadata:do_deploy uuu-bin:do_deploy"
 do_image_teziimg[vardepsexclude] = "DISTRO_VERSION TDX_VER_ID DATE"

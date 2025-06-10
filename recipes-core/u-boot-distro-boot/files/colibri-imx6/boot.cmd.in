@@ -19,7 +19,7 @@ env set fdt_high
 env set fdt_resize true
 
 env set bootcmd_args 'env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480-16@60D video=HDMI-A-1:640x480-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
-env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
+env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
 env set tezi_image ${prefix}tezi.itb
 
 env set set_default_overlays 'env set fdt_overlays "@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@"'

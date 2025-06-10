@@ -10,7 +10,7 @@ test -n ${overlays_file} || env set overlays_file "overlays.txt"
 env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
 
 env set bootcmd_args 'env set bootargs quiet video=DP-1:640x480@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
-env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
+env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${ramdisk_addr_r}#conf-\${fdtfile}\${fitconf_fdt_overlays}'
 env set tezi_image ${prefix}tezi.itb
 
 env set set_default_overlays 'env set fdt_overlays "@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@"'
