@@ -1,4 +1,4 @@
-From b2db5fc2a3338b8f2c867f773f33fbf58c26142d Mon Sep 17 00:00:00 2001
+From 2334e216f9430d8009a2896e44df82114b1801af Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -32,52 +32,59 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 - Variable is renamed: retry_remaining
 - Fix line numbers
 
-Upstream-Status: Denied [https://github.com/curl/curl/pull/2450]
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
+- Forward port to curl 8.14.1
+- Part of the function post_per_transfer() has been extraced to retrycheck()
+- Changed Upstrem-Status to Pending as Denied is not exactly correct
+  [https://github.com/curl/curl/pull/2450]
+
+Upstream-Status: Pending
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
  src/tool_operate.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index f6ae64dd3d5f..a0890840a3c2 100644
+index 24e79e6f61fa..c2be91d2e5c4 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -584,6 +584,11 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
-         }
+@@ -427,6 +427,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
        }
-     } /* if CURLE_OK */
-+    else if(result == CURLE_RANGE_ERROR) {
-+      /* Retry failed last time, don't retry with resume anymore */
-+      config->use_resume = 0;
-+      retry = RETRY_HTTP;
+     }
+   } /* if CURLE_OK */
++  else if(result == CURLE_RANGE_ERROR) {
++    /* Retry failed last time, don't retry with resume anymore */
++    config->use_resume = 0;
++    retry = RETRY_HTTP;
++  }
+   else if(result) {
+     const char *scheme;
+ 
+@@ -494,6 +499,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
+           per->retry_remaining,
+           (per->retry_remaining > 1 ? "ies" : "y"));
+ 
++    /* If resume is requested, resume at last byte on retry too */
++    if (config->use_resume) {
++      fprintf(stderr, "Continuing at %"
++              CURL_FORMAT_CURL_OFF_T " bytes\n",
++              outs->bytes);
++      my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
 +    }
-     else if(result) {
-       const char *scheme;
- 
-@@ -646,13 +651,21 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
-             "%ld retries left.",
-             m[retry], sleeptime/1000L, per->retry_remaining);
- 
-+      /* If resume is requested, resume at last byte on retry too */
-+      if (config->use_resume) {
-+        fprintf(stderr, "Continuing at %"
-+                CURL_FORMAT_CURL_OFF_T " bytes\n",
-+                outs->bytes);
-+        my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
-+      }
 +
-       per->retry_remaining--;
-       if(!config->retry_delay) {
-         per->retry_sleep *= 2;
-         if(per->retry_sleep > RETRY_SLEEP_MAX)
-           per->retry_sleep = RETRY_SLEEP_MAX;
-       }
--      if(outs->bytes && outs->filename && outs->stream) {
-+      if(outs->bytes && outs->filename && outs->stream && !config->use_resume) {
-         /* We have written data to an output file, we truncate file
-          */
-         notef(config->global,
+     per->retry_remaining--;
+     if(!config->retry_delay) {
+       per->retry_sleep *= 2;
+@@ -501,7 +514,7 @@ static CURLcode retrycheck(struct OperationConfig *config,
+         per->retry_sleep = RETRY_SLEEP_MAX;
+     }
+ 
+-    if(outs->bytes && outs->filename && outs->stream) {
++    if(outs->bytes && outs->filename && outs->stream  && !config->use_resume) {
+ #ifndef __MINGW32CE__
+       struct_stat fileinfo;
+ 
 -- 
 2.42.0
 
