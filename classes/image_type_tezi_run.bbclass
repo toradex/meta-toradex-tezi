@@ -33,7 +33,7 @@ DEPENDS += "u-boot-mkimage-native zip-native"
 
 def fitimg_get_size(d):
     import os
-    return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'tezi.itb')) / (1024 * 1024)
+    return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'fitImage')) / (1024 * 1024)
 
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
@@ -259,7 +259,8 @@ IMAGE_CMD:tezirunimg () {
         done
     fi
 
-    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi.itb tezi-run-metadata/* uuu-bin/* ${WORKDIR}/${TDX_VER_ID})
+    (cd ${DEPLOY_DIR_IMAGE}; cp -L -R ${TEZI_IMAGE_UBOOT_FILES} ${TEZI_UBOOT_BINARY_RECOVERY} ${MACHINE_BOOT_FILES} tezi-run-metadata/* uuu-bin/* ${WORKDIR}/${TDX_VER_ID})
+    (cd ${DEPLOY_DIR_IMAGE}; cp -L fitImage ${WORKDIR}/${TDX_VER_ID}/tezi.itb)
     (cd ${IMGDEPLOYDIR}; cp -L -R ${TEZI_IMAGE_FILES} $LEGACY_IMAGE_FILES ${WORKDIR}/${TDX_VER_ID})
     zip -r ${TDX_VER_ID}.zip ${TDX_VER_ID}
     mv ${TDX_VER_ID}.zip ${IMGDEPLOYDIR}
