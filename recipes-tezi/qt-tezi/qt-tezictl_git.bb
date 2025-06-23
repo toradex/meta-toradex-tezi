@@ -5,7 +5,7 @@ HOMEPAGE = "http://www.toradex.com"
 
 LICENSE = "BSD-3-Clause"
 
-SRC_URI = "git://gitlab.int.toradex.com/rd/tezi/qt-tezictl.git;branch=${SRCBRANCH};protocol=https"
+SRC_URI = "git://github.com/toradex/qt-tezictl.git;branch=${SRCBRANCH};protocol=https"
 
 SRCREV = "8feb64026685eeb49b5b60ab85e1a78b1b131d2b"
 SRCBRANCH = "master"
