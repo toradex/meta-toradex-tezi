@@ -5,11 +5,6 @@ This layer is used to build the Toradex Easy Installer utility.
 It provides a small distro called "tezi" along with image recipes
 for the root file system and recipies for the Qt based UI.
 
-Currently the Qt User Interface as well as the utility flash-wince
-are not publicly available and stored on internal only git
-repositories. In order to build an image one needs to remove those
-two utilities from the image recipes.
-
 This layer depends on:
 
 URI: git://git.openembedded.org/openembedded-core
