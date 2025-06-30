@@ -14,8 +14,6 @@ SRCBRANCH = "master"
 SRCREV = "a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b"
 PV = "5.5+git${SRCPV}"
 
-S = "${WORKDIR}/git"
-
 inherit autotools
 
 do_install:append:colibri-imx6ull() {

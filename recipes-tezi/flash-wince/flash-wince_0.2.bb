@@ -9,8 +9,6 @@ SRC_URI = "git://github.com/toradex/flash-wince.git;branch=master;protocol=https
 
 SRCREV = "1c79234a6951a23924756b4563154c93af45a52d"
 
-S = "${WORKDIR}/git"
-
 do_install() {
 	oe_runmake 'DESTDIR=${D}' install
 }

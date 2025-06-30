@@ -16,8 +16,6 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
 
 PV = "${TDX_VERSION}+git${SRCPV}"
 
-S = "${WORKDIR}/git"
-
 EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
 
 QMAKE_PROFILES = "${S}/tezi.pro"
@@ -64,7 +62,7 @@ FILES:${PN} += " \
 
 do_install() {
     install -d ${D}${bindir}/
-    install -m 0755 ${S}/../build/tezi ${D}${bindir}/
+    install -m 0755 ${B}/tezi ${D}${bindir}/
     install -d ${D}${datadir}/tezi/keymaps/
     install -m 0644 ${S}/keymaps/*qmap ${D}${datadir}/tezi/keymaps/
 

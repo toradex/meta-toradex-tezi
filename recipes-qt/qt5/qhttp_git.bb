@@ -14,8 +14,6 @@ SRCREV = "67c9e9c44ababcfae54420dd385cd5b858f91d54"
 
 PV = "3.2+git${SRCPV}"
 
-S = "${WORKDIR}/git"
-
 DEPENDS += "qtwebsockets qtbase"
 
 EXTRA_QMAKEVARS_PRE += "PREFIX=${prefix} ENABLE_QHTTP_CLIENT=0"

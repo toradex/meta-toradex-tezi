@@ -16,8 +16,6 @@ SRCREV = "b1d32694d0a310e36da1cf84420c827bbf665755"
 
 PV = "0.4.0+git${SRCPV}"
 
-S = "${WORKDIR}/git"
-
 DEPENDS = "libdrm pixman aml zlib"
 
 PACKAGECONFIG ??= "examples"

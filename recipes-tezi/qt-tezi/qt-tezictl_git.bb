@@ -12,8 +12,6 @@ SRCBRANCH = "master"
 SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1611c5652037dacc6ac585f2443a1979"
 
-S = "${WORKDIR}/git"
-
 PV = "${TDX_VERSION}+git${SRCPV}"
 
 EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
@@ -26,5 +24,5 @@ DEPENDS += " \
 
 do_install() {
     install -d ${D}${bindir}/
-    install -m 0755 ${S}/../build/tezictl ${D}${bindir}/
+    install -m 0755 ${B}/tezictl ${D}${bindir}/
 }
