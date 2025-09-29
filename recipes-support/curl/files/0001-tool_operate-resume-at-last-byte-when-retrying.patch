@@ -1,4 +1,4 @@
-From 2334e216f9430d8009a2896e44df82114b1801af Mon Sep 17 00:00:00 2001
+From a8db9a4bff9b3a08f66055bdae1b46de9e3483fd Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -39,6 +39,8 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 - Changed Upstrem-Status to Pending as Denied is not exactly correct
   [https://github.com/curl/curl/pull/2450]
 
+- Forward port to curl 8.16.0
+
 Upstream-Status: Pending
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
@@ -46,10 +48,10 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 24e79e6f61fa..c2be91d2e5c4 100644
+index 2c3030096f6a..99e49d920d0a 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -427,6 +427,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -406,6 +406,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
        }
      }
    } /* if CURLE_OK */
@@ -61,7 +63,7 @@ index 24e79e6f61fa..c2be91d2e5c4 100644
    else if(result) {
      const char *scheme;
  
-@@ -494,6 +499,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -472,6 +477,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
            per->retry_remaining,
            (per->retry_remaining > 1 ? "ies" : "y"));
  
@@ -74,9 +76,9 @@ index 24e79e6f61fa..c2be91d2e5c4 100644
 +    }
 +
      per->retry_remaining--;
-     if(!config->retry_delay) {
+     if(!config->retry_delay_ms) {
        per->retry_sleep *= 2;
-@@ -501,7 +514,7 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -479,7 +492,7 @@ static CURLcode retrycheck(struct OperationConfig *config,
          per->retry_sleep = RETRY_SLEEP_MAX;
      }
  
