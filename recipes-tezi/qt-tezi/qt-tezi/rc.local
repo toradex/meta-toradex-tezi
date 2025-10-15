@@ -58,6 +58,28 @@ export XDG_RUNTIME_DIR=/run/wayland
 # Export variables relevant for Qt
 export QT_WAYLAND_FORCE_DPI=72
 
+wait_count=0
+while [ $wait_count -lt 50 ]; do
+	wait_count=$((wait_count + 1))
+
+	# Wait until /dev/dri/card0 exists
+	if [ ! -e /dev/dri/card0 ]; then
+		sleep 0.1
+		continue
+	fi
+
+	# If there's a GPU in /dev/dri/by-path, also wait for /dev/dri/card1
+	if ls /dev/dri/by-path/*gpu* >/dev/null 2>&1; then
+		[ -e /dev/dri/card1 ] && break
+	else
+		break
+	fi
+
+	sleep 0.1
+done
+
+[ $wait_count -ge 50 ] && echo "Timeout (~5s) waiting for graphics cards to appear." >> "${RW_MEMORY_DIR}/${TEZI_LOGFILE}"
+
 # Start in background
 # if the first command fails due to any reason e.g. no card available we spin
 # only vnc-backend up
