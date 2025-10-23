@@ -45,6 +45,10 @@ do_configure:prepend:aquila-am69 () {
     kconfig_configure_variable BOOTCOMMAND '"source ${scriptaddr}"' $recoveryconf
 }
 
+do_configure:prepend:aquila-imx95 () {
+    kconfig_configure_variable BOOTCOMMAND '"fastboot usb 0"' $recoveryconf
+}
+
 do_configure:prepend () {
     recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
     defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
