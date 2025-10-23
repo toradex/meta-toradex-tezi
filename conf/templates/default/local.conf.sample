@@ -34,6 +34,7 @@
 # and matching userspace components. Support with tdx-xwayland-upstream
 # DISTRO is experimental and currently only builds for Verdin modules.
 #MACHINE ?= "apalis-imx8"
+#MACHINE ?= "aquila-imx95"
 #MACHINE ?= "colibri-imx8x"
 #MACHINE ?= "toradex-smarc-imx8mp"
 #MACHINE ?= "toradex-smarc-imx95"
