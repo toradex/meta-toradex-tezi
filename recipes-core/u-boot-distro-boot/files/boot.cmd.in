@@ -1,5 +1,8 @@
-# TODO: adapt to toradex-smarc-imx95 specifics
-# toradex-smarc-imx95 TEZI boot script
+# TEZI script
+
+test -n ${devtype} || env set devtype mmc
+test -n ${devnum} || env set devnum 0
+test -n ${distro_bootpart} || env set distro_bootpart 1
 
 env set fitconf_fdt_overlays
 env set prefix
@@ -8,10 +11,16 @@ env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
 
 # This address needs to be the alligned with the one used by imx_usb/uuu loader
 # inside the 'recovery' folder
-env set fitimage_addr 0x90400000
-env set overlays_addr 0x9c800000
+env set fitimage_addr @@TEZI_FITIMAGE_ADDR@@
+env set overlays_addr @@TEZI_OVERLAY_ADDR@@
 
-env set bootcmd_args 'env set bootargs quiet video=DP-1:1280x720-16@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
+# Set console baudrate only when required
+setexpr _res sub "," "_" ${console}
+if test "${_res}" = "" -o "${_res}" = "${console}"; then
+	env set console "${console},${baudrate}"
+fi
+
+env set bootcmd_args 'env set bootargs @@TEZI_BOOT_ARGS@@ console=${console} quiet rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}'
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
 env set tezi_image ${prefix}tezi.itb
 
