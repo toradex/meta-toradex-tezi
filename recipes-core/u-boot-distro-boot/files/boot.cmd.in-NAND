@@ -1,16 +1,23 @@
-# colibri-imx6ull TEZI script
+# TEZI script for devices with NAND options
 
-env set bootargs console=ttymxc0,115200 quiet video=DPI-1:640x480@60D rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
+# Set console baudrate only when required
+setexpr _res sub "," "_" ${console}
+if test "${_res}" = "" -o "${_res}" = "${console}"; then
+	env set console "${console},${baudrate}"
+fi
+
+env set bootargs @@TEZI_BOOT_ARGS@@ console=${console} quiet rootfstype=@@INITRAMFS_FSTYPES@@ root=/dev/ram autoinstall ${teziargs}
+
 # Addresses defined by uuu.auto script
-env set fitimage_addr 0x81100000
-env set overlays_addr 0x80f00000
+env set fitimage_addr @@TEZI_FITIMAGE_ADDR@@
+env set overlays_addr @@TEZI_OVERLAY_ADDR@@
 
 env set fitconf_fdt_overlays
 test -n ${overlays_file} || env set overlays_file "overlays.txt"
 env set set_default_overlays 'env set fdt_overlays "@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@"'
 env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#conf-\\${overlay_file}\\"\"; env set overlay_file; done; true"'
 
-env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-imx6ull-colibri\${variant}-\${fdt_board}.dtb\${fitconf_fdt_overlays}'
+env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
 
 test -n ${devtype} || env set devtype mmc
 test -n ${devnum} || env set devnum 0
@@ -18,12 +25,12 @@ test -n ${distro_bootpart} || env set distro_bootpart 1
 
 if test x${recovery_tezi} != x1
 then
-    # If variant is not set or it's 'wifi', then we're in a NAND device.
-    # Otherwise, if variant is '-emmc', this a an eMMC device.
+    # If variant is '-emmc', this is an eMMC device
     if test x${variant} = x-emmc
     then
         env set load_overlays_file 'load ${devtype} ${devnum}:${distro_bootpart} ${overlays_addr} ${overlays_file} && env import -t ${overlays_addr} 0x200; test -n ${fdt_overlays} || run set_default_overlays'
         load ${devtype} ${devnum}:${distro_bootpart} ${fitimage_addr} ${prefix}tezi.itb
+    # If variant is not set or it's 'wifi', then we're in a NAND device.
     else
         ubi read ${fitimage_addr} rootfs
     fi
