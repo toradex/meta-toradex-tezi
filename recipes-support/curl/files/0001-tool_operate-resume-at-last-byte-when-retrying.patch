@@ -1,4 +1,4 @@
-From a8db9a4bff9b3a08f66055bdae1b46de9e3483fd Mon Sep 17 00:00:00 2001
+From a479211b9b5af437181e7968ddfbe537c76514d1 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -40,18 +40,19 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
   [https://github.com/curl/curl/pull/2450]
 
 - Forward port to curl 8.16.0
+- Forward port to curl 8.17.0
 
 Upstream-Status: Pending
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
- src/tool_operate.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ src/tool_operate.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 2c3030096f6a..99e49d920d0a 100644
+index f290a288dee7..41d49373880b 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -406,6 +406,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -429,6 +429,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
        }
      }
    } /* if CURLE_OK */
@@ -62,8 +63,8 @@ index 2c3030096f6a..99e49d920d0a 100644
 +  }
    else if(result) {
      const char *scheme;
- 
-@@ -472,6 +477,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
+     long response = 0;
+@@ -509,6 +514,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
            per->retry_remaining,
            (per->retry_remaining > 1 ? "ies" : "y"));
  
@@ -76,14 +77,15 @@ index 2c3030096f6a..99e49d920d0a 100644
 +    }
 +
      per->retry_remaining--;
-     if(!config->retry_delay_ms) {
-       per->retry_sleep *= 2;
-@@ -479,7 +492,7 @@ static CURLcode retrycheck(struct OperationConfig *config,
-         per->retry_sleep = RETRY_SLEEP_MAX;
+ 
+     /* Skip truncation of outfile if auto-resume is enabled for download and
+@@ -553,7 +566,8 @@ static CURLcode retrycheck(struct OperationConfig *config,
+       }
      }
  
--    if(outs->bytes && outs->filename && outs->stream) {
-+    if(outs->bytes && outs->filename && outs->stream  && !config->use_resume) {
+-    if(truncate && outs->bytes && outs->filename && outs->stream) {
++    if(truncate && outs->bytes && outs->filename && outs->stream &&
++       !config->use_resume) {
  #ifndef __MINGW32CE__
        struct_stat fileinfo;
  
