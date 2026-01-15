@@ -36,6 +36,7 @@
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "aquila-imx95"
 #MACHINE ?= "colibri-imx8x"
+#MACHINE ?= "lino-imx93"
 #MACHINE ?= "toradex-osm-imx93"
 #MACHINE ?= "toradex-smarc-imx8mp"
 #MACHINE ?= "toradex-smarc-imx95"
