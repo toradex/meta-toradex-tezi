@@ -66,6 +66,6 @@ do_deploy:append:k3 () {
 
 addtask deploy before do_build after do_install
 
-COMPATIBLE_MACHINE = "(apalis|aquila|colibri|verdin|toradex)"
+COMPATIBLE_MACHINE = "(apalis|aquila|colibri|verdin|toradex|lino)"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
