@@ -1,4 +1,4 @@
-From a479211b9b5af437181e7968ddfbe537c76514d1 Mon Sep 17 00:00:00 2001
+From 6b2cbc01619f401393baf8f23e91318ae19fcbbf Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Tue, 3 Apr 2018 13:54:13 +0200
 Subject: [PATCH] tool_operate: resume at last byte when retrying
@@ -41,6 +41,8 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
 - Forward port to curl 8.16.0
 - Forward port to curl 8.17.0
+- Forward port to curl 8.18.0
+  my_setopt() changed to type specific my_setopt_offt()
 
 Upstream-Status: Pending
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
@@ -49,10 +51,10 @@ Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
  1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index f290a288dee7..41d49373880b 100644
+index 4bc98a1e52be..1aa8c0c0ed32 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
-@@ -429,6 +429,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -423,6 +423,11 @@ static CURLcode retrycheck(struct OperationConfig *config,
        }
      }
    } /* if CURLE_OK */
@@ -64,7 +66,7 @@ index f290a288dee7..41d49373880b 100644
    else if(result) {
      const char *scheme;
      long response = 0;
-@@ -509,6 +514,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -503,6 +508,14 @@ static CURLcode retrycheck(struct OperationConfig *config,
            per->retry_remaining,
            (per->retry_remaining > 1 ? "ies" : "y"));
  
@@ -73,22 +75,22 @@ index f290a288dee7..41d49373880b 100644
 +      fprintf(stderr, "Continuing at %"
 +              CURL_FORMAT_CURL_OFF_T " bytes\n",
 +              outs->bytes);
-+      my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
++      my_setopt_offt(curl, CURLOPT_RESUME_FROM_LARGE, outs->bytes);
 +    }
 +
      per->retry_remaining--;
  
      /* Skip truncation of outfile if auto-resume is enabled for download and
-@@ -553,7 +566,8 @@ static CURLcode retrycheck(struct OperationConfig *config,
+@@ -546,7 +559,8 @@ static CURLcode retrycheck(struct OperationConfig *config,
        }
      }
  
 -    if(truncate && outs->bytes && outs->filename && outs->stream) {
 +    if(truncate && outs->bytes && outs->filename && outs->stream &&
 +       !config->use_resume) {
- #ifndef __MINGW32CE__
        struct_stat fileinfo;
  
+       /* The output can be a named pipe or a character device etc that
 -- 
 2.42.0
 
