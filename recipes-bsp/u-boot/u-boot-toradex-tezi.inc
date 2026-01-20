@@ -10,8 +10,8 @@ TEZI_BOOTCOMMAND:mx8m-generic-bsp = "fastboot usb 0"
 TEZI_BOOTCOMMAND:mx9-generic-bsp = "fastboot usb 0"
 
 configure_bootcmd_nand () {
-    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
-    kconfig_configure_variable BOOTCOMMAND \""ubi part ubi ; ubi read \${scriptaddr} bootscr; source \${scriptaddr} ;"\" $recoveryconf
+    defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
+    kconfig_configure_variable BOOTCOMMAND \""ubi part ubi ; ubi read \${scriptaddr} bootscr; source \${scriptaddr} ;"\" $defaultconf
 }
 
 do_configure:prepend:colibri-imx6ull () {
