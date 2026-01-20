@@ -26,7 +26,7 @@ TEZI_BOOT_ARGS:toradex-smarc-imx8mp = "video=HDMI-A-1:1280x720-16@60D"
 TEZI_BOOT_ARGS:toradex-smarc-imx95 = "video=DP-1:1280x720@60D"
 TEZI_BOOT_ARGS:verdin-am62 = "video=HDMI-A-1:640x480-16@60D"
 TEZI_BOOT_ARGS:verdin-am62p = "video=HDMI-A-1:1280x720-16@60D"
-TEZI_BOOT_ARGS:verdin-imx8mm = "video=HDMI-A-1:1280x720-16@60D"
+TEZI_BOOT_ARGS:verdin-imx8mm = "video=HDMI-A-1:1280x720@60D"
 TEZI_BOOT_ARGS:verdin-imx8mp = "video=HDMI-A-1:1280x720-16@60D video=HDMI-A-2:1280x720-16@60D"
 TEZI_BOOT_ARGS:verdin-imx95 = "video=HDMI-A-1:1280x720-16@60D"
 
