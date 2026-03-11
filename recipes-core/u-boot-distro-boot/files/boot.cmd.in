@@ -3,8 +3,8 @@
 test -n "${devtype}" || env set devtype mmc
 test -n "${devnum}" || env set devnum 0
 test -n "${distro_bootpart}" || env set distro_bootpart 1
+test -n "${fitconf_fdt_overlays}" || env set fitconf_fdt_overlays '@@FITCONF_FDT_OVERLAYS@@'
 
-env set fitconf_fdt_overlays
 env set prefix
 test -n "${overlays_file}" || env set overlays_file "overlays.txt"
 env set load_cmd load ${devtype} ${devnum}:${distro_bootpart}
