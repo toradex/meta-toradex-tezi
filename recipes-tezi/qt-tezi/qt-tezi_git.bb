@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
 
 PV = "${TDX_VERSION}+git${SRCPV}"
 
-EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
+EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_RELEASE}\\\\\\\""
 
 QMAKE_PROFILES = "${S}/tezi.pro"
 
