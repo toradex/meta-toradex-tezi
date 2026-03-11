@@ -18,7 +18,7 @@ PV = "${TDX_VERSION}+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
-EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_VERSION}\\\\\\\""
+EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_RELEASE}\\\\\\\""
 
 QMAKE_PROFILES = "${S}/tezi.pro"
 
