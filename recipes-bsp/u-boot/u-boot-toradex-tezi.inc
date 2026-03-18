@@ -1,46 +1,15 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI:append = " file://toradex-recovery-u-boot.dtsi"
-
-inherit toradex-kernel-config
-
-TEZI_BOOTCOMMAND = ""
-TEZI_BOOTCOMMAND:k3 = "fastboot usb 0"
-TEZI_BOOTCOMMAND:mx8m-generic-bsp = "fastboot usb 0"
-TEZI_BOOTCOMMAND:mx9-generic-bsp = "fastboot usb 0"
-
-configure_bootcmd_nand () {
-    defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
-    kconfig_configure_variable BOOTCOMMAND \""ubi part ubi ; ubi read \${scriptaddr} bootscr; source \${scriptaddr} ;"\" $defaultconf
-}
-
-do_configure:prepend:colibri-imx6ull () {
-    configure_bootcmd_nand
-}
-
-do_configure:prepend:colibri-imx7 () {
-    configure_bootcmd_nand
-}
+SRC_URI:append = " \
+    file://toradex-recovery.config \
+    file://toradex-nand-bootcmd.config \
+    file://toradex-recovery-u-boot.dtsi \
+"
 
 do_configure:prepend () {
-    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
-    cp $defaultconf $recoveryconf
+    cp ${UNPACKDIR}/toradex-recovery.config ${S}/configs/
+    cp ${UNPACKDIR}/toradex-nand-bootcmd.config ${S}/configs/
 
-    if [ -n "${TEZI_BOOTCOMMAND}" ]; then
-        kconfig_configure_variable BOOTCOMMAND "\"${TEZI_BOOTCOMMAND}\"" $recoveryconf
-    fi
-
-    kconfig_configure_variable CMD_USB_SDP n $recoveryconf
-    kconfig_configure_variable DEVICE_TREE_INCLUDES \"toradex-recovery-u-boot.dtsi\" $recoveryconf
-    kconfig_configure_variable ENV_IMPORT_FDT y $recoveryconf
-    kconfig_configure_variable ENV_IS_IN_MMC n $recoveryconf
-    kconfig_configure_variable ENV_IS_IN_NAND n $recoveryconf
-    kconfig_configure_variable ENV_IS_NOWHERE y $recoveryconf
-    kconfig_configure_variable TDX_CFG_BLOCK_USB_GADGET_PID n $recoveryconf
-}
-
-do_compile:prepend () {
     cp ${UNPACKDIR}/toradex-recovery-u-boot.dtsi ${S}/arch/arm/dts/
 }
 
