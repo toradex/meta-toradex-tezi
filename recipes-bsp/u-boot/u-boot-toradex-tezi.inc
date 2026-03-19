@@ -8,10 +8,6 @@ SRC_URI:append = " \
 "
 
 do_configure:prepend () {
-    recoveryconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_tezi_defconfig
-    defaultconf=${S}/configs/${UBOOT_CONFIG_BASENAME}_defconfig
-    cp $defaultconf $recoveryconf
-
     cp ${UNPACKDIR}/toradex-recovery-base.config ${S}/configs/
     cp ${UNPACKDIR}/toradex-recovery-fastboot.config ${S}/configs/
     cp ${UNPACKDIR}/toradex-recovery-nand-bootcmd.config ${S}/configs/
