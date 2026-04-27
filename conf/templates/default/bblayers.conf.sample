@@ -10,13 +10,13 @@ BBLAYERS_TI ?= " \
   ${TOPDIR}/../layers/meta-arm/meta-arm \
   ${TOPDIR}/../layers/meta-ti/meta-ti-bsp \
   ${TOPDIR}/../layers/meta-ti/meta-ti-extras \
-  ${TOPDIR}/../layers/meta-toradex-ti \
+  ${TOPDIR}/../layers/meta-toradex-bsp/meta-toradex-ti \
 "
 
 BBLAYERS_NXP ?= " \
   ${TOPDIR}/../layers/meta-freescale \
   ${TOPDIR}/../layers/meta-freescale-3rdparty \
-  ${TOPDIR}/../layers/meta-toradex-nxp \
+  ${TOPDIR}/../layers/meta-toradex-bsp/meta-toradex-nxp \
 "
 
 BBLAYERS ?= " \
@@ -27,7 +27,7 @@ BBLAYERS ?= " \
   ${TOPDIR}/../layers/meta-openembedded/meta-oe \
   ${TOPDIR}/../layers/meta-openembedded/meta-python \
   ${TOPDIR}/../layers/meta-toradex-tezi \
-  ${TOPDIR}/../layers/meta-toradex-bsp-common \
+  ${TOPDIR}/../layers/meta-toradex-bsp/meta-toradex-bsp-common \
   ${TOPDIR}/../layers/meta-qt5 \
   "
 
