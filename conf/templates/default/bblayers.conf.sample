@@ -15,7 +15,6 @@ BBLAYERS_TI ?= " \
 
 BBLAYERS_NXP ?= " \
   ${TOPDIR}/../layers/meta-freescale \
-  ${TOPDIR}/../layers/meta-freescale-3rdparty \
   ${TOPDIR}/../layers/meta-toradex-bsp/meta-toradex-nxp \
 "
 
