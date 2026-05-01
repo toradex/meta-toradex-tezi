@@ -9,7 +9,7 @@ SRC_URI = "git://github.com/toradex/qt-tezi.git;branch=${SRCBRANCH};protocol=htt
     file://udhcpd.conf \
 "
 
-SRCREV = "de7b16ad7c313136e0ab437134a32a8db9182028"
+SRCREV = "c3f1b95eb892546a3c3d7da46be7b5efcfec3200"
 SRCBRANCH = "master"
 SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
