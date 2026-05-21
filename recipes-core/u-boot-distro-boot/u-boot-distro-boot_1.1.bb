@@ -64,7 +64,7 @@ BOOT_CMD_FILE = "boot.cmd.in"
 BOOT_CMD_FILE:colibri-imx6ull = "boot.cmd.in-NAND"
 BOOT_CMD_FILE:colibri-imx7 = "boot.cmd.in-NAND"
 
-do_deploy() {
+do_compile() {
     sed -e 's/@@INITRAMFS_FSTYPES@@/${INITRAMFS_FSTYPES}/' \
         -e 's/@@TEZI_BOOT_ARGS@@/${TEZI_BOOT_ARGS}/' \
         -e 's/@@TEZI_FITIMAGE_ADDR@@/${TEZI_FITIMAGE_ADDR}/' \
@@ -72,7 +72,9 @@ do_deploy() {
         -e 's/@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@/${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}/' \
         -e 's/@@KERNEL_DTB_PREFIX@@/${DTB_PREFIX}/' \
         "${WORKDIR}/${BOOT_CMD_FILE}" > boot.cmd
+}
 
+do_deploy() {
     uboot-mkimage -T script -C none -a 0 -e 0 \
         -n "TEZI distro boot script" -d boot.cmd ${DEPLOYDIR}/boot.scr-${MACHINE}-${PV}-${PR}
     ln -sf boot.scr-${MACHINE}-${PV}-${PR} ${DEPLOYDIR}/boot.scr
