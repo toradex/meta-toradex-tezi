@@ -73,7 +73,7 @@ do_compile() {
         -e 's/@@TEZI_OVERLAY_ADDR@@/${TEZI_OVERLAY_ADDR}/' \
         -e 's/@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@/${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}/' \
         -e 's/@@FITCONF_FDT_OVERLAYS@@/${FITCONF_FDT_OVERLAYS}/' \
-        "${WORKDIR}/${BOOT_CMD_FILE}" > boot.cmd
+        "${S}/${BOOT_CMD_FILE}" > boot.cmd
 }
 
 do_deploy() {
