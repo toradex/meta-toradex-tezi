@@ -25,6 +25,7 @@ inherit qmake5 pkgconfig
 DEPENDS += " \
     libusbgx \
     rapidjson \
+    valijson \
     qtbase \
     qtwayland \
     qtzeroconf \
