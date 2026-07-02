@@ -67,6 +67,10 @@ BOOT_CMD_FILE:colibri-imx7 = "boot.cmd.in-NAND"
 
 FITCONF_FDT_OVERLAYS ??= ""
 
+# Mirror the config-node prefix kernel-fit-image.bbclass adds when
+# KERNEL_DTBVENDORED = "1", so the requested FIT config name matches.
+DTB_PREFIX ??= "${@d.getVar('KERNEL_DTB_PREFIX').replace("/", "_") if d.getVar('KERNEL_DTB_PREFIX') and d.getVar('KERNEL_DTBVENDORED') == '1' else ''}"
+
 do_compile() {
     sed -e 's/@@INITRAMFS_FSTYPES@@/${INITRAMFS_FSTYPES}/' \
         -e 's/@@TEZI_BOOT_ARGS@@/${TEZI_BOOT_ARGS}/' \
@@ -74,6 +78,7 @@ do_compile() {
         -e 's/@@TEZI_OVERLAY_ADDR@@/${TEZI_OVERLAY_ADDR}/' \
         -e 's/@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@/${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}/' \
         -e 's/@@FITCONF_FDT_OVERLAYS@@/${FITCONF_FDT_OVERLAYS}/' \
+        -e 's/@@KERNEL_DTB_PREFIX@@/${DTB_PREFIX}/' \
         "${S}/${BOOT_CMD_FILE}" > boot.cmd
 }
 
