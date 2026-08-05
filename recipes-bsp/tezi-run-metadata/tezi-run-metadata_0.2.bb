@@ -37,11 +37,11 @@ S = "${UNPACKDIR}"
 
 TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 
-inherit deploy linux-kernel-base nopackages
+inherit deploy nopackages
 
 DEPENDS = "virtual/kernel"
 
-KERNEL_VERSION = "${@get_kernelversion_file("${STAGING_KERNEL_BUILDDIR}")}"
+KERNEL_VERSION = "${@oe.kernel.get_version_file("${STAGING_KERNEL_BUILDDIR}")}"
 
 do_deploy() {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
