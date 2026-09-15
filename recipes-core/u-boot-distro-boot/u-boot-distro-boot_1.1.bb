@@ -56,7 +56,7 @@ TEZI_OVERLAY_ADDR:colibri-imx6ull = "0x80f00000"
 TEZI_OVERLAY_ADDR:colibri-imx7 = "0x80f00000"
 TEZI_OVERLAY_ADDR:colibri-imx8x = "0x82e10000"
 TEZI_OVERLAY_ADDR:mx8mp-generic-bsp = "0x42e10000"
-TEZI_OVERLAY_ADDR:mx93-generic-bsp = "0x9c800000"
+TEZI_OVERLAY_ADDR:mx93-generic-bsp = "0x8a900000"
 TEZI_OVERLAY_ADDR:mx95-generic-bsp = "0x9c800000"
 TEZI_OVERLAY_ADDR:verdin-imx8mm = "0x42e10000"
 
