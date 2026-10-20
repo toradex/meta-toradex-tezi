@@ -331,10 +331,6 @@ INHERIT += "toradex-mirrors toradex-sanity"
 
 DISTRO = "tezi"
 
-# To build a Toradex Easy Installer image which is installable via the Toradex Installer
-# Image itself
-IMAGE_CLASSES += "image_type_tezi_run"
-
 # Don't generate the mirror tarball for SCM repos, the snapshot is enough
 # BB_GENERATE_MIRROR_TARBALLS = "0"
 
