@@ -327,7 +327,7 @@ CONF_VERSION = "2"
 INHERIT += "rm_work"
 
 # Add Toradex bbclasses
-INHERIT += "toradex-mirrors toradex-sanity"
+INHERIT += "toradex-sanity"
 
 DISTRO = "tezi"
 
