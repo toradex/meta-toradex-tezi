@@ -66,6 +66,7 @@ BOOT_CMD_FILE:colibri-imx6ull = "boot.cmd.in-NAND"
 BOOT_CMD_FILE:colibri-imx7 = "boot.cmd.in-NAND"
 
 FITCONF_FDT_OVERLAYS ??= ""
+TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT ??= ""
 
 # Mirror the config-node prefix kernel-fit-image.bbclass adds when
 # KERNEL_DTBVENDORED = "1", so the requested FIT config name matches.
