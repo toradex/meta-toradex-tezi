@@ -69,8 +69,5 @@ do_install() {
 
     install -d ${D}${sysconfdir}
     install -m 0755 ${UNPACKDIR}/rc.local ${D}${sysconfdir}
-
-    install -d ${D}${sysconfdir}
-    install -m 0755 ${UNPACKDIR}/udhcpd.conf ${D}${sysconfdir}
-
+    install -m 0644 ${UNPACKDIR}/udhcpd.conf ${D}${sysconfdir}
 }
