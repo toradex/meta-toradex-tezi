@@ -20,6 +20,6 @@ add_rootfs_version () {
     printf "${DISTRO_NAME} ${DISTRO_VERSION} (${DISTRO_CODENAME}) \n" > ${IMAGE_ROOTFS}/etc/issue
 }
 # add the rootfs version to the welcome banner
-ROOTFS_POSTPROCESS_COMMAND += " add_rootfs_version;"
+ROOTFS_POSTPROCESS_COMMAND += " add_rootfs_version"
 
 inherit core-image
