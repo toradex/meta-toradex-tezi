@@ -12,7 +12,7 @@ SRC_URI = "git://github.com/NXPmicro/imx-kobs.git;branch=${SRCBRANCH};protocol=h
 "
 SRCBRANCH = "master"
 SRCREV = "a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b"
-PV = "5.5+git${SRCPV}"
+PV = "5.5+git"
 
 inherit autotools
 

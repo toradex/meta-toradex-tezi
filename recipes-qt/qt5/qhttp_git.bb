@@ -12,7 +12,7 @@ SRC_URI = "gitsm://github.com/Hypelab/qhttp;branch=master;protocol=https \
 
 SRCREV = "67c9e9c44ababcfae54420dd385cd5b858f91d54"
 
-PV = "3.2+git${SRCPV}"
+PV = "3.2+git"
 
 DEPENDS += "qtwebsockets qtbase"
 

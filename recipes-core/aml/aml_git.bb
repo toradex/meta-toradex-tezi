@@ -8,7 +8,7 @@ SRC_URI = "git://github.com/any1/aml;branch=master;protocol=https"
 
 SRCREV = "1d8185ec15c68074cec1fd252c01c5ecad877b73"
 
-PV = "0.2.0+git${SRCPV}"
+PV = "0.2.0+git"
 
 PACKAGECONFIG ??= ""
 PACKAGECONFIG[examples] = "-Dexamples=true,-Dexamples=false"

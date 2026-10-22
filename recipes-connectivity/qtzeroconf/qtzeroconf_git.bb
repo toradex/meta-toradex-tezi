@@ -10,7 +10,7 @@ SRC_URI = " \
     file://0001-dependency.pri-support-static-libraries.patch \
 "
 
-PV = "0.0.1+git${SRCPV}"
+PV = "0.0.1+git"
 
 DEPENDS = "avahi qtbase"
 

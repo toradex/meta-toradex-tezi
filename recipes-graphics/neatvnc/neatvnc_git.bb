@@ -14,7 +14,7 @@ SRC_URI = "git://github.com/any1/neatvnc;branch=master;protocol=https \
 
 SRCREV = "b1d32694d0a310e36da1cf84420c827bbf665755"
 
-PV = "0.4.0+git${SRCPV}"
+PV = "0.4.0+git"
 
 DEPENDS = "libdrm pixman aml zlib"
 

@@ -14,7 +14,7 @@ SRCBRANCH = "master"
 SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
 
-PV = "${TDX_VERSION}+git${SRCPV}"
+PV = "${TDX_VERSION}+git"
 
 EXTRA_QMAKEVARS_PRE:append = " DEFINES+=VERSION_NUMBER=\\\\\\\"${TDX_RELEASE}\\\\\\\""
 
