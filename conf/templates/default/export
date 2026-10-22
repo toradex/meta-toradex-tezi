@@ -19,9 +19,7 @@ fi
 
 if [ ! -z "$FIRST_TIME" ]; then
     # add use-head-next to MACHINEOVERRIDES if one uses the integration or next manifests.
-    if grep -q "meta-toradex-bsp-common" ../.repo/manifest.xml && \
-       ! grep -q "meta-toradex-bsp-common.git.*upstream" ../.repo/manifest.xml || \
-       grep -qE "(integration.xml|next.xml)" ../.repo/manifest.xml
+    if grep -qE "(integration.xml|next.xml)" ../.repo/manifest.xml
     then
         {
             echo "# This is needed when building on integration. With use-head-next you"
