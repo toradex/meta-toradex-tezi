@@ -2,7 +2,7 @@ DESCRIPTION = "Toradex Easy Installer Metadata for Toradex Easy Installer"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS:k3 = "dfu-util-native patchelf-native"
+DEPENDS:k3 = "dfu-util-native"
 MCDEPENDS = ""
 MCDEPENDS:k3 = "mc::k3r5:virtual/bootloader:do_deploy"
 do_deploy[mcdepends] = "${MCDEPENDS}"
