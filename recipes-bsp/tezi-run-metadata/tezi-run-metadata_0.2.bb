@@ -39,10 +39,6 @@ TEZI_RUN_DEPLOYDIR = "${DEPLOYDIR}/${BPN}"
 
 inherit deploy nopackages
 
-DEPENDS = "virtual/kernel"
-
-KERNEL_VERSION = "${@oe.kernel.get_version_file("${STAGING_KERNEL_BUILDDIR}")}"
-
 do_deploy() {
     install -d ${TEZI_RUN_DEPLOYDIR}/recovery
     install -m 644 ${S}/wrapup.sh ${TEZI_RUN_DEPLOYDIR}
