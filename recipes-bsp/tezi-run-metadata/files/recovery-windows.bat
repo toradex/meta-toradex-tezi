@@ -3,7 +3,7 @@
 echo [93mDownloading Toradex Easy Installer...[0m
 recovery\uuu.exe recovery
 
-echo
+echo.
 IF %ERRORLEVEL% EQU 0 (
   echo [92mSuccessfully downloaded Toradex Easy Installer.[0m
 ) else (
