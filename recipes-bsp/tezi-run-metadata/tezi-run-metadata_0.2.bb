@@ -2,7 +2,6 @@ DESCRIPTION = "Toradex Easy Installer Metadata for Toradex Easy Installer"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS:k3 = "dfu-util-native"
 MCDEPENDS = ""
 MCDEPENDS:k3 = "mc::k3r5:virtual/bootloader:do_deploy"
 do_deploy[mcdepends] = "${MCDEPENDS}"
@@ -48,7 +47,7 @@ do_deploy() {
 
 do_deploy:append:k3 () {
 
-    install -m 755 ${RECIPE_SYSROOT_NATIVE}/usr/bin/dfu-util ${TEZI_RUN_DEPLOYDIR}/recovery/
+    install -m 755 ${S}/dfu-util-0.11-binaries/linux-amd64/dfu-util-static ${TEZI_RUN_DEPLOYDIR}/recovery/dfu-util
     install -m 755 ${S}/dfu-util-0.11-binaries/win64/dfu-util.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${S}/dfu-util-0.11-binaries/win64/libusb-1.0.dll ${TEZI_RUN_DEPLOYDIR}/recovery/
     install -m 755 ${S}/coreutils-5.3.0/bin/dd.exe ${TEZI_RUN_DEPLOYDIR}/recovery/
