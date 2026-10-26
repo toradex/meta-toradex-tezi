@@ -15,7 +15,7 @@ env set overlays_addr @@TEZI_OVERLAY_ADDR@@
 env set fitconf_fdt_overlays
 test -n "${overlays_file}" || env set overlays_file "overlays.txt"
 env set set_default_overlays 'env set fdt_overlays "@@TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT@@"'
-env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#conf-\\${overlay_file}\\"\"; env set overlay_file; done; true"'
+env set set_apply_overlays 'env set apply_overlays "for overlay_file in \"\\${fdt_overlays}\"; do env set fitconf_fdt_overlays \"\\"\\${fitconf_fdt_overlays}#conf-@@KERNEL_DTB_PREFIX@@\\${overlay_file}\\"\"; env set overlay_file; done; true"'
 
 env set bootcmd_run 'echo "Bootargs: \${bootargs}" && bootm ${fitimage_addr}#conf-@@KERNEL_DTB_PREFIX@@\${fdtfile}\${fitconf_fdt_overlays}'
 
