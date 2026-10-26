@@ -1,0 +1,161 @@
+{
+    "description": "Tezi Wrynose setup",
+    "sources": {
+        "bitbake": {
+            "git-remote": {
+                "branch": "2.18",
+                "rev": "6e260eb6ab1631607ea414d9ff8ede1155faa5d9",
+                "uri": "https://git.openembedded.org/bitbake"
+            }
+        },
+        "meta-arm": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "673e8d7c5dcd14de58092eb73e6ecc5eee5c1735",
+                "uri": "https://git.yoctoproject.org/meta-arm"
+            }
+        },
+        "meta-freescale": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "0d494991c90f33a16b9a39cd11bc817518aada03",
+                "uri": "https://github.com/Freescale/meta-freescale.git"
+            }
+        },
+        "meta-lts-mixins": {
+            "git-remote": {
+                "branch": "wrynose/linux-firmware",
+                "rev": "71dfb81bd98f59ca2127d39b100ecbb8ce1e0ba3",
+                "uri": "https://git.yoctoproject.org/meta-lts-mixins"
+            }
+        },
+        "meta-openembedded": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "f28a144aa0a0ae05ca2ee91e1aef6aa05f6a12db",
+                "uri": "https://git.openembedded.org/meta-openembedded"
+            }
+        },
+        "meta-qcom": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "c8b75cf9af35a2e9dae5178d4430b7a48859db0b",
+                "uri": "https://github.com/qualcomm-linux/meta-qcom.git"
+            }
+        },
+        "meta-qt5": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "4967c88083a9a385136252faeaf0ca04b701e892",
+                "uri": "https://github.com/meta-qt5/meta-qt5.git"
+            }
+        },
+        "meta-ti": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "7baceb0737e457b7c9acefca00c76dbbb7cd6b72",
+                "uri": "https://git.yoctoproject.org/meta-ti"
+            }
+        },
+        "meta-toradex-bsp": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "ecc50de39a1de85ae34865a5503ec571e374df1b",
+                "uri": "https://git.toradex.com/meta-toradex-bsp.git"
+            }
+        },
+        "meta-toradex-tezi": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "wrynose",
+                "uri": "https://github.com/toradex/meta-toradex-tezi.git"
+            }
+        },
+        "openembedded-core": {
+            "git-remote": {
+                "branch": "wrynose",
+                "rev": "884a91e689d545238cfabd7926c93663950ca286",
+                "uri": "https://git.openembedded.org/openembedded-core"
+            }
+        }
+    },
+    "bitbake-setup": {
+        "configurations": [
+            {
+                "bb-layers": [
+                    "meta-arm/meta-arm",
+                    "meta-arm/meta-arm-toolchain",
+                    "meta-freescale",
+                    "meta-lts-mixins",
+                    "meta-openembedded/meta-filesystems",
+                    "meta-openembedded/meta-multimedia",
+                    "meta-openembedded/meta-networking",
+                    "meta-openembedded/meta-oe",
+                    "meta-openembedded/meta-python",
+                    "meta-qcom",
+                    "meta-qt5",
+                    "meta-ti/meta-ti-bsp",
+                    "meta-toradex-bsp/meta-toradex-bsp-common",
+                    "meta-toradex-bsp/meta-toradex-nxp",
+                    "meta-toradex-bsp/meta-toradex-qcom",
+                    "meta-toradex-bsp/meta-toradex-ti",
+                    "meta-toradex-tezi",
+                    "openembedded-core/meta"
+                ],
+                "name": "tdxref",
+                "description": "Tezi Wrynose layer stack",
+                "notes": [
+                    "Tezi targets are:",
+                    "    tezi-run",
+                    "    tezi-devel",
+                    "    targets may be found in",
+                    "    meta-toradex-tezi/recipes-tezi/images/"
+                ],
+                "oe-fragments-one-of": {
+                    "machine": {
+                        "description": "Target machine",
+                        "options": [
+                            "machine/apalis-imx6",
+                            "machine/apalis-imx8",
+                            "machine/aquila-am69",
+                            "machine/aquila-imx95",
+                            "machine/colibri-imx6",
+                            "machine/colibri-imx6ull",
+                            "machine/colibri-imx7",
+                            "machine/colibri-imx8x",
+                            "machine/lino-imx93",
+                            "machine/toradex-osm-imx93",
+                            "machine/toradex-osm-imx95",
+                            "machine/toradex-smarc-imx8mp",
+                            "machine/toradex-smarc-imx95",
+                            "machine/verdin-am62",
+                            "machine/verdin-am62p",
+                            "machine/verdin-imx8mm",
+                            "machine/verdin-imx8mp",
+                            "machine/verdin-imx95"
+                        ]
+                    },
+                    "accept-fsl-eula": {
+                        "description": "Accept the FSL EULA",
+                        "options": [
+                            {
+                                "name": "freescale-layer/eula/accept-fsl-eula",
+                                "description": "Required to build recipes that use proprietary NXP software."
+                            },
+                            {
+                                "name": "",
+                                "description": "Do not accept the FSL EULA"
+                            }
+                        ]
+                    }
+                },
+                "oe-fragments": [
+                    "distro/tezi",
+                    "toradex-bsp-common-layer/toradex-deploy-layout"
+                ],
+                "setup-dir-name": "tezi-wrynose"
+            }
+        ]
+    },
+    "version": "1.0"
+}

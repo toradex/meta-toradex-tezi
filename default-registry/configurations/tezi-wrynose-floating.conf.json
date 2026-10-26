@@ -1,73 +1,80 @@
 {
-    "description": "Tezi master floating development setup",
+    "description": "Tezi Wrynose floating development setup",
     "sources": {
         "bitbake": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "2.18",
+                "rev": "2.18",
                 "uri": "https://git.openembedded.org/bitbake"
             }
         },
         "meta-arm": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://git.yoctoproject.org/meta-arm"
             }
         },
         "meta-freescale": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://github.com/Freescale/meta-freescale.git"
+            }
+        },
+        "meta-lts-mixins": {
+            "git-remote": {
+                "branch": "wrynose/linux-firmware",
+                "rev": "wrynose/linux-firmware",
+                "uri": "https://git.yoctoproject.org/meta-lts-mixins"
             }
         },
         "meta-openembedded": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://git.openembedded.org/meta-openembedded"
             }
         },
         "meta-qcom": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://github.com/qualcomm-linux/meta-qcom.git"
             }
         },
         "meta-qt5": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://github.com/meta-qt5/meta-qt5.git"
             }
         },
         "meta-ti": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://git.yoctoproject.org/meta-ti"
             }
         },
         "meta-toradex-bsp": {
             "git-remote": {
-                "branch": "main",
-                "rev": "main",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://git.toradex.com/meta-toradex-bsp.git"
             }
         },
         "meta-toradex-tezi": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://github.com/toradex/meta-toradex-tezi.git"
             }
         },
         "openembedded-core": {
             "git-remote": {
-                "branch": "master",
-                "rev": "master",
+                "branch": "wrynose",
+                "rev": "wrynose",
                 "uri": "https://git.openembedded.org/openembedded-core"
             }
         }
@@ -79,6 +86,7 @@
                     "meta-arm/meta-arm",
                     "meta-arm/meta-arm-toolchain",
                     "meta-freescale",
+                    "meta-lts-mixins",
                     "meta-openembedded/meta-filesystems",
                     "meta-openembedded/meta-multimedia",
                     "meta-openembedded/meta-networking",
@@ -95,7 +103,7 @@
                     "openembedded-core/meta"
                 ],
                 "name": "tdxref-floating",
-                "description": "Tezi development layer stack with floating sources",
+                "description": "Tezi Wrynose development layer stack with floating sources",
                 "notes": [
                     "Tezi targets are:",
                     "    tezi-run",
@@ -113,9 +121,7 @@
                             "machine/aquila-imx95",
                             "machine/colibri-imx6",
                             "machine/colibri-imx6ull",
-                            "machine/colibri-imx6ull-emmc",
                             "machine/colibri-imx7",
-                            "machine/colibri-imx7-emmc",
                             "machine/colibri-imx8x",
                             "machine/lino-imx93",
                             "machine/toradex-osm-imx93",
@@ -149,7 +155,7 @@
                     "toradex-bsp-common-layer/toradex-deploy-layout",
                     "toradex-tezi/floating-tezi-sources"
                 ],
-                "setup-dir-name": "tezi-master"
+                "setup-dir-name": "tezi-wrynose-floating"
             }
         ]
     },
