@@ -27,9 +27,7 @@ WARN_QA:append:layer-qt5-layer = " buildpaths"
 # module families:
 #
 
-# Toradex Modules based on i.MX 6/6ULL/7 are only supported with the
-# tdx-xwayland-upstream DISTRO which builds a kernel pulled from
-# kernel.org and use matching userspace components.
+# Toradex Modules based on i.MX 6/6ULL/7:
 #MACHINE ?= "apalis-imx6"
 #MACHINE ?= "colibri-imx6"
 #MACHINE ?= "colibri-imx6ull"
@@ -37,10 +35,7 @@ WARN_QA:append:layer-qt5-layer = " buildpaths"
 #MACHINE ?= "colibri-imx7"
 #MACHINE ?= "colibri-imx7-emmc"
 #
-# Toradex Modules based on SoC of the i.MX 8/9 family are supported with the
-# tdx-xwayland DISTRO which builds a kernel based on NXP's downstream fork
-# and matching userspace components. Support with tdx-xwayland-upstream
-# DISTRO is experimental and currently only builds for Verdin modules.
+# Toradex Modules based on SoC of the i.MX 8/9 family:
 #MACHINE ?= "apalis-imx8"
 #MACHINE ?= "aquila-imx95"
 #MACHINE ?= "colibri-imx8x"
@@ -53,9 +48,7 @@ WARN_QA:append:layer-qt5-layer = " buildpaths"
 #MACHINE ?= "verdin-imx8mp"
 #MACHINE ?= "verdin-imx95"
 #
-# Toradex Modules based on SoC of the TI AM62x family are supported with the
-# tdx-xwayland DISTRO which builds a kernel based on TI downstream fork
-# and matching userspace components.
+# Toradex Modules based on SoC of the TI K3 family:
 #MACHINE ?= "aquila-am69"
 #MACHINE ?= "verdin-am62"
 #MACHINE ?= "verdin-am62p"
