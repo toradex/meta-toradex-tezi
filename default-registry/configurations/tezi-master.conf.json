@@ -94,7 +94,7 @@
                     "meta-toradex-tezi",
                     "openembedded-core/meta"
                 ],
-                "name": "tdxref-floating",
+                "name": "tezi-floating",
                 "description": "Tezi development layer stack with floating sources",
                 "notes": [
                     "Tezi targets are:",
