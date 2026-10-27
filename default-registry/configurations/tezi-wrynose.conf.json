@@ -102,7 +102,7 @@
                     "meta-toradex-tezi",
                     "openembedded-core/meta"
                 ],
-                "name": "tdxref",
+                "name": "tezi",
                 "description": "Tezi Wrynose layer stack",
                 "notes": [
                     "Tezi targets are:",
