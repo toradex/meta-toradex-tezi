@@ -12,7 +12,7 @@ S = "${UNPACKDIR}"
 inherit deploy nopackages
 
 TEZI_BOOT_ARGS = ""
-TEZI_BOOT_ARGS:apalis-imx6 = "video=DPI-1:640x480D video=HDMI-A-1:640x480-16@60D video=LVDS-1:d video=VGA-1:640x480-16@60D"
+TEZI_BOOT_ARGS:apalis-imx6 = "video=DPI-1:640x480D video=HDMI-A-1:640x480-16@60D video=LVDS-1:d video=VGA-1:640x480e"
 TEZI_BOOT_ARGS:apalis-imx8 = "video=LVDS-1:d video=HDMI-A-1:640x480-16@60D"
 TEZI_BOOT_ARGS:aquila-am69 = "video=DP-1:1280x720@60D"
 TEZI_BOOT_ARGS:aquila-imx95 = "video=DP-1:1280x720@60D"
