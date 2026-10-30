@@ -32,14 +32,14 @@
         "meta-openembedded": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "f28a144aa0a0ae05ca2ee91e1aef6aa05f6a12db",
+                "rev": "c734c2cb9713dbd6d50697a9f6c25ebdf3ae589e",
                 "uri": "https://git.openembedded.org/meta-openembedded"
             }
         },
         "meta-qcom": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "c8b75cf9af35a2e9dae5178d4430b7a48859db0b",
+                "rev": "8ffb7378387b6d641abccde5e0e0387cb2ff4036",
                 "uri": "https://github.com/qualcomm-linux/meta-qcom.git"
             }
         },
@@ -53,28 +53,28 @@
         "meta-ti": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "7baceb0737e457b7c9acefca00c76dbbb7cd6b72",
+                "rev": "066a7c440c0b241bca045133ec8cb5e506d49d98",
                 "uri": "https://git.yoctoproject.org/meta-ti"
             }
         },
         "meta-toradex-bsp": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "ecc50de39a1de85ae34865a5503ec571e374df1b",
+                "rev": "wrynose-8.0",
                 "uri": "https://git.toradex.com/meta-toradex-bsp.git"
             }
         },
         "meta-toradex-tezi": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "wrynose",
+                "rev": "wrynose-8.0",
                 "uri": "https://github.com/toradex/meta-toradex-tezi.git"
             }
         },
         "openembedded-core": {
             "git-remote": {
                 "branch": "wrynose",
-                "rev": "884a91e689d545238cfabd7926c93663950ca286",
+                "rev": "ae5a301091f5b0574ea7444aab40b309b6d9f3f2",
                 "uri": "https://git.openembedded.org/openembedded-core"
             }
         }
