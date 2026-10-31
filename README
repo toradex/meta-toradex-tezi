@@ -5,29 +5,44 @@ This layer is used to build the Toradex Easy Installer utility.
 It provides a small distro called `tezi` along with image recipes
 for the root file system and recipes for the Qt based UI.
 
-This layer depends on:
+Dependencies
+------------
 
-URI: git://git.openembedded.org/openembedded-core
-openembedded/meta
-branch: master
-revision: HEAD
+This layer is built on the wrynose branches of:
 
-URI: git://git.openembedded.org/meta-openembedded
-meta-openembedded/meta-oe
-branch: master
-revision: HEAD
+- bitbake (branch 2.18)
+- openembedded-core
+- meta-openembedded
+- meta-qt5
+- meta-freescale
+- meta-arm
+- meta-ti
+- meta-qcom
+- meta-lts-mixins
+- meta-toradex-bsp
 
-URI: https://github.com/meta-qt5/meta-qt5
-branch: master
-revision: HEAD
+The exact layers, URIs and revisions are defined by the bitbake-setup
+configurations in default-registry/configurations/.
 
-URI: git://git.yoctoproject.org/meta-freescale
-branch: master
-revision: HEAD
+Building
+--------
 
-URI: git://git.toradex.com/meta-toradex-bsp
-branch: main
-revision: HEAD
+This layer is a bitbake-setup registry for Tezi images. Get bitbake-setup
+(`git clone https://git.openembedded.org/bitbake`) and run:
+
+    ./bitbake/bin/bitbake-setup --setting default registry \
+        'git://github.com/toradex/meta-toradex-tezi.git;protocol=https;branch=wrynose;rev=wrynose' \
+        init
+
+bitbake-setup asks for a configuration, the target machine and whether to
+accept the FSL EULA. The available configurations are:
+
+- tezi-wrynose: layer revisions are pinned by the configuration. Use it for
+  releases and development.
+- tezi-wrynose-floating: all layers, qt-tezi and qt-tezictl track their
+  branch heads. Builds are not reproducible.
+
+To reproduce release 8.N, use 'rev=wrynose-8.N' in the registry URL.
 
 Contributing
 ------------
