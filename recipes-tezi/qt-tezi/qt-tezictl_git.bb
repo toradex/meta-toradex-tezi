@@ -9,7 +9,6 @@ SRC_URI = "git://github.com/toradex/qt-tezictl.git;branch=${SRCBRANCH};protocol=
 
 SRCREV = "8feb64026685eeb49b5b60ab85e1a78b1b131d2b"
 SRCBRANCH = "master"
-SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1611c5652037dacc6ac585f2443a1979"
 
 PV = "${TDX_VERSION}+git"
