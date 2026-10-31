@@ -11,7 +11,6 @@ SRC_URI = "git://github.com/toradex/qt-tezi.git;branch=${SRCBRANCH};protocol=htt
 
 SRCREV = "561041c64a9cff6461b8b6ea1fa40698f8a9edfb"
 SRCBRANCH = "master"
-SRCREV:use-head-next = "${AUTOREV}"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=41609b911f0c746afdabad42336840b5"
 
 PV = "${TDX_VERSION}+git"
