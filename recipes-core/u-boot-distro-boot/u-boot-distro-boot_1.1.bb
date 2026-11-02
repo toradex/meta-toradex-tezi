@@ -11,25 +11,24 @@ S = "${UNPACKDIR}"
 
 inherit deploy nopackages
 
-TEZI_BOOT_ARGS = ""
-TEZI_BOOT_ARGS:apalis-imx6 = "video=DPI-1:640x480D video=HDMI-A-1:640x480D video=LVDS-1:d video=VGA-1:640x480e"
-TEZI_BOOT_ARGS:apalis-imx8 = "video=LVDS-1:d video=HDMI-A-1:640x480D"
-TEZI_BOOT_ARGS:aquila-am69 = "video=DP-1:1280x720D"
-TEZI_BOOT_ARGS:aquila-imx95 = "video=DP-1:1920x1080D"
-TEZI_BOOT_ARGS:colibri-imx6 = "video=DVI-A-1:640x480e video=HDMI-A-1:640x480D"
-TEZI_BOOT_ARGS:colibri-imx6ull = "video=DPI-1:640x480e video=VGA-1:640x480e"
-TEZI_BOOT_ARGS:colibri-imx7 = "video=DPI-1:640x480e video=VGA-1:640x480e"
-TEZI_BOOT_ARGS:colibri-imx8x = "video=VGA-1:640x480e"
-TEZI_BOOT_ARGS:lino-imx93 = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:toradex-osm-imx93 = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:toradex-osm-imx95 = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:toradex-smarc-imx8mp = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:toradex-smarc-imx95 = "video=DP-1:1920x1080D"
-TEZI_BOOT_ARGS:verdin-am62 = "video=HDMI-A-1:640x480D"
-TEZI_BOOT_ARGS:verdin-am62p = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:verdin-imx8mm = "video=HDMI-A-1:1280x720D"
-TEZI_BOOT_ARGS:verdin-imx8mp = "video=HDMI-A-1:1280x720D video=HDMI-A-2:1280x720D"
-TEZI_BOOT_ARGS:verdin-imx95 = "video=HDMI-A-1:1280x720D"
+TEZI_DP_MODE = "1280x720D"
+TEZI_DP_MODE:aquila-imx95 = "1920x1080D"
+TEZI_DP_MODE:toradex-smarc-imx95 = "1920x1080D"
+
+TEZI_DPI_MODE = "640x480e"
+
+TEZI_HDMI_MODE = "1280x720D"
+TEZI_HDMI_MODE:apalis-imx6 = "640x480D"
+TEZI_HDMI_MODE:apalis-imx8 = "640x480D"
+TEZI_HDMI_MODE:colibri-imx6 = "640x480D"
+TEZI_HDMI_MODE:verdin-am62 = "640x480D"
+
+TEZI_VGA_MODE = "640x480e"
+
+TEZI_BOOT_ARGS = "video=DP-1:${TEZI_DP_MODE} video=DPI-1:${TEZI_DPI_MODE} \
+                  video=DVI-A-1:${TEZI_VGA_MODE} \
+                  video=HDMI-A-1:${TEZI_HDMI_MODE} video=HDMI-A-2:${TEZI_HDMI_MODE} \
+                  video=LVDS-1:d video=VGA-1:${TEZI_VGA_MODE}"
 
 # As default, keep the ramdisk_addr_r and loadaddr from u-boot for the fitimage
 # and overlay files. This way TI machines can use this as default value.
