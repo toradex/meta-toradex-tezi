@@ -28,7 +28,8 @@ TEZI_VGA_MODE = "640x480e"
 TEZI_BOOT_ARGS = "video=DP-1:${TEZI_DP_MODE} video=DPI-1:${TEZI_DPI_MODE} \
                   video=DVI-A-1:${TEZI_VGA_MODE} \
                   video=HDMI-A-1:${TEZI_HDMI_MODE} video=HDMI-A-2:${TEZI_HDMI_MODE} \
-                  video=LVDS-1:d video=VGA-1:${TEZI_VGA_MODE}"
+                  video=LVDS-1:d video=VGA-1:${TEZI_VGA_MODE} \
+                  drm.edid_firmware=DP-1:edid/tezi.bin,HDMI-A-1:edid/tezi.bin,HDMI-A-2:edid/tezi.bin"
 
 # As default, keep the ramdisk_addr_r and loadaddr from u-boot for the fitimage
 # and overlay files. This way TI machines can use this as default value.

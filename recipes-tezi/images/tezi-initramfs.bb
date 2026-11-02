@@ -13,6 +13,7 @@ IMAGE_NAME_SUFFIX ?= ""
 CORE_IMAGE_BASE_INSTALL:append = " \
     qt-tezi \
     qt-tezictl \
+    tezi-edid \
     udev-toradex-rules \
 "
 
