@@ -42,6 +42,7 @@ WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 
 EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false \
 		-Dpipewire=false -Dbackend-rdp=false \
+		-Dshell-desktop=false -Dshell-ivi=false \
 		"
 
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'kms', '', d)} \
