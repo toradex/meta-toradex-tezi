@@ -43,6 +43,7 @@ WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 EXTRA_OEMESON += "-Dbackend-vnc=true -Dbackend-default=drm -Drenderer-gl=false \
 		-Dpipewire=false -Dbackend-rdp=false \
 		-Dshell-desktop=false -Dshell-ivi=false \
+		-Dwcap-decode=false \
 		"
 
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'kms', '', d)} \
@@ -112,7 +113,7 @@ PACKAGES += "${@bb.utils.contains('PACKAGECONFIG', 'xwayland', '${PN}-xwayland',
              libweston-${WESTON_MAJOR_VERSION} ${PN}-examples"
 
 FILES:${PN}-dev += "${libdir}/${BPN}/libexec_weston.so"
-FILES:${PN} = "${bindir}/weston ${bindir}/weston-launch ${bindir}/wcap-decode ${libexecdir} ${libdir}/${BPN}/*.so* ${datadir}"
+FILES:${PN} = "${bindir}/weston ${bindir}/weston-launch ${libexecdir} ${libdir}/${BPN}/*.so* ${datadir}"
 
 FILES:libweston-${WESTON_MAJOR_VERSION} = "${libdir}/lib*${SOLIBS} ${libdir}/libweston-${WESTON_MAJOR_VERSION}/*.so"
 SUMMARY:libweston-${WESTON_MAJOR_VERSION} = "Helper library for implementing 'wayland window managers'."
