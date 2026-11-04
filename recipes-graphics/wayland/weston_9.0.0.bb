@@ -35,8 +35,8 @@ export CPPFLAGS:class-target = "${TARGET_CPPFLAGS}"
 export CXXFLAGS:class-target = "${TARGET_CXXFLAGS}"
 export LDFLAGS:class-target = "${TARGET_LDFLAGS}"
 
-DEPENDS = "libxkbcommon gdk-pixbuf pixman cairo glib-2.0 jpeg drm neatvnc"
-DEPENDS += "wayland wayland-protocols libinput pango wayland-native"
+DEPENDS = "libxkbcommon pixman cairo jpeg drm neatvnc"
+DEPENDS += "wayland wayland-protocols libinput wayland-native"
 
 WESTON_MAJOR_VERSION = "${@'.'.join(d.getVar('PV').split('.')[0:1])}"
 
