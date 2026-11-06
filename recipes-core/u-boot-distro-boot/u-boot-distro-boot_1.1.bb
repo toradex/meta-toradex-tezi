@@ -12,7 +12,6 @@ S = "${UNPACKDIR}"
 inherit deploy nopackages
 
 TEZI_DP_MODE = "1280x720D"
-TEZI_DP_MODE:toradex-smarc-imx95 = "1920x1080D"
 
 TEZI_DPI_MODE = "640x480e"
 
