@@ -35,6 +35,20 @@ def fitimg_get_size(d):
     import os
     return os.path.getsize(os.path.join(d.getVar('DEPLOY_DIR_IMAGE'), 'fitImage')) / (1024 * 1024)
 
+def fw_mapping(d):
+    # FIRMWARE_BINARY is the default filename for all TORADEX_PRODUCT_IDS,
+    # optionally overridden per product id via FIRMWARE_BINARY[<pid4>]
+    fwdefault = d.getVar('FIRMWARE_BINARY')
+    fwflags = d.getVarFlags('FIRMWARE_BINARY') or {}
+
+    fwmapping = {}
+    for pid in d.getVar('TORADEX_PRODUCT_IDS').split():
+        fw = fwflags.get(pid, fwdefault)
+        if not fw:
+            bb.fatal("No firmware binary for product id %s, set FIRMWARE_BINARY or FIRMWARE_BINARY[%s]." % (pid, pid))
+        fwmapping[pid] = fw
+    return fwmapping
+
 def rootfs_tezi_run_emmc(d):
     from collections import OrderedDict
     emmcdev = d.getVar('EMMCDEV')
@@ -49,14 +63,12 @@ def rootfs_tezi_run_emmc(d):
 
     offset_payload = offset_bootrom
     if offset_fw:
-        # FIRMWARE_BINARY contain product_id <-> filename mapping
-        fwmapping = d.getVarFlags('FIRMWARE_BINARY')
-        for f, v in fwmapping.items():
+        for pid, fw in fw_mapping(d).items():
             bootpart_rawfiles.append(
               {
-                "filename": v,
+                "filename": fw,
                 "dd_options": "seek=" + offset_payload,
-                "product_ids": f
+                "product_ids": pid
               })
         offset_payload = offset_fw
     if offset_spl:
@@ -153,16 +165,14 @@ def rootfs_tezi_run_rawnand(d):
         })]
 
 def fw_binaries(d):
-    fwmapping = d.getVarFlags('FIRMWARE_BINARY')
-
-    if fwmapping is not None:
-        fw_bins = []
-        for key, val in fwmapping.items():
-            if val not in fw_bins:
-                fw_bins.append(val)
-        return " " + " ".join(fw_bins)
-    else:
+    if not d.getVar('FIRMWARE_BINARY') and not d.getVarFlags('FIRMWARE_BINARY'):
         return ""
+
+    fw_bins = []
+    for fw in fw_mapping(d).values():
+        if fw not in fw_bins:
+            fw_bins.append(fw)
+    return " " + " ".join(fw_bins)
 
 def rootfs_tezi_run_create_json(d, flash_type, type_specific_name = False):
     import json
