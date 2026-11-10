@@ -46,5 +46,6 @@ TDX_VER_ID:toradex-smarc-imx95 = "SMARC-iMX95_ToradexEasyInstaller_${DISTRO_VERS
 TDX_VER_ID:verdin-imx8mm = "Verdin-iMX8MM_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:verdin-imx8mp = "Verdin-iMX8MP_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:verdin-imx95 = "Verdin-iMX95_ToradexEasyInstaller_${DISTRO_VERSION}"
+TDX_VER_ID:verdin-imx952 = "Verdin-iMX952_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:verdin-am62 = "Verdin-AM62_ToradexEasyInstaller_${DISTRO_VERSION}"
 TDX_VER_ID:verdin-am62p = "Verdin-AM62P_ToradexEasyInstaller_${DISTRO_VERSION}"

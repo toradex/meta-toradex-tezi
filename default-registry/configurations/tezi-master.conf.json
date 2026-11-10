@@ -124,7 +124,8 @@
                             "machine/verdin-am62p",
                             "machine/verdin-imx8mm",
                             "machine/verdin-imx8mp",
-                            "machine/verdin-imx95"
+                            "machine/verdin-imx95",
+                            "machine/verdin-imx952"
                         ]
                     },
                     "accept-fsl-eula": {
