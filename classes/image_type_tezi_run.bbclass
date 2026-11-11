@@ -265,7 +265,9 @@ IMAGE_CMD:tezirunimg () {
             sed -i 's/\(\"description\".*\)Toradex.*for/\1Legacy Toradex Easy Installer Package for 1.8 for/' ${IMGDEPLOYDIR}/$LEGACY
             #-    "version": "5.3.0+build.3",
             #+    "version": "5.30",
-            sed -i 's/\(\"version\".*\"[0-9]*\.[0-9]*\)\.\([0-9]*\)\+.*/\1\2",/' ${IMGDEPLOYDIR}/$LEGACY
+            #-    "version": "8.1+build.3",
+            #+    "version": "8.1",
+            sed -i -E 's/("version"[^"]*"[0-9]+\.[0-9]+)(\.([0-9]+))?[^"]*".*/\1\3",/' ${IMGDEPLOYDIR}/$LEGACY
         done
     fi
 
